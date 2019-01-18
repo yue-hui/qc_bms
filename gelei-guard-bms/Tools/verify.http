@@ -1,0 +1,136 @@
+### Get request with environment variables
+GET http://172.168.50.58:12710/common/get/verify/code?gnw_appid=437EC0AC7F0000015E2BBF4849643C96&sign=web&version=1.0.0&source=01&val=gladmin&type=type
+Accept: application/json
+
+
+### 验证码
+POST http://172.168.50.58:12710/common/get/verify/code
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "sign": "web",
+  "version": "1.0.0",
+  "source": "01",
+  "val": "gladmin",
+  "type": 3
+}
+
+
+### Send POST request with json body
+#POST http://172.168.50.58:12710/common/get/verify/code
+POST https://msdev.dev.zhixike.net/common/get/verify/code
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "sign": "web",
+  "version": "1.0.0",
+  "source": "01",
+  "val": "15959276686",
+  "type": "1"
+}
+
+
+### 获取用户详情
+POST http://172.168.50.58:12720/manager/user/detail
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "version": "1.0.0",
+  "sign": "web",
+  "source": "05",
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiZ2xhZG1pbiIsImV4cCI6MTU0ODEyNjI2Nn0.MlFyELYTgUWqShyiAt0KoRnmTsgdsbge0Tdx5dToraw"
+}
+
+
+### 获取家长用户列表
+POST http://172.168.50.58:12720/manager/user/patriarch/list
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "version": "1.0.0",
+  "sign": "web",
+  "source": "05",
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiZ2xhZG1pbiIsImV4cCI6MTU0ODEyNjI2Nn0.MlFyELYTgUWqShyiAt0KoRnmTsgdsbge0Tdx5dToraw",
+  "page_no": "1",
+  "page_size": "10",
+  "phone": "1545191445000"
+}
+
+
+### Send POST request with json body
+POST http://172.168.50.58:12720/manager/soft/recommend/list
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "version": "1.0.0",
+  "sign": "web",
+  "source": "05",
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiMTU5NTkyNzY2ODZfeUJGNVFoIiwiZXhwIjoxNTQ3MTkzMTE5fQ.NkiDvuo2lLWRm-4J2PTr8y5bpjmWrhyPUT0VQs-Y0b4",
+  "page_no": 1,
+  "page_num": 10
+}
+
+
+### 年级列表
+POST http://172.168.50.58:12720/common/get/sys/parameter
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "version": "1.0.0",
+  "sign": "web",
+  "source": "05",
+  "p_type": "CHILD_GRADE_LIST"
+}
+
+
+### 学科列表
+POST http://172.168.50.58:12720/common/get/sys/parameter
+Content-Type: application/json
+
+{
+  "source": "05",
+  "p_type": "CHILD_SUBJECT_LIST"
+}
+
+
+### 搜索应用
+POST http://172.168.50.58:12720/manager/soft/recommend/mark/search
+Content-Type: application/json
+
+{
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiZ2xhZG1pbiIsImV4cCI6MTU0ODA1NzEzOX0.jENpgoG1DbChAi1Yc8mZyYJ11BHT2jgxBu8LMze0V_I",
+  "source": "05",
+  "kw": "王"
+}
+
+
+### 获取推荐应用组合
+POST http://172.168.50.58:12720/manager/soft/recommend/group/list
+Content-Type: application/json
+
+{
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiZ2xhZG1pbiIsImV4cCI6MTU0ODA3NDM2NH0.wGhJCSgxSt5q5EBQEpRCfb4MaRf-2YddErT-J1QEqZk",
+  "source": "05",
+  "page_no": "1",
+  "page_num": "20"
+}
+
+
+### 绑定用户增长情况
+POST http://172.168.50.58:12720/manager/user/analyze/increased/bind_user
+Content-Type: application/json
+
+{
+  "app_token": "eyJhbGciOiJIUzI1NiJ9.eyJBUFBfVE9LRU46IjoiZ2xhZG1pbiIsImV4cCI6MTU0ODA3NDM2NH0.wGhJCSgxSt5q5EBQEpRCfb4MaRf-2YddErT-J1QEqZk",
+  "source": "05",
+  "page_no": "1",
+  "page_num": "20"
+}
+
+###

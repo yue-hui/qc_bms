@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">vue-admin-template</h3>
+      <h3 class="title">{{ SYSTEM_CONSTANT.name }}</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
+        <el-input auto-complete="on" name="username" placeholder="请输入用户名" type="text" v-model="loginForm.username" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -17,27 +17,36 @@
           v-model="loginForm.password"
           name="password"
           auto-complete="on"
-          placeholder="password"
+          placeholder="请输入密码"
           @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
+      <el-form-item prop="verify">
+        <div class="verify-code-div">
+          <div class="verify-left">
+            <el-input @keyup.enter.native="handleLogin" placeholder="请输入验证码" v-model="loginForm.verify" />
+          </div>
+          <div class="verify-right">
+            <img :src="verify_data" @click="refreshVerifyCode" alt="验证码" class="verify-code">
+          </div>
+        </div>
+      </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          Sign in
+          登录
         </el-button>
       </el-form-item>
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
-      </div>
     </el-form>
   </div>
 </template>
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import { get_verify_code } from '@/api/login'
+import { HOME_PATH, SYSTEM_CONSTANT } from '@/utils/constant'
+import { get_uuid } from '@/utils/common'
 
 export default {
   name: 'Login',
@@ -50,24 +59,29 @@ export default {
       }
     }
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: 'gladmin',
+        password: 'gl2018.',
+        verify: '',
+        verify_uid: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        verify: [{ required: true, trigger: 'blur', len: 4, type: 'string', message: '请检查验证码' }]
       },
       loading: false,
       pwdType: 'password',
-      redirect: undefined
+      redirect: HOME_PATH,
+      verify_data: '',
+      SYSTEM_CONSTANT
     }
   },
   watch: {
@@ -77,6 +91,10 @@ export default {
       },
       immediate: true
     }
+  },
+  beforeMount: function() {
+    this.loginForm.verify_uid = get_uuid()
+    this.refreshVerifyCode()
   },
   methods: {
     showPwd() {
@@ -99,6 +117,19 @@ export default {
         } else {
           console.log('error submit!!')
           return false
+        }
+      })
+    },
+    refreshVerifyCode() {
+      const data = {
+        type: '3',
+        val: this.loginForm.verify_uid
+      }
+      get_verify_code(data).then((res) => {
+        if (res.status === 0) {
+          this.verify_data = res.data
+        } else {
+          this.$message.info(res.message)
         }
       })
     }
@@ -158,16 +189,6 @@ $light_gray:#eee;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
   }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
-    }
-  }
   .svg-container {
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
@@ -191,6 +212,21 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .verify-code-div {
+    height: 45px;
+    display: flex;
+
+    .verify-left {
+      flex: 1;
+    }
+
+    .verify-right {
+      .verify-code {
+        height: 45px;
+      }
+    }
   }
 }
 </style>

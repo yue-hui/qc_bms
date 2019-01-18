@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
-import { getToken } from '@/utils/auth'
+import sign from './sign'
+
+// 全局配置
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.post['charset'] = 'utf-8'
 
 // 创建axios实例
 const service = axios.create({
@@ -12,9 +16,11 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    if (store.getters.token) {
-      config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    if (process.env.IS_SIGN) {
+      const data = config.data || {}
+      config['data'] = sign(data)
     }
+    console.log('sign config', process.env.IS_SIGN, config)
     return config
   },
   error => {
@@ -28,18 +34,27 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     /**
-     * code为非20000是抛错 可结合自己业务进行修改
+     * status为非0是抛错 可结合自己业务进行修改
      */
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.status !== 0) {
       Message({
         message: res.message,
         type: 'error',
         duration: 5 * 1000
       })
-
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+    
+      /*
+      -: 非法的token
+      -1: 通用异常，后续接口异常区分返回码
+      -2: 业务异常,需要data内返回base64位图形验证码(例：登陆密码10分钟内输错5次)
+      1: 登录状态已过期，请重新登录
+      11: 其他客户端登录了
+      2: 该设备已经被绑定啦
+      3: 权限异常
+      -999: 未知异常
+       */
+      if (res.status === 1 || res.status === 11 || res.status === 50014) {
         MessageBox.confirm(
           '你已被登出，可以取消继续留在该页面，或者重新登录',
           '确定登出',
@@ -56,7 +71,7 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
-      return response.data
+      return Promise.resolve(res)
     }
   },
   error => {

@@ -9,10 +9,20 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': { //这里是公共部分，在调用接口时后面接不相同的部分
+        // target: 'https://msdev.dev.zhixike.net/greenguard', //这里写的是访问接口的域名和端口号
+        target: 'http://172.168.50.58:12720', //这里写的是访问接口的域名和端口号
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: { // 重命名
+          '^/api': '/'
+        }
+      }
+    },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

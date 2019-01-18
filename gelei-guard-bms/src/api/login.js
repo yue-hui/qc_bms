@@ -1,27 +1,35 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
-  return request({
-    url: '/user/login',
+/* 登录 */
+export function login(data) {
+  const options = {
+    url: 'manager/user/login ',
     method: 'post',
-    data: {
-      username,
-      password
-    }
-  })
+    data
+  }
+  return request(options)
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/manager/user/detail',
+    method: 'POST'
   })
 }
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/manager/user/logout',
     method: 'post'
   })
+}
+
+/* 验证码 */
+export function get_verify_code(data) {
+  const options = {
+    url: 'common/get/verify/code',
+    method: 'post',
+    data
+  }
+  return request(options)
 }

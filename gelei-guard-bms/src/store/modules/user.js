@@ -1,5 +1,6 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getInfo, login, logout } from '@/api/login'
+import { getToken, removeToken, setToken } from '@/utils/auth'
+import sha256 from 'sha256'
 
 const user = {
   state: {
@@ -26,14 +27,22 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    Login({ commit }, data) {
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
+        const config = {}
+        config.account = data.username.trim()
+        config.password = sha256(data.password)
+        config.code = data.verify
+        config.code_uid = data.verify_uid
+        login(config).then(response => {
+          if (response.status === 0) {
+            const app_token = response.data.app_token
+            setToken(app_token)
+            commit('SET_TOKEN', app_token)
+            resolve()
+          } else {
+            reject(response)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -43,14 +52,14 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
+        getInfo().then(response => {
           const data = response.data
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
-          commit('SET_NAME', data.name)
+          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          //   commit('SET_ROLES', data.roles)
+          // } else {
+          //   reject('getInfo: roles must be a non-null array !')
+          // }
+          commit('SET_NAME', data.account)
           commit('SET_AVATAR', data.avatar)
           resolve(response)
         }).catch(error => {

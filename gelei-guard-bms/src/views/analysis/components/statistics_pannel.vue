@@ -1,0 +1,127 @@
+<template>
+  <el-card class="box-card">
+    <div class="clearfix" slot="header">
+      <span>整体数据指标</span>
+    </div>
+    <div class="component-card">
+      <div class="row row-1">
+        <div class="column column-1">新增注册用户</div>
+        <div class="column column-2">{{ statistics.increased_user }}</div>
+        <div class="column column-3">
+          日
+          <svg-icon :icon-class="judge_direction(statistics.increased_user_percent)" />
+          {{ statistics.increased_user_percent }}%
+        </div>
+      </div>
+      <div class="row row-2">
+        <div class="column column-1">新增绑定用户</div>
+        <div class="column column-2">{{ statistics.increased_bind_user }}</div>
+        <div class="column column-3">
+          日
+          <svg-icon :icon-class="judge_direction(statistics.increased_bind_user_percent)" />
+          {{ statistics.increased_bind_user_percent }}%
+        </div>
+      </div>
+      <div class="row row-3">
+        <div class="column column-1">新增绑定设备</div>
+        <div class="column column-2">{{ statistics.increased_bind_device }}</div>
+        <div class="column column-3">
+          日
+          <svg-icon :icon-class="judge_direction(statistics.increased_bind_device_percent)" />
+          {{ statistics.increased_bind_device_percent }}%
+        </div>
+      </div>
+      <div class="row row-4">
+        <div class="column column-1">总注册用户数</div>
+        <div class="column column-2">{{ statistics.total_user }}</div>
+        <div class="column column-3" />
+      </div>
+    </div>
+  </el-card>
+</template>
+
+<script>
+import { get_user_analysis_summary } from '@/api/interactive'
+
+export default {
+  name: 'StatisticsPannel',
+  beforecreate: function() {
+  },
+  props: {},
+  data: function() {
+    return {
+      statistics: {}
+    }
+  },
+  computed: {},
+  watch: {},
+  mounted: function() {
+  },
+  methods: {
+    judge_direction: function(direct) {
+      return +direct >= 100 ? 'upper' : 'down'
+    },
+    load_summary: function(data) {
+      get_user_analysis_summary(data).then(res => {
+        this.statistics = res.data
+      })
+    },
+    search(data) {
+      this.load_summary(data)
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+$column_1_height: 28px;
+$column_2_height: 40px;
+$column_3_height: 28px;
+$pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
+
+.component-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  border: $pannel_border_color;
+
+  .row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-right: $pannel_border_color;
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    .column {
+      text-align: center;
+      /*padding: 5px 10px;*/
+    }
+
+    .column-1 {
+      font-size: 14px;
+      height: $column_1_height;
+      line-height: $column_1_height;
+      display: flex;
+      justify-content: center;
+      vertical-align: center;
+    }
+
+    .column-2 {
+      font-size: 24px;
+      font-weight: 600;
+      height: $column_2_height;
+      line-height: $column_2_height;
+    }
+
+    .column-3 {
+      font-size: 14px;
+      height: $column_3_height;
+      line-height: $column_3_height;
+    }
+  }
+}
+</style>
