@@ -1,12 +1,23 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left">
       <h3 class="title">{{ SYSTEM_CONSTANT.name }}</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input auto-complete="on" name="username" placeholder="请输入用户名" type="text" v-model="loginForm.username" />
+        <el-input
+          v-model="loginForm.username"
+          auto-complete="on"
+          name="username"
+          type="text"
+          placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -26,10 +37,10 @@
       <el-form-item prop="verify">
         <div class="verify-code-div">
           <div class="verify-left">
-            <el-input @keyup.enter.native="handleLogin" placeholder="请输入验证码" v-model="loginForm.verify" />
+            <el-input v-model="loginForm.verify" placeholder="请输入验证码" @keyup.enter.native="handleLogin" />
           </div>
           <div class="verify-right">
-            <img :src="verify_data" @click="refreshVerifyCode" alt="验证码" class="verify-code">
+            <img :src="verify_data" alt="验证码" class="verify-code" @click="refreshVerifyCode">
           </div>
         </div>
       </el-form-item>
@@ -138,8 +149,8 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$bg:#2d3a4b;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$light_gray: #eee;
 
 /* reset element-ui css */
 .login-container {
@@ -147,6 +158,7 @@ $light_gray:#eee;
     display: inline-block;
     height: 47px;
     width: 85%;
+
     input {
       background: transparent;
       border: 0px;
@@ -155,12 +167,14 @@ $light_gray:#eee;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
+
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: #fff !important;
       }
     }
   }
+
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
@@ -172,14 +186,15 @@ $light_gray:#eee;
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 .login-container {
   position: fixed;
   height: 100%;
   width: 100%;
   background-color: $bg;
+
   .login-form {
     position: absolute;
     left: 0;
@@ -189,6 +204,7 @@ $light_gray:#eee;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
   }
+
   .svg-container {
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
@@ -196,6 +212,7 @@ $light_gray:#eee;
     width: 30px;
     display: inline-block;
   }
+
   .title {
     font-size: 26px;
     font-weight: 400;
@@ -204,6 +221,7 @@ $light_gray:#eee;
     text-align: center;
     font-weight: bold;
   }
+
   .show-pwd {
     position: absolute;
     right: 10px;

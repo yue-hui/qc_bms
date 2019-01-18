@@ -7,20 +7,28 @@
           <div class="header-block search-time">
             <label class="search-item">年级:</label>
             <div class="block">
-              <el-select class="select-box-width" clearable placeholder="请选择年级" v-model="information.grade_from">
+              <el-select
+                v-model="information.grade_from"
+                class="select-box-width"
+                clearable
+                placeholder="请选择年级" >
                 <el-option
+                  v-for="item in grade_list_1"
                   :key="item.val"
                   :label="item.name"
-                  :value="item.val"
-                  v-for="item in grade_list_1" />
+                  :value="item.val" />
               </el-select>
               <span class="grade-to-word">至</span>
-              <el-select class="select-box-width" clearable placeholder="请选择年级" v-model="information.grade_to">
+              <el-select
+                v-model="information.grade_to"
+                class="select-box-width"
+                clearable
+                placeholder="请选择年级" >
                 <el-option
+                  v-for="item in grade_list_2"
                   :key="item.val"
                   :label="item.name"
-                  :value="item.val"
-                  v-for="item in grade_list_2" />
+                  :value="item.val" />
               </el-select>
             </div>
           </div>
@@ -28,48 +36,53 @@
           <div class="header-block phone-block">
             <label class="search-item">学科:</label>
             <el-select
+              v-model="information.subject"
               class="select-box-width"
               clearable
               collapse-tags
               multiple
-              placeholder="请选择学科"
-              v-model="information.subject">
+              placeholder="请选择学科">
               <el-option
+                v-for="item in subject_list"
                 :key="item.val"
                 :label="item.name"
-                :value="item.val"
-                v-for="item in subject_list" />
+                :value="item.val" />
             </el-select>
           </div>
 
           <div class="header-block phone-block">
             <label class="search-item">应用名称:</label>
-            <el-input class="select-box-width" clearable v-model="information.app_name" />
+            <el-input v-model="information.app_name" class="select-box-width" clearable />
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button @click="query" type="success">查询</el-button>
+          <el-button type="success" @click="query">查询</el-button>
         </div>
       </div>
 
       <div class="new-application">
-        <el-button @click="create_app" class="new-application-button" round size="mini" type="primary">创建应用</el-button>
+        <el-button
+          class="new-application-button"
+          round
+          size="mini"
+          type="primary"
+          @click="create_app">创建应用</el-button>
       </div>
 
       <!--推荐应用列表-->
       <application-list
+        ref="app_list"
         :condition="condition"
-        @reflex="reflex"
-        ref="app_list" />
+        @reflex="reflex" />
 
       <!--添加新应用-->
       <application-create
+        ref="app_dialog"
         :current="current_app"
         :is-create="is_create"
         :is-show="show_app_dialog"
-        @receive="receive"
-        ref="app_dialog" />
+        @receive="receive" />
 
     </div>
   </div>

@@ -2,12 +2,12 @@
   <div class="content">
     <div class="content-body">
       <el-card class="box-card parent-card-block">
-        <div class="clearfix" slot="header">
+        <div slot="header" class="clearfix">
           <span>个人信息</span>
           <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
         </div>
         <div class="card-block-body">
-          <el-form label-suffix=":" label-width="140px" ref="form">
+          <el-form ref="form" label-suffix=":" label-width="140px">
             <el-row :gutter="20">
               <el-col :span="6">
                 <div class="grid-content bg-purple">
@@ -60,9 +60,9 @@
                     <el-form-item prop="date1">
                       <el-date-picker
                         :disabled="edit.create_time"
+                        v-model="information.create_time"
                         placeholder="注册时间"
-                        type="date"
-                        v-model="information.create_time" />
+                        type="date" />
                     </el-form-item>
                   </el-form-item>
                 </div>
@@ -73,9 +73,9 @@
                     <el-form-item prop="date1">
                       <el-date-picker
                         :disabled="edit.last_use_time"
+                        v-model="information.last_use_time"
                         placeholder="最后使用时间"
-                        type="date"
-                        v-model="information.last_use_time" />
+                        type="date" />
                     </el-form-item>
                   </el-form-item>
                 </div>
@@ -88,7 +88,7 @@
       <div class="black-block" />
 
       <template>
-        <child :card-index="index" :child="child" :key="index" v-for="(child, index) in information.chlid_list" />
+        <child v-for="(child, index) in information.chlid_list" :card-index="index" :child="child" :key="index" />
       </template>
     </div>
   </div>

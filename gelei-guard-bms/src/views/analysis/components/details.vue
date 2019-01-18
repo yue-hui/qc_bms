@@ -1,14 +1,14 @@
 <template>
   <el-card class="box-card">
-    <div class="clearfix" slot="header">
+    <div slot="header" class="clearfix">
       <div class="card-header-content">
         <span>详细数据</span>
         <el-button
           :loading="download_loading"
-          @click="download"
           class="download"
           size="mini"
-          type="success">导出
+          type="success"
+          @click="download">导出
           <svg-icon icon-class="download" />
         </el-button>
       </div>
@@ -52,9 +52,9 @@
           :page-size="page_size"
           :page-sizes="[100, 200, 300, 400]"
           :total="total"
+          layout="total, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change"
-          layout="total, prev, pager, next, jumper" />
+          @size-change="table_size_change" />
       </div>
     </div>
   </el-card>

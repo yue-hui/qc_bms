@@ -7,19 +7,19 @@
             <label class="search-item">注册时间:</label>
             <div class="block">
               <el-date-picker
-                @change="date_range_change"
+                v-model="datetime_range"
                 end-placeholder="结束日期"
                 range-separator="至"
                 start-placeholder="开始日期"
                 type="daterange"
                 unlink-panels
-                v-model="datetime_range" />
+                @change="date_range_change"/>
             </div>
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button @click="search" type="success">搜索</el-button>
+          <el-button type="success" @click="search">搜索</el-button>
         </div>
       </div>
 
@@ -32,11 +32,11 @@
 
       <!--图表数据-->
       <div class="statistics-diagram">
-        <diagram :condition="condition" ref="diagram" />
+        <diagram ref="diagram" :condition="condition" />
       </div>
 
       <!--详情信息-->
-      <statics_details :condition="condition" ref="details" />
+      <statics_details ref="details" :condition="condition" />
     </div>
   </div>
 </template>

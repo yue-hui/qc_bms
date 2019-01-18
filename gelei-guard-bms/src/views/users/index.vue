@@ -7,27 +7,27 @@
             <label class="search-item">注册时间:</label>
             <div class="block">
               <el-date-picker
+                v-model="datetime_range"
                 end-placeholder="结束日期"
                 range-separator="至"
                 start-placeholder="开始日期"
                 type="daterange"
-                unlink-panels
-                v-model="datetime_range" />
+                unlink-panels />
             </div>
           </div>
 
           <div class="header-block phone-block">
             <label class="search-item">手机号:</label>
             <el-input
+              v-model="phone"
               maxlength="11"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
-              placeholder="请输入手机号"
-              v-model="phone" />
+              placeholder="请输入手机号" />
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button @click="search" type="success">搜索</el-button>
+          <el-button type="success" @click="search">搜索</el-button>
         </div>
       </div>
       <hr class="hr-diviser">
@@ -58,7 +58,7 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button @click="view_details(scope.row)" size="small" type="text">查看</el-button>
+              <el-button size="small" type="text" @click="view_details(scope.row)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -67,9 +67,9 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
+          layout="total, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change"
-          layout="total, prev, pager, next, jumper" />
+          @size-change="table_size_change" />
       </div>
     </div>
   </div>

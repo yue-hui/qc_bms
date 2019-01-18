@@ -188,10 +188,19 @@ export function forbidden_soft_recommend_group(data) {
   })
 }
 
-// 禁用推荐应用组合
+// 推荐应用组合详情信息
 export function get_soft_recommend_group_detail(data) {
   return request({
     url: '/manager/soft/recommend/group/detail',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑推荐应用组合
+export function edit_soft_recommend_group(data) {
+  return request({
+    url: '/manager/soft/recommend/group/edit',
     method: 'post',
     data
   })

@@ -14,7 +14,7 @@
             label="学科"
             prop="subject_list">
             <template slot-scope="scope">
-              <div :key="index" v-for="(subject_label, index) in scope.row.subject_label_list">{{ subject_label }}</div>
+              <div v-for="(subject_label, index) in scope.row.subject_label_list" :key="index">{{ subject_label }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -22,7 +22,7 @@
             label="所属年级"
             prop="grade_list">
             <template slot-scope="scope">
-              <div :key="index" v-for="(grade_label, index) in scope.row.grade_label_list">{{ grade_label }}</div>
+              <div v-for="(grade_label, index) in scope.row.grade_label_list" :key="index">{{ grade_label }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -44,10 +44,10 @@
             width="180">
             <template slot-scope="scope">
               <el-rate
+                v-model="scope.row.rec_level"
                 :colors="['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#5e5e5e', '#444444', '#404040', '#303030', '#121212', '#000000']"
                 disabled
-                show-score
-                v-model="scope.row.rec_level" />
+                show-score />
             </template>
           </el-table-column>
           <el-table-column
@@ -55,7 +55,7 @@
             label="所在组合"
             prop="group_list">
             <template slot-scope="scope">
-              <div :key="index" class="show-list-content" v-for="(group, index) in scope.row.group_list">
+              <div v-for="(group, index) in scope.row.group_list" :key="index" class="show-list-content">
                 <el-tag size="mini">{{ group }}</el-tag>
               </div>
             </template>
@@ -71,8 +71,8 @@
             prop="total_user"
             width="180">
             <template slot-scope="scope">
-              <el-button @click="edit_application(scope.row)" size="small" type="text">编辑</el-button>
-              <el-button @click="delete_application(scope.row)" size="small" type="text">删除</el-button>
+              <el-button size="small" type="text" @click="edit_application(scope.row)">编辑</el-button>
+              <el-button size="small" type="text" @click="delete_application(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -81,9 +81,9 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
+          layout="total, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change"
-          layout="total, prev, pager, next, jumper" />
+          @size-change="table_size_change" />
       </div>
     </div>
   </div>

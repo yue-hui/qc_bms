@@ -15,7 +15,7 @@
             <span>组合名称:</span>
           </div>
           <div class="column column-content">
-            <el-input placeholder="组合名称" size="mini" v-model="group_name" />
+            <el-input v-model="group_name" placeholder="组合名称" size="mini" />
           </div>
         </div>
         <div class="row">
@@ -24,16 +24,16 @@
           </div>
           <div class="column column-content">
             <el-select
-              @change="change_grade"
+              v-model="grade"
               placeholder="添加应用"
               size="mini"
-              v-model="grade">
+              @change="change_grade">
               <el-option
+                v-for="(grade, index) in grade_list"
                 :key="index"
                 :label="grade.name"
                 :value="grade.val"
-                class="el-select-dropdown__item__recommend"
-                v-for="(grade, index) in grade_list" />
+                class="el-select-dropdown__item__recommend" />
             </el-select>
           </div>
         </div>
@@ -43,10 +43,10 @@
           </div>
           <div class="column column-content">
             <el-checkbox-group
-              @change="change_subject"
-              v-model="subjects">
+              v-model="subjects"
+              @change="change_subject">
               <el-row :span="24">
-                <el-col :key="index" :span="4" v-for="(subject, index) in subject_list">
+                <el-col v-for="(subject, index) in subject_list" :key="index" :span="4">
                   <el-checkbox :key="subject.val" :label="subject.name">{{ subject.name }}</el-checkbox>
                 </el-col>
               </el-row>
@@ -59,10 +59,10 @@
           </div>
           <div class="column column-content">
             <combination-panel
+              ref="comb_panel"
               :applications="applications"
               :condition="panel_condition"
-              @rsync_app="rsync_application"
-              ref="comb_panel" />
+              @rsync_app="rsync_application" />
           </div>
         </div>
         <div class="row">
@@ -71,20 +71,20 @@
           </div>
           <div class="column column-content">
             <el-tag
+              v-for="app in applications"
               :key="app.name"
-              @close="close_tags(app)"
               closable
               size="medium"
-              v-for="app in applications">
+              @close="close_tags(app)">
               APP:{{ app.name }}
             </el-tag>
           </div>
         </div>
       </div>
 
-      <span class="dialog-footer" slot="footer">
-        <el-button @click="$emit('receive', false)" size="mini">取 消</el-button>
-        <el-button @click="emmit_application" size="mini" type="primary">确 定</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="$emit('receive', false)">取 消</el-button>
+        <el-button size="mini" type="primary" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -92,7 +92,11 @@
 
 <script>
 import combinationPanel from '@/views/recommend/components/combination_panel'
-import { create_soft_recommend_group, get_soft_recommend_group_detail } from '@/api/interactive'
+import {
+  create_soft_recommend_group,
+  edit_soft_recommend_group,
+  get_soft_recommend_group_detail
+} from '@/api/interactive'
 import { GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
 
 export default {
@@ -120,7 +124,7 @@ export default {
   },
   data: function() {
     return {
-      group_id: '',
+      rec_group_id: '',
       group_name: '',
       panel_condition: {},
       applications: [],
@@ -157,14 +161,14 @@ export default {
       }
     },
     init_new_dialog() {
-      this.group_id = ''
+      this.rec_group_id = ''
       this.group_name = ''
       this.grade = ''
       this.subjects = []
       this.applications = []
     },
     edit_new_dialog() {
-      this.group_id = this.condition.group_id
+      this.rec_group_id = this.condition.rec_group_id
       this.group_name = this.condition.group_name
       this.grade = this.condition.grade
       this.subjects = this.condition.subjects
@@ -183,10 +187,12 @@ export default {
         return r.record_id
       })
       const config = {
+        rec_group_id: this.rec_group_id,
+        grade: this.grade,
         group_name: this.group_name,
         bundle_id_list,
-        grade: this.grade,
-        rec_type: this.rec_type
+        rec_type: this.rec_type,
+        record_id_list: this.record_id_list
         // subjects: this.subjects
       }
       console.log('config:', config)
@@ -210,6 +216,17 @@ export default {
     },
     edit(config) {
       // 编辑接口
+      // condition
+      // const config = {
+      //   rec_group_id,
+      //   group_name,
+      //   grade,
+      //   record_id_list,
+      //   rec_type
+      // }
+      edit_soft_recommend_group(config).then(res => {
+        console.log('res', res)
+      })
       this.$emit('receive', false)
     },
     change_condition() {

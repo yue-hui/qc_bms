@@ -8,7 +8,7 @@
         label=""
         width="60">
         <template slot-scope="scope">
-          <el-checkbox @change="change_check_box(scope.row)" v-model="scope.row.checked" />
+          <el-checkbox v-model="scope.row.checked" @change="change_check_box(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column
@@ -22,7 +22,7 @@
         prop="subject_list_label"
         width="100">
         <template slot-scope="scope">
-          <div :key="index" v-for="(subject_label, index) in scope.row.subject_list_label">{{ subject_label }}</div>
+          <div v-for="(subject_label, index) in scope.row.subject_list_label" :key="index">{{ subject_label }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -31,7 +31,7 @@
         prop="grade_list_label"
         width="100">
         <template slot-scope="scope">
-          <div :key="index" v-for="(grade_label, index) in scope.row.grade_list_label">{{ grade_label }}</div>
+          <div v-for="(grade_label, index) in scope.row.grade_list_label" :key="index">{{ grade_label }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -51,9 +51,9 @@
       :page-size="page_size"
       :page-sizes="[10, 20, 50, 100]"
       :total="total"
+      layout="total, prev, pager, next, jumper"
       @current-change="change_current"
-      @size-change="table_size_change"
-      layout="total, prev, pager, next, jumper" />
+      @size-change="table_size_change" />
   </div>
 </template>
 

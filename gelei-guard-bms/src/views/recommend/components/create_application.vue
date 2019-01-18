@@ -15,21 +15,21 @@
           <div class="column column-content">
             <template v-if="isCreate">
               <el-select
+                v-model="rec_bundle_id"
                 :filterable="true"
                 :remote="true"
                 :remote-method="remote_application"
-                @change="change_app"
                 class="application-name-input"
                 collapse-tags
                 placeholder="添加应用"
                 size="mini"
-                v-model="rec_bundle_id">
+                @change="change_app">
                 <el-option
+                  v-for="(item, index) in app_list"
                   :key="index"
                   :label="item.soft_name"
                   :value="item.rec_bundle_id"
-                  class="el-select-dropdown__item__recommend"
-                  v-for="(item, index) in app_list">
+                  class="el-select-dropdown__item__recommend">
                   <div class="select-slot-block">
                     <span title="item.app_name">{{ item.soft_name }}</span>
                     <span title="item.app_name">{{ item.soft_name }}</span>
@@ -38,7 +38,7 @@
               </el-select>
             </template>
             <template v-if="!isCreate">
-              <el-input disabled v-model="soft_name" />
+              <el-input v-model="soft_name" disabled />
             </template>
           </div>
         </div>
@@ -48,8 +48,8 @@
           </div>
           <div class="column column-content">
             <div class="app-list-tags">
-              <div :key="index" class="app-list-tag" v-for="(app, index) in app_tags">
-                <el-tag @close="close_app_tag(app.id)" closable>{{ app.name }}</el-tag>
+              <div v-for="(app, index) in app_tags" :key="index" class="app-list-tag">
+                <el-tag closable @close="close_app_tag(app.id)">{{ app.name }}</el-tag>
               </div>
             </div>
           </div>
@@ -79,7 +79,7 @@
             <el-checkbox-group
               v-model="subject_list">
               <el-row :span="24">
-                <el-col :key="index" :span="4" v-for="(subject, index) in subjects">
+                <el-col v-for="(subject, index) in subjects" :key="index" :span="4">
                   <el-checkbox :key="index" :label="subject.p_value">{{ subject.p_label }}</el-checkbox>
                 </el-col>
               </el-row>
@@ -92,9 +92,9 @@
           </div>
           <div class="column column-content">
             <div class="age-group-block">
-              <el-input class="age-group-sub-block" placeholder="请输入年龄段" v-model="start_age" />
+              <el-input v-model="start_age" class="age-group-sub-block" placeholder="请输入年龄段" />
               <span class="grade-to-word">-</span>
-              <el-input class="age-group-sub-block" placeholder="请输入年龄段" v-model="end_age" />
+              <el-input v-model="end_age" class="age-group-sub-block" placeholder="请输入年龄段" />
               <span class="grade-to-word">岁</span>
             </div>
           </div>
@@ -105,15 +105,15 @@
           </div>
           <div class="column column-content">
             <el-select
+              v-model="sex"
               placeholder="性别"
               size="mini"
-              style="width: 80px;"
-              v-model="sex">
+              style="width: 80px;">
               <el-option
+                v-for="sex in sex_list"
                 :key="sex.val"
                 :label="sex.name"
-                :value="sex.val"
-                v-for="sex in sex_list" />
+                :value="sex.val" />
             </el-select>
           </div>
         </div>
@@ -123,12 +123,12 @@
           </div>
           <div class="column column-content">
             <el-rate
+              v-model="rec_level"
               :allow-half="true"
               :max="5"
               score-template="{value}分"
               show-score
-              text-color="#ff9900"
-              v-model="rec_level" />
+              text-color="#ff9900" />
           </div>
         </div>
         <div class="row">
@@ -136,7 +136,7 @@
             <span>应用推荐语:</span>
           </div>
           <div class="column column-content">
-            <el-input placeholder="请输入应用推荐语(20字内)" size="mini" v-model="rec_phrase" />
+            <el-input v-model="rec_phrase" placeholder="请输入应用推荐语(20字内)" size="mini" />
           </div>
         </div>
         <div class="row">
@@ -145,19 +145,19 @@
           </div>
           <div class="column column-content">
             <el-input
+              v-model="rec_desc"
               columns="10"
               placeholder="请输入小编推荐语"
               rows="5"
               size="mini"
-              type="textarea"
-              v-model="rec_desc" />
+              type="textarea" />
           </div>
         </div>
       </div>
 
-      <span class="dialog-footer" slot="footer">
-        <el-button @click="cancel" size="mini">取 消</el-button>
-        <el-button @click="emmit_application" size="mini" type="primary">确 定</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="cancel">取 消</el-button>
+        <el-button size="mini" type="primary" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>

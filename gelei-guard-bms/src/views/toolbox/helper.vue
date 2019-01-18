@@ -3,7 +3,7 @@
     <div class="content-body">
       <div class="header-line">
         <div class="control-box">
-          <el-button @click="add_questions" type="success">添加帮助问题</el-button>
+          <el-button type="success" @click="add_questions">添加帮助问题</el-button>
         </div>
       </div>
 
@@ -30,8 +30,8 @@
             prop="control"
             width="260">
             <template slot-scope="scope">
-              <el-button @click="edit_questions(scope.row)" size="small" type="text">编辑</el-button>
-              <el-button @click="prefer_deploy(scope.row)" size="small" type="text">{{ deploy_name }}</el-button>
+              <el-button size="small" type="text" @click="edit_questions(scope.row)">编辑</el-button>
+              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ deploy_name }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -40,12 +40,12 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
+          layout="total, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change"
-          layout="total, prev, pager, next, jumper" />
+          @size-change="table_size_change" />
       </div>
 
-      <questions :is_new="is_create" :rid="record_id" @destory="close_dialog" v-if="show_dialog" />
+      <questions v-if="show_dialog" :is_new="is_create" :rid="record_id" @destory="close_dialog" />
 
     </div>
   </div>

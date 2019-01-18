@@ -4,10 +4,10 @@
       格雷守护后台管理系统
     </div>
     <div class="user-info">
-      <div class="user-name-show" v-if="name">{{ name }},</div>
+      <div v-if="name" class="user-name-show">{{ name }},</div>
       <div class="user-name-show">欢迎您!</div>
       <div class="diviser" />
-      <div @click="logout" class="logout-block">
+      <div class="logout-block" @click="logout">
         <div class="logout-hover-style">
           <svg-icon icon-class="logout" />
           <span class="logout-text">退出</span>

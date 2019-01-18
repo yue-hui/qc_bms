@@ -1,13 +1,13 @@
 <template>
   <div class="component-card">
     <el-card class="box-card parent-card-block">
-      <div class="clearfix" slot="header">
+      <div slot="header" class="clearfix">
         <span>绑定孩子{{ child_index }}信息</span>
         <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
       </div>
       <!--孩子 - 详细信息-->
       <div class="card-block-body">
-        <el-form label-suffix=":" label-width="140px" ref="form">
+        <el-form ref="form" label-suffix=":" label-width="140px">
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="grid-content bg-purple">
@@ -64,9 +64,9 @@
                   <el-form-item prop="date1">
                     <el-date-picker
                       :disabled="edit.create_time"
+                      v-model="child_new.create_time"
                       placeholder="注册时间"
-                      type="date"
-                      v-model="child_new.create_time" />
+                      type="date" />
                   </el-form-item>
                 </el-form-item>
               </div>
@@ -76,10 +76,10 @@
                 <el-form-item label="最后使用时间">
                   <el-form-item prop="date1">
                     <el-date-picker
+                      v-model="child_new.last_use_time"
                       :disabled="edit.last_use_time"
-                      placeholder="最后使用时间"
                       type="date"
-                      v-model="child_new.last_use_time" />
+                      placeholder="最后使用时间" />
                   </el-form-item>
                 </el-form-item>
               </div>
@@ -88,7 +88,11 @@
         </el-form>
       </div>
 
-      <device-card :device="device" :index="cardIndex" :key="index" v-for="(device, index) in child_new.device_list" />
+      <device-card
+        v-for="(device, index) in child_new.device_list"
+        :key="index"
+        :device="device"
+        :index="cardIndex" />
     </el-card>
   </div>
 </template>

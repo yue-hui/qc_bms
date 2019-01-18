@@ -47,16 +47,16 @@
             <template slot-scope="scope">
               <el-button
                 :disabled="control_is_enabled(scope.row)"
-                @click="control_combinaion(scope.row)"
                 size="small"
                 type="text"
+                @click="control_combinaion(scope.row)"
               >{{ show_label(scope.row) }}
               </el-button>
               <el-button
                 :disabled="edit_is_enabled(scope.row)"
-                @click="edit_combinaion(scope.row)"
                 size="small"
                 type="text"
+                @click="edit_combinaion(scope.row)"
               >编辑
               </el-button>
             </template>
@@ -67,9 +67,9 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
+          layout="total, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change"
-          layout="total, prev, pager, next, jumper" />
+          @size-change="table_size_change" />
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@
 
 <script>
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
-import { get_soft_recommend_group } from '@/api/interactive'
+import { forbidden_soft_recommend_group, get_soft_recommend_group } from '@/api/interactive'
 import { date_formatter, get_app_combination_status, get_grade_label, get_rec_type_label } from '@/utils/common'
 
 export default {
@@ -173,8 +173,19 @@ export default {
           // 系统 已开启不作处理
         }
       } else {
-        // 暂不处理
+        // 手工 暂不处理
       }
+    },
+    suspend_application_group(rec_group_id) {
+      // 手工 停用接口
+      const config = { rec_group_id }
+      forbidden_soft_recommend_group(config).then(res => {
+        if (res.status === 0) {
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
+        }
+      })
     }
   }
 }

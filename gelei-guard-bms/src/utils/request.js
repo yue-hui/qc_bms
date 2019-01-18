@@ -43,7 +43,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-    
+
       /*
       -: 非法的token
       -1: 通用异常，后续接口异常区分返回码

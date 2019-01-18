@@ -9,10 +9,9 @@
           :index="resolvePath(onlyOneChild.path)"
         >
           <item
-            :icon="onlyOneChild.meta.icon||item.meta.icon"
-            :title="onlyOneChild.meta.title"
             v-if="onlyOneChild.meta"
-          />
+            :icon="onlyOneChild.meta.icon||item.meta.icon"
+            :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>

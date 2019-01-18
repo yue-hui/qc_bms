@@ -1,14 +1,14 @@
 <template>
   <div class="component-card">
-    <el-tabs @tab-click="tab_change" type="border-card" v-model="active_name">
+    <el-tabs v-model="active_name" type="border-card" @tab-click="tab_change">
       <el-tab-pane label="新增注册用户" name="1">
-        <ve-line :data="options" ref="chart1" />
+        <ve-line ref="chart1" :data="options" />
       </el-tab-pane>
       <el-tab-pane label="新增绑定用户" name="2">
-        <ve-line :data="options" ref="chart2" />
+        <ve-line ref="chart2" :data="options" />
       </el-tab-pane>
       <el-tab-pane label="新增绑定设备" name="3">
-        <ve-line :data="options" ref="chart3" />
+        <ve-line ref="chart3" :data="options" />
       </el-tab-pane>
     </el-tabs>
   </div>

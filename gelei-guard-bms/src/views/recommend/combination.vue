@@ -3,7 +3,12 @@
     <div class="content-body">
 
       <div class="new-combination">
-        <el-button @click="create_system_recomend" class="new-combination-button" round size="mini" type="primary">
+        <el-button
+          class="new-combination-button"
+          round
+          size="mini"
+          type="primary"
+          @click="create_system_recomend">
           创建系统推荐
         </el-button>
         <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend" round>创建手工推荐</el-button>-->
@@ -13,8 +18,12 @@
       <combination-list @control="control_combination" @edit="edit_combination" />
 
       <!--添加新应用-->
-      <combination-create :condition="current_row" :is-create="is_create" :is-show="show_app_dialog" @receive="receive"
-                          v-if="show_app_dialog" />
+      <combination-create
+        v-if="show_app_dialog"
+        :condition="current_row"
+        :is-create="is_create"
+        :is-show="show_app_dialog"
+        @receive="receive" />
 
     </div>
   </div>

@@ -4,7 +4,7 @@
       :before-close="before_close"
       :title="title"
       :visible.sync="visible">
-      <el-form :model="form" :rules="rules" label-suffix=":" label-width="100px" ref="form">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <el-form-item label="帮助问题" prop="question">
           <el-input v-model="form.question" />
         </el-form-item>
@@ -13,17 +13,17 @@
         </el-form-item>
         <el-form-item :label="weight_label" prop="weight">
           <el-input-number
+            v-model="form.weight"
             :max="max"
             :min="min"
-            controls-position="right"
-            v-model="form.weight" />
+            controls-position="right" />
         </el-form-item>
       </el-form>
 
       <div class="button-block">
         <div class="button-group">
-          <el-button @click="save" type="primary">保 存</el-button>
-          <el-button @click="cancel" type="danger">取 消</el-button>
+          <el-button type="primary" @click="save">保 存</el-button>
+          <el-button type="primary" @click="cancel">取 消</el-button>
         </div>
       </div>
     </el-dialog>

@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-    <div class="clearfix" slot="header">
+    <div slot="header" class="clearfix">
       <span>整体数据指标</span>
     </div>
     <div class="component-card">

@@ -1,7 +1,11 @@
 <template>
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" @click=" dialogVisible=true" icon="el-icon-upload"
-               size="mini" type="primary">上传图片
+    <el-button
+      :style="{background:color,borderColor:color}"
+      type="primary"
+      icon="el-icon-upload"
+      size="mini"
+      @click=" dialogVisible=true">上传图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
@@ -17,7 +21,7 @@
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button @click="handleSubmit" type="primary">确 定</el-button>
+      <el-button type="primary" @click="handleSubmit">确 定</el-button>
     </el-dialog>
   </div>
 </template>
