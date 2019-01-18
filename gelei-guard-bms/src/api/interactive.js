@@ -206,3 +206,12 @@ export function edit_soft_recommend_group(data) {
   })
 }
 
+// 发布或撤销应用组合
+export function deploy_soft_recommend_group(data) {
+  return request({
+    url: '/manager/soft/recommend/group/publish',
+    method: 'post',
+    data
+  })
+}
+

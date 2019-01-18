@@ -77,7 +77,11 @@
 
 <script>
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
-import { forbidden_soft_recommend_group, get_soft_recommend_group } from '@/api/interactive'
+import {
+  deploy_soft_recommend_group,
+  forbidden_soft_recommend_group,
+  get_soft_recommend_group
+} from '@/api/interactive'
 import { date_formatter, get_app_combination_status, get_grade_label, get_rec_type_label } from '@/utils/common'
 
 export default {
@@ -101,16 +105,18 @@ export default {
   methods: {
     show_label(row) {
       if (row.rec_type === '1') {
+        // 系统推荐
         if (row.status === '01' || row.rec_type === '1') {
           return '开启'
         } else {
-          return '关闭'
+          return '已开启'
         }
       } else {
+        // 手工推荐
         if (row.status === '01' || row.rec_type === '1') {
-          return ''
-        } else {
           return '推送'
+        } else {
+          return '暂停'
         }
       }
     },
@@ -147,16 +153,37 @@ export default {
       })
     },
     edit_is_enabled(row) {
-      if (row.rec_type === '1' && row.status === '02') {
-        return true
+      // 编辑
+      if (row.rec_type === '1') {
+        // 系统推荐
+        if (row.enabled === '1') {
+          return false
+        }
+      } else if (row.rec_type === '2') {
+        // 手工推荐
+        if (['02', '2'].indexOf(row.status) !== -1) {
+          // 已发送状态
+          return true
+        }
+        if (row.enabled === '0') {
+          return true
+        }
       }
-      return false
+      return true
     },
     control_is_enabled(row) {
-      if (row.rec_type === '1' && row.status === '02') {
-        return true
+      // 开启/关闭
+      if (row.rec_type === '1') {
+        // 系统推荐
+        if (row.enabled === '1' && ['01', '1'].indexOf(row.status) !== -1) {
+          // 可用状态都开启
+          return false
+        }
+      } else if (row.rec_type === '2') {
+        // 手工推荐
+        return false
       }
-      return false
+      return true
     },
     edit_combinaion(row) {
       // 编辑
@@ -168,6 +195,8 @@ export default {
       if (['01', '1'].indexOf(row.rec_type) !== -1) {
         if (['01', '1'].indexOf(row.status) !== -1) {
           // 系统  待开启
+          const rec_group_id = row.rec_group_id
+          this.depoly_application_group_or_not(rec_group_id, false)
           console.log('系统  待开启')
         } else {
           // 系统 已开启不作处理
@@ -182,6 +211,21 @@ export default {
       forbidden_soft_recommend_group(config).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    depoly_application_group_or_not(rec_group_id, published) {
+      const config = {
+        rec_group_id,
+        published
+      }
+      console.log('depoly_application_group_or_not config', config)
+      deploy_soft_recommend_group(config).then(res => {
+        if (res.status === 0) {
+          this.$message.success('发布成功')
+          this.reload()
         } else {
           this.$message.error(res.message)
         }

@@ -14,7 +14,9 @@
             label="学科"
             prop="subject_list">
             <template slot-scope="scope">
-              <div v-for="(subject_label, index) in scope.row.subject_label_list" :key="index">{{ subject_label }}</div>
+              <div v-for="(subject_label, index) in scope.row.subject_label_list" :key="index" class="show-list-content">
+                <el-tag size="mini">{{ subject_label }}</el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -22,7 +24,9 @@
             label="所属年级"
             prop="grade_list">
             <template slot-scope="scope">
-              <div v-for="(grade_label, index) in scope.row.grade_label_list" :key="index">{{ grade_label }}</div>
+              <div v-for="(grade_label, index) in scope.row.grade_label_list" :key="index" class="show-list-content">
+                <el-tag size="mini">{{ grade_label }}</el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column

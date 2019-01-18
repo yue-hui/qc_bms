@@ -55,18 +55,6 @@
         </div>
         <div class="row">
           <div class="column column-label">
-            <span />
-          </div>
-          <div class="column column-content">
-            <combination-panel
-              ref="comb_panel"
-              :applications="applications"
-              :condition="panel_condition"
-              @rsync_app="rsync_application" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
             <span>符合条件的应用:</span>
           </div>
           <div class="column column-content">
@@ -78,6 +66,18 @@
               @close="close_tags(app)">
               APP:{{ app.name }}
             </el-tag>
+          </div>
+        </div>
+        <div class="row">
+          <div class="column column-label">
+            <span />
+          </div>
+          <div class="column column-content">
+            <combination-panel
+              ref="comb_panel"
+              :applications="applications"
+              :condition="panel_condition"
+              @rsync_app="rsync_application" />
           </div>
         </div>
       </div>
@@ -183,19 +183,16 @@ export default {
         })
     },
     get_application_config() {
-      const bundle_id_list = this.applications.map(r => {
+      const record_id_list = this.applications.map(r => {
         return r.record_id
       })
       const config = {
-        rec_group_id: this.rec_group_id,
+        rec_group_id: this.condition.rec_group_id,
         grade: this.grade,
         group_name: this.group_name,
-        bundle_id_list,
-        rec_type: this.rec_type,
-        record_id_list: this.record_id_list
-        // subjects: this.subjects
+        record_id_list,
+        rec_type: this.rec_type
       }
-      console.log('config:', config)
       return config
     },
     emmit_application() {
@@ -216,16 +213,10 @@ export default {
     },
     edit(config) {
       // 编辑接口
-      // condition
-      // const config = {
-      //   rec_group_id,
-      //   group_name,
-      //   grade,
-      //   record_id_list,
-      //   rec_type
-      // }
       edit_soft_recommend_group(config).then(res => {
-        console.log('res', res)
+        if (res.status !== 0) {
+          this.$message.error(res.message)
+        }
       })
       this.$emit('receive', false)
     },
@@ -256,7 +247,6 @@ export default {
     },
     close_tags(app) {
       // close app tags
-      console.log('app', app, this.applications)
       this.applications = this.applications.filter(r => r.record_id !== app.record_id)
       // sync checked box status
       // must be next tick
@@ -265,10 +255,10 @@ export default {
       })
     },
     load_edit_details() {
-      const rec_group_id = this.condition.rec_group_id
-      const config = { rec_group_id }
+      const config = {
+        rec_group_id: this.condition.rec_group_id
+      }
       get_soft_recommend_group_detail(config).then(res => {
-        console.log(res)
         if (res.status === 0) {
           const data = res.data
           this.group_name = data.group_name
@@ -282,12 +272,9 @@ export default {
             return config
           })
         }
-        console.log('-----------------------------------')
-        // this.$nextTick(() => {
-        //   this.$refs.comb_panel.search()
-        // })
-
-        // this.$refs.comb_panel.search()
+        this.$nextTick(() => {
+          this.$refs.comb_panel.search()
+        })
       })
     }
   }

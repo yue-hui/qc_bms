@@ -80,7 +80,7 @@
               v-model="subject_list">
               <el-row :span="24">
                 <el-col v-for="(subject, index) in subjects" :key="index" :span="4">
-                  <el-checkbox :key="index" :label="subject.p_value">{{ subject.p_label }}</el-checkbox>
+                  <el-checkbox :key="index" :label="subject.name">{{ subject.name }}</el-checkbox>
                 </el-col>
               </el-row>
             </el-checkbox-group>
@@ -164,8 +164,9 @@
 </template>
 
 <script>
-import { GRADE_LIST, SEX_LIST } from '@/utils/constant'
+import { GRADE_LIST, SEX_LIST, SUBJECT_LIST } from '@/utils/constant'
 import { create_soft_remmend, edit_soft_remmend, search_soft_recommend_mark } from '@/api/interactive'
+import { subject_label_map_number, subject_number_map_label } from '@/utils/common'
 
 export default {
   name: 'ApplicationCreate',
@@ -199,7 +200,7 @@ export default {
       soft_name: '',
       app_tags: [],
       grade_list: [],
-      subjects: [],
+      subject_list: [],
       start_age: 0,
       end_age: 0,
       sex: null,
@@ -208,7 +209,7 @@ export default {
       rec_desc: '',
       app_list: [],
       grades: GRADE_LIST,
-      subject_list: [],
+      subjects: SUBJECT_LIST,
       sex_list: SEX_LIST
     }
   },
@@ -253,12 +254,12 @@ export default {
       } else {
         current = modified
       }
-      console.log('current current', current)
+      console.log('initital_with_row current', current)
       this.record_id = current.record_id
       this.rec_bundle_id = current.rec_bundle_id
       this.soft_name = current.soft_name
       this.grade_list = current.grade_list
-      this.subject_list = current.subject_list
+      this.subject_list = subject_number_map_label(current.subject_list)
       this.start_age = current.start_age
       this.end_age = current.end_age
       this.sex = current.sex
@@ -278,7 +279,7 @@ export default {
       const config = {
         soft_name: this.soft_name,
         grade_list: this.grade_list,
-        subject_list: this.subject_list,
+        subject_list: subject_label_map_number(this.subject_list),
         start_age: this.start_age,
         end_age: this.end_age,
         sex: this.sex,

@@ -15,7 +15,10 @@
       </div>
 
       <!--应用列表-->
-      <combination-list @control="control_combination" @edit="edit_combination" />
+      <combination-list
+        ref="comb_list"
+        @control="control_combination"
+        @edit="edit_combination" />
 
       <!--添加新应用-->
       <combination-create
@@ -71,38 +74,33 @@ export default {
   methods: {
     grade_from_change(grade, old_grade) {
       this.grade_list_2 = GRADE_LIST.filter((r) => r.val >= grade)
-      console.log('this.grade_list_2', this.grade_list_2)
       if (this.grade_to < grade) {
         this.grade_to = this.grade_list_2[0].val
       }
     },
     create_system_recomend() {
-      console.log('create system recommend')
       this.is_create = true
       this.show_app_dialog = true
     },
     create_manual_recomend() {
-      console.log('create manual recommend')
       this.is_create = true
       this.show_app_dialog = true
     },
     edit_app() {
-      console.log('edit_app')
       this.is_create = false
       this.show_app_dialog = true
     },
     receive(status) {
       this.show_app_dialog = status
+      this.$refs.comb_list.reload()
     },
     edit_combination(row) {
-      console.log('edit combination', row)
       this.current_row = row
       this.is_create = false
       this.show_app_dialog = true
     },
     control_combination(row) {
       // 推送  已开启  已关闭
-      console.log('delete combination', row)
     }
   }
 }
