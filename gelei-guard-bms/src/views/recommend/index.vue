@@ -66,7 +66,7 @@
           class="new-application-button"
           round
           size="mini"
-          type="primary"
+          type="success"
           @click="create_app">创建应用</el-button>
       </div>
 

@@ -3,7 +3,10 @@
     <div class="content-body">
       <div class="header-line">
         <div class="control-box">
-          <el-button type="success" @click="add_questions">添加帮助问题</el-button>
+          <el-button
+            type="success"
+            @click="add_questions"
+          >添加帮助问题</el-button>
         </div>
       </div>
 

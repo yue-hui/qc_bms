@@ -7,7 +7,7 @@
           class="new-combination-button"
           round
           size="mini"
-          type="primary"
+          type="success"
           @click="create_system_recomend">
           创建系统推荐
         </el-button>
