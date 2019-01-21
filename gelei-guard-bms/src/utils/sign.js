@@ -1,5 +1,9 @@
-import { SIGN_DELTA_TIME } from './constant'
-import { getToken } from '@/utils/auth'
+import {
+  SIGN_DELTA_TIME
+} from './constant'
+import {
+  getToken
+} from '@/utils/auth'
 
 const sha256 = require('sha256')
 
@@ -23,16 +27,14 @@ function getSign(params) {
     publicParams['app_token'] = app_token
   }
   const all_params = Object.assign({}, params, publicParams, other_params)
-  // 排序
   const arr = Object.values(all_params)
+  // 参数值是数组，处理方法
   arr.forEach((element, i) => {
-    console.log('element', element)
     if (Array.isArray(element)) {
       arr[i] = JSON.stringify(element)
-      console.log('element2', element)
     }
   })
-  console.log('arr', JSON.stringify(arr))
+  // 排序
   arr.sort()
 
   // 加密
