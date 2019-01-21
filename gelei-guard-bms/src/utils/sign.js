@@ -25,9 +25,19 @@ function getSign(params) {
   const all_params = Object.assign({}, params, publicParams, other_params)
   // 排序
   const arr = Object.values(all_params)
+  arr.forEach((element, i) => {
+    console.log('element', element)
+    if (Array.isArray(element)) {
+      arr[i] = JSON.stringify(element)
+      console.log('element2', element)
+    }
+  })
+  console.log('arr', JSON.stringify(arr))
   arr.sort()
+
   // 加密
   const str = arr.join('')
+  console.log('str', str)
   const sign = sha256(str)
   // 返回所有参数
   const p = Object.assign({}, params, publicParams, {
