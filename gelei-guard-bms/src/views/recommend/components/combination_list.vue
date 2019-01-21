@@ -5,7 +5,6 @@
         <el-table
           :data="data_list"
           :stripe="true"
-          :header-cell-style="get_row_class"
           style="width: 100%">
           <el-table-column
             align="center"
@@ -232,10 +231,6 @@ export default {
           this.$message.error(res.message)
         }
       })
-    },
-    get_row_class(params) {
-      console.log(params)
-      return 'background: #44474c;'
     }
   }
 }
