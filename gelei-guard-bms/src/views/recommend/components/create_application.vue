@@ -31,7 +31,7 @@
                   :value="item.rec_bundle_id"
                   class="el-select-dropdown__item__recommend">
                   <div class="select-slot-block">
-                    <span title="item.app_name">{{ item.soft_name }}</span>
+                    <img :src="item.icon_url"></img>
                     <span title="item.app_name">{{ item.soft_name }}</span>
                   </div>
                 </el-option>
@@ -414,6 +414,23 @@ export default {
           text-align: center;
         }
       }
+    }
+  }
+}
+
+.el-select-dropdown__item__recommend {
+  position: relative;
+  .select-slot-block {
+    display: flex;
+    flex-direction: row;
+    /*justify-items: center;*/
+    align-items: center;
+    img {
+      width: 20px;
+      height: 20px;
+    }
+    span{
+      padding-left: 10px;
     }
   }
 }
