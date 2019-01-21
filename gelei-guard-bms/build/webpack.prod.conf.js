@@ -16,7 +16,7 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const env = require('../config/prod.env')
+const env = require('../config/' + process.env.NODE_BUILD + '.env')
 
 // For NamedChunksPlugin
 const seen = new Set()
@@ -140,7 +140,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
-
+  
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',
@@ -157,7 +157,7 @@ if (config.build.productionGzip) {
 if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin
-
+  
   if (config.build.bundleAnalyzerReport) {
     webpackConfig.plugins.push(
       new BundleAnalyzerPlugin({
@@ -166,7 +166,7 @@ if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
       })
     )
   }
-
+  
   if (config.build.generateAnalyzerReport) {
     webpackConfig.plugins.push(
       new BundleAnalyzerPlugin({
