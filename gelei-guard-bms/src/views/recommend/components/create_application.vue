@@ -266,7 +266,6 @@ export default {
       } else {
         current = modified
       }
-      console.log('initital_with_row current', current)
       this.record_id = current.record_id
       this.rec_bundle_id = current.rec_bundle_id
       this.soft_name = current.soft_name
@@ -343,7 +342,6 @@ export default {
       this.rec_bundle_id = this.rec_bundle_id
     },
     remote_application(value) {
-      console.log('remote_application', value)
       this.get_application_list(value)
     },
     get_application_list(key_word = null) {
@@ -354,9 +352,7 @@ export default {
         kw = key_word
       }
       const config = { kw }
-      console.log('search_soft_recommend_mark', config)
       search_soft_recommend_mark(config).then(res => {
-        console.log('search_soft_recommend_mark', res)
         this.app_list = res.data.map(r => {
           return {
             soft_name: r.app_name,

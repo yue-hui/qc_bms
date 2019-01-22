@@ -143,11 +143,9 @@ export default {
   },
   methods: {
     table_size_change(row) {
-      console.log('table_size_change', row)
       this.reload()
     },
     change_current(page) {
-      console.log('change_current', page)
       this.page = page
       this.reload()
     },

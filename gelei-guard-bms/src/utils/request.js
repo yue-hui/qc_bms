@@ -21,7 +21,6 @@ service.interceptors.request.use(
       const data = config.data || {}
       config['data'] = sign(data)
     }
-    console.log('sign config', process.env.IS_SIGN, config)
     return config
   },
   error => {

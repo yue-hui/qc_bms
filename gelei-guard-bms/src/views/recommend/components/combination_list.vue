@@ -122,7 +122,6 @@ export default {
       }
     },
     table_size_change(row) {
-      console.log('table_size_change', row)
       this.reload()
     },
     change_current(page) {
@@ -139,7 +138,6 @@ export default {
     },
     reload() {
       const config = this.get_pagination_config()
-      console.log('reload request', config)
       get_soft_recommend_group(config).then(res => {
         this.data_list = res.data.map(r => {
           const time_transfer = date_formatter(r.create_time)
@@ -222,7 +220,6 @@ export default {
         rec_group_id,
         published
       }
-      console.log('depoly_application_group_or_not config', config)
       deploy_soft_recommend_group(config).then(res => {
         if (res.status === 0) {
           this.$message.success('发布成功')

@@ -140,7 +140,6 @@ export default {
   methods: {
     grade_from_change(grade, old_grade) {
       this.grade_list_2 = GRADE_LIST.filter((r) => r.val >= grade)
-      console.log('this.grade_list_2', this.grade_list_2)
       if (this.grade_to < grade) {
         this.grade_to = this.grade_list_2[0].val
       }
@@ -151,7 +150,6 @@ export default {
       this.show_app_dialog = true
     },
     edit_app(row) {
-      console.log('edit_app', row)
       this.current_app = row
       this.is_create = false
       this.show_app_dialog = true

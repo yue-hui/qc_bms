@@ -59,7 +59,7 @@ export default {
       } else if (this.active_name === '3') {
         this.build_bd_yh()
       } else {
-        console.log('error active name', this.active_name)
+        console.error('error active name', this.active_name)
       }
     },
     chart_events: function(res) {
@@ -96,7 +96,6 @@ export default {
     build_bd_yh: function() {
       const options = this.condition
       get_bind_device_increased_data(options).then(res => {
-        console.log('option', res)
         this.options = {
           columns: ['日期', '新增绑定设备'],
           rows: res.data.map(r => {

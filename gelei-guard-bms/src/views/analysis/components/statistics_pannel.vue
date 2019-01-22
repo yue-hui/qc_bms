@@ -63,7 +63,6 @@ export default {
     },
     load_summary: function(data) {
       get_user_analysis_summary(data).then(res => {
-        console.log('res:', res)
         this.statistics = res.data
       })
     },
