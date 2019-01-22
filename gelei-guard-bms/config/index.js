@@ -11,8 +11,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': { //这里是公共部分，在调用接口时后面接不相同的部分
-        // target: 'https://msdev.dev.zhixike.net/greenguard', //这里写的是访问接口的域名和端口号
-        target: 'http://172.168.50.58:12720', //这里写的是访问接口的域名和端口号
+        target: 'https://msdev.dev.zhixike.net/greenguard', //  开发
+        // target: 'http://localhost:4002', //  开发
+        // target: 'http://172.168.50.58:12720', //这里写的是访问接口的域名和端口号
+        // target: 'https://mstes.dev.zhixike.net/greenguard', // 测试
         changeOrigin: true,
         secure: false,
         pathRewrite: { // 重命名

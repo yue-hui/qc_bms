@@ -31,6 +31,7 @@ function getSign(params) {
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
     if (Array.isArray(element)) {
+      element.sort()
       arr[i] = JSON.stringify(element)
     }
   })
@@ -39,7 +40,6 @@ function getSign(params) {
 
   // 加密
   const str = arr.join('')
-  console.log('str', str)
   const sign = sha256(str)
   // 返回所有参数
   const p = Object.assign({}, params, publicParams, {
@@ -48,4 +48,5 @@ function getSign(params) {
   return JSON.stringify(p)
 }
 
+// 原始版本
 export default getSign

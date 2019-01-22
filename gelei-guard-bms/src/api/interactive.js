@@ -215,3 +215,12 @@ export function deploy_soft_recommend_group(data) {
   })
 }
 
+// 发布或撤销应用组合
+export function deploy_qa(data) {
+  return request({
+    url: '/manager/qa/publish',
+    method: 'post',
+    data
+  })
+}
+

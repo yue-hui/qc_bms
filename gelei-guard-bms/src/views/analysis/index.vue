@@ -27,7 +27,7 @@
 
       <!--概况数据-->
       <div class="statistics-summary">
-        <statistics-pannel ref="summary" style="display: none" />
+        <statistics-pannel ref="summary" />
       </div>
 
       <!--图表数据-->
@@ -61,10 +61,10 @@ export default {
   },
   computed: {},
   create: function() {
-    this.init_data()
-    this.load_data()
   },
   mounted: function() {
+    this.init_data()
+    this.load_data()
   },
   methods: {
     init_data: function() {

@@ -6,7 +6,8 @@
           <el-button
             type="success"
             @click="add_questions"
-          >添加帮助问题</el-button>
+          >添加帮助问题
+          </el-button>
         </div>
       </div>
 
@@ -22,7 +23,7 @@
             prop="question" />
           <el-table-column
             label="状态"
-            prop="status"
+            prop="status_label"
             width="180" />
           <el-table-column
             label="权重"
@@ -34,7 +35,8 @@
             width="260">
             <template slot-scope="scope">
               <el-button size="small" type="text" @click="edit_questions(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ deploy_name }}</el-button>
+              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -56,7 +58,7 @@
 
 <script>
 import questions from '@/views/toolbox/components/questions'
-import { get_questions_list } from '@/api/interactive'
+import { deploy_qa, get_questions_list } from '@/api/interactive'
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
 
 export default {
@@ -73,7 +75,7 @@ export default {
       total: 0,
       is_create: true,
       show_dialog: false,
-      deploy_name: '待发布',
+      deploy_name: '开启',
       record_id: ''
     }
   },
@@ -82,6 +84,13 @@ export default {
     this.load_data()
   },
   methods: {
+    show_deploy_name(row) {
+      if (row.status === '1') {
+        return '关闭'
+      } else {
+        return '开启'
+      }
+    },
     load_data() {
       this.fetch_question_list()
     },
@@ -102,15 +111,25 @@ export default {
     },
     prefer_deploy: function(row) {
       /* 发布按钮 */
-      if (row.status === '待发布') {
+      const config = {
+        record_id: row.record_id
+      }
+      if (row.status === '0') {
+        config['published'] = true
         this.$confirm('确认是否发布？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '发布成功!'
+          deploy_qa(config).then(res => {
+            if (res.statusCode !== 200) {
+              this.$message({
+                type: 'success',
+                message: '发布成功!'
+              })
+            } else {
+              this.$message.error(res.message)
+            }
           })
         }).catch(() => {
           this.$message({
@@ -119,14 +138,21 @@ export default {
           })
         })
       } else {
+        config['published'] = false
         this.$confirm('确认是否取消发布？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '取消发布成功!'
+          deploy_qa(config).then(res => {
+            if (res.statusCode !== 200) {
+              this.$message({
+                type: 'success',
+                message: '取消发布成功!'
+              })
+            } else {
+              this.$message.error(res.message)
+            }
           })
         }).catch(() => {
           this.$message({
@@ -151,10 +177,23 @@ export default {
       }
       return config
     },
+    show_status_label(r) {
+      if (r === '0') {
+        return '未生效'
+      } else {
+        return '已生效'
+      }
+    },
     fetch_question_list() {
       const config = this.get_config()
       get_questions_list(config).then(res => {
-        this.questions = res.data
+        this.questions = res.data.map(res => {
+          const status_label = this.show_status_label(res.status)
+          return {
+            ...res,
+            status_label
+          }
+        })
         this.total = res.total_count
       })
     }
