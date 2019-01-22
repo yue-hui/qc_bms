@@ -3,7 +3,8 @@
     <el-dialog
       :before-close="before_close"
       :title="title"
-      :visible.sync="visible">
+      :visible.sync="visible"
+      width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <el-form-item label="帮助问题" prop="question">
           <el-input v-model="form.question" />
@@ -66,9 +67,9 @@ export default {
       form: {
         question: '',
         answer: '',
-        weight: 0
+        weight: 1
       },
-      weight: 0,
+      weight: 1,
       rules: {
         question: [{ required: true, trigger: 'blur', message: '帮助标题不能为空' }],
         answer: [{ required: true, trigger: 'blur', message: '帮助内容不能为空' }],

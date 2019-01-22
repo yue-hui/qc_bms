@@ -16,7 +16,8 @@
           :data="questions"
           style="width: 100%">
           <el-table-column
-            type="index"
+            label="序号"
+            prop="_id"
             width="50" />
           <el-table-column
             label="帮助问题"
@@ -127,6 +128,7 @@ export default {
                 type: 'success',
                 message: '发布成功!'
               })
+              this.load_data()
             } else {
               this.$message.error(res.message)
             }
@@ -150,6 +152,7 @@ export default {
                 type: 'success',
                 message: '取消发布成功!'
               })
+              this.load_data()
             } else {
               this.$message.error(res.message)
             }
@@ -187,13 +190,18 @@ export default {
     fetch_question_list() {
       const config = this.get_config()
       get_questions_list(config).then(res => {
-        this.questions = res.data.map(res => {
+        const base_index = (config.page_no - 1) * config.page_num + 1
+        const questions = []
+        res.data.forEach((r, i, _a) => {
           const status_label = this.show_status_label(res.status)
-          return {
-            ...res,
-            status_label
+          const question = {
+            ...r,
+            status_label,
+            _id: base_index + i
           }
+          questions.push(question)
         })
+        this.questions = questions
         this.total = res.total_count
       })
     }

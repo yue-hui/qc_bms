@@ -27,7 +27,7 @@ export function get_chinese_index(idx) {
 }
 
 // 帮助问题权重范围
-export const min_weight = 0
+export const min_weight = 1
 export const max_weight = 3
 
 // 分页参数

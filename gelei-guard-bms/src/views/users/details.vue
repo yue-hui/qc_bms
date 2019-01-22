@@ -12,28 +12,28 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="用户名">
-                    <el-input :disabled="edit.nick_name" v-model="information.nick_name" />
+                    <span>{{ information.nick_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="手机号">
-                    <el-input :disabled="edit.phone" v-model="information.phone" />
+                    <span>{{ information.phone }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="会员状态">
-                    <el-input :disabled="edit.vip_info" v-model="information.vip_info" />
+                    <span>{{ information.vip_info }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="机型">
-                    <el-input :disabled="edit.device_name" v-model="information.device_name" />
+                    <span>{{ information.device_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -43,41 +43,25 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="设备号">
-                    <el-input :disabled="edit.device_id" v-model="information.device_id" />
+                    <span>{{ information.device_id }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
                   <el-form-item label="系统版本号">
-                    <el-input :disabled="edit.os_version" v-model="information.os_version" />
+                    <span>{{ information.os_version }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="注册时间">
-                    <el-form-item prop="date1">
-                      <el-date-picker
-                        :disabled="edit.create_time"
-                        v-model="information.create_time"
-                        placeholder="注册时间"
-                        type="date" />
-                    </el-form-item>
-                  </el-form-item>
+                  <span>{{ information.create_time }}</span>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="最后使用时间">
-                    <el-form-item prop="date1">
-                      <el-date-picker
-                        :disabled="edit.last_use_time"
-                        v-model="information.last_use_time"
-                        placeholder="最后使用时间"
-                        type="date" />
-                    </el-form-item>
-                  </el-form-item>
+                  <span>{{ information.last_use_time }}</span>
                 </div>
               </el-col>
             </el-row>

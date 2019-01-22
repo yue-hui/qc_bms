@@ -4,6 +4,7 @@ import store from '../store'
 import sign from './sign'
 
 // 全局配置
+axios.defaults.headers['transfer-req'] = process.env.TRANSFER_REQ
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.post['charset'] = 'utf-8'
 

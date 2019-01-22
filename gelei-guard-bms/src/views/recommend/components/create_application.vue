@@ -5,7 +5,7 @@
       :title="title"
       :visible.sync="isShow"
       size="mini"
-      width="30%">
+      width="50%">
 
       <div class="show-dialog-pannel">
         <div class="row">
@@ -92,9 +92,9 @@
           </div>
           <div class="column column-content">
             <div class="age-group-block">
-              <el-input v-model="start_age" class="age-group-sub-block" placeholder="请输入年龄段" />
+              <el-input v-model="start_age" :min="0" :max="99" class="age-group-sub-block" placeholder="请输入年龄段" />
               <span class="grade-to-word">-</span>
-              <el-input v-model="end_age" class="age-group-sub-block" placeholder="请输入年龄段" />
+              <el-input v-model="end_age" :min="0" :max="99" class="age-group-sub-block" placeholder="请输入年龄段" />
               <span class="grade-to-word">岁</span>
             </div>
           </div>
@@ -122,13 +122,14 @@
             <span>推荐星级:</span>
           </div>
           <div class="column column-content">
-            <el-rate
-              v-model="rec_level"
-              :allow-half="true"
-              :max="5"
-              score-template="{value}分"
-              show-score
-              text-color="#ff9900" />
+            <div class="rate-display">
+              <el-rate
+                v-model="score"
+                :allow-half="true"
+                :max="5"
+                text-color="#ff9900" />
+              <span>{{ rec_level }}分</span>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -202,9 +203,9 @@ export default {
       grade_list: [],
       subject_list: [],
       start_age: 0,
-      end_age: 0,
+      end_age: 99,
       sex: null,
-      rec_level: 0,
+      rec_level: 5,
       rec_phrase: '',
       rec_desc: '',
       app_list: [],
@@ -220,6 +221,17 @@ export default {
       } else {
         return '编辑应用'
       }
+    },
+    score: {
+      get: function() {
+        return this.rec_level - 5
+      },
+      set: function(value) {
+        this.rec_level = value + 5
+      }
+    },
+    show_score: function() {
+      return this.rec_level
     }
   },
   watch: {
@@ -241,9 +253,9 @@ export default {
       this.grade_list = []
       this.subject_list = []
       this.start_age = 0
-      this.end_age = 0
-      this.sex = null
-      this.rec_level = 0
+      this.end_age = 99
+      this.sex = '2'
+      this.rec_level = 5
       this.rec_phrase = ''
       this.rec_desc = ''
     },
@@ -414,6 +426,12 @@ export default {
           text-align: center;
         }
       }
+
+      .rate-display{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
     }
   }
 }
@@ -438,4 +456,3 @@ export default {
   }
 }
 </style>
-

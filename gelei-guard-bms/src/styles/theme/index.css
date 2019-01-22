@@ -18404,6 +18404,7 @@
     line-height: 32px;
     font-size: 14px;
     width: 5%;
+    min-width: 20px;
     color: #303133; }
   .el-date-editor .el-range__close-icon {
     font-size: 14px;
@@ -21144,6 +21145,7 @@
     line-height: 32px;
     font-size: 14px;
     width: 5%;
+    min-width: 20px;
     color: #303133; }
   .el-date-editor .el-range__close-icon {
     font-size: 14px;
@@ -22835,6 +22837,7 @@
     line-height: 32px;
     font-size: 14px;
     width: 5%;
+    min-width: 20px;
     color: #303133; }
   .el-date-editor .el-range__close-icon {
     font-size: 14px;

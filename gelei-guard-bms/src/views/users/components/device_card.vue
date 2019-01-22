@@ -10,28 +10,28 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-form-item label="手机号">
-                      <el-input v-model="device.phone" :disabled="edit.phone" />
+                      <span>{{ device.phone }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-form-item label="终端类型">
-                      <el-input v-model="device.device_type" :disabled="edit.device_type" />
+                      <span>{{ device.device_type }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-form-item label="机型">
-                      <el-input v-model="device.device_name" :disabled="edit.device_name" />
+                      <span>{{ device.device_name }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-form-item label="设备号">
-                      <el-input v-model="device.device_id" :disabled="edit.device_id" />
+                      <span>{{ device.device_id }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -40,7 +40,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-form-item label="系统版本号">
-                      <el-input v-model="device.os_version" :disabled="edit.os_version" />
+                      <span>{{ device.os_version }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -48,11 +48,7 @@
                   <div class="grid-content bg-purple">
                     <el-form-item label="绑定时间">
                       <el-form-item prop="date1">
-                        <el-date-picker
-                          :disabled="edit.bind_time"
-                          v-model="device.bind_time"
-                          placeholder="绑定时间"
-                          type="date" />
+                        <span>{{ date_formatter(device.bind_time) }}</span>
                       </el-form-item>
                     </el-form-item>
                   </div>
@@ -61,11 +57,7 @@
                   <div class="grid-content bg-purple">
                     <el-form-item label="最后使用时间">
                       <el-form-item prop="date1">
-                        <el-date-picker
-                          :disabled="edit.last_use_time"
-                          v-model="device.last_use_time"
-                          placeholder="最后使用时间"
-                          type="date" />
+                        <span>{{ date_formatter(device.last_use_time) }}</span>
                       </el-form-item>
                     </el-form-item>
                   </div>
@@ -81,6 +73,7 @@
 
 <script>
 import { get_chinese_index } from '@/utils/constant'
+import { date_formatter } from '@/utils/common'
 
 export default {
   name: 'DeviceCard',
@@ -136,6 +129,9 @@ export default {
   },
   methods: {
     handleChange: (a) => {
+    },
+    date_formatter: (t) => {
+      return date_formatter(t)
     }
   }
 }

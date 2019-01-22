@@ -8,6 +8,7 @@
             <div class="block">
               <el-date-picker
                 v-model="datetime_range"
+                clearable
                 end-placeholder="结束日期"
                 range-separator="至"
                 start-placeholder="开始日期"
@@ -20,6 +21,7 @@
             <label class="search-item">手机号:</label>
             <el-input
               v-model="phone"
+              clearable
               maxlength="11"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
               placeholder="请输入手机号" />
@@ -38,8 +40,8 @@
           <el-table-column
             align="center"
             label="序号"
-            prop="user_id"
-            width="228" />
+            prop="_id"
+            width="80" />
           <el-table-column
             align="center"
             label="用户昵称"
@@ -58,7 +60,7 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="view_details(scope.row)">查看</el-button>
+              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_details(scope.row)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -140,13 +142,19 @@ export default {
     },
     refresh_data: function() {
       const config = this.get_params()
+      console.log(config)
       get_parent_list(config).then(res => {
-        this.table_data = res.data.map(r => {
-          return {
+        const table_data = []
+        const base_index = (config.page_no - 1) * config.page_num + 1
+        res.data.forEach((r, i, _a) => {
+          const item = {
             ...r,
-            create_time: date_formatter(r.create_time)
+            create_time: date_formatter(r.create_time),
+            _id: base_index + i
           }
+          table_data.push(item)
         })
+        this.table_data = table_data
         this.total = res.total_count
       })
     }

@@ -14,8 +14,7 @@
       <el-table-column
         align="left"
         label="应用名称"
-        prop="soft_name"
-        width="240" />
+        prop="soft_name" />
       <el-table-column
         align="center"
         label="学科"

@@ -1,0 +1,11 @@
+.idea/
+.project
+.DS_Store
+node_modules/
+dist/
+static/
+npm-debug.log
+yarn-error.log
+log.log
+.vscode/
+

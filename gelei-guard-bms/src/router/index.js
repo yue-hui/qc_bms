@@ -31,9 +31,9 @@ export const constantRouterMap = [
     children: [
       {
         path: 'information',
-        name: '家长信息管理',
+        name: '用户信息管理',
         component: () => import('@/views/users/index'),
-        meta: { title: '家长信息管理', icon: 'parents' }
+        meta: { title: '用户信息管理', icon: 'parents' }
       },
       {
         path: 'details',

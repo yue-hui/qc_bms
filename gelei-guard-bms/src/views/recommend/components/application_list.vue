@@ -11,22 +11,36 @@
             prop="soft_name" />
           <el-table-column
             align="center"
+            width="140"
             label="学科"
             prop="subject_list">
             <template slot-scope="scope">
-              <div v-for="(subject_label, index) in scope.row.subject_label_list" :key="index" class="show-list-content">
-                <el-tag size="mini">{{ subject_label }}</el-tag>
-              </div>
+              <el-row :gutter="1">
+                <el-col
+                  v-for="(subject_label, index) in scope.row.subject_label_list"
+                  :key="index"
+                  :span="8"
+                  class="show-list-content">
+                  <el-tag size="mini">{{ subject_label }}</el-tag>
+                </el-col>
+              </el-row>
             </template>
           </el-table-column>
           <el-table-column
             align="center"
+            width="176"
             label="所属年级"
             prop="grade_list">
             <template slot-scope="scope">
-              <div v-for="(grade_label, index) in scope.row.grade_label_list" :key="index" class="show-list-content">
-                <el-tag size="mini">{{ grade_label }}</el-tag>
-              </div>
+              <el-row :gutter="2">
+                <el-col
+                  v-for="(grade_label, index) in scope.row.grade_label_list"
+                  :key="index"
+                  :span="8"
+                  class="show-list-content">
+                  <el-tag size="mini" class="show-list-item">{{ grade_label }}</el-tag>
+                </el-col>
+              </el-row>
             </template>
           </el-table-column>
           <el-table-column
@@ -48,10 +62,9 @@
             width="180">
             <template slot-scope="scope">
               <el-rate
-                v-model="scope.row.rec_level"
+                v-model="scope.row.rec_level_score"
                 :colors="['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#5e5e5e', '#444444', '#404040', '#303030', '#121212', '#000000']"
-                disabled
-                show-score />
+                disabled/>
             </template>
           </el-table-column>
           <el-table-column
@@ -59,7 +72,10 @@
             label="所在组合"
             prop="group_list">
             <template slot-scope="scope">
-              <div v-for="(group, index) in scope.row.group_list" :key="index" class="show-list-content">
+              <div
+                v-for="(group, index) in scope.row.group_list"
+                :key="index"
+                class="show-list-content">
                 <el-tag size="mini">{{ group }}</el-tag>
               </div>
             </template>
@@ -194,6 +210,7 @@ export default {
             ...r,
             age_label,
             create_time: time_transfer,
+            rec_level_score: r.rec_level - 5,
             sex_label: get_sex_label(r.sex),
             grade_label_list: this.grade_label_list(r.grade_list),
             subject_label_list: this.subject_label_list(r.subject_list)
@@ -222,5 +239,8 @@ export default {
 
 .show-list-content {
   display: block;
+  .show-list-item{
+    min-width: 50px;
+  }
 }
 </style>
