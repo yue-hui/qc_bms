@@ -4,7 +4,9 @@
   "description": "格雷守护h5应用服务端",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js --port 4002"
+    "dev": "nodemon src/index.js --port 4003 --env_config=dev",
+    "test": "nodemon src/index.js --port 4003 --env_config=test",
+    "prod": "nodemon src/index.js --port 4003 --env_config=prod"
   },
   "author": "yexl",
   "license": "ISC",

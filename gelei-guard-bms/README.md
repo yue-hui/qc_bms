@@ -29,6 +29,8 @@ npm run build:prod
 
 # 发布包在nodeserver文件夹下面
 # 直接拷贝nodeserver布曙到对应的环境即可
+cd nodeserver
+npm run dev
 
 # Build for production and view the bundle analyzer report
 npm run build --report

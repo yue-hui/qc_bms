@@ -5,9 +5,10 @@ var serveIndex = require('serve-index')
 var bodyParser = require('body-parser')
 var request = require('request')
 var sha256 = require('js-sha256')
-// 命令参数
 var argv = require('minimist')(process.argv.slice(2))
 var __port = argv['port'] || 4002
+global.env_config = argv['env_config']
+var config = require('./config.js')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.resolve('./static')))
@@ -16,14 +17,8 @@ app.use('/api/*', function (req, res) {
     var method = req.method.toLowerCase()
     var reqConType = req.headers['content-type']
     var reqParam = null
-    var TransferReq = req.headers['transfer-req'] || 'https://msdev.dev.zhixike.net/greenguard'
-    console.log('TransferReq', TransferReq)
-    if (!TransferReq) {
-      res.send({
-        status: -1,
-        message: 'node miss TransferReq'
-      })
-    }
+    // var TransferReq = req.headers['transfer-req'] || 'https://msdev.dev.zhixike.net/greenguard'
+    var TransferReq = config.baseURL
     if (method === 'get') {
       reqParam = req.query
       TransferReq = TransferReq + req.originalUrl.split('api')[1]
@@ -89,6 +84,7 @@ function getSign (timeStamp, compSign, params) {
     token: '27688ab70a56db714b59a6ebc79b8509a1f81629ce8edc743e1bc23e24465735'
   }
   let allParams = Object.assign({}, params, otherParams)
+  // 排序
   let arr = Object.values(allParams)
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
@@ -97,7 +93,6 @@ function getSign (timeStamp, compSign, params) {
       arr[i] = JSON.stringify(element)
     }
   })
-  // 排序
   arr.sort()
   // 加密
   let str = arr.join('')
