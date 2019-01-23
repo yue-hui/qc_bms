@@ -5,6 +5,7 @@
         <div class="control-box">
           <el-button
             type="success"
+            size="mini"
             @click="add_questions"
           >添加帮助问题
           </el-button>
