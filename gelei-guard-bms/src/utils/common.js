@@ -7,14 +7,14 @@ export function get_uuid() {
   return string.replace(/-/g, '').toUpperCase()
 }
 
-export function date_formatter(date) {
+export function date_formatter(date, fomatter = DATE_FORMAT) {
   let day_js
   if (date) {
     day_js = dayjs(date)
   } else {
     day_js = dayjs()
   }
-  return day_js.format(DATE_FORMAT)
+  return day_js.format(fomatter)
 }
 
 export function transfer_to_chinese_index(index) {

@@ -153,8 +153,12 @@ export default {
         page_no: this.page,
         page_num: this.page_size
       }
-      options['begin_time'] = this.condition.begin_time
-      options['end_time'] = this.condition.end_time
+      if (this.condition.begin_time) {
+        options['begin_time'] = new Date(this.condition.begin_time).getTime()
+      }
+      if (this.condition.end_time) {
+        options['end_time'] = new Date(this.condition.end_time).getTime()
+      }
       return options
     },
     load_details() {
