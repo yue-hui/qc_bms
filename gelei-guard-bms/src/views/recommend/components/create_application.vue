@@ -8,59 +8,42 @@
       width="50%">
 
       <div class="show-dialog-pannel">
-        <div class="row">
-          <div class="column column-label">
-            <span>应用名称:</span>
-          </div>
-          <div class="column column-content">
-            <template v-if="isCreate">
-              <el-select
-                v-model="rec_bundle_id"
-                :filterable="true"
-                :remote="true"
-                :remote-method="remote_application"
-                class="application-name-input"
-                collapse-tags
-                placeholder="添加应用"
-                size="mini"
-                @change="change_app">
-                <el-option
-                  v-for="(item, index) in app_list"
-                  :key="index"
-                  :label="item.soft_name"
-                  :value="item.rec_bundle_id"
-                  class="el-select-dropdown__item__recommend">
-                  <div class="select-slot-block">
-                    <img :src="item.icon_url" :alt="item.app_name">
-                    <span :title="item.app_name">{{ item.soft_name }}</span>
-                  </div>
-                </el-option>
-              </el-select>
-            </template>
-            <template v-if="!isCreate">
-              <el-input v-model="soft_name" disabled />
-            </template>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span />
-          </div>
-          <div class="column column-content">
-            <div class="app-list-tags">
-              <div v-for="(app, index) in app_tags" :key="index" class="app-list-tag">
-                <el-tag closable @close="close_app_tag(app.id)">{{ app.name }}</el-tag>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>适用年级:</span>
-          </div>
-          <div class="column column-content">
+        <el-form
+          ref="ruleForm"
+          :model="ruleForm"
+          :rules="rules"
+          label-width="100px"
+          class="demo-ruleForm">
+          <el-form-item label="应用名称:" prop="rec_bundle_id">
+            <el-select
+              v-model="ruleForm.rec_bundle_id"
+              :filterable="true"
+              :remote="true"
+              :remote-method="remote_application"
+              class="application-name-input"
+              style="width: 100%;"
+              collapse-tags
+              clearable
+              placeholder="添加应用"
+              size="mini"
+              @change="change_app">
+              <el-option
+                v-for="(item, index) in app_list"
+                :key="index"
+                :label="item.soft_name"
+                :value="item.rec_bundle_id"
+                class="el-select-dropdown__item__recommend">
+                <div class="select-slot-block">
+                  <img :src="item.icon_url" :alt="item.app_name">
+                  <span :title="item.app_name">{{ item.soft_name }}</span>
+                </div>
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="适用年级:" prop="grade_list">
             <el-checkbox-group
-              v-model="grade_list">
+              v-model="ruleForm.grade_list">
               <el-row :span="24">
                 <template v-for="(grade, index) in grades">
                   <el-col :key="index" :span="4">
@@ -69,43 +52,58 @@
                 </template>
               </el-row>
             </el-checkbox-group>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>适用学科:</span>
-          </div>
-          <div class="column column-content">
+          </el-form-item>
+
+          <el-form-item label="适用学科:" prop="subject_list">
             <el-checkbox-group
-              v-model="subject_list">
+              v-model="ruleForm.subject_list">
               <el-row :span="24">
-                <el-col v-for="(subject, index) in subjects" :key="index" :span="4">
-                  <el-checkbox :key="index" :label="subject.name">{{ subject.name }}</el-checkbox>
+                <el-col
+                  v-for="(subject, index) in subjects"
+                  :key="index"
+                  :span="4">
+                  <el-checkbox
+                    :key="index"
+                    :label="subject.name"
+                  >{{ subject.name }}
+                  </el-checkbox>
                 </el-col>
               </el-row>
             </el-checkbox-group>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>适用年龄:</span>
-          </div>
-          <div class="column column-content">
-            <div class="age-group-block">
-              <el-input v-model="start_age" :min="0" :max="99" class="age-group-sub-block" placeholder="请输入年龄段" />
-              <span class="grade-to-word">-</span>
-              <el-input v-model="end_age" :min="0" :max="99" class="age-group-sub-block" placeholder="请输入年龄段" />
-              <span class="grade-to-word">岁</span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>适用性别:</span>
-          </div>
-          <div class="column column-content">
+          </el-form-item>
+
+          <el-form-item label="适用年龄:" prop="start_age">
+            <el-row class="age-group-block">
+              <el-col :span="2">
+                <el-input
+                  v-model="ruleForm.start_age"
+                  :min="0"
+                  :max="99"
+                  class="age-group-sub-block"
+                  size="mini"
+                  placeholder="请输入年龄段" />
+              </el-col>
+              <el-col :span="1">
+                <span class="grade-to-word">-</span>
+              </el-col>
+              <el-col :span="2">
+                <el-input
+                  v-model="ruleForm.end_age"
+                  :min="0"
+                  :max="99"
+                  size="mini"
+                  class="age-group-sub-block"
+                  placeholder="请输入年龄段" />
+              </el-col>
+              <el-col :span="2">
+                <span class="grade-to-word">岁</span>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item label="适用性别:" prop="sex">
             <el-select
-              v-model="sex"
+              v-model="ruleForm.sex"
               placeholder="性别"
               size="mini"
               style="width: 80px;">
@@ -115,45 +113,38 @@
                 :label="sex.name"
                 :value="sex.val" />
             </el-select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>推荐星级:</span>
-          </div>
-          <div class="column column-content">
+          </el-form-item>
+
+          <el-form-item label="推荐星级:" prop="score">
             <div class="rate-display">
               <el-rate
                 v-model="score"
                 :allow-half="true"
                 :max="5"
                 text-color="#ff9900" />
-              <span>{{ rec_level }}分</span>
+              <span>{{ ruleForm.rec_level }}分</span>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>应用推荐语:</span>
-          </div>
-          <div class="column column-content">
-            <el-input v-model="rec_phrase" placeholder="请输入应用推荐语(20字内)" size="mini" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-label">
-            <span>小编推荐:</span>
-          </div>
-          <div class="column column-content">
+          </el-form-item>
+
+          <el-form-item label="应用推荐语:" prop="rec_phrase">
             <el-input
-              v-model="rec_desc"
+              v-model="ruleForm.rec_phrase"
+              placeholder="请输入应用推荐语(20字内)"
+              size="mini" />
+          </el-form-item>
+
+          <el-form-item label="小编推荐:" prop="rec_desc">
+            <el-input
+              v-model="ruleForm.rec_desc"
+              maxlength="200"
               columns="10"
-              placeholder="请输入小编推荐语"
+              placeholder="请输入小编推荐语(200字内)"
               rows="5"
               size="mini"
+              resize="none"
               type="textarea" />
-          </div>
-        </div>
+          </el-form-item>
+        </el-form>
       </div>
 
       <span slot="footer" class="dialog-footer">
@@ -196,22 +187,35 @@ export default {
   },
   data: function() {
     return {
-      record_id: '',
-      rec_bundle_id: '',
-      soft_name: '',
       app_tags: [],
-      grade_list: [],
-      subject_list: [],
-      start_age: 0,
-      end_age: 99,
-      sex: null,
-      rec_level: 5,
-      rec_phrase: '',
-      rec_desc: '',
       app_list: [],
       grades: GRADE_LIST,
       subjects: SUBJECT_LIST,
-      sex_list: SEX_LIST
+      sex_list: SEX_LIST,
+      ruleForm: {
+        record_id: '',
+        soft_name: '',
+        rec_bundle_id: '',
+        rec_level: 5,
+        grade_list: [],
+        subject_list: [],
+        start_age: 0,
+        end_age: 99,
+        sex: '2',
+        rec_phrase: '',
+        rec_desc: ''
+      },
+      rules: {
+        rec_bundle_id: { required: true, message: '请输入应用名称', trigger: 'blur' },
+        grade_list: { required: true, message: '请输入适用年级', trigger: 'blur' },
+        subject_list: { required: true, message: '请输入适用学科', trigger: 'blur' },
+        start_age: { required: true, message: '请输入适用起始年龄', trigger: 'blur' },
+        end_age: { required: true, message: '请输入适用终止年龄', trigger: 'blur' },
+        sex: { required: true, message: '请选择用户性别', trigger: 'blur' },
+        rec_level: { required: true, message: '请选择推荐星级', trigger: 'blur' },
+        rec_phrase: { required: true, message: '应用推荐语不能为空', trigger: 'blur' },
+        rec_desc: { required: true, message: '小编推荐不能为空', trigger: 'blur' }
+      }
     }
   },
   computed: {
@@ -224,14 +228,11 @@ export default {
     },
     score: {
       get: function() {
-        return this.rec_level - 5
+        return this.ruleForm.rec_level - 5
       },
       set: function(value) {
-        this.rec_level = value + 5
+        this.ruleForm.rec_level = value + 5
       }
-    },
-    show_score: function() {
-      return this.rec_level
     }
   },
   watch: {
@@ -248,16 +249,18 @@ export default {
   },
   methods: {
     initital_with_none() {
-      this.rec_bundle_id = ''
-      this.soft_name = ''
-      this.grade_list = []
-      this.subject_list = []
-      this.start_age = 0
-      this.end_age = 99
-      this.sex = '2'
-      this.rec_level = 5
-      this.rec_phrase = ''
-      this.rec_desc = ''
+      this.ruleForm = {
+        rec_bundle_id: '',
+        soft_name: '',
+        rec_level: 5,
+        grade_list: [],
+        subject_list: [],
+        start_age: 0,
+        end_age: 99,
+        sex: '2',
+        rec_phrase: '',
+        rec_desc: ''
+      }
     },
     initital_with_row(modified) {
       let current
@@ -266,17 +269,20 @@ export default {
       } else {
         current = modified
       }
-      this.record_id = current.record_id
-      this.rec_bundle_id = current.rec_bundle_id
-      this.soft_name = current.soft_name
-      this.grade_list = current.grade_list
-      this.subject_list = subject_number_map_label(current.subject_list)
-      this.start_age = current.start_age
-      this.end_age = current.end_age
-      this.sex = current.sex
-      this.rec_level = current.rec_level
-      this.rec_phrase = current.rec_phrase
-      this.rec_desc = current.rec_desc
+
+      this.ruleForm = {
+        record_id: current.record_id,
+        rec_bundle_id: current.rec_bundle_id,
+        soft_name: current.soft_name,
+        rec_level: current.rec_level,
+        grade_list: current.grade_list,
+        subject_list: subject_number_map_label(current.subject_list),
+        start_age: current.start_age,
+        end_age: current.end_age,
+        sex: current.sex,
+        rec_phrase: current.rec_phrase,
+        rec_desc: current.rec_desc
+      }
     },
     handle_close(done) {
       this.$confirm('确认关闭？')
@@ -288,20 +294,20 @@ export default {
     },
     get_application_config() {
       const config = {
-        soft_name: this.soft_name,
-        grade_list: this.grade_list,
-        subject_list: subject_label_map_number(this.subject_list),
-        start_age: this.start_age,
-        end_age: this.end_age,
-        sex: this.sex,
-        rec_level: this.rec_level,
-        rec_phrase: this.rec_phrase,
-        rec_desc: this.rec_desc
+        soft_name: this.ruleForm.soft_name,
+        grade_list: this.ruleForm.grade_list,
+        subject_list: subject_label_map_number(this.ruleForm.subject_list),
+        start_age: this.ruleForm.start_age,
+        end_age: this.ruleForm.end_age,
+        sex: this.ruleForm.sex,
+        rec_level: this.ruleForm.rec_level,
+        rec_phrase: this.ruleForm.rec_phrase,
+        rec_desc: this.ruleForm.rec_desc
       }
       if (this.isCreate) {
-        config['rec_bundle_id'] = this.rec_bundle_id
+        config['rec_bundle_id'] = this.ruleForm.rec_bundle_id
       } else {
-        config['record_id'] = this.record_id
+        config['record_id'] = this.ruleForm.record_id
       }
       return config
     },
@@ -309,12 +315,18 @@ export default {
       this.$emit('receive', false)
     },
     emmit_application() {
-      const config = this.get_application_config()
-      if (this.isCreate) {
-        this.create(config)
-      } else {
-        this.edit(config)
-      }
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          const config = this.get_application_config()
+          if (this.isCreate) {
+            this.create(config)
+          } else {
+            this.edit(config)
+          }
+        } else {
+          return false
+        }
+      })
     },
     create(config) {
       // 创建接口
@@ -333,13 +345,8 @@ export default {
       })
     },
     change_app(rec_bundle_id) {
-      console.log('change rec_bundle_id', rec_bundle_id)
       const app = this.app_list.filter(r => r.rec_bundle_id === rec_bundle_id)
-      this.soft_name = app[0]['soft_name']
-    },
-    close_app_tag(app_id) {
-      this.app_tags = this.app_tags.filter(r => r.id !== app_id)
-      this.rec_bundle_id = this.rec_bundle_id
+      this.ruleForm.soft_name = app[0]['soft_name']
     },
     remote_application(value) {
       this.get_application_list(value)
@@ -405,29 +412,6 @@ export default {
           padding: 5px;
         }
       }
-
-      .age-group-block {
-        display: flex;
-        flex-direction: row;
-
-        .age-group-sub-block {
-          width: 60px;
-          text-align: center;
-        }
-
-        .grade-to-word {
-          padding: 0 10px;
-          height: 40px;
-          line-height: 40px;
-          text-align: center;
-        }
-      }
-
-      .rate-display{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
     }
   }
 }
@@ -449,6 +433,29 @@ export default {
     span {
       padding-left: 10px;
     }
+  }
+}
+
+.rate-display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.age-group-block {
+  display: flex;
+  flex-direction: row;
+
+  .age-group-sub-block {
+    width: 60px;
+    text-align: center;
+  }
+
+  .grade-to-word {
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
   }
 }
 </style>

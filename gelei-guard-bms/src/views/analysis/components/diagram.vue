@@ -67,7 +67,6 @@ export default {
     build_xzyh: function() {
       const options = this.condition
       get_user_increased_data(options).then(res => {
-        console.log('option', res)
         this.options = {
           columns: ['日期', '新增注册用户'],
           rows: res.data.map(r => {

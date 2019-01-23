@@ -11,7 +11,7 @@
                 v-model="information.grade_from"
                 class="select-box-width"
                 clearable
-                placeholder="请选择年级" >
+                placeholder="请选择年级">
                 <el-option
                   v-for="item in grade_list_1"
                   :key="item.val"
@@ -23,7 +23,7 @@
                 v-model="information.grade_to"
                 class="select-box-width"
                 clearable
-                placeholder="请选择年级" >
+                placeholder="请选择年级">
                 <el-option
                   v-for="item in grade_list_2"
                   :key="item.val"
@@ -67,7 +67,8 @@
           round
           size="mini"
           type="success"
-          @click="create_app">创建应用</el-button>
+          @click="create_app">创建应用
+        </el-button>
       </div>
 
       <!--推荐应用列表-->
@@ -145,7 +146,6 @@ export default {
       }
     },
     create_app() {
-      console.log('create_app')
       this.is_create = true
       this.show_app_dialog = true
     },
@@ -163,7 +163,12 @@ export default {
         record_id
       }
       forbidden_soft_remmend(config).then(res => {
-        console.log(res)
+        if (res.status === 0) {
+          this.$message.success('禁用推荐应用成功')
+          this.query()
+        } else {
+          this.$message.error(res.message)
+        }
       })
     },
     receive(status) {

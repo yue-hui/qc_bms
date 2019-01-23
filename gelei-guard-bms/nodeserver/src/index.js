@@ -10,9 +10,9 @@ var __port = argv['port'] || 4002
 global.env_config = argv['env_config']
 var config = require('./config.js')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.resolve('./static')))
-app.use('/api/*', function (req, res) {
+app.use('/api/*', function(req, res) {
   try {
     var method = req.method.toLowerCase()
     var reqConType = req.headers['content-type']
@@ -38,10 +38,9 @@ app.use('/api/*', function (req, res) {
   }
 })
 
-function noderequest (TransferReq, reqParam, method, reqConType, res) {
-  console.log('reqParam', reqParam)
+function noderequest(TransferReq, reqParam, method, reqConType, res) {
   if (!reqParam.sign) {
-    res.send({message: 'node sign miss 1!', status: -1})
+    res.send({ message: 'node sign miss 1!', status: -1 })
     return
   }
   var encryptParams = compTime(reqParam.sign, reqParam)
@@ -56,28 +55,28 @@ function noderequest (TransferReq, reqParam, method, reqConType, res) {
     headers: reqConType,
     method: method,
     json: true
-  }, function (error, response, data) { // 错误,响应对象,请求回来的数据
+  }, function(error, response, data) { // 错误,响应对象,请求回来的数据
     res.send(data)
     error ? console.log(error) : '转发请求正常'
   })
 }
 
-function compTime (reqsign, params) {
+function compTime(reqsign, params) {
   delete params.sign
   let reqStamp = reqsign.substring(0, 13)
   let currentTime = +new Date()
   let timediff = currentTime - reqStamp
   if (timediff > 0 && (timediff / 1000) > 10) {
     console.log(timediff / 1000)
-    return {message: 'node sign miss 2!', status: -1}
+    return { message: 'node sign miss 2!', status: -1 }
   }
   if (reqsign !== getSign(reqStamp, true, params)) {
-    return {message: 'node sign error!', status: -1}
+    return { message: 'node sign error!', status: -1 }
   }
   return getSign(currentTime, false, params)
 }
 
-function getSign (timeStamp, compSign, params) {
+function getSign(timeStamp, compSign, params) {
   // 只用于签名的参数
   let otherParams = {
     timeStamp: '' + timeStamp,
@@ -99,11 +98,11 @@ function getSign (timeStamp, compSign, params) {
   let sign = sha256(str)
   // 返回所有参数
   let mergeSign = timeStamp + sign
-  let p = Object.assign({}, params, {'sign': mergeSign})
+  let p = Object.assign({}, params, { 'sign': mergeSign })
   return compSign ? mergeSign : p
 }
 
-app.use('/', serveIndex(path.resolve('./static'), {'icons': true}))
-app.listen(__port, function () {
+app.use('/', serveIndex(path.resolve('./static'), { 'icons': true }))
+app.listen(__port, function() {
   console.log('http://localhost:' + __port)
 })

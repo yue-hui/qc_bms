@@ -147,7 +147,7 @@ export default {
     },
     change_current(page) {
       this.page = page
-      this.reload()
+      this.fetch()
     },
     get_pagination_config() {
       const pagination = {

@@ -142,7 +142,6 @@ export default {
     },
     refresh_data: function() {
       const config = this.get_params()
-      console.log(config)
       get_parent_list(config).then(res => {
         const table_data = []
         const base_index = (config.page_no - 1) * config.page_num + 1

@@ -8,6 +8,9 @@
 # Clone project
 git clone git@172.168.50.230:lwtx/bms.git
 
+# 增加cross-env工具
+npm install -g cross-env
+
 # Install dependencies
 npm install
 
