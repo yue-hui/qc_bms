@@ -78,8 +78,8 @@ export default {
     },
     date_range_change() {
       this.condition = {
-        begin_time: this.datetime_range[0],
-        end_time: this.datetime_range[1]
+        begin_time: this.datetime_range[0].getTime(),
+        end_time: this.datetime_range[1].getTime()
       }
     },
     get_config() {

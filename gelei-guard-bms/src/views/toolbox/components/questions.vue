@@ -4,6 +4,7 @@
       :before-close="before_close"
       :title="title"
       :visible.sync="visible"
+      style="min-width: 800px;"
       width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <el-form-item label="帮助问题" prop="question">
