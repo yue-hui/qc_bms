@@ -13,13 +13,14 @@
                 start-placeholder="开始日期"
                 type="daterange"
                 unlink-panels
+                size="mini"
                 @change="date_range_change"/>
             </div>
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button type="success" @click="search">搜索</el-button>
+          <el-button type="success" size="mini" @click="search">搜索</el-button>
         </div>
       </div>
 
@@ -103,7 +104,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$label_height: 40px;
+$label_height: 28px;
 
 .content {
   width: 100%;

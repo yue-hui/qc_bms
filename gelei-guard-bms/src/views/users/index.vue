@@ -13,6 +13,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 type="daterange"
+                size="mini"
                 unlink-panels />
             </div>
           </div>
@@ -23,13 +24,14 @@
               v-model="phone"
               clearable
               maxlength="11"
+              size="mini"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
               placeholder="请输入手机号" />
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button type="success" @click="search">搜索</el-button>
+          <el-button type="success" size="mini" @click="search">搜索</el-button>
         </div>
       </div>
       <hr class="hr-diviser">
@@ -162,7 +164,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$label_height: 40px;
+$label_height: 28px;
 .content {
   width: 100%;
   height: 100%;

@@ -11,6 +11,7 @@
                 v-model="information.grade_from"
                 class="select-box-width"
                 clearable
+                size="mini"
                 placeholder="请选择年级">
                 <el-option
                   v-for="item in grade_list_1"
@@ -23,6 +24,7 @@
                 v-model="information.grade_to"
                 class="select-box-width"
                 clearable
+                size="mini"
                 placeholder="请选择年级">
                 <el-option
                   v-for="item in grade_list_2"
@@ -41,6 +43,7 @@
               clearable
               collapse-tags
               multiple
+              size="mini"
               placeholder="请选择学科">
               <el-option
                 v-for="item in subject_list"
@@ -52,12 +55,16 @@
 
           <div class="header-block phone-block">
             <label class="search-item">应用名称:</label>
-            <el-input v-model="information.app_name" class="select-box-width" clearable />
+            <el-input
+              v-model="information.app_name"
+              size="mini"
+              class="select-box-width"
+              clearable />
           </div>
         </div>
 
         <div class="header-line-right">
-          <el-button type="success" @click="query">查询</el-button>
+          <el-button type="success" size="mini" @click="query">查询</el-button>
         </div>
       </div>
 
@@ -196,7 +203,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 $select_box_witdh: 160px;
-$label_height: 40px;
+$label_height: 28px;
 
 .content {
   width: 100%;
