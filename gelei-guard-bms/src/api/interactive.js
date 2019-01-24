@@ -32,7 +32,7 @@ export function get_questions_list(data) {
 }
 
 // 创建常见问题
-export function create_questions(data) {
+export function add_questions(data) {
   return request({
     url: '/manager/qa/add',
     method: 'post',

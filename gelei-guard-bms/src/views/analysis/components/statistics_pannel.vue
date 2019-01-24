@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span>整体数据指标</span>
+      <span>整体数据指标(昨日)</span>
     </div>
     <div class="component-card">
       <div class="row row-1">
@@ -9,7 +9,9 @@
         <div class="column column-2">{{ statistics.increased_user }}</div>
         <div class="column column-3">
           日
-          <svg-icon :icon-class="judge_direction(statistics.increased_user_percent)" />
+          <svg-icon
+            :icon-class="judge_direction(statistics.increased_user_percent)"
+            :class="judge_direction(statistics.increased_user_percent)"/>
           {{ statistics.increased_user_percent }}%
         </div>
       </div>
@@ -18,7 +20,9 @@
         <div class="column column-2">{{ statistics.increased_bind_user }}</div>
         <div class="column column-3">
           日
-          <svg-icon :icon-class="judge_direction(statistics.increased_bind_user_percent)" />
+          <svg-icon
+            :icon-class="judge_direction(statistics.increased_bind_user_percent)"
+            :class="judge_direction(statistics.increased_user_percent)"/>
           {{ statistics.increased_bind_user_percent }}%
         </div>
       </div>
@@ -27,7 +31,9 @@
         <div class="column column-2">{{ statistics.increased_bind_device }}</div>
         <div class="column column-3">
           日
-          <svg-icon :icon-class="judge_direction(statistics.increased_bind_device_percent)" />
+          <svg-icon
+            :icon-class="judge_direction(statistics.increased_bind_device_percent)"
+            :class="judge_direction(statistics.increased_user_percent)"/>
           {{ statistics.increased_bind_device_percent }}%
         </div>
       </div>
@@ -42,6 +48,7 @@
 
 <script>
 import { get_user_analysis_summary } from '@/api/interactive'
+import { DAY_MICROSECOND } from '@/utils/constant'
 
 export default {
   name: 'StatisticsPannel',
@@ -56,6 +63,7 @@ export default {
   computed: {},
   watch: {},
   mounted: function() {
+    this.search()
   },
   methods: {
     judge_direction: function(direct) {
@@ -66,7 +74,13 @@ export default {
         this.statistics = res.data
       })
     },
-    search(data) {
+    search() {
+      // search 如果参数为
+      const pre_day_unix_stamp = new Date().getTime() - DAY_MICROSECOND
+      const data = {
+        begin_time: pre_day_unix_stamp,
+        end_time: pre_day_unix_stamp
+      }
       this.load_summary(data)
     }
   }
@@ -123,5 +137,13 @@ $pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
       line-height: $column_3_height;
     }
   }
+}
+
+.upper{
+  color: red;
+}
+
+.down{
+  color: green;
 }
 </style>

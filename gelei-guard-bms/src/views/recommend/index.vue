@@ -1,82 +1,85 @@
 <template>
   <div class="content">
-    <div class="content-body">
 
-      <div class="header-line">
-        <div class="header-line-left">
-          <div class="header-block search-time">
-            <label class="search-item">年级:</label>
-            <div class="block">
-              <el-select
-                v-model="information.grade_from"
-                class="select-box-width"
-                clearable
-                size="mini"
-                placeholder="请选择年级">
-                <el-option
-                  v-for="item in grade_list_1"
-                  :key="item.val"
-                  :label="item.name"
-                  :value="item.val" />
-              </el-select>
-              <span class="grade-to-word">至</span>
-              <el-select
-                v-model="information.grade_to"
-                class="select-box-width"
-                clearable
-                size="mini"
-                placeholder="请选择年级">
-                <el-option
-                  v-for="item in grade_list_2"
-                  :key="item.val"
-                  :label="item.name"
-                  :value="item.val" />
-              </el-select>
-            </div>
-          </div>
-
-          <div class="header-block phone-block">
-            <label class="search-item">学科:</label>
+    <div class="header-line">
+      <div class="header-line-left">
+        <div class="header-block search-time">
+          <label class="search-item">年级:</label>
+          <div class="block">
             <el-select
-              v-model="information.subject"
+              v-model="information.grade_from"
               class="select-box-width"
               clearable
-              collapse-tags
-              multiple
               size="mini"
-              placeholder="请选择学科">
+              placeholder="请选择年级">
               <el-option
-                v-for="item in subject_list"
+                v-for="item in grade_list_1"
+                :key="item.val"
+                :label="item.name"
+                :value="item.val" />
+            </el-select>
+            <span class="grade-to-word">至</span>
+            <el-select
+              v-model="information.grade_to"
+              class="select-box-width"
+              clearable
+              size="mini"
+              placeholder="请选择年级">
+              <el-option
+                v-for="item in grade_list_2"
                 :key="item.val"
                 :label="item.name"
                 :value="item.val" />
             </el-select>
           </div>
-
-          <div class="header-block phone-block">
-            <label class="search-item">应用名称:</label>
-            <el-input
-              v-model="information.app_name"
-              size="mini"
-              class="select-box-width"
-              clearable />
-          </div>
         </div>
 
-        <div class="header-line-right">
-          <el-button type="success" size="mini" @click="query">查询</el-button>
+        <div class="header-block phone-block">
+          <label class="search-item">学科:</label>
+          <el-select
+            v-model="information.subject"
+            class="select-box-width"
+            clearable
+            collapse-tags
+            multiple
+            size="mini"
+            placeholder="请选择学科">
+            <el-option
+              v-for="item in subject_list"
+              :key="item.val"
+              :label="item.name"
+              :value="item.val" />
+          </el-select>
+        </div>
+
+        <div class="header-block phone-block">
+          <label class="search-item">应用名称:</label>
+          <el-input
+            v-model="information.app_name"
+            size="mini"
+            class="select-box-width"
+            clearable />
         </div>
       </div>
 
-      <div class="new-application">
-        <el-button
-          class="new-application-button"
-          round
-          size="mini"
-          type="success"
-          @click="create_app">创建应用
-        </el-button>
+      <div class="header-line-right">
+        <el-button type="success" size="mini" @click="query">查询</el-button>
       </div>
+    </div>
+
+    <div class="new-application">
+      <el-button
+        class="new-application-button"
+        round
+        size="mini"
+        type="success"
+        @click="create_app">创建应用
+      </el-button>
+    </div>
+
+    <!--<hr class="hr-diviser">-->
+
+    <div class="content-body">
 
       <!--推荐应用列表-->
       <application-list
@@ -218,70 +221,70 @@ $label_height: 28px;
     height: 100%;
     padding: 15px 25px;
     min-height: 120px;
+  }
 
-    .header-line {
+  .header-line {
+    display: flex;
+    flex-direction: row;
+
+    .header-line-left {
+      flex: 1;
       display: flex;
       flex-direction: row;
 
-      .header-line-left {
-        flex: 1;
+      .header-block {
         display: flex;
         flex-direction: row;
 
-        .header-block {
-          display: flex;
-          flex-direction: row;
-
-          .search-item {
-            vertical-align: middle;
-            display: inline-block;
-            height: $label_height;
-            line-height: $label_height;
-            padding-right: 8px;
-            min-width: 64px;
-            color: grey;
-            font-size: 16px;
-            font-weight: 400;
-          }
-        }
-
-        .phone-block {
-          width: 280px;
-        }
-
-        .search-time {
-          width: 500px;
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          min-width: 64px;
+          color: grey;
+          font-size: 16px;
+          font-weight: 400;
         }
       }
 
-      .header-line-right {
-        min-width: 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+      .phone-block {
+        width: 280px;
       }
 
-      .select-box-width {
-        width: $select_box_witdh;
-      }
-
-      .grade-to-word {
-        padding: 0 10px;
+      .search-time {
+        width: 500px;
       }
     }
 
-    .new-application {
-      height: 60px;
-      /*background-color: rgba(231, 231, 231, 0.56);*/
+    .header-line-right {
+      min-width: 60px;
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding-left: 15px;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-      .new-application-button {
-        width: 80px;
-        height: 28px;
-      }
+    .select-box-width {
+      width: $select_box_witdh;
+    }
+
+    .grade-to-word {
+      padding: 0 10px;
+    }
+  }
+
+  .new-application {
+    height: 60px;
+    /*background-color: rgba(231, 231, 231, 0.56);*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /*padding-left: 15px;*/
+
+    .new-application-button {
+      width: 80px;
+      height: 28px;
     }
   }
 }

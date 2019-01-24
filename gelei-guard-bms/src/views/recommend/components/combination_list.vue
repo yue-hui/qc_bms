@@ -222,7 +222,7 @@ export default {
       }
       deploy_soft_recommend_group(config).then(res => {
         if (res.status === 0) {
-          this.$message.success('发布成功')
+          this.$message.success(res.message)
           this.reload()
         } else {
           this.$message.error(res.message)

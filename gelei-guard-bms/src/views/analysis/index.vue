@@ -1,43 +1,47 @@
 <template>
   <div class="content">
-    <div class="content-body">
-      <div class="header-line">
-        <div class="header-line-left">
-          <div class="header-block search-time">
-            <label class="search-item">注册时间:</label>
-            <div class="block">
-              <el-date-picker
-                v-model="datetime_range"
-                end-placeholder="结束日期"
-                range-separator="至"
-                start-placeholder="开始日期"
-                type="daterange"
-                unlink-panels
-                size="mini"
-                @change="date_range_change"/>
-            </div>
+    <!--概况数据 start -->
+    <div class="statistics-summary">
+      <statistics-pannel ref="summary" />
+    </div>
+    <!--概况数据 end -->
+
+    <!--搜索栏 start -->
+    <div class="header-line">
+      <div class="header-line-left">
+        <div class="header-block search-time">
+          <label class="search-item">注册时间范围:</label>
+          <div class="block">
+            <el-date-picker
+              v-model="datetime_range"
+              end-placeholder="结束日期"
+              range-separator="至"
+              start-placeholder="开始日期"
+              type="daterange"
+              unlink-panels
+              size="mini"
+              @change="date_range_change" />
           </div>
         </div>
-
-        <div class="header-line-right">
-          <el-button type="success" size="mini" @click="search">搜索</el-button>
-        </div>
       </div>
 
-      <hr class="hr-diviser">
+      <!--<div class="header-line-right">-->
+      <!--<el-button type="success" size="mini" @click="search">搜索</el-button>-->
+      <!--</div>-->
+    </div>
+    <!--<hr class="hr-diviser">-->
+    <!--搜索栏 end -->
 
-      <!--概况数据-->
-      <div class="statistics-summary">
-        <statistics-pannel ref="summary" />
-      </div>
-
-      <!--图表数据-->
+    <div class="content-body">
+      <!--图表数据 start -->
       <div class="statistics-diagram">
         <diagram ref="diagram" :condition="condition" />
       </div>
+      <!--图表数据 end -->
 
-      <!--详情信息-->
+      <!--详情信息 start -->
       <statics_details ref="details" :condition="condition" />
+      <!--详情信息 end -->
     </div>
   </div>
 </template>
@@ -46,7 +50,7 @@
 import statisticsPannel from '@/views/analysis/components/statistics_pannel'
 import diagram from '@/views/analysis/components/diagram'
 import statics_details from '@/views/analysis/components/details'
-import { DAY_MICROSECOND } from '@/utils/constant'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -69,11 +73,12 @@ export default {
   },
   methods: {
     init_data: function() {
-      const pre_day_unix_stamp = new Date().getTime() - DAY_MICROSECOND
-      this.datetime_range = [new Date(pre_day_unix_stamp), new Date(pre_day_unix_stamp)]
+      const begin_time = dayjs().subtract(1, 'month').subtract(1, 'day').valueOf()
+      const end_time = dayjs().subtract(1, 'day').valueOf()
+      this.datetime_range = [begin_time, end_time]
       this.condition = {
-        begin_time: pre_day_unix_stamp,
-        end_time: pre_day_unix_stamp
+        begin_time,
+        end_time
       }
     },
     date_range_change() {
@@ -81,6 +86,7 @@ export default {
         begin_time: this.datetime_range[0].getTime(),
         end_time: this.datetime_range[1].getTime()
       }
+      this.search()
     },
     get_config() {
       const config = {
@@ -94,8 +100,8 @@ export default {
     },
     load_data: function() {
       // 总况数据
-      const options = this.get_config()
-      this.$refs.summary.search(options)
+      // const options = this.get_config()
+      // this.$refs.summary.search(options)
       this.$refs.diagram.search()
       this.$refs.details.search()
     }
@@ -120,52 +126,53 @@ $label_height: 28px;
     padding: 15px 25px;
     min-height: 120px;
 
-    .header-line {
-      display: flex;
-      flex-direction: row;
-
-      .header-line-left {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-
-        .header-block {
-          display: flex;
-          flex-direction: row;
-
-          .search-item {
-            vertical-align: middle;
-            display: inline-block;
-            height: $label_height;
-            line-height: $label_height;
-            padding-right: 8px;
-            min-width: 64px;
-            color: grey;
-            font-size: 16px;
-            font-weight: 400;
-          }
-        }
-
-        .phone-block {
-          width: 200px;
-        }
-
-        .search-time {
-          width: 440px;
-        }
-      }
-
-      .header-line-right {
-        min-width: 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-    }
-
     .hr-diviser {
       border-top: solid #c8c8c8 1px;
       border-bottom: 0;
+    }
+  }
+
+  .header-line {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 0;
+
+    .header-line-left {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+
+      .header-block {
+        display: flex;
+        flex-direction: row;
+
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          min-width: 100px;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+
+      .phone-block {
+        width: 200px;
+      }
+
+      .search-time {
+        width: 440px;
+      }
+    }
+
+    .header-line-right {
+      min-width: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
 }

@@ -333,6 +333,9 @@ export default {
       create_soft_remmend(config).then(res => {
         if (res.status === 0) {
           this.$emit('receive', false)
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
         }
       })
     },
@@ -341,6 +344,9 @@ export default {
       edit_soft_remmend(config).then(res => {
         if (res.status === 0) {
           this.$emit('receive', false)
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
         }
       })
     },

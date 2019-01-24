@@ -35,7 +35,7 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import { max_weight, min_weight } from '@/utils/constant'
-import { create_questions, get_questions_details, update_questions } from '@/api/interactive'
+import { add_questions, get_questions_details, update_questions } from '@/api/interactive'
 
 export default {
   name: '',
@@ -111,15 +111,25 @@ export default {
     },
     create_questions: function() {
       const data = this.form
-      create_questions(data).then(res => {
-        res.status === 0 && this.refresh()
+      add_questions(data).then(res => {
+        if (res.status === 0) {
+          this.refresh()
+          this.$message.success(res.message)
+        } else {
+          this.$message.error(res.message)
+        }
       })
     },
     edit_questions: function() {
       const data = JSON.parse(JSON.stringify(this.form))
       data['record_id'] = this.rid
       update_questions(data).then(res => {
-        res.status === 0 && this.refresh()
+        if (res.status === 0) {
+          this.$message.success(res.message)
+          this.refresh()
+        } else {
+          this.$message.error(res.message)
+        }
       })
     },
     refresh() {

@@ -1,40 +1,43 @@
 <template>
   <div class="content">
-    <div class="content-body">
-      <div class="header-line">
-        <div class="header-line-left">
-          <div class="header-block search-time">
-            <label class="search-item">注册时间:</label>
-            <div class="block">
-              <el-date-picker
-                v-model="datetime_range"
-                clearable
-                end-placeholder="结束日期"
-                range-separator="至"
-                start-placeholder="开始日期"
-                type="daterange"
-                size="mini"
-                unlink-panels />
-            </div>
-          </div>
 
-          <div class="header-block phone-block">
-            <label class="search-item">手机号:</label>
-            <el-input
-              v-model="phone"
+    <div class="header-line">
+      <div class="header-line-left">
+        <div class="header-block search-time">
+          <label class="search-item">注册时间:</label>
+          <div class="block">
+            <el-date-picker
+              v-model="datetime_range"
               clearable
-              maxlength="11"
+              end-placeholder="结束日期"
+              range-separator="至"
+              start-placeholder="开始日期"
+              type="daterange"
               size="mini"
-              onkeyup="this.value=this.value.replace(/\D/g,'')"
-              placeholder="请输入手机号" />
+              unlink-panels />
           </div>
         </div>
 
-        <div class="header-line-right">
-          <el-button type="success" size="mini" @click="search">搜索</el-button>
+        <div class="header-block phone-block">
+          <label class="search-item">手机号:</label>
+          <el-input
+            v-model="phone"
+            clearable
+            maxlength="11"
+            size="mini"
+            onkeyup="this.value=this.value.replace(/\D/g,'')"
+            placeholder="请输入手机号" />
         </div>
       </div>
-      <hr class="hr-diviser">
+
+      <div class="header-line-right">
+        <el-button type="success" size="mini" @click="search">搜索</el-button>
+      </div>
+    </div>
+
+    <hr class="hr-diviser">
+
+    <div class="content-body">
       <div class="table-content">
         <el-table
           :data="table_data"
@@ -179,53 +182,55 @@ $label_height: 28px;
     padding: 15px 25px;
     min-height: 120px;
 
-    .header-line {
+  }
+
+  .header-line {
+    display: flex;
+    flex-direction: row;
+
+    .header-line-left {
+      flex: 1;
       display: flex;
       flex-direction: row;
 
-      .header-line-left {
-        flex: 1;
+      .header-block {
         display: flex;
         flex-direction: row;
 
-        .header-block {
-          display: flex;
-          flex-direction: row;
-
-          .search-item {
-            vertical-align: middle;
-            display: inline-block;
-            height: $label_height;
-            line-height: $label_height;
-            padding-right: 8px;
-            min-width: 64px;
-            color: grey;
-            font-size: 16px;
-            font-weight: 400;
-          }
-        }
-
-        .phone-block {
-          width: 200px;
-        }
-
-        .search-time {
-          width: 440px;
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          min-width: 64px;
+          color: grey;
+          font-size: 16px;
+          font-weight: 400;
         }
       }
 
-      .header-line-right {
-        min-width: 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+      .phone-block {
+        width: 200px;
+      }
+
+      .search-time {
+        width: 440px;
       }
     }
 
-    .hr-diviser {
-      border-top: solid #c8c8c8 1px;
-      border-bottom: 0;
+    .header-line-right {
+      min-width: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
+
+  /*.hr-diviser {*/
+    /*border-top: solid #c8c8c8 1px;*/
+    /*width: 100%;*/
+    /*border-bottom: 0;*/
+  /*}*/
 }
 </style>

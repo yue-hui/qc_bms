@@ -1,18 +1,18 @@
 <template>
   <div class="content">
-    <div class="content-body">
+    <div class="new-combination">
+      <el-button
+        class="new-combination-button"
+        round
+        size="mini"
+        type="success"
+        @click="create_system_recomend">
+        创建系统推荐
+      </el-button>
+      <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend" round>创建手工推荐</el-button>-->
+    </div>
 
-      <div class="new-combination">
-        <el-button
-          class="new-combination-button"
-          round
-          size="mini"
-          type="success"
-          @click="create_system_recomend">
-          创建系统推荐
-        </el-button>
-        <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend" round>创建手工推荐</el-button>-->
-      </div>
+    <div class="content-body">
 
       <!--应用列表-->
       <combination-list
@@ -174,19 +174,19 @@ $label_height: 40px;
         padding: 0 10px;
       }
     }
+  }
 
-    .new-combination {
-      height: 60px;
-      display: flex;
-      flex-direction: row;
-      justify-content: right;
-      align-items: center;
-      padding-left: 15px;
+  .new-combination {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    padding-left: 15px;
 
-      .new-combination-button {
-        width: 100px;
-        height: 28px;
-      }
+    .new-combination-button {
+      width: 100px;
+      height: 28px;
     }
   }
 }

@@ -1,17 +1,18 @@
 <template>
   <div class="content">
-    <div class="content-body">
-      <div class="header-line">
-        <div class="control-box">
-          <el-button
-            type="success"
-            size="mini"
-            @click="add_questions"
-          >添加帮助问题
-          </el-button>
-        </div>
-      </div>
 
+    <div class="header-line">
+      <div class="control-box">
+        <el-button
+          type="success"
+          size="mini"
+          @click="add_questions"
+        >添加帮助问题
+        </el-button>
+      </div>
+    </div>
+
+    <div class="content-body">
       <div class="table-block">
         <el-table
           :data="questions"
@@ -127,7 +128,7 @@ export default {
             if (res.statusCode !== 200) {
               this.$message({
                 type: 'success',
-                message: '发布成功!'
+                message: res.message
               })
               this.load_data()
             } else {
@@ -151,7 +152,7 @@ export default {
             if (res.statusCode !== 200) {
               this.$message({
                 type: 'success',
-                message: '取消发布成功!'
+                message: res.message
               })
               this.load_data()
             } else {
@@ -224,14 +225,14 @@ export default {
     height: 100%;
     padding: 15px 25px;
     min-height: 120px;
+  }
 
-    .header-line {
-      display: flex;
-      flex-direction: row;
+  .header-line {
+    display: flex;
+    flex-direction: row;
 
-      .control-box {
-        padding: 10px 15px;
-      }
+    .control-box {
+      padding: 10px 15px;
     }
   }
 }
