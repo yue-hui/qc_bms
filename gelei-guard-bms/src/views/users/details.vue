@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="content-body">
-      <el-card class="box-card parent-card-block">
+      <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
           <span>个人信息</span>
           <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
@@ -56,12 +56,16 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <span>{{ information.create_time }}</span>
+                  <el-form-item label="注册时间">
+                    <span>{{ __date_formatter(information.create_time) }}</span>
+                  </el-form-item>
                 </div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple">
-                  <span>{{ information.last_use_time }}</span>
+                  <el-form-item label="最后使用时间">
+                    <span>{{ __date_formatter(information.last_use_time) }}</span>
+                  </el-form-item>
                 </div>
               </el-col>
             </el-row>
@@ -82,6 +86,8 @@
 // import { parent_info } from '@/views/users/data'
 import child from './components/child'
 import { get_parent_details } from '@/api/interactive'
+import { date_formatter } from '@/utils/common'
+import { DATE_TIME_FORMAT } from '@/utils/constant'
 
 export default {
   components: {
@@ -119,6 +125,9 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    __date_formatter: (t) => {
+      return date_formatter(t, DATE_TIME_FORMAT)
     }
   }
 }
@@ -153,4 +162,8 @@ export default {
     }
   }
 }
+</style>
+
+<style rel="stylesheet/scss" lang="scss">
+@import "style/index";
 </style>

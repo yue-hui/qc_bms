@@ -5,7 +5,9 @@
 @import './sidebar.scss';
 
 body {
+  width: 100%;
   height: 100%;
+  background-color: rgb(248, 246, 231);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -17,11 +19,12 @@ label {
 }
 
 html {
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
 }
 
-#app{
+#app {
   height: 100%;
 }
 
@@ -40,9 +43,9 @@ a:hover {
   text-decoration: none;
 }
 
-div:focus{
+div:focus {
   outline: none;
- }
+}
 
 a:focus,
 a:active {
@@ -69,7 +72,7 @@ a:hover {
 }
 
 //main-container全局样式
-.app-main{
+.app-main {
   min-height: 100%
 }
 
@@ -77,6 +80,34 @@ a:hover {
   padding: 20px;
 }
 
-.el-range-separator{
+.el-range-separator {
   width: 20px;
 }
+
+/* start scroll style */
+.scrollbar {
+  float: left;
+  background: #F5F5F5;
+  overflow-y: scroll;
+}
+
+.style-with-scrollbar::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+}
+
+.style-with-scrollbar::-webkit-scrollbar
+{
+  width: 0;
+  background-color: #F5F5F5;
+}
+
+.style-with-scrollbar::-webkit-scrollbar-thumb
+{
+  background-color: #e8e8e8;
+}
+
+.force-overflow {
+}
+/* end scroll style */

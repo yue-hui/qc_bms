@@ -1,16 +1,10 @@
 <template>
   <div class="content">
-    <!--概况数据 start -->
-    <div class="statistics-summary">
-      <statistics-pannel ref="summary" />
-    </div>
-    <!--概况数据 end -->
-
     <!--搜索栏 start -->
     <div class="header-line">
       <div class="header-line-left">
         <div class="header-block search-time">
-          <label class="search-item">注册时间范围:</label>
+          <label class="search-item">时间范围:</label>
           <div class="block">
             <el-date-picker
               v-model="datetime_range"
@@ -33,11 +27,21 @@
     <!--搜索栏 end -->
 
     <div class="content-body">
+      <!--概况数据 start -->
+      <div class="statistics-summary">
+        <statistics-pannel ref="summary" />
+      </div>
+      <!--概况数据 end -->
+
+      <hr class="hr-diviser">
+
       <!--图表数据 start -->
       <div class="statistics-diagram">
         <diagram ref="diagram" :condition="condition" />
       </div>
       <!--图表数据 end -->
+
+      <hr class="hr-diviser">
 
       <!--详情信息 start -->
       <statics_details ref="details" :condition="condition" />
@@ -81,12 +85,14 @@ export default {
         end_time
       }
     },
-    date_range_change() {
+    date_range_change(values) {
       this.condition = {
         begin_time: this.datetime_range[0].getTime(),
         end_time: this.datetime_range[1].getTime()
       }
-      this.search()
+      this.$nextTick(() => {
+        this.search()
+      })
     },
     get_config() {
       const config = {
@@ -127,8 +133,7 @@ $label_height: 28px;
     min-height: 120px;
 
     .hr-diviser {
-      border-top: solid #c8c8c8 1px;
-      border-bottom: 0;
+      border: 0;
     }
   }
 
@@ -152,7 +157,7 @@ $label_height: 28px;
           height: $label_height;
           line-height: $label_height;
           padding-right: 8px;
-          min-width: 100px;
+          min-width: 60px;
           color: #4d4d4d;
           font-size: 14px;
           font-weight: 600;

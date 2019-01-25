@@ -1,7 +1,7 @@
 <template>
   <div class="component-card">
     <div class="left-item">
-      格雷守护后台管理系统
+      <a href="/" class="hover-system-subject"> 格雷守护后台管理系统</a>
     </div>
     <div class="user-info">
       <div v-if="name" class="user-name-show">{{ name }},</div>
@@ -55,6 +55,12 @@ export default {
     padding-left: 10px;
     color: white;
     flex: 1;
+    .hover-system-subject{
+      color: #cecece;
+      &:hover{
+        color: rgb(64, 158, 255);
+      }
+    }
   }
 
   .user-info {

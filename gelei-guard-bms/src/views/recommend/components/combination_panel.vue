@@ -2,6 +2,7 @@
   <div class="component-card">
     <el-table
       :data="data_list"
+      :stripe="true"
       size="mini">
       <el-table-column
         align="center"

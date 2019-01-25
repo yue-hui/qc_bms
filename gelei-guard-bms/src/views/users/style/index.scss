@@ -1,0 +1,35 @@
+.gg-user-details-with-all {
+  .el-card__header {
+    padding: 10px 20px;
+    background-color: rgb(48, 65, 86);
+    color: white;
+  }
+
+  .el-card__body {
+    padding: 0;
+  }
+
+  .title-box {
+    .title-name {
+      padding: 0 4px;
+      color: #4aff24;
+    }
+  }
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .component-card {
+    //padding: 0 10px;
+    .el-collapse-item__header {
+      background-color: rgb(69, 93, 123);
+      color: white;
+      height: 32px;
+    }
+
+    .el-collapse-item__arrow {
+      margin: 2px 5px;
+    }
+  }
+}

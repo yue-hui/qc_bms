@@ -17,6 +17,7 @@
       <div class="table-block">
         <el-table
           :data="data_list"
+          size="mini"
           style="width: 100%">
           <el-table-column
             align="center"
@@ -192,6 +193,27 @@ export default {
 
   &:hover {
     color: green;
+  }
+}
+</style>
+
+<style rel="stylesheet/scss" lang="scss">
+.box-card{
+  .el-card__header{
+    padding: 10px 20px;
+    .card-header-content{
+      height: 29px;
+      line-height: 29px;
+      span{
+        height: 29px;
+        line-height: 29px;
+      }
+      button{
+        padding: 0px 15px;
+        height: 29px;
+        line-height: 29px;
+      }
+    }
   }
 }
 </style>

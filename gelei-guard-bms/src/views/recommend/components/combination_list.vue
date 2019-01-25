@@ -5,6 +5,7 @@
         <el-table
           :data="data_list"
           :stripe="true"
+          size="mini"
           style="width: 100%">
           <el-table-column
             align="center"
@@ -107,14 +108,14 @@ export default {
     show_label(row) {
       if (row.rec_type === '1') {
         // 系统推荐
-        if (row.status === '01' || row.rec_type === '1') {
+        if (row.status === '01') {
           return '开启'
         } else {
           return '已开启'
         }
       } else {
         // 手工推荐
-        if (row.status === '01' || row.rec_type === '1') {
+        if (row.status === '01') {
           return '推送'
         } else {
           return '暂停'
@@ -149,6 +150,7 @@ export default {
             status_name: get_app_combination_status(r.rec_type, r.status)
           }
         })
+        this.total = res.total_count
       })
     },
     edit_is_enabled(row) {
@@ -196,7 +198,6 @@ export default {
           // 系统  待开启
           const rec_group_id = row.rec_group_id
           this.depoly_application_group_or_not(rec_group_id, false)
-          console.log('系统  待开启')
         } else {
           // 系统 已开启不作处理
         }

@@ -1,13 +1,13 @@
 <template>
   <div class="component-card">
-    <el-card class="box-card parent-card-block">
+    <el-card class="box-card parent-card-block gg-user-details-with-all">
       <div slot="header" class="clearfix">
-        <span>孩子--{{ child_new.nick_name }}的信息</span>
+        <span class="title-box">孩子<span class="title-name">{{ child_new.nick_name }}</span>的信息</span>
         <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
       </div>
       <!--孩子 - 详细信息-->
       <div class="card-block-body">
-        <el-form ref="form" label-suffix=":" label-width="140px">
+        <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="grid-content bg-purple">
@@ -26,7 +26,7 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">
                 <el-form-item label="生日">
-                  <span>{{ child_new.birthdate }}</span>
+                  <span>{{ __date_formatter(child_new.birthdate) }}</span>
                 </el-form-item>
               </div>
             </el-col>
@@ -44,7 +44,7 @@
               <div class="grid-content bg-purple">
                 <el-form-item label="注册时间">
                   <el-form-item prop="date1">
-                    <span>{{ child_new.create_time }}</span>
+                    <span>{{ __date_formatter(child_new.create_time) }}</span>
                   </el-form-item>
                 </el-form-item>
               </div>
@@ -64,8 +64,8 @@
 
 <script>
 import DeviceCard from './device_card'
-import { get_chinese_index } from '@/utils/constant'
-import { get_sex_label, transfer_to_chinese_index } from '@/utils/common'
+import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
+import { date_formatter, get_sex_label, transfer_to_chinese_index } from '@/utils/common'
 
 export default {
   name: 'Child',
@@ -128,6 +128,9 @@ export default {
     },
     sex_label(sex) {
       return get_sex_label(sex)
+    },
+    __date_formatter: (t) => {
+      return date_formatter(t, DATE_TIME_FORMAT)
     }
   }
 }
@@ -138,4 +141,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+</style>
+<style rel="stylesheet/scss" lang="scss">
+@import "../style/index";
 </style>

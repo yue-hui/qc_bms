@@ -27,6 +27,7 @@
           <el-form-item label="年级选择:" prop="grade">
             <el-select
               v-model="combination_form.grade"
+              :disabled="!isCreate"
               placeholder="请选择应用组合年级"
               size="mini"
               @change="change_grade">
@@ -64,13 +65,11 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="">
-            <combination-panel
-              ref="comb_panel"
-              :applications="combination_form.applications"
-              :condition="panel_condition"
-              @rsync_app="rsync_application" />
-          </el-form-item>
+          <combination-panel
+            ref="comb_panel"
+            :applications="combination_form.applications"
+            :condition="panel_condition"
+            @rsync_app="rsync_application" />
 
         </el-form>
       </div>

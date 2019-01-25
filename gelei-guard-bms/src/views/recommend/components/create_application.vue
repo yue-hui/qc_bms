@@ -20,6 +20,7 @@
               :filterable="true"
               :remote="true"
               :remote-method="remote_application"
+              :disabled="!isCreate"
               class="application-name-input"
               style="width: 100%;"
               collapse-tags
@@ -121,24 +122,24 @@
                 v-model="score"
                 :allow-half="true"
                 :max="5"
-                text-color="#ff9900" />
+                :colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
               <span>{{ ruleForm.rec_level }}分</span>
             </div>
           </el-form-item>
 
-          <el-form-item label="应用推荐语:" prop="rec_phrase">
+          <el-form-item label="应用简述:" prop="rec_phrase">
             <el-input
               v-model="ruleForm.rec_phrase"
-              placeholder="请输入应用推荐语(20字内)"
+              placeholder="请输入应用简述(20字内)"
               size="mini" />
           </el-form-item>
 
-          <el-form-item label="小编推荐:" prop="rec_desc">
+          <el-form-item label="推荐理由:" prop="rec_desc">
             <el-input
               v-model="ruleForm.rec_desc"
               maxlength="200"
               columns="10"
-              placeholder="请输入小编推荐语(200字内)"
+              placeholder="请输入推荐理由(200字内)"
               rows="5"
               size="mini"
               resize="none"
@@ -213,8 +214,11 @@ export default {
         end_age: { required: true, message: '请输入适用终止年龄', trigger: 'blur' },
         sex: { required: true, message: '请选择用户性别', trigger: 'blur' },
         rec_level: { required: true, message: '请选择推荐星级', trigger: 'blur' },
-        rec_phrase: { required: true, message: '应用推荐语不能为空', trigger: 'blur' },
-        rec_desc: { required: true, message: '小编推荐不能为空', trigger: 'blur' }
+        rec_phrase: [
+          { required: true, message: '应用简述不能为空', trigger: 'blur' },
+          { required: true, max: 20, message: '应用简述不能超过20个字', trigger: 'blur' }
+        ],
+        rec_desc: { required: true, message: '推荐理由不能为空', trigger: 'blur' }
       }
     }
   },
@@ -283,6 +287,12 @@ export default {
         rec_phrase: current.rec_phrase,
         rec_desc: current.rec_desc
       }
+      this.app_list = [
+        {
+          soft_name: current.soft_name,
+          rec_bundle_id: current.rec_bundle_id
+        }
+      ]
     },
     handle_close(done) {
       this.$confirm('确认关闭？')

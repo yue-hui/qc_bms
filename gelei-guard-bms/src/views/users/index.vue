@@ -41,6 +41,7 @@
       <div class="table-content">
         <el-table
           :data="table_data"
+          size="mini"
           style="width: 100%">
           <el-table-column
             align="center"

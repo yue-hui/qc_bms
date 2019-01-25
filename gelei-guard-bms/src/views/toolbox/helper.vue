@@ -16,6 +16,7 @@
       <div class="table-block">
         <el-table
           :data="questions"
+          size="mini"
           style="width: 100%">
           <el-table-column
             label="序号"
@@ -195,7 +196,7 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         const questions = []
         res.data.forEach((r, i, _a) => {
-          const status_label = this.show_status_label(res.status)
+          const status_label = this.show_status_label(r.status)
           const question = {
             ...r,
             status_label,

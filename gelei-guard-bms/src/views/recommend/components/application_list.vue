@@ -4,6 +4,7 @@
       <div class="table-block">
         <el-table
           :data="data_list"
+          size="mini"
           style="width: 100%">
           <el-table-column
             align="center"
@@ -63,7 +64,7 @@
             <template slot-scope="scope">
               <el-rate
                 v-model="scope.row.rec_level_score"
-                :colors="['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#5e5e5e', '#444444', '#404040', '#303030', '#121212', '#000000']"
+                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
                 disabled/>
             </template>
           </el-table-column>

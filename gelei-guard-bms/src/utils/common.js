@@ -81,13 +81,13 @@ export function subject_label_map_number(subjects) {
 // 组合状态别名
 export function get_app_combination_status(rec_type, status) {
   if (rec_type === '1') {
-    if (status === '01' || rec_type === '1') {
+    if (status === '01') {
       return '未生效'
     } else {
       return '生效中'
     }
   } else {
-    if (status === '01' || rec_type === '1') {
+    if (status === '01') {
       return '未推送'
     } else {
       return '已推送'

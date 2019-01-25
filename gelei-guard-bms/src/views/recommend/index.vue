@@ -174,7 +174,7 @@ export default {
       }
       forbidden_soft_remmend(config).then(res => {
         if (res.status === 0) {
-          this.$message.success('禁用推荐应用成功')
+          this.$message.success(res.message)
           this.query()
         } else {
           this.$message.error(res.message)

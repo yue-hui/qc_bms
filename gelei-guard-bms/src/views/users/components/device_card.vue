@@ -5,7 +5,7 @@
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item :title="device_index" name="1">
           <div>
-            <el-form ref="form" label-suffix=":" label-width="140px">
+            <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
               <el-row :gutter="20">
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
@@ -48,7 +48,7 @@
                   <div class="grid-content bg-purple">
                     <el-form-item label="绑定时间">
                       <el-form-item prop="date1">
-                        <span>{{ date_formatter(device.bind_time) }}</span>
+                        <span>{{ __date_formatter(device.bind_time) }}</span>
                       </el-form-item>
                     </el-form-item>
                   </div>
@@ -57,7 +57,7 @@
                   <div class="grid-content bg-purple">
                     <el-form-item label="最后使用时间">
                       <el-form-item prop="date1">
-                        <span>{{ date_formatter(device.last_use_time) }}</span>
+                        <span>{{ __date_formatter(device.last_use_time) }}</span>
                       </el-form-item>
                     </el-form-item>
                   </div>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { get_chinese_index } from '@/utils/constant'
+import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
 
 export default {
@@ -130,8 +130,8 @@ export default {
   methods: {
     handleChange: (a) => {
     },
-    date_formatter: (t) => {
-      return date_formatter(t)
+    __date_formatter: (t) => {
+      return date_formatter(t, DATE_TIME_FORMAT)
     }
   }
 }
@@ -142,4 +142,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+</style>
+<style rel="stylesheet/scss" lang="scss">
+@import "../style/index";
 </style>
