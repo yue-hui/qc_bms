@@ -127,10 +127,10 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="应用简述:" prop="rec_phrase">
+          <el-form-item label="应用推荐语:" prop="rec_phrase">
             <el-input
               v-model="ruleForm.rec_phrase"
-              placeholder="请输入应用简述(20字内)"
+              placeholder="请输入应用推荐语(20字内)"
               size="mini" />
           </el-form-item>
 
@@ -215,8 +215,8 @@ export default {
         sex: { required: true, message: '请选择用户性别', trigger: 'blur' },
         rec_level: { required: true, message: '请选择推荐星级', trigger: 'blur' },
         rec_phrase: [
-          { required: true, message: '应用简述不能为空', trigger: 'blur' },
-          { required: true, max: 20, message: '应用简述不能超过20个字', trigger: 'blur' }
+          { required: true, message: '应用推荐语不能为空', trigger: 'blur' },
+          { required: true, max: 20, message: '应用推荐语不能超过20个字', trigger: 'blur' }
         ],
         rec_desc: { required: true, message: '推荐理由不能为空', trigger: 'blur' }
       }
