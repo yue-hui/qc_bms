@@ -130,6 +130,7 @@
           <el-form-item label="应用推荐语:" prop="rec_phrase">
             <el-input
               v-model="ruleForm.rec_phrase"
+              maxlength="20"
               placeholder="请输入应用推荐语(20字内)"
               size="mini" />
           </el-form-item>
