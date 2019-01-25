@@ -21,13 +21,13 @@
           <el-form-item label="组合名称:" prop="group_name">
             <el-input
               v-model="combination_form.group_name"
-              :disabled="!isCreate && rec_type === '1'"
               placeholder="组合名称"
               size="mini" />
           </el-form-item>
           <el-form-item label="年级选择:" prop="grade">
             <el-select
               v-model="combination_form.grade"
+              :disabled="!isCreate"
               placeholder="请选择应用组合年级"
               size="mini"
               @change="change_grade">
