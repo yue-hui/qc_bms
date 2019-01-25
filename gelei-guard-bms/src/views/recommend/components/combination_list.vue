@@ -108,14 +108,14 @@ export default {
     show_label(row) {
       if (row.rec_type === '1') {
         // 系统推荐
-        if (row.status === '01') {
+        if (['01', '1'].indexOf(row.status) !== -1) {
           return '开启'
         } else {
           return '已开启'
         }
       } else {
         // 手工推荐
-        if (row.status === '01') {
+        if (['01', '1'].indexOf(row.status) !== -1) {
           return '推送'
         } else {
           return '暂停'

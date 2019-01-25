@@ -21,13 +21,13 @@
           <el-form-item label="组合名称:" prop="group_name">
             <el-input
               v-model="combination_form.group_name"
+              :disabled="!isCreate && rec_type === '1'"
               placeholder="组合名称"
               size="mini" />
           </el-form-item>
           <el-form-item label="年级选择:" prop="grade">
             <el-select
               v-model="combination_form.grade"
-              :disabled="!isCreate"
               placeholder="请选择应用组合年级"
               size="mini"
               @change="change_grade">
@@ -132,7 +132,7 @@ export default {
       combination_rules: {
         group_name: { required: true, message: '应用组合名不能为空', trigger: 'blur' },
         grade: { required: true, message: '请选择应用组合的年级', trigger: 'blur' },
-        subjects: { required: true, message: '至少选择一个学科', trigger: 'blur' },
+        // subjects: { required: true, message: '至少选择一个学科', trigger: 'blur' },
         applications: { required: true, message: '至少选择一个符合条件应用组合', trigger: 'blur' }
       }
     }
@@ -274,7 +274,8 @@ export default {
           const data = res.data
           this.combination_form.group_name = data.group_name
           this.combination_form.grade = data.grade
-          this.combination_form.subjects = data.subject_list
+          this.rec_type = data.rec_type
+          // this.combination_form.subjects = data.subject_list
           this.combination_form.applications = data.soft_list.map(r => {
             const config = {
               name: r.soft_name,
