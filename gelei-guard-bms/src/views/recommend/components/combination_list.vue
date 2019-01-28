@@ -193,11 +193,12 @@ export default {
     control_combinaion(row) {
       // 推送  已开启  已关闭
       this.$emit('control', row)
+      debugger
       if (['01', '1'].indexOf(row.rec_type) !== -1) {
         if (['01', '1'].indexOf(row.status) !== -1) {
           // 系统  待开启
           const rec_group_id = row.rec_group_id
-          this.depoly_application_group_or_not(rec_group_id, false)
+          this.depoly_application_group_or_not(rec_group_id, true)
         } else {
           // 系统 已开启不作处理
         }
