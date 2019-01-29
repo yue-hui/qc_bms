@@ -1,7 +1,7 @@
 <template>
   <div class="component-card">
     <div class="left-item">
-      <a href="/" class="hover-system-subject"> 格雷守护后台管理系统</a>
+      <a href="/gelei-guard-bms" class="hover-system-subject"> 格雷守护后台管理系统</a>
     </div>
     <div class="user-info">
       <div v-if="name" class="user-name-show">{{ name }},</div>
