@@ -1,7 +1,5 @@
 <template>
-  <div class="component-card">
-
-  </div>
+  <div class="component-card" />
 </template>
 
 <script>
@@ -9,15 +7,15 @@ export default {
   name: '',
   beforecreate: function() {
   },
-  computed: {},
+  props: {},
   data: function() {
     return {}
   },
-  methods: {},
+  computed: {},
   mounted: function() {
   },
   watch: {},
-  props: {}
+  methods: {}
 }
 </script>
 

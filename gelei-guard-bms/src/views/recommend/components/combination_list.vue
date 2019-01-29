@@ -193,7 +193,6 @@ export default {
     control_combinaion(row) {
       // 推送  已开启  已关闭
       this.$emit('control', row)
-      debugger
       if (['01', '1'].indexOf(row.rec_type) !== -1) {
         if (['01', '1'].indexOf(row.status) !== -1) {
           // 系统  待开启
