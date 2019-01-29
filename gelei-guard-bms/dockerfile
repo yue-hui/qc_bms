@@ -16,6 +16,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
 #以上的内容和顺序不要改动
 
-RUN mkdir -p /data/project /data/logs/nodejs/gelei-guard-h5
-ADD gelei-guard-h5.tar.gz /data/project
+
+RUN mkdir -p /data/project /data/logs/nodejs/gelei-guard-bms
+ADD gelei-guard-bms.tar.gz /data/project
 
