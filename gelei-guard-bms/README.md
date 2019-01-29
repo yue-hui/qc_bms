@@ -74,3 +74,19 @@ npm run build --report
 ├── index.html                 // html模板
 └── package.json               // package.json
 ```
+
+```angular2
+开发环境
+http://172.168.50.173:4003/#/login
+测试环境
+http://172.168.50.62:4004/#/login
+
+Jenkins 打包流程
+在【打包】dist-greenguard-bms 内点击【立即构建】
+构建完成后将包同步到173开发环境、62测试环境
+Jenkins 发布流程
+在【部署-开发】deploy-greenguard-bms 【立即构建】发布开发环境
+在【部署-测试】deploy-greenguard-bms-test 【立即构建】发布测试环境
+```
+
+

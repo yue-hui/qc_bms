@@ -37,12 +37,16 @@
             prop="increased_bind_device" />
           <el-table-column
             align="center"
+            label="当前绑定设备数"
+            prop="cur_total_bind_device" />
+          <el-table-column
+            align="center"
             label="绑定设备总数"
             prop="total_bind_device" />
           <el-table-column
             align="center"
             label="绑定用户总数"
-            prop="total_bind_user" />
+            prop="cur_total_bind_user" />
           <el-table-column
             align="center"
             label="总注册用户数"
