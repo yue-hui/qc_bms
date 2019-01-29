@@ -10,7 +10,12 @@ RUN ln -s /data/ent/nodejs/node-v10.14.0-linux-x64/bin/node /usr/bin/
 RUN ln -s /data/ent/nodejs/node-v10.14.0-linux-x64/bin/npm /usr/bin/
 RUN ln -s /data/ent/nodejs/node-v10.14.0-linux-x64/bin/cnpm /usr/local/bin/
 RUN ln -s /data/ent/nodejs/node-v10.14.0-linux-x64/bin/cnpm /usr/bin/
+#定义时区参数
+ENV TZ=Asia/Shanghai
+#设置时区
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
+#以上的内容和顺序不要改动
 
-RUN mkdir -p /data/project /data/logs/nodejs/gelei-guard-bms
-ADD gelei-guard-bms.tar.gz /data/project
+RUN mkdir -p /data/project /data/logs/nodejs/gelei-guard-h5
+ADD gelei-guard-h5.tar.gz /data/project
 

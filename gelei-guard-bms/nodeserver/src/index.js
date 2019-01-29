@@ -103,6 +103,7 @@ function getSign(timeStamp, compSign, params) {
 }
 
 app.use('/', serveIndex(path.resolve('./static'), { 'icons': true }))
+// app.use('/gelei-guard-bms/', serveIndex(path.resolve('./static/gelei-guard-bms'), { 'icons': true }))
 app.listen(__port, function() {
   console.log('http://localhost:' + __port)
 })

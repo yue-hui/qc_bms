@@ -59,7 +59,7 @@ module.exports = {
     index: path.resolve(__dirname, '../nodeserver/static/gelei-guard-bms/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../nodeserver/static/gelei-guard-bms'),
+    assetsRoot: path.resolve(__dirname, '../nodeserver/static/gelei-guard-bms/'),
     assetsSubDirectory: 'static',
 
     /**
@@ -69,7 +69,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: './',
+    assetsPublicPath: '/gelei-guard-bms/',
 
     /**
      * Source Maps
