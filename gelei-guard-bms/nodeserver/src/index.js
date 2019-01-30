@@ -71,7 +71,7 @@ function compTime(reqsign, params) {
     return { message: 'node sign miss 2!', status: -1 }
   }
   if (reqsign !== getSign(reqStamp, true, params)) {
-    return { message: 'node sign error!', status: -1 }
+    return { message: 'node sign error -!', status: -1 }
   }
   return getSign(currentTime, false, params)
 }
