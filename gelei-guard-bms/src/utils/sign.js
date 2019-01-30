@@ -31,21 +31,48 @@ function getSign(params) {
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
     if (Array.isArray(element)) {
-      element.sort()
-      arr[i] = JSON.stringify(element)
+      arr[i] = JSON.stringify(deepSort(element))
+      // console.log(element)
     }
   })
   // 排序
   arr.sort()
-
+  
   // 加密
   const str = arr.join('')
+  console.log('str', str)
   const sign = sha256(str)
   // 返回所有参数
   const p = Object.assign({}, params, publicParams, {
     'sign': time_stamp + sign
   })
   return JSON.stringify(p)
+}
+
+function deepSort(source) {
+  if (!source || typeof source !== 'object') {
+    return source
+  }
+  var targetObj = source.constructor === Array ? [] : {}
+  if (source.constructor !== Array) {
+    const newKeys = Object.keys(source).sort()
+    for (var i = 0; i < newKeys.length; i++) {
+      // 遍历newkey数组
+      targetObj[newKeys[i]] = source[newKeys[i]]
+      // 向新创建的对象中按照排好的顺序依次增加键值对
+    }
+  }
+  for (var keys in source) {
+    if (source.hasOwnProperty(keys)) {
+      if (source[keys] && typeof source[keys] === 'object') {
+        targetObj[keys] = source[keys].constructor === Array ? [] : {}
+        targetObj[keys] = deepSort(source[keys])
+      } else {
+        targetObj[keys] = source[keys]
+      }
+    }
+  }
+  return targetObj
 }
 
 // 原始版本

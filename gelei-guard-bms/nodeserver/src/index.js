@@ -71,7 +71,7 @@ function compTime(reqsign, params) {
     return { message: 'node sign miss 2!', status: -1 }
   }
   if (reqsign !== getSign(reqStamp, true, params)) {
-    return { message: 'node sign error -!', status: -1 }
+    return { message: 'node sign error!', status: -1 }
   }
   return getSign(currentTime, false, params)
 }
@@ -88,8 +88,7 @@ function getSign(timeStamp, compSign, params) {
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
     if (Array.isArray(element)) {
-      element.sort()
-      arr[i] = JSON.stringify(element)
+      arr[i] = JSON.stringify(deepSort(element))
     }
   })
   arr.sort()
@@ -102,13 +101,39 @@ function getSign(timeStamp, compSign, params) {
   return compSign ? mergeSign : p
 }
 
+function deepSort(source) {
+  if (!source || typeof source !== 'object') {
+    return source
+  }
+  var targetObj = source.constructor === Array ? [] : {}
+  if (source.constructor !== Array) {
+    const newKeys = Object.keys(source).sort()
+    for (var i = 0; i < newKeys.length; i++) {
+      // 遍历newkey数组
+      targetObj[newKeys[i]] = source[newKeys[i]]
+      // 向新创建的对象中按照排好的顺序依次增加键值对
+    }
+  }
+  for (var keys in source) {
+    if (source.hasOwnProperty(keys)) {
+      if (source[keys] && typeof source[keys] === 'object') {
+        targetObj[keys] = source[keys].constructor === Array ? [] : {}
+        targetObj[keys] = deepSort(source[keys])
+      } else {
+        targetObj[keys] = source[keys]
+      }
+    }
+  }
+  return targetObj
+}
+
 const options = {
   'index': ['index.html', 'index.htm'],
   'icons': true
 }
 
 app.use('/', serveIndex(path.resolve('./static/gelei-guard-bms'), options))
-app.use('/gelei-guard-bms/*', function (req, res) {
+app.use('/gelei-guard-bms/*', function(req, res) {
   // 处理history模式时找不到URL的情况
   const base_path = '/gelei-guard-bms'
   if (req.baseUrl.indexOf(base_path) !== -1) {
