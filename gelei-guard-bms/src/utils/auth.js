@@ -1,4 +1,7 @@
 /* 本地存储 */
+
+import { __VERSION__ } from '@/utils/constant'
+
 const TokenKey = 'APP-Token'
 
 export function getToken() {
@@ -11,4 +14,10 @@ export function setToken(token) {
 
 export function removeToken() {
   return localStorage.removeItem(TokenKey)
+}
+
+const VersionKey = 'ver'
+
+export function setVersion() {
+  return localStorage.setItem(VersionKey, __VERSION__)
 }

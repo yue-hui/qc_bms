@@ -73,7 +73,9 @@ export default {
   },
   mounted: function() {
     this.init_data()
-    this.load_data()
+    this.$nextTick(() => {
+      this.load_data()
+    })
   },
   methods: {
     init_data: function() {

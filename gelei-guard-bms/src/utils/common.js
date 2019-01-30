@@ -103,3 +103,7 @@ export function get_rec_type_label(rec_type) {
     return '手动推荐'
   }
 }
+
+export function build_version() {
+  return dayjs().format('YYYYMMDDHHmm')
+}

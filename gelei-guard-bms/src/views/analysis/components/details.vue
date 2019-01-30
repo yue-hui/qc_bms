@@ -99,7 +99,7 @@ export default {
   computed: {},
   watch: {},
   mounted: function() {
-    this.fetch_user_analysis_details()
+    // this.fetch_user_analysis_details()
   },
   methods: {
     download: function() {

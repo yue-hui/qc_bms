@@ -15,6 +15,10 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 import VCharts from 'v-charts'
+import { setVersion } from '@/utils/auth'
+
+// 配置版本号
+setVersion()
 
 Vue.use(ElementUI, { zhLocale })
 Vue.use(VCharts)

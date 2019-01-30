@@ -48,7 +48,7 @@ export default {
     }
   },
   mounted: function() {
-    this.build_xzyh()
+    // this.build_xzyh()
   },
   methods: {
     tab_change: function(active_name) {
