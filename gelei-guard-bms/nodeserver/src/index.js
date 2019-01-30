@@ -48,7 +48,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
     res.send(encryptParams)
     return
   }
-  
+
   request({
     url: TransferReq,
     body: encryptParams,
@@ -63,13 +63,16 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
 
 function compTime(reqsign, params) {
   delete params.sign
-  let reqStamp = reqsign.substring(0, 13)
-  let currentTime = +new Date()
-  let timediff = currentTime - reqStamp
+  const reqStamp = reqsign.substring(0, 13)
+  const currentTime = +new Date()
+  const timediff = currentTime - reqStamp
   if (timediff > 0 && (timediff / 1000) > 10) {
     console.log(timediff / 1000)
     return { message: 'node sign miss 2!', status: -1 }
   }
+  console.log('确认' + reqsign)
+  console.log(getSign(reqStamp, true, params))
+  console.log(params)
   if (reqsign !== getSign(reqStamp, true, params)) {
     return { message: 'node sign error!', status: -1 }
   }
@@ -78,13 +81,13 @@ function compTime(reqsign, params) {
 
 function getSign(timeStamp, compSign, params) {
   // 只用于签名的参数
-  let otherParams = {
+  const otherParams = {
     timeStamp: '' + timeStamp,
     token: '27688ab70a56db714b59a6ebc79b8509a1f81629ce8edc743e1bc23e24465735'
   }
-  let allParams = Object.assign({}, params, otherParams)
+  const allParams = Object.assign({}, params, otherParams)
   // 排序
-  let arr = Object.values(allParams)
+  const arr = Object.values(allParams)
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
     if (Array.isArray(element)) {
@@ -93,11 +96,11 @@ function getSign(timeStamp, compSign, params) {
   })
   arr.sort()
   // 加密
-  let str = arr.join('')
-  let sign = sha256(str)
+  const str = arr.join('')
+  const sign = sha256(str)
   // 返回所有参数
-  let mergeSign = timeStamp + sign
-  let p = Object.assign({}, params, { 'sign': mergeSign })
+  const mergeSign = timeStamp + sign
+  const p = Object.assign({}, params, { 'sign': mergeSign })
   return compSign ? mergeSign : p
 }
 
@@ -132,7 +135,7 @@ const options = {
   'icons': true
 }
 
-app.use('/', serveIndex(path.resolve('./static/gelei-guard-bms'), options))
+app.use('/', serveIndex(path.resolve('./static'), options))
 app.use('/gelei-guard-bms/*', function(req, res) {
   // 处理history模式时找不到URL的情况
   const base_path = '/gelei-guard-bms'
