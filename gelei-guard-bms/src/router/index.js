@@ -109,7 +109,7 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/app/recommend/combination',
+    redirect: '/users/information',
     name: '首页',
     hidden: true,
     children: [{

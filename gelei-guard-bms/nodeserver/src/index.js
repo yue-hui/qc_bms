@@ -108,8 +108,13 @@ const options = {
 }
 
 app.use('/', serveIndex(path.resolve('./static/gelei-guard-bms'), options))
-// app.use('/gelei-guard-bms/', serveIndex(path.resolve('./static/gelei-guard-bms'), { 'icons': true }))
-
+app.use('/gelei-guard-bms/*', function (req, res) {
+  // 处理history模式时找不到URL的情况
+  const base_path = '/gelei-guard-bms'
+  if (req.baseUrl.indexOf(base_path) !== -1) {
+    res.redirect(base_path)
+  }
+})
 app.listen(__port, function() {
   console.log('http://localhost:' + __port)
 })
