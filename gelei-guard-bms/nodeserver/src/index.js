@@ -12,7 +12,7 @@ var config = require('./config.js')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.resolve('./static')))
-app.use('/api/*', function(req, res) {
+app.use('/bmsapi/*', function(req, res) {
   try {
     var method = req.method.toLowerCase()
     var reqConType = req.headers['content-type']
@@ -97,6 +97,8 @@ function getSign(timeStamp, compSign, params) {
   arr.sort()
   // 加密
   const str = arr.join('')
+  console.log(111111111111111111111111111)
+  console.log(str)
   const sign = sha256(str)
   // 返回所有参数
   const mergeSign = timeStamp + sign
