@@ -12,7 +12,7 @@ var config = require('./config.js')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.resolve('./static')))
-app.use('/bmsapi/*', function(req, res) {
+app.use('/gelei-guard-bms/api/*', function(req, res) {
   try {
     var method = req.method.toLowerCase()
     var reqConType = req.headers['content-type']
