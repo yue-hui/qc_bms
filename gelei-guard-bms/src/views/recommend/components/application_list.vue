@@ -150,13 +150,6 @@ export default {
       this.page = page
       this.fetch()
     },
-    get_pagination_config() {
-      const pagination = {
-        page: this.page,
-        page_size: this.page_size
-      }
-      return pagination
-    },
     edit_application(row) {
       // 编辑
       const config = {

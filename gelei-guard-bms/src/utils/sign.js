@@ -37,10 +37,9 @@ function getSign(params) {
   })
   // 排序
   arr.sort()
-  
+
   // 加密
   const str = arr.join('')
-  console.log('str', str)
   const sign = sha256(str)
   // 返回所有参数
   const p = Object.assign({}, params, publicParams, {

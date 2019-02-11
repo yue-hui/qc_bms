@@ -106,6 +106,8 @@ export default {
       const subject_list = SUBJECT_LIST.filter(r => this.condition.subjects.indexOf(r.name) !== -1).map(r => r.val)
       const options = {
         grade: this.condition.grade,
+        page_no: this.page,
+        page_num: this.page_size,
         subject_list
       }
       get_manager_soft_recommend_list(options).then(res => {
@@ -126,7 +128,8 @@ export default {
         this.total = res.total_count
       })
     },
-    table_size_change(row) {
+    table_size_change(page_size) {
+      this.page_size = page_size
       this.search()
     },
     change_current(page) {

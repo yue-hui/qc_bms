@@ -132,8 +132,8 @@ export default {
     },
     get_pagination_config() {
       const pagination = {
-        page: this.page,
-        page_size: this.page_size
+        page_no: this.page,
+        page_num: this.page_size
       }
       return pagination
     },
