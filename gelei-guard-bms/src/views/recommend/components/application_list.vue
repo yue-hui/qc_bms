@@ -216,7 +216,6 @@ export default {
       this.fetch()
     },
     reload() {
-      this.page = 1
       this.fetch()
     }
   }
