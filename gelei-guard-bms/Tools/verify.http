@@ -133,4 +133,19 @@ Content-Type: application/json
   "page_num": "20"
 }
 
+
+### 登录接口
+# 开发环境
+POST http://172.168.50.58:12720/patriarch/user/login/pwd
+Content-Type: application/json
+
+{
+  "gnw_appid": "437EC0AC7F0000015E2BBF4849643C96",
+  "version": "1.0.0",
+  "source": "01",
+  "username": "15920295083",
+  "password": "1234567aa",
+  "device_id": "43323cb2517541dfeb30649d3ee71097"
+}
+
 ###
