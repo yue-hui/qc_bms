@@ -63,10 +63,14 @@
             prop="rec_level"
             width="180">
             <template slot-scope="scope">
-              <el-rate
-                v-model="scope.row.rec_level_score"
-                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                disabled/>
+              <div class="rate-style-with-application">
+                <el-rate
+                  v-model="scope.row.rec_level_score"
+                  :allow-half="true"
+                  :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                  disabled />
+                <span>{{ scope.row.rec_level }}分</span>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -203,7 +207,7 @@ export default {
             ...r,
             age_label,
             create_time: time_transfer,
-            rec_level_score: r.rec_level - 5,
+            rec_level_score: r.rec_level / 2,
             sex_label: get_sex_label(r.sex),
             grade_label_list: this.grade_label_list(r.grade_list),
             subject_label_list: this.subject_label_list(r.subject_list)
@@ -231,8 +235,14 @@ export default {
 
 .show-list-content {
   display: block;
-  .show-list-item{
+
+  .show-list-item {
     min-width: 50px;
   }
+}
+
+.rate-style-with-application {
+  display: flex;
+  flex-direction: row;
 }
 </style>

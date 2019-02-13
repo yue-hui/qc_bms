@@ -233,10 +233,10 @@ export default {
     },
     score: {
       get: function() {
-        return this.ruleForm.rec_level - 5
+        return this.ruleForm.rec_level / 2
       },
       set: function(value) {
-        this.ruleForm.rec_level = value + 5
+        this.ruleForm.rec_level = value * 2
       }
     }
   },
