@@ -10,6 +10,7 @@
           <el-table-column
             align="center"
             label="推荐组合名称"
+            width="140"
             prop="group_name" />
           <el-table-column
             align="center"

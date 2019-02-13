@@ -9,6 +9,7 @@
           <el-table-column
             align="center"
             label="应用名称"
+            width="160"
             prop="soft_name" />
           <el-table-column
             align="center"

@@ -217,7 +217,7 @@ export default {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 20px 10px 25px 10px;
+  padding: 0 10px 25px 10px;
   display: flex;
   flex-direction: column;
 

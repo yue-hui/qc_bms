@@ -140,6 +140,7 @@ export default {
 .component-card {
   width: 100%;
   height: 100%;
+  margin-top: 10px;
 }
 </style>
 <style rel="stylesheet/scss" lang="scss">

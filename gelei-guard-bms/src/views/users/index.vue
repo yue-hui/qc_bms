@@ -38,7 +38,7 @@
     <hr class="hr-diviser">
 
     <div class="content-body">
-      <div class="table-content">
+      <div class="table-content table-block">
         <el-table
           :data="table_data"
           size="mini"
