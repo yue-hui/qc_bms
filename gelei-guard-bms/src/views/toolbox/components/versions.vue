@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item label="包大小" prop="file_size">
           <el-input v-model="form.file_size" placeholder="请输入目标版本包大小">
-            <template slot="append">KB</template>
+            <template slot="append">MB</template>
           </el-input>
         </el-form-item>
         <el-form-item label="升级地址" prop="update_url">
@@ -121,7 +121,6 @@ export default {
         app_version: [{ required: true, trigger: 'blur', message: '目标版本号不能为空' }],
         file_size: [{ required: true, trigger: 'blur', message: '包大小为必填项' }],
         update_title: [{ required: true, trigger: 'blur', message: '策略名称为必填项' }],
-        update_url: [{ required: true, trigger: 'blur', message: '升级地址为必填项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
         is_force: [{ required: true, trigger: 'blur', message: '升级方式为必选项' }],
         start_strage: [{ required: true, trigger: 'blur', message: '策略启动条件为必选项' }],

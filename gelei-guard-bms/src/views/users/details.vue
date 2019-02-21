@@ -8,60 +8,61 @@
         </div>
         <div class="card-block-body">
           <el-form ref="form" label-suffix=":" label-width="140px">
-            <el-row :gutter="20">
-              <el-col :span="6">
+            <el-row :gutter="24">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="用户名">
                     <span>{{ information.nick_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="手机号">
                     <span>{{ information.phone }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="会员状态">
                     <span>{{ information.vip_info }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="机型">
                     <span>{{ information.device_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-            </el-row>
-
-            <el-row :gutter="20">
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="设备号">
                     <span>{{ information.device_id }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="系统版本号">
                     <span>{{ information.os_version }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="注册时间">
                     <span>{{ __date_formatter(information.create_time) }}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="最后使用时间">
                     <span>{{ __date_formatter(information.last_use_time) }}</span>

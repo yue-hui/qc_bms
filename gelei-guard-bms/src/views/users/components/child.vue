@@ -8,39 +8,38 @@
       <!--孩子 - 详细信息-->
       <div class="card-block-body">
         <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
-          <el-row :gutter="20">
-            <el-col :span="6">
+          <el-row :gutter="24">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <el-form-item label="昵称">
                   <span>{{ child_new.nick_name }}</span>
                 </el-form-item>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <el-form-item label="性别">
                   <span>{{ sex_label(child_new.sex) }}</span>
                 </el-form-item>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <el-form-item label="生日">
                   <span>{{ __date_formatter(child_new.birthdate) }}</span>
                 </el-form-item>
               </div>
             </el-col>
-            <el-col :span="6">
+          </el-row>
+          <el-row :gutter="24">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <el-form-item label="年级">
                   <span>{{ child_new.grade_name }}</span>
                 </el-form-item>
               </div>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <el-form-item label="注册时间">
                   <el-form-item prop="date1">

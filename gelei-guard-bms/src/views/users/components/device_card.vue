@@ -6,45 +6,45 @@
         <el-collapse-item :title="device_index" name="1">
           <div>
             <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
-              <el-row :gutter="20">
-                <el-col :span="6">
+              <el-row :gutter="24">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="手机号">
                       <span>{{ device.phone }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="终端类型">
                       <span>{{ device.device_type }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="机型">
                       <span>{{ device.device_name }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="设备号">
                       <span>{{ device.device_id }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="系统版本号">
                       <span>{{ device.os_version }}</span>
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="绑定时间">
                       <el-form-item prop="date1">
@@ -53,7 +53,9 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
                   <div class="grid-content bg-purple">
                     <el-form-item label="最后使用时间">
                       <el-form-item prop="date1">

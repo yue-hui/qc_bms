@@ -185,7 +185,7 @@ export default {
           this.version_block = res.data.map(r => {
             let file_size_label
             if (r.file_size) {
-              file_size_label = r.file_size + 'KB'
+              file_size_label = r.file_size + 'MB'
             } else {
               file_size_label = ''
             }
