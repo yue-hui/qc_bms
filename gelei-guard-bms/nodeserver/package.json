@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js --port 4003 --env_config=dev",
     "test": "nodemon src/index.js --port 4004 --env_config=test",
-    "prod": "nodemon src/index.js --port 4003 --env_config=prod"
+    "prod": "nodemon src/index.js --port 4004 --env_config=prod"
   },
   "author": "yexl",
   "license": "ISC",
