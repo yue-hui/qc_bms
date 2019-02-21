@@ -89,7 +89,14 @@ import { date_formatter, get_app_combination_status, get_grade_label, get_rec_ty
 
 export default {
   name: 'ApplicationList',
-  props: {},
+  props: {
+    conditions: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    }
+  },
   beforecreate: function() {
   },
   data: function() {
@@ -140,6 +147,14 @@ export default {
     },
     reload() {
       const config = this.get_pagination_config()
+      for (const query_key in this.conditions) {
+        if (this.conditions[query_key]) {
+          config[query_key] = this.conditions[query_key]
+        }
+      }
+      this.load_data(config)
+    },
+    load_data(config) {
       get_soft_recommend_group(config).then(res => {
         this.data_list = res.data.map(r => {
           const time_transfer = date_formatter(r.create_time)
@@ -240,7 +255,8 @@ export default {
   width: 100%;
   height: 100%;
 }
-.table_header{
+
+.table_header {
   background-color: #44474c;
 }
 </style>

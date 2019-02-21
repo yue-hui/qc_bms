@@ -224,3 +224,48 @@ export function deploy_qa(data) {
   })
 }
 
+/* 应用版本管理 */
+// 获取应用版本列表
+export function get_application_version_list(data) {
+  return request({
+    url: '/manager/app/version/list',
+    method: 'post',
+    data
+  })
+}
+
+// 添加应用版本记录
+export function add_application_version(data) {
+  return request({
+    url: '/manager/app/version/add',
+    method: 'post',
+    data
+  })
+}
+
+// 启动或停止应用版本
+export function deploy_application_version(data) {
+  return request({
+    url: '/manager/app/version/startup',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑应用版本记录
+export function edit_application_version(data) {
+  return request({
+    url: '/manager/app/version/update',
+    method: 'post',
+    data
+  })
+}
+
+// 获取单个应用版本记录的详情
+export function get_application_version(data) {
+  return request({
+    url: '/manager/app/version/get',
+    method: 'post',
+    data
+  })
+}

@@ -10,6 +10,20 @@
         >添加帮助问题
         </el-button>
       </div>
+      <div class="control-box">
+        <el-select
+          v-model="query_status"
+          size="mini"
+          placeholder="请选择状态"
+          clearable
+          @change="change_query_status">
+          <el-option
+            v-for="item in help_question_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" />
+        </el-select>
+      </div>
     </div>
 
     <div class="content-body">
@@ -64,6 +78,7 @@
 import questions from '@/views/toolbox/components/questions'
 import { deploy_qa, get_questions_list } from '@/api/interactive'
 import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { help_question_status } from '@/views/toolbox/data/promotion'
 
 export default {
   components: {
@@ -71,6 +86,7 @@ export default {
   },
   data() {
     return {
+      help_question_status,
       content: '格雷为您守护！',
       init: '',
       questions: [],
@@ -80,7 +96,8 @@ export default {
       is_create: true,
       show_dialog: false,
       deploy_name: '开启',
-      record_id: ''
+      record_id: '',
+      query_status: ''
     }
   },
   computed: {},
@@ -181,6 +198,9 @@ export default {
         page_no: this.page,
         page_num: this.page_size
       }
+      if (this.query_status) {
+        config['status'] = this.query_status
+      }
       return config
     },
     show_status_label(r) {
@@ -207,6 +227,9 @@ export default {
         this.questions = questions
         this.total = res.total_count
       })
+    },
+    change_query_status() {
+      this.fetch_question_list()
     }
   }
 }

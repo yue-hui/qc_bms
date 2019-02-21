@@ -87,10 +87,16 @@ export const constantRouterMap = [
     meta: { title: '工具使用', icon: 'tools', hidden: false },
     children: [
       {
-        path: 'analysis',
+        path: 'helper',
         name: '帮助中心',
         component: () => import('@/views/toolbox/helper'),
         meta: { title: '帮助中心', icon: 'helper' }
+      },
+      {
+        path: 'promotion',
+        name: '应用升级',
+        component: () => import('@/views/toolbox/promotion'),
+        meta: { title: '应用升级', icon: 'promotion' }
       }
     ]
   },

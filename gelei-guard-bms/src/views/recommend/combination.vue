@@ -1,15 +1,47 @@
 <template>
   <div class="content">
-    <div class="new-combination">
-      <el-button
-        class="new-combination-button"
-        round
-        size="mini"
-        type="success"
-        @click="create_system_recomend">
-        创建系统推荐
-      </el-button>
-      <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend" round>创建手工推荐</el-button>-->
+    <div class="header-line">
+      <div class="control-box">
+        <el-button
+          class="new-combination-button"
+          round
+          type="success"
+          size="mini"
+          @click="create_system_recomend">
+          创建系统推荐
+        </el-button>
+      </div>
+      <!--<div class="control-box">-->
+      <!--<el-button type="primary" class="new-combination-button" size="mini" round @click="create_manual_recomend">创建手工推荐</el-button>-->
+      <!--</div>-->
+      <div class="control-box">
+        <el-select
+          v-model="combination_status"
+          size="mini"
+          placeholder="请选择状态"
+          clearable
+          @change="change_combination_status">
+          <el-option
+            v-for="item in combination_all_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" />
+        </el-select>
+      </div>
+      <div class="control-box">
+        <el-select
+          v-model="recommend_style"
+          size="mini"
+          placeholder="请选择推荐方式"
+          clearable
+          @change="change_recommend_style">
+          <el-option
+            v-for="item in recommend_styles"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" />
+        </el-select>
+      </div>
     </div>
 
     <div class="content-body">
@@ -17,6 +49,7 @@
       <!--应用列表-->
       <combination-list
         ref="comb_list"
+        :conditions="query_condition"
         @control="control_combination"
         @edit="edit_combination" />
 
@@ -36,6 +69,7 @@
 import { GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
 import combinationList from '@/views/recommend/components/combination_list'
 import combinationCreate from '@/views/recommend/components/create_combination'
+import { combination_all_status, recommend_styles } from '@/views/recommend/data/data'
 
 export default {
   components: {
@@ -44,6 +78,11 @@ export default {
   },
   data() {
     return {
+      combination_all_status,
+      recommend_styles,
+      recommend_style: '',
+      combination_status: '',
+      query_condition: {},
       information: {
         grade_from: '',
         grade_to: '',
@@ -101,6 +140,23 @@ export default {
     },
     control_combination(row) {
       // 推送  已开启  已关闭
+    },
+    change_combination_condition() {
+      this.query_condition = {
+        rec_type: this.recommend_style,
+        status: this.combination_status
+      }
+      this.$nextTick(() => {
+        this.$refs.comb_list.reload()
+      })
+    },
+    change_combination_status(status) {
+      this.combination_status = status
+      this.change_combination_condition()
+    },
+    change_recommend_style(reco_style) {
+      this.recommend_style = reco_style
+      this.change_combination_condition()
     }
   }
 }
@@ -187,6 +243,15 @@ $label_height: 40px;
     .new-combination-button {
       width: 100px;
       height: 28px;
+    }
+  }
+
+  .header-line {
+    display: flex;
+    flex-direction: row;
+
+    .control-box {
+      padding: 10px 15px;
     }
   }
 }
