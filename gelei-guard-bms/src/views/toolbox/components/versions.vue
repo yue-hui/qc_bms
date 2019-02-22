@@ -206,7 +206,11 @@ export default {
         })
     },
     create_version() {
-      add_application_version(this.form).then((res) => {
+      const data = Object.assign({}, this.form)
+      if (!data.update_url) {
+        delete data.update_url
+      }
+      add_application_version(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
         } else {
@@ -216,7 +220,11 @@ export default {
       })
     },
     edit_version() {
-      edit_application_version(this.form).then((res) => {
+      const data = Object.assign({}, this.form)
+      if (!data.update_url) {
+        delete data.update_url
+      }
+      edit_application_version(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
         } else {

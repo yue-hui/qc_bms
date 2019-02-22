@@ -243,7 +243,7 @@ export default {
     create_app_version(row) {
       this.show_dialog = true
       this.is_create = true
-      this.record_id = 0
+      this.record_id = ''
     }
   }
 }
