@@ -137,11 +137,16 @@ export default {
     init_page() {
       this.fetch_application_version_list()
     },
-    change_promotion_status(row) {
+    search_appllication_versions() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
       this.fetch_application_version_list()
     },
+    change_promotion_status(row) {
+      this.search_appllication_versions()
+    },
     change_promotion_platform(row) {
-      this.fetch_application_version_list()
+      this.search_appllication_versions()
     },
     show_deploy_name(row) {
       if (['00', '02'].indexOf(row.status) !== -1) {

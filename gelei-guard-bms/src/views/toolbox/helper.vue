@@ -229,6 +229,8 @@ export default {
       })
     },
     change_query_status() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
       this.fetch_question_list()
     }
   }

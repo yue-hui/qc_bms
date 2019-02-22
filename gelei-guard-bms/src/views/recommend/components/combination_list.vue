@@ -145,6 +145,11 @@ export default {
       }
       return pagination
     },
+    reset_pagination_and_load_data() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
+      this.reload()
+    },
     reload() {
       const config = this.get_pagination_config()
       for (const query_key in this.conditions) {

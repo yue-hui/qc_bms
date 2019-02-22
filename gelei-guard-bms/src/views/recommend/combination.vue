@@ -147,7 +147,7 @@ export default {
         status: this.combination_status
       }
       this.$nextTick(() => {
-        this.$refs.comb_list.reload()
+        this.$refs.comb_list.reset_pagination_and_load_data()
       })
     },
     change_combination_status(status) {

@@ -57,10 +57,10 @@ export const update_models = [
 export const help_question_status = [
   {
     value: '0',
-    label: '待发效'
+    label: '待生效'
   },
   {
     value: '1',
-    label: '已发效'
+    label: '已生效'
   }
 ]
