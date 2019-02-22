@@ -15,10 +15,6 @@ export const promotion_status = [
 
 export const platform_type = [
   {
-    value: '',
-    label: '所有平台'
-  },
-  {
     value: '01',
     label: 'IOS家长端'
   },

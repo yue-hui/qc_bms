@@ -226,8 +226,10 @@ export default {
         status = '02'
       } else if (row.status === '02') {
         status = '01'
+      } else {
+        status = '01'
       }
-      const version_id = row.version_id
+     const version_id = row.version_id
       const config = {
         status,
         version_id
