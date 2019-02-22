@@ -229,7 +229,36 @@ export default {
       } else {
         status = '01'
       }
-     const version_id = row.version_id
+      let confirm_message
+      if (status === '02') {
+        confirm_message = '确认是否停止本次应用升级？'
+      } else {
+        confirm_message = '确认是否启动本次应用升级？'
+      }
+
+      this.$confirm(confirm_message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.prefer_deploy_action(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作!'
+        })
+      })
+    },
+    prefer_deploy_action(row) {
+      let status
+      if (row.status === '01') {
+        status = '02'
+      } else if (row.status === '02') {
+        status = '01'
+      } else {
+        status = '01'
+      }
+      const version_id = row.version_id
       const config = {
         status,
         version_id
