@@ -235,7 +235,7 @@ export default {
         version_id
       }
       deploy_application_version(config).then((res) => {
-        if (res.status) {
+        if (res.status === 0) {
           this.fetch_application_version_list()
         } else {
           this.$message.error(res.message)
