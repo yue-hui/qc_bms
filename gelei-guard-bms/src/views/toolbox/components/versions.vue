@@ -19,7 +19,7 @@
           <el-input v-model="form.app_version" placeholder="请输入目标版本号" />
         </el-form-item>
         <el-form-item label="包大小" prop="file_size">
-          <el-input v-model="form.file_size" placeholder="请输入目标版本包大小">
+          <el-input v-model="form.file_size" type="number" placeholder="请输入目标版本包大小">
             <template slot="append">MB</template>
           </el-input>
         </el-form-item>
@@ -120,8 +120,7 @@ export default {
       rules: {
         app_version: [{ required: true, trigger: 'blur', message: '目标版本号不能为空' }],
         file_size: [
-          { required: true, trigger: 'blur', message: '包大小为必填项' },
-          { required: true, type: 'number', message: '包大小只能输入数字', trigger: 'blur' }
+          { type: 'string', required: true, message: '包大小只能输入数字', trigger: 'blur', pattern: /\d+(\.\d+)?/ }
         ],
         update_title: [{ required: true, trigger: 'blur', message: '策略名称为必填项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
@@ -238,6 +237,8 @@ export default {
     },
     create_update_strage() {
       //
+      console.log('xxxx', this.form)
+
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.isNew) {
