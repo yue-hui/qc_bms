@@ -1,8 +1,9 @@
 <template>
   <div class="component-card">
     <el-card class="box-card parent-card-block gg-user-details-with-all">
-      <div slot="header" class="clearfix">
+      <div slot="header" class="clearfix child-bind-group">
         <span class="title-box">孩子<span class="title-name">{{ child_new.nick_name }}</span>的信息</span>
+        <div class="bind-record-log" @click="show_bind_panel(child_new)">（<span class="bind-record-log-title">绑定记录</span>）</div>
         <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
       </div>
       <!--孩子 - 详细信息-->
@@ -58,11 +59,14 @@
         :device="device"
         :index="cardIndex" />
     </el-card>
+
+    <device-bind-records v-if="show_bind_record" :params="bind_records_params" :child-id="current_child_id" @refresh="close_bind_records" />
   </div>
 </template>
 
 <script>
 import DeviceCard from './device_card'
+import DeviceBindRecords from './device_bind_records'
 import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter, get_sex_label, transfer_to_chinese_index } from '@/utils/common'
 
@@ -71,7 +75,8 @@ export default {
   beforecreate: function() {
   },
   components: {
-    DeviceCard
+    DeviceCard,
+    DeviceBindRecords
   },
   props: {
     child: {
@@ -81,6 +86,10 @@ export default {
       }
     },
     cardIndex: {
+      type: Number,
+      default: 0
+    },
+    parent_id: {
       type: Number,
       default: 0
     }
@@ -99,7 +108,10 @@ export default {
         device_type: true
       },
       child_index: '',
-      child_new: {}
+      child_new: {},
+      bind_records_params: {},
+      show_bind_record: false,
+      current_child_id: null
     }
   },
   watch: {
@@ -130,6 +142,13 @@ export default {
     },
     __date_formatter: (t) => {
       return date_formatter(t, DATE_TIME_FORMAT)
+    },
+    close_bind_records() {
+      this.show_bind_record = false
+    },
+    show_bind_panel(data) {
+      this.show_bind_record = true
+      this.current_child_id = data.user_id
     }
   }
 }

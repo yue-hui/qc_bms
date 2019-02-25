@@ -3,7 +3,10 @@
     <!--孩子 - 设备详细信息-->
     <div class="card-block-child-device">
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item :title="device_index" name="1">
+        <el-collapse-item name="1">
+          <template slot="title">
+            {{ device_index }}<span :class="bind_type_color">{{ bind_type_name }}</span>
+          </template>
           <div>
             <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
               <el-row :gutter="24">
@@ -108,22 +111,30 @@ export default {
         last_use_time: true,
         device_type: true
       }
-      // device: {
-      //   'device_id': 'xxx',
-      //   'device_type': '0',
-      //   'phone': 13266534451,
-      //   'device_name': 'xxx',
-      //   'os_name': 'xxx',
-      //   'os_version': 'xxx',
-      //   'bind_time': 124334,
-      //   'last_use_time': 1974738
-      // }
     }
   },
   computed: {
     device_index: function() {
       const device_title = ['设备', get_chinese_index(this.index), '信息']
       return device_title.join('')
+    },
+    bind_type_name: function() {
+      if (this.device.bind_type === '1') {
+        return '（绑定中）'
+      } else if (this.device.bind_type === '0') {
+        return '（已解绑）'
+      } else {
+        return '（绑定中）'
+      }
+    },
+    bind_type_color: function() {
+      if (this.device.bind_type === '1') {
+        return 'show-binding-status'
+      } else if (this.device.bind_type === '0') {
+        return 'show-binded-status'
+      } else {
+        return 'show-binding-status'
+      }
     }
   },
   watch: {},
@@ -143,6 +154,12 @@ export default {
 .component-card {
   width: 100%;
   height: 100%;
+  .show-binding-status{
+    color: #4aff24;
+  }
+  .show-binded-status{
+    color: #ea4d45;
+  }
 }
 </style>
 <style rel="stylesheet/scss" lang="scss">

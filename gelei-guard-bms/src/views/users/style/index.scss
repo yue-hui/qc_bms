@@ -9,10 +9,26 @@
     padding: 0;
   }
 
-  .title-box {
-    .title-name {
-      padding: 0 4px;
-      color: #4aff24;
+  .child-bind-group {
+    display: flex;
+    flex-direction: row;
+
+    .title-box {
+      .title-name {
+        padding: 0 4px;
+        color: #4aff24;
+      }
+    }
+
+    .bind-record-log {
+      &:hover{
+        color: #61a8ff;
+        cursor: pointer;
+      }
+      color: rgba(97, 168, 255, 0.79);
+      .bind-record-log-title{
+        border-bottom: 1px solid rgba(97, 168, 255, 0.79);
+      }
     }
   }
 

@@ -20,6 +20,15 @@ export function get_parent_details(data) {
   })
 }
 
+// 用户信息管理 - 获取孩子设备操作（绑定或解绑）记录
+export function get_child_record_details(data) {
+  return request({
+    url: '/manager/user/patriarch/child_device/record/list',
+    method: 'post',
+    data
+  })
+}
+
 /* 常见问题管理 */
 
 // 获取常见问题列表
