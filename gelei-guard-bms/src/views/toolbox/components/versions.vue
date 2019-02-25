@@ -80,6 +80,7 @@
 <script>
 import { platforms, update_models } from '@/views/toolbox/data/promotion'
 import { add_application_version, edit_application_version, get_application_version } from '@/api/interactive'
+import { POSITIVE_FLOAT } from '@/utils/constant'
 
 export default {
   name: 'VersionDialog',
@@ -120,7 +121,7 @@ export default {
       rules: {
         app_version: [{ required: true, trigger: 'blur', message: '目标版本号不能为空' }],
         file_size: [
-          { type: 'string', required: true, message: '包大小只能输入数字', trigger: 'blur', pattern: /\d+(\.\d+)?/ }
+          { type: 'string', required: true, message: '包大小只能输入数字', trigger: 'blur', pattern: POSITIVE_FLOAT }
         ],
         update_title: [{ required: true, trigger: 'blur', message: '策略名称为必填项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
