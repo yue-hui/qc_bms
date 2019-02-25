@@ -16,7 +16,7 @@
         <span class="group-title">目标版本信息</span>
         <hr class="diviser">
         <el-form-item label="目标版本号" prop="app_version">
-          <el-input v-model="form.app_version" placeholder="请输入目标版本号"/>
+          <el-input v-model="form.app_version" placeholder="请输入目标版本号" />
         </el-form-item>
         <el-form-item label="包大小" prop="file_size">
           <el-input v-model="form.file_size" placeholder="请输入目标版本包大小">
@@ -119,7 +119,10 @@ export default {
       },
       rules: {
         app_version: [{ required: true, trigger: 'blur', message: '目标版本号不能为空' }],
-        file_size: [{ required: true, trigger: 'blur', message: '包大小为必填项' }],
+        file_size: [
+          { required: true, trigger: 'blur', message: '包大小为必填项' },
+          { required: true, type: 'number', message: '包大小只能输入数字', trigger: 'blur' }
+        ],
         update_title: [{ required: true, trigger: 'blur', message: '策略名称为必填项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
         is_force: [{ required: true, trigger: 'blur', message: '升级方式为必选项' }],
