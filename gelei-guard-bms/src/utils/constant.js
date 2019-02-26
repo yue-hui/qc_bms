@@ -36,6 +36,9 @@ export const DEFAULT_PAGE_SIZE = 10
 // 日期格式
 export const DATE_FORMAT = 'YYYY-MM-DD'
 
+// 日期格式以点分隔
+export const DATE_FORMAT_WITH_POINT = 'YYYY.MM.DD'
+
 // 日期时间格式
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
 

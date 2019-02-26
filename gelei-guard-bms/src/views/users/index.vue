@@ -63,10 +63,16 @@
             prop="create_time" />
           <el-table-column
             align="center"
+            label="注册时间"
+            prop="vip_label" />
+          <el-table-column
+            align="center"
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_details(scope.row)">查看</el-button>
+              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_details(scope.row)">
+                查看
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -86,7 +92,7 @@
 <script>
 import { get_parent_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_FORMAT_WITH_POINT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
 
 export default {
   components: {},
@@ -151,9 +157,13 @@ export default {
       get_parent_list(config).then(res => {
         const table_data = []
         const base_index = (config.page_no - 1) * config.page_num + 1
+        // 会员信息
         res.data.forEach((r, i, _a) => {
+          const vip_label = ['VIP体验会员（', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+            '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), '）'].join('')
           const item = {
             ...r,
+            vip_label,
             create_time: date_formatter(r.create_time),
             _id: base_index + i
           }
@@ -229,9 +239,9 @@ $label_height: 28px;
   }
 
   /*.hr-diviser {*/
-    /*border-top: solid #c8c8c8 1px;*/
-    /*width: 100%;*/
-    /*border-bottom: 0;*/
+  /*border-top: solid #c8c8c8 1px;*/
+  /*width: 100%;*/
+  /*border-bottom: 0;*/
   /*}*/
 }
 </style>
