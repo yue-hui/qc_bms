@@ -63,7 +63,7 @@
             prop="create_time" />
           <el-table-column
             align="center"
-            label="注册时间"
+            label="会员状态"
             prop="vip_label" />
           <el-table-column
             align="center"
