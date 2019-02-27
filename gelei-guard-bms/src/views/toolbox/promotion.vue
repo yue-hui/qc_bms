@@ -2,41 +2,53 @@
   <div class="content">
 
     <div class="header-line">
-      <div class="control-box">
-        <el-button
-          type="success"
-          size="mini"
-          @click="create_app_version"
-        >创建应用升级策略
-        </el-button>
+      <div class="left-sider-box-style">
+        <div class="control-box">
+          <el-select
+            v-model="current_promotion_status"
+            size="mini"
+            placeholder="请选择状态"
+            clearable
+            @change="change_promotion_status">
+            <el-option
+              v-for="item in promotion_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
+        <div class="control-box">
+          <el-select
+            v-model="current_platform_type"
+            size="mini"
+            placeholder="请选择平台"
+            clearable
+            @change="change_promotion_platform">
+            <el-option
+              v-for="item in platform_type"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
       </div>
-      <div class="control-box">
-        <el-select
-          v-model="current_promotion_status"
-          size="mini"
-          placeholder="请选择状态"
-          clearable
-          @change="change_promotion_status">
-          <el-option
-            v-for="item in promotion_status"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
-      </div>
-      <div class="control-box">
-        <el-select
-          v-model="current_platform_type"
-          size="mini"
-          placeholder="请选择平台"
-          clearable
-          @change="change_promotion_platform">
-          <el-option
-            v-for="item in platform_type"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
+      <div class="right-sider-box-style">
+        <div class="control-box">
+          <el-button
+            type="success"
+            size="mini"
+            @click="sync_version"
+          >发送同步版本指令
+          </el-button>
+        </div>
+        <div class="control-box">
+          <el-button
+            type="success"
+            size="mini"
+            @click="create_app_version"
+          >创建应用升级策略
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -100,19 +112,23 @@
       :is-new="is_create"
       :rid="record_id"
       @destory="destory" />
+
+    <sync-instructions ref="sync_panel" />
   </div>
 </template>
 
 <script>
 import { promotion_status, platform_type, platforms } from '@/views/toolbox/data/promotion'
 import versionDialog from '@/views/toolbox/components/versions'
+import syncInstructions from '@/views/toolbox/components/sync_instructions'
 import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import { deploy_application_version, get_application_version_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 
 export default {
   components: {
-    versionDialog
+    versionDialog,
+    syncInstructions
   },
   data() {
     return {
@@ -280,6 +296,10 @@ export default {
       this.show_dialog = true
       this.is_create = true
       this.record_id = ''
+    },
+    sync_version() {
+      // 同步版本指令
+      this.$refs.sync_panel.show_panel()
     }
   }
 }
@@ -304,9 +324,21 @@ export default {
   .header-line {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    .left-sider-box-style{
+      display: flex;
+      flex-direction: row;
+      .control-box {
+        padding: 10px 15px;
+      }
+    }
 
-    .control-box {
-      padding: 10px 15px;
+    .right-sider-box-style{
+      display: flex;
+      flex-direction: row-reverse;
+      .control-box {
+        padding: 10px 15px;
+      }
     }
   }
 }

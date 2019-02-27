@@ -1,46 +1,52 @@
 <template>
   <div class="content">
     <div class="header-line">
-      <div class="control-box">
-        <el-button
-          class="new-combination-button"
-          round
-          type="success"
-          size="mini"
-          @click="create_system_recomend">
-          创建系统推荐
-        </el-button>
+      <div class="left-sider-box-style">
+        <div class="control-box">
+          <span class="search-item">状态:</span>
+          <el-select
+            v-model="combination_status"
+            size="mini"
+            placeholder="请选择状态"
+            clearable
+            @change="change_combination_status">
+            <el-option
+              v-for="item in combination_all_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
+        <div class="control-box">
+          <span class="search-item">推荐方式:</span>
+          <el-select
+            v-model="recommend_style"
+            size="mini"
+            placeholder="请选择推荐方式"
+            clearable
+            @change="change_recommend_style">
+            <el-option
+              v-for="item in recommend_styles"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
       </div>
-      <!--<div class="control-box">-->
-      <!--<el-button type="primary" class="new-combination-button" size="mini" round @click="create_manual_recomend">创建手工推荐</el-button>-->
-      <!--</div>-->
-      <div class="control-box">
-        <el-select
-          v-model="combination_status"
-          size="mini"
-          placeholder="请选择状态"
-          clearable
-          @change="change_combination_status">
-          <el-option
-            v-for="item in combination_all_status"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
-      </div>
-      <div class="control-box">
-        <el-select
-          v-model="recommend_style"
-          size="mini"
-          placeholder="请选择推荐方式"
-          clearable
-          @change="change_recommend_style">
-          <el-option
-            v-for="item in recommend_styles"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
+      <div class="right-sider-box-style">
+        <div class="control-box">
+          <el-button
+            class="new-combination-button"
+            round
+            type="success"
+            size="mini"
+            @click="create_system_recomend">
+            创建系统推荐
+          </el-button>
+        </div>
+        <!--<div class="control-box">-->
+        <!--<el-button type="primary" class="new-combination-button" size="mini" round @click="create_manual_recomend">创建手工推荐</el-button>-->
+        <!--</div>-->
       </div>
     </div>
 
@@ -179,57 +185,6 @@ $label_height: 40px;
     height: 100%;
     padding: 15px 25px;
     min-height: 120px;
-
-    .header-line {
-      display: flex;
-      flex-direction: row;
-
-      .header-line-left {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-
-        .header-block {
-          display: flex;
-          flex-direction: row;
-
-          .search-item {
-            vertical-align: middle;
-            display: inline-block;
-            height: $label_height;
-            line-height: $label_height;
-            padding-right: 8px;
-            min-width: 64px;
-            color: grey;
-            font-size: 16px;
-            font-weight: 400;
-          }
-        }
-
-        .phone-block {
-          width: 200px;
-        }
-
-        .search-time {
-          width: 360px;
-        }
-      }
-
-      .header-line-right {
-        min-width: 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .select-box-width {
-        width: $select_box_witdh;
-      }
-
-      .grade-to-word {
-        padding: 0 10px;
-      }
-    }
   }
 
   .new-combination {
@@ -249,9 +204,33 @@ $label_height: 40px;
   .header-line {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    .left-sider-box-style{
+      display: flex;
+      flex-direction: row;
+      .control-box {
+        padding: 10px 15px;
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          text-align: left;
+          min-width: 64px;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+    }
 
-    .control-box {
-      padding: 10px 15px;
+    .right-sider-box-style{
+      display: flex;
+      flex-direction: row-reverse;
+      .control-box {
+        padding: 10px 15px;
+      }
     }
   }
 }

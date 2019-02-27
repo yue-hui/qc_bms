@@ -3,30 +3,55 @@
 
     <div class="header-line">
       <div class="header-line-left">
-        <div class="header-block search-time">
-          <label class="search-item">年级:</label>
-          <div class="block">
+        <div class="control-box">
+          <div class="header-block search-time">
+            <label class="search-item">年级:</label>
+            <div class="block">
+              <el-select
+                v-model="information.grade_from"
+                class="select-box-width"
+                clearable
+                size="mini"
+                placeholder="请选择年级"
+                @change="next_tick_query">
+                <el-option
+                  v-for="item in grade_list_1"
+                  :key="item.val"
+                  :label="item.name"
+                  :value="item.val" />
+              </el-select>
+              <span class="grade-to-word">至</span>
+              <el-select
+                v-model="information.grade_to"
+                class="select-box-width"
+                clearable
+                size="mini"
+                placeholder="请选择年级"
+                @change="next_tick_query">
+                <el-option
+                  v-for="item in grade_list_2"
+                  :key="item.val"
+                  :label="item.name"
+                  :value="item.val" />
+              </el-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-box">
+          <div class="header-block phone-block">
+            <label class="search-item">学科:</label>
             <el-select
-              v-model="information.grade_from"
+              v-model="information.subject"
               class="select-box-width"
               clearable
+              collapse-tags
+              multiple
               size="mini"
-              placeholder="请选择年级">
+              placeholder="请选择学科"
+              @change="next_tick_query">
               <el-option
-                v-for="item in grade_list_1"
-                :key="item.val"
-                :label="item.name"
-                :value="item.val" />
-            </el-select>
-            <span class="grade-to-word">至</span>
-            <el-select
-              v-model="information.grade_to"
-              class="select-box-width"
-              clearable
-              size="mini"
-              placeholder="请选择年级">
-              <el-option
-                v-for="item in grade_list_2"
+                v-for="item in subject_list"
                 :key="item.val"
                 :label="item.name"
                 :value="item.val" />
@@ -34,48 +59,41 @@
           </div>
         </div>
 
-        <div class="header-block phone-block">
-          <label class="search-item">学科:</label>
-          <el-select
-            v-model="information.subject"
-            class="select-box-width"
-            clearable
-            collapse-tags
-            multiple
-            size="mini"
-            placeholder="请选择学科">
-            <el-option
-              v-for="item in subject_list"
-              :key="item.val"
-              :label="item.name"
-              :value="item.val" />
-          </el-select>
-        </div>
-
-        <div class="header-block phone-block">
-          <label class="search-item">应用名称:</label>
-          <el-input
-            v-model="information.app_name"
-            size="mini"
-            class="select-box-width"
-            clearable />
+        <div class="control-box">
+          <div class="header-block phone-block">
+            <label class="search-item">应用名称:</label>
+            <el-input
+              v-model="information.app_name"
+              size="mini"
+              class="select-box-width"
+              clearable
+              @change="next_tick_query" />
+          </div>
         </div>
       </div>
 
       <div class="header-line-right">
-        <el-button type="success" size="mini" @click="query">查询</el-button>
+        <div class="control-box">
+          <el-button
+            class="new-application-button"
+            round
+            size="mini"
+            type="success"
+            @click="create_app">创建应用
+          </el-button>
+        </div>
       </div>
     </div>
 
-    <div class="new-application">
-      <el-button
-        class="new-application-button"
-        round
-        size="mini"
-        type="success"
-        @click="create_app">创建应用
-      </el-button>
-    </div>
+    <!--<div class="new-application">-->
+    <!--<el-button-->
+    <!--class="new-application-button"-->
+    <!--round-->
+    <!--size="mini"-->
+    <!--type="success"-->
+    <!--@click="create_app">创建应用-->
+    <!--</el-button>-->
+    <!--</div>-->
 
     <!--<hr class="hr-diviser">-->
 
@@ -185,6 +203,11 @@ export default {
       this.$refs.app_list.reload()
       this.show_app_dialog = status
     },
+    next_tick_query(r) {
+      this.$nextTick((r) => {
+        this.query()
+      })
+    },
     query() {
       this.$refs.app_list.search()
     },
@@ -212,16 +235,9 @@ $label_height: 28px;
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 20px 10px 25px 10px;
+  padding: 0 10px 25px 10px;
   display: flex;
   flex-direction: column;
-
-  .content-body {
-    border: 1px solid #c7d5ee;
-    height: 100%;
-    padding: 15px 25px;
-    min-height: 120px;
-  }
 
   .header-line {
     display: flex;
@@ -231,6 +247,23 @@ $label_height: 28px;
       flex: 1;
       display: flex;
       flex-direction: row;
+
+      .control-box {
+        padding: 10px 15px;
+
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          text-align: left;
+          min-width: 64px;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
 
       .header-block {
         display: flex;
@@ -243,9 +276,9 @@ $label_height: 28px;
           line-height: $label_height;
           padding-right: 8px;
           min-width: 64px;
-          color: grey;
-          font-size: 16px;
-          font-weight: 400;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
         }
       }
 
@@ -263,6 +296,10 @@ $label_height: 28px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      .control-box {
+        padding: 10px 15px;
+      }
     }
 
     .select-box-width {
@@ -270,8 +307,18 @@ $label_height: 28px;
     }
 
     .grade-to-word {
+      color: #4d4d4d;
+      font-size: 14px;
+      font-weight: 600;
       padding: 0 10px;
     }
+  }
+
+  .content-body {
+    border: 1px solid #c7d5ee;
+    height: 100%;
+    padding: 15px 25px;
+    min-height: 120px;
   }
 
   .new-application {

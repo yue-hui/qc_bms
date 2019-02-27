@@ -261,6 +261,15 @@ export function deploy_application_version(data) {
   })
 }
 
+// 批量推送App版本更新
+export function sync_platform_to_all(data) {
+  return request({
+    url: '/manager/app/version/send/command',
+    method: 'post',
+    data
+  })
+}
+
 // 编辑应用版本记录
 export function edit_application_version(data) {
   return request({

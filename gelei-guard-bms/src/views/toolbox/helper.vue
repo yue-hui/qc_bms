@@ -2,27 +2,31 @@
   <div class="content">
 
     <div class="header-line">
-      <div class="control-box">
-        <el-button
-          type="success"
-          size="mini"
-          @click="add_questions"
-        >添加帮助问题
-        </el-button>
+      <div class="left-sider-box-style">
+        <div class="control-box">
+          <el-select
+            v-model="query_status"
+            size="mini"
+            placeholder="请选择状态"
+            clearable
+            @change="change_query_status">
+            <el-option
+              v-for="item in help_question_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
       </div>
-      <div class="control-box">
-        <el-select
-          v-model="query_status"
-          size="mini"
-          placeholder="请选择状态"
-          clearable
-          @change="change_query_status">
-          <el-option
-            v-for="item in help_question_status"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
+      <div class="right-sider-box-style">
+        <div class="control-box">
+          <el-button
+            type="success"
+            size="mini"
+            @click="add_questions"
+          >添加帮助问题
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -238,6 +242,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+$select_box_witdh: 120px;
+$label_height: 40px;
+
 .content {
   width: 100%;
   height: 100%;
@@ -256,9 +263,33 @@ export default {
   .header-line {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    .left-sider-box-style{
+      display: flex;
+      flex-direction: row;
+      .control-box {
+        padding: 10px 15px;
+        .search-item {
+          vertical-align: middle;
+          display: inline-block;
+          height: $label_height;
+          line-height: $label_height;
+          padding-right: 8px;
+          text-align: left;
+          min-width: 64px;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+    }
 
-    .control-box {
-      padding: 10px 15px;
+    .right-sider-box-style{
+      display: flex;
+      flex-direction: row-reverse;
+      .control-box {
+        padding: 10px 15px;
+      }
     }
   }
 }

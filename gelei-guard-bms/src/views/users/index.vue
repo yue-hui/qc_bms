@@ -215,9 +215,9 @@ $label_height: 28px;
           line-height: $label_height;
           padding-right: 8px;
           min-width: 64px;
-          color: grey;
-          font-size: 16px;
-          font-weight: 400;
+          color: #4d4d4d;
+          font-size: 14px;
+          font-weight: 600;
         }
       }
 
