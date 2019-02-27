@@ -4,9 +4,10 @@
       :before-close="handle_close"
       :visible.sync="dialog_visible"
       title="发送同步版本指令"
-      top="30vh"
-      width="30%">
+      width="40%"
+      top="30vh">
       <span class="platform-group-title">发送平台类型</span>
+      <hr class="diviser">
       <div class="platform-group">
         <el-radio
           v-for="(platform_version_instruction, index) in platform_version_instructions"
@@ -101,12 +102,22 @@ export default {
   height: 100%;
 
   .platform-group-title {
+    /*font-weight: 600;*/
     font-style: normal;
     font-size: 16px;
+    min-width: 400px;
+  }
+
+  .diviser {
+    margin: 10px 0 10px 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid #d8bdbd;
   }
 
   .platform-group {
-    padding: 15px 10px 0 0;
+    padding: 0 10px 0 0;
   }
 }
 </style>
