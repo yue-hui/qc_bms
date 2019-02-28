@@ -43,7 +43,7 @@ export const platforms = [
   },
   {
     value: '13',
-    label: '中间件'
+    label: '孩子端+中间件'
   }
 ]
 
@@ -66,5 +66,24 @@ export const help_question_status = [
   {
     value: '1',
     label: '已生效'
+  }
+]
+
+export const platform_version_instructions = [
+  {
+    value: '01',
+    label: 'IOS家长端'
+  },
+  {
+    value: '11',
+    label: '安卓家长端'
+  },
+  {
+    value: '12',
+    label: '安卓孩子端'
+  },
+  {
+    value: '13',
+    label: '中间件'
   }
 ]

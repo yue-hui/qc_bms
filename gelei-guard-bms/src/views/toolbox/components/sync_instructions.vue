@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { platforms } from '@/views/toolbox/data/promotion'
+import { platform_version_instructions } from '@/views/toolbox/data/promotion'
 import { sync_platform_to_all } from '@/api/interactive'
 
 export default {
@@ -35,7 +35,7 @@ export default {
   props: {},
   data: function() {
     return {
-      platform_version_instructions: platforms,
+      platform_version_instructions,
       platform_type: '',
       dialog_visible: false
     }
