@@ -25,7 +25,7 @@
             clearable
             @change="change_promotion_platform">
             <el-option
-              v-for="item in platform_type"
+              v-for="item in platforms"
               :key="item.value"
               :label="item.label"
               :value="item.value" />
@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { promotion_status, platform_type, platforms } from '@/views/toolbox/data/promotion'
+import { promotion_status, platforms } from '@/views/toolbox/data/promotion'
 import versionDialog from '@/views/toolbox/components/versions'
 import syncInstructions from '@/views/toolbox/components/sync_instructions'
 import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
@@ -133,7 +133,7 @@ export default {
   data() {
     return {
       promotion_status,
-      platform_type,
+      platforms,
       current_platform_type: '',
       current_promotion_status: '',
       version_block: [],
