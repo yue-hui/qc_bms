@@ -43,7 +43,7 @@ export const platforms = [
   },
   {
     value: '13',
-    label: '孩子端+中间件'
+    label: '中间件'
   }
 ]
 
@@ -84,6 +84,6 @@ export const platform_version_instructions = [
   },
   {
     value: '13',
-    label: '中间件'
+    label: '孩子端+中间件'
   }
 ]
