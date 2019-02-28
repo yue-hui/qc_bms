@@ -237,9 +237,7 @@ export default {
       })
     },
     create_update_strage() {
-      //
-      console.log('xxxx', this.form)
-
+      // 创建策略
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.isNew) {

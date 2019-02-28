@@ -13,7 +13,8 @@
           v-for="(platform_version_instruction, index) in platform_version_instructions"
           :key="index"
           :label="platform_version_instruction.value"
-          v-model="platform_type">{{ platform_version_instruction.label }}</el-radio>
+          v-model="platform_type">{{ platform_version_instruction.label }}
+        </el-radio>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="close_panel">取 消</el-button>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { platform_version_instructions } from '@/views/toolbox/data/promotion'
+import { platforms } from '@/views/toolbox/data/promotion'
 import { sync_platform_to_all } from '@/api/interactive'
 
 export default {
@@ -34,7 +35,7 @@ export default {
   props: {},
   data: function() {
     return {
-      platform_version_instructions,
+      platform_version_instructions: platforms,
       platform_type: '',
       dialog_visible: false
     }

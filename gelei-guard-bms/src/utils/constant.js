@@ -179,7 +179,7 @@ export const RATE_STARTS_COLOR = ['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#
   '#444444', '#404040', '#303030', '#121212', '#000000']
 
 // 当前版本号
-export const __VERSION__ = '201901301942'
+export const __VERSION__ = '201902281003'
 
 // 正浮点数
 export const POSITIVE_FLOAT = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
