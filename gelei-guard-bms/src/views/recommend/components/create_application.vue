@@ -241,11 +241,14 @@ export default {
     }
   },
   watch: {
-    isCreate: function(value) {
-      if (value) {
-        this.initital_with_none()
-      } else {
-        this.initital_with_row(this.current)
+    isCreate: {
+      immediate: true,
+      handler: function(value) {
+        if (value) {
+          this.initital_with_none()
+        } else {
+          this.initital_with_row(this.current)
+        }
       }
     }
   },
@@ -385,7 +388,6 @@ export default {
             icon_url: r.icon_url
           }
         })
-        console.log('this.app_list', this.app_list)
       })
     }
   }

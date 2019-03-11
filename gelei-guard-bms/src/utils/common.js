@@ -70,7 +70,11 @@ export function get_subject_label(subject) {
 
 // 学科数字列表转换学科标签列表
 export function subject_number_map_label(subjects) {
-  return SUBJECT_LIST.filter(r => subjects.indexOf(r.val) !== -1).map(r => r.name)
+  if (subjects === undefined) {
+    return []
+  } else {
+    return SUBJECT_LIST.filter(r => subjects.indexOf(r.val) !== -1).map(r => r.name)
+  }
 }
 
 // 学科标签列表转换学科数字列表

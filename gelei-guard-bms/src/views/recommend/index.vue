@@ -202,6 +202,7 @@ export default {
     receive(status) {
       this.$refs.app_list.reload()
       this.show_app_dialog = status
+      this.is_create = !this.is_create
     },
     next_tick_query(r) {
       this.$nextTick((r) => {
