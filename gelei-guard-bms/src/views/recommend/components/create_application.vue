@@ -291,12 +291,14 @@ export default {
         rec_phrase: current.rec_phrase,
         rec_desc: current.rec_desc
       }
-      this.app_list = [
-        {
-          soft_name: current.soft_name,
-          rec_bundle_id: current.rec_bundle_id
-        }
-      ]
+      if (current.rec_bundle_id && current.soft_name) {
+        this.app_list = [
+          {
+            soft_name: current.soft_name,
+            rec_bundle_id: current.rec_bundle_id
+          }
+        ]
+      }
     },
     handle_close(done) {
       this.$confirm('确认关闭？')
