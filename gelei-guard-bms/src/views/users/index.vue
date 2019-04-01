@@ -159,8 +159,13 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
         res.data.forEach((r, i, _a) => {
-          const vip_label = ['VIP体验会员（', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
-            '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), '）'].join('')
+          let vip_label
+          if (r.begin_time && r.end_time) {
+            vip_label = ['VIP体验会员（', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+              '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), '）'].join('')
+          } else {
+            vip_label = ''
+          }
           const item = {
             ...r,
             vip_label,
