@@ -91,27 +91,25 @@ a:hover {
   overflow-y: scroll;
 }
 
-.style-with-scrollbar::-webkit-scrollbar-track
-{
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+.style-with-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;
 }
 
-.style-with-scrollbar::-webkit-scrollbar
-{
+.style-with-scrollbar::-webkit-scrollbar {
   width: 0;
   background-color: #F5F5F5;
 }
 
-.style-with-scrollbar::-webkit-scrollbar-thumb
-{
+.style-with-scrollbar::-webkit-scrollbar-thumb {
   background-color: #e8e8e8;
 }
 
 .force-overflow {
 }
+
 /* end scroll style */
 
-.table-block{
+.table-block {
   border: 1px solid rgb(96, 255, 238);
 }

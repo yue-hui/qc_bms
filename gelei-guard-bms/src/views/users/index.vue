@@ -63,6 +63,10 @@
             prop="create_time" />
           <el-table-column
             align="center"
+            label="类型"
+            prop="device_type" />
+          <el-table-column
+            align="center"
             label="会员状态"
             prop="vip_label" />
           <el-table-column
@@ -72,6 +76,12 @@
             <template slot-scope="scope">
               <el-button size="small" style="text-decoration: underline;" type="text" @click="view_details(scope.row)">
                 查看
+              </el-button>
+              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_recharge_dialog(scope.row)">
+                交易记录
+              </el-button>
+              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_member_dialog(scope.row)">
+                会员记录
               </el-button>
             </template>
           </el-table-column>
@@ -86,6 +96,9 @@
           @size-change="table_size_change" />
       </div>
     </div>
+
+    <recharge-dialog :visible="recharge_dialog_visible" :uid="current_uid" @callback="close_recharge_dialog" />
+    <member-dialog :visible="member_dialog_visible" :uid="current_uid" @callback="close_member_dialog" />
   </div>
 </template>
 
@@ -93,9 +106,14 @@
 import { get_parent_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { DATE_FORMAT_WITH_POINT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import rechargeDialog from './components/recharge_dialog'
+import memberDialog from './components/member_dialog'
 
 export default {
-  components: {},
+  components: {
+    rechargeDialog,
+    memberDialog
+  },
   data() {
     return {
       page: 1,
@@ -103,7 +121,10 @@ export default {
       total: 0,
       datetime_range: '',
       phone: '',
-      table_data: []
+      table_data: [],
+      current_uid: '',
+      recharge_dialog_visible: false,
+      member_dialog_visible: false
     }
   },
   computed: {},
@@ -151,6 +172,20 @@ export default {
       }
       const { href } = this.$router.resolve(options)
       window.open(href, '_blank')
+    },
+    close_recharge_dialog: function() {
+      this.recharge_dialog_visible = false
+    },
+    view_recharge_dialog: function(row) {
+      this.current_uid = row.user_id
+      this.recharge_dialog_visible = true
+    },
+    close_member_dialog: function() {
+      this.member_dialog_visible = false
+    },
+    view_member_dialog: function(row) {
+      this.current_uid = row.user_id
+      this.member_dialog_visible = true
     },
     refresh_data: function() {
       const config = this.get_params()

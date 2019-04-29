@@ -48,6 +48,9 @@ export const DAY_MICROSECOND = 3600 * 24 * 1000
 // 统计详情数据名称
 export const ANALYSIS_DETAILS_NAME = '统计详情数据'
 
+// 统计详情数据名称
+export const ORDER_MANAGEMENT_LIST_NAME = '订单管理数据'
+
 // 学科列表
 export const SUBJECT_LIST = [
   {
@@ -183,3 +186,181 @@ export const __VERSION__ = '201902281003'
 
 // 正浮点数
 export const POSITIVE_FLOAT = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+
+// 订单来源 - 订单详情
+export const COMMODITY_TYPE = [
+  {
+    value: 1,
+    label: '所有'
+  },
+  {
+    value: 2,
+    label: '格雷守护会员月卡'
+  },
+  {
+    value: 3,
+    label: '格雷守护会员季卡'
+  },
+  {
+    value: 4,
+    label: '格雷守护会员年卡'
+  }
+]
+
+// 订单状态
+export const ORDER_STATUS_LIST = [
+  {
+    value: 1,
+    label: '所有'
+  },
+  {
+    value: 2,
+    label: '待支付'
+  },
+  {
+    value: 3,
+    label: '已完成'
+  }
+]
+
+// 交易方式
+export const TRANSCATION_MODE = [
+  {
+    value: 1,
+    label: '所有'
+  },
+  {
+    value: 2,
+    label: '待支付'
+  },
+  {
+    value: 3,
+    label: 'IOS内购'
+  },
+  {
+    value: 4,
+    label: '支付宝'
+  },
+  {
+    value: 5,
+    label: '微信'
+  },
+  {
+    value: 6,
+    label: '营销抵扣'
+  }
+]
+
+// 套餐类型
+export const PACKAGE_TYPE = [
+  {
+    value: null,
+    label: '所有'
+  },
+  {
+    value: '01',
+    label: '公开'
+  },
+  {
+    value: '02',
+    label: '不公开'
+  }
+]
+
+// 套餐当前状态
+export const PACKAGE_STATUS = [
+  {
+    value: null,
+    label: '所有'
+  },
+  {
+    value: '1',
+    label: '已上架'
+  },
+  {
+    value: '0',
+    label: '未上架'
+  }
+]
+
+// 广告类型
+export const ADVERTISEMENT_TYPE = [
+  {
+    value: 1,
+    label: '固定位置'
+  },
+  {
+    value: 2,
+    label: '开屏弹屏'
+  },
+  {
+    value: 3,
+    label: '悬浮按钮'
+  }
+]
+
+// 广告位置
+export const ADVERTISEMENT_LOCATIONS = [
+  {
+    value: 1,
+    label: '首页卡片'
+  },
+  {
+    value: 2,
+    label: '绑定流程定制机图片'
+  },
+  {
+    value: 3,
+    label: '绑定流程广告'
+  },
+  {
+    value: 4,
+    label: '会员页面广告'
+  }
+]
+
+// 广告状态
+export const ADVERTISEMENT_STATUS = [
+  {
+    value: null,
+    label: '所有'
+  },
+  {
+    value: '1',
+    label: '生效中'
+  },
+  {
+    value: '0',
+    label: '未生效'
+  }
+]
+
+// 广告跳转平台
+export const ADVERTISEMENT_PLATFORM = [
+  {
+    value: '01',
+    label: 'APP原生页'
+  },
+  {
+    value: '02',
+    label: 'H5'
+  },
+  {
+    value: '03',
+    label: '微信小程序'
+  }
+]
+
+/* 会员活动管理 */
+
+// 活动类型
+export const ACTIVITY_TYPES = [
+  {
+    value: '01',
+    label: '会员充值活动'
+  },
+  {
+    value: '02',
+    label: '积分赠送活动'
+  }
+]

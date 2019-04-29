@@ -1,0 +1,236 @@
+<template>
+  <div class="content">
+    <div class="content-body">
+      <div class="search-area">
+        <el-row :gutter="10" class="row-bg">
+          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-row>
+                <el-col :xl="8" class="order-number-list">活动名称:</el-col>
+                <el-col :xl="16">
+                  <el-input v-model="query_sets.activity_name" size="mini" placeholder="活动名称" clearable @change="query" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="20" class="col-bg layout-right">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-button size="mini" type="success" @click="create_activity">创建会员活动</el-button>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="between-search-area-and-table-display" />
+      <div class="table-content table-block">
+        <el-table
+          :data="activity_list"
+          size="mini"
+          style="width: 100%">
+          <el-table-column
+            align="center"
+            label="活动名称"
+            prop="activity_name"
+            width="160" />
+          <el-table-column
+            align="center"
+            label="套餐名称"
+            prop="activity_type_label"
+            width="180" />
+          <el-table-column
+            align="center"
+            label="套餐时长"
+            prop="valid_days" />
+          <el-table-column
+            align="center"
+            label="活动价格"
+            prop="activity_price" />
+          <el-table-column
+            align="center"
+            label="活动人数"
+            prop="user_count" />
+          <el-table-column
+            align="center"
+            label="创建时间"
+            prop="create_time_label" />
+          <el-table-column
+            align="center"
+            label="操作"
+            prop="control">
+            <template slot-scope="scope">
+              <el-button
+                size="small"
+                style="padding-bottom: 2px; border-bottom: 1px solid;"
+                type="text"
+                @click="edit_activity(scope.row)">编辑
+              </el-button>
+              <el-button
+                size="small"
+                style="padding-bottom: 2px; border-bottom: 1px solid;"
+                type="text"
+                @click="see_activity(scope.row)">查看
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          :current-page="page"
+          :page-size="page_size"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="total"
+          layout="total, prev, pager, next, jumper"
+          @current-change="change_current"
+          @size-change="table_size_change" />
+      </div>
+    </div>
+
+    <create-activity v-if="is_create" @callback="destory_create_activity" />
+    <edit-activity v-if="is_edit" :is_edit="is_edit" :current="current_row" @callback="destory_edit_activity"/>
+  </div>
+</template>
+
+<script>
+import createActivity from './components/create_activity'
+import editActivity from './components/edit_activity'
+import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { get_member_activity_list } from '@/api/interactive'
+import { date_formatter } from '@/utils/common'
+
+export default {
+  components: {
+    createActivity,
+    editActivity
+  },
+  data() {
+    return {
+      query_sets: {
+        activity_name: ''
+      },
+      is_create: false,
+      is_edit: false,
+      activity_list: [{}],
+      current_row: {},
+      page: 1,
+      page_size: DEFAULT_PAGE_SIZE,
+      total: 0
+    }
+  },
+  computed: {},
+  mounted: function() {
+    this.fetch_member_activity_list()
+  },
+  methods: {
+    create_activity() {
+      this.is_create = true
+    },
+    destory_create_activity(refresh = false) {
+      this.is_create = false
+      if (refresh) {
+        this.fetch_member_activity_list()
+      }
+    },
+    get_options() {
+      const condition = {}
+      condition['page_no'] = this.page
+      condition['page_num'] = this.page_size
+      condition['activity_name'] = this.query_sets.activity_name
+      return condition
+    },
+    query() {
+      this.fetch_member_activity_list()
+    },
+    fetch_member_activity_list() {
+      const options = this.get_options()
+      get_member_activity_list(options).then(res => {
+        if (res.status === 0) {
+          this.activity_list = res.data.map(r => {
+            const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
+            return {
+              ...r,
+              create_time_label
+            }
+          })
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    table_size_change: function(size) {
+      this.page_size = size
+    },
+    change_current: function(page) {
+      this.page = page
+    },
+    edit_activity: function(row) {
+      this.current_row = row
+      this.is_edit = true
+    },
+    destory_edit_activity(refresh = false) {
+      this.is_edit = false
+      if (refresh) {
+        this.fetch_member_activity_list()
+      }
+    },
+    see_activity: function(row) {
+      const activity_id = row.activity_id
+      const router = {
+        path: '/member/details',
+        query: {
+          id: activity_id
+        }
+      }
+      this.$router.push(router)
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.content {
+  width: 100%;
+  height: 100%;
+  /*min-height: 480px;*/
+  padding: 20px 10px 25px 10px;
+  display: flex;
+  flex-direction: column;
+
+  .content-body {
+    border: 1px solid #c7d5ee;
+    height: 100%;
+    min-height: 120px;
+
+    .search-area {
+      padding: 20px 20px 0 20px;
+
+      .row-bg {
+        .col-bg {
+          padding: 5px 0;
+
+          &.layout-right {
+            text-align: right;
+          }
+
+          .order-number-list {
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4d4d4d;
+          }
+        }
+      }
+    }
+
+    .between-search-area-and-table-display {
+      height: 1px;
+      margin: 10px 20px 15px 20px;
+      background-color: #d0d0d7;
+    }
+
+    .table-content {
+      margin: 20px;
+    }
+  }
+}
+</style>

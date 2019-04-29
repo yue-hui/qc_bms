@@ -21,6 +21,15 @@ service.interceptors.request.use(
       const data = config.data || {}
       config['data'] = sign(data)
     }
+    // if(config.method.toUpperCase() === 'POST') {
+    //   if (!('Content-Type' in config.headers)) {
+    //     config.headers['Content-Type'] = 'application/json'
+    //   }
+    // }
+    // if (config.headers['Content-Type'] && config.headers['Content-Type'].indexOf('multipart/form-data') !== -1 ) {
+    //   delete config.headers['Content-Type']
+    //   console.log('config - ', config)
+    // }
     return config
   },
   error => {

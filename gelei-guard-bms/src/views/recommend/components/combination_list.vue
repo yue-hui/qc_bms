@@ -135,7 +135,6 @@ export default {
     },
     change_current(page) {
       this.page = page
-      console.log('change_current', page)
       this.reload()
     },
     get_pagination_config() {

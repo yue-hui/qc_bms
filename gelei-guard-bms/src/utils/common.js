@@ -42,6 +42,12 @@ export function get_grade_label_map() {
   return grade_map
 }
 
+// 交易金额
+export function formatter_transaction_amount(fee, unit = '元') {
+  const num = +fee
+  return num.toFixed(2) + unit
+}
+
 // 获取单个年级对应标签
 export function get_grade_label(grade) {
   const grade_map = get_grade_label_map()

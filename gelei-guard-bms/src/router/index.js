@@ -27,7 +27,9 @@ export const constantRouterMap = [
     path: '/users',
     component: Layout,
     name: '用户管理',
-    meta: { title: '用户管理', icon: 'form' },
+    redirect: '/users/information',
+    alwaysShow: true,
+    meta: { title: '用户管理', icon: 'information' },
     children: [
       {
         path: 'information',
@@ -41,6 +43,12 @@ export const constantRouterMap = [
         hidden: true,
         component: () => import('@/views/users/details'),
         meta: { title: '用户详细信息', hide: true, icon: 'form' }
+      },
+      {
+        path: 'order-list',
+        name: '订单管理',
+        component: () => import('@/views/users/order_list'),
+        meta: { title: '订单管理', icon: 'form' }
       }
     ]
   },
@@ -48,6 +56,7 @@ export const constantRouterMap = [
     path: '/data',
     component: Layout,
     name: '用户数据分析',
+    redirect: '/data/analysis',
     alwaysShow: true,
     meta: { title: '用户数据分析', icon: 'analysis' },
     children: [
@@ -60,9 +69,39 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/member',
+    component: Layout,
+    name: '会员管理',
+    redirect: '/member/packages',
+    alwaysShow: true,
+    meta: { title: '会员管理', icon: 'member' },
+    children: [
+      {
+        path: 'packages',
+        name: '会员套餐管理',
+        component: () => import('@/views/member/packages'),
+        meta: { title: '会员套餐管理', icon: 'packages' }
+      },
+      {
+        path: 'activity',
+        name: '会员活动管理',
+        component: () => import('@/views/member/activity'),
+        meta: { title: '会员活动管理', icon: 'activity' }
+      },
+      {
+        path: 'details',
+        name: '活动详细信息',
+        hidden: true,
+        component: () => import('@/views/member/details'),
+        meta: { title: '活动详细信息', icon: 'details' }
+      }
+    ]
+  },
+  {
     path: '/app/recommend',
     component: Layout,
     name: '应用推荐管理',
+    redirect: '/app/recommend/index',
     meta: { title: '应用推荐管理', icon: 'apply' },
     children: [
       {
@@ -83,6 +122,7 @@ export const constantRouterMap = [
     path: '/toolbox',
     component: Layout,
     name: '工具使用',
+    redirect: '/toolbox/helper',
     alwaysShow: true,
     meta: { title: '工具使用', icon: 'tools', hidden: false },
     children: [
@@ -97,13 +137,20 @@ export const constantRouterMap = [
         name: '应用升级',
         component: () => import('@/views/toolbox/promotion'),
         meta: { title: '应用升级', icon: 'promotion' }
+      },
+      {
+        path: 'advertisement',
+        name: '广告配置',
+        component: () => import('@/views/toolbox/advertisement'),
+        meta: { title: '广告配置', icon: 'advertisement' }
       }
     ]
   },
   {
     path: '/system',
     component: Layout,
-    name: 'system',
+    name: '权限管理',
+    redirect: '/system/role',
     hidden: true,
     children: [{
       path: 'role',

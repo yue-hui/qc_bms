@@ -27,6 +27,16 @@ function getSign(params) {
     publicParams['app_token'] = app_token
   }
   const all_params = Object.assign({}, params, publicParams, other_params)
+  /* 清掉不需要上传的字段 */
+  const un_sign_fields = all_params.un_sign_fields || []
+  un_sign_fields.forEach((_v, _i, _a) => {
+    if (_v in all_params) {
+      delete all_params[_v]
+    }
+  })
+  if ('un_sign_fields' in all_params) {
+    delete all_params.un_sign_fields
+  }
   const arr = Object.values(all_params)
   // 参数值是数组，处理方法
   arr.forEach((element, i) => {
@@ -37,7 +47,6 @@ function getSign(params) {
   })
   // 排序
   arr.sort()
-
   // 加密
   const str = arr.join('')
   const sign = sha256(str)

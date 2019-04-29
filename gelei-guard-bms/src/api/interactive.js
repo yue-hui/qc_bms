@@ -1,6 +1,22 @@
 import request from '@/utils/request'
 
-/* 用户信息管理 */
+/*
+* 公共接口
+*  */
+
+// 图片上传接口
+export function upload_file(data) {
+  return request({
+    url: '/common/file/upload',
+    method: 'post',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data;' }
+  })
+}
+
+/*
+* 用户信息管理
+*  */
 
 // 获取家长用户列表
 export function get_parent_list(data) {
@@ -29,7 +45,9 @@ export function get_child_record_details(data) {
   })
 }
 
-/* 常见问题管理 */
+/*
+* 常见问题管理
+*  */
 
 // 获取常见问题列表
 export function get_questions_list(data) {
@@ -76,7 +94,9 @@ export function delete_questions(data) {
   })
 }
 
-/* 用户数据分析 */
+/*
+* 用户数据分析
+*  */
 
 // 用户分析整体情况
 export function get_user_analysis_summary(data) {
@@ -87,10 +107,19 @@ export function get_user_analysis_summary(data) {
   })
 }
 
-// 用户分析详细列表
+// 家长端详细数据列表
 export function get_user_analysis_details(data) {
   return request({
     url: '/manager/user/analyze/list',
+    method: 'post',
+    data
+  })
+}
+
+// 孩子端详细数据列表
+export function get_user_analysis_child_details(data) {
+  return request({
+    url: '/manager/user/analyze/child/list',
     method: 'post',
     data
   })
@@ -123,7 +152,9 @@ export function get_bind_device_increased_data(data) {
   })
 }
 
-/* 应用推荐管理 */
+/*
+* 应用推荐管理
+*  */
 
 // 推荐应用列表
 export function get_manager_soft_recommend_list(data) {
@@ -233,7 +264,10 @@ export function deploy_qa(data) {
   })
 }
 
-/* 应用版本管理 */
+/*
+* 应用版本管理
+*  */
+
 // 获取应用版本列表
 export function get_application_version_list(data) {
   return request({
@@ -285,5 +319,196 @@ export function get_application_version(data) {
     url: '/manager/app/version/get',
     method: 'post',
     data
+  })
+}
+
+/*
+* 订单管理
+*  */
+
+// 获取订单管理列表
+export function get_order_list(data) {
+  return request({
+    url: '/manager/order/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取订单类型列表
+export function get_order_type_list() {
+  return request({
+    url: '/common/order/type/list',
+    method: 'post'
+  })
+}
+
+// 获取订单状态列表
+export function get_order_status_list() {
+  return request({
+    url: '/common/order/status/list',
+    method: 'post'
+  })
+}
+
+// 获取订单状态列表
+export function get_order_paytype_list() {
+  return request({
+    url: '/common/order/paytype/list',
+    method: 'post'
+  })
+}
+
+// 获取会员充值流水
+export function get_member_plan_flow_list(data) {
+  return request({
+    url: '/manager/member/plan/flow/list',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 会员管理
+*  */
+
+// 获取会员套餐列表
+export function get_member_plan_list(data) {
+  return request({
+    url: '/manager/member/plan/list',
+    method: 'post',
+    data
+  })
+}
+
+// 删除会员套餐
+export function delete_member_plan(data) {
+  return request({
+    url: '/manager/member/plan/delete',
+    method: 'post',
+    data
+  })
+}
+
+// 新增会员套餐
+export function add_member_plan(data) {
+  return request({
+    url: '/manager/member/plan/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑会员套餐 与 上下架
+export function update_member_plan(data) {
+  return request({
+    url: '/manager/member/plan/edit',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 会员活动管理
+*  */
+
+// 获取会员活动列表
+export function get_member_activity_list(data) {
+  return request({
+    url: '/manager/member/activity/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取会员活动详情
+export function get_member_activity_details(data) {
+  return request({
+    url: '/manager/member/activity/info',
+    method: 'post',
+    data
+  })
+}
+
+// 获取指定活动的参与用户
+export function get_member_activity_user_list(data) {
+  return request({
+    url: '/manager/member/activity/user/list',
+    method: 'post',
+    data
+  })
+}
+
+// 创建会员活动
+export function add_member_activity(data) {
+  return request({
+    url: '/manager/member/activity/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑会员活动
+export function edit_member_activity(data) {
+  return request({
+    url: '/manager/member/activity/edit',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 广告模块
+*  */
+
+// 获取广告列表
+export function get_advertising_list(data) {
+  return request({
+    url: '/manager/advertising/list',
+    method: 'post',
+    data
+  })
+}
+
+// 创建广告
+export function add_advertising(data) {
+  return request({
+    url: '/manager/advertising/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑广告
+export function edit_advertising(data) {
+  return request({
+    url: '/manager/advertising/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 删除广告
+export function delete_advertising(data) {
+  return request({
+    url: '/manager/advertising/delete',
+    method: 'post',
+    data
+  })
+}
+
+// 获取广告类型列表
+export function get_advertising_type_list() {
+  return request({
+    url: '/common/advertising/type/list',
+    method: 'post'
+  })
+}
+
+// 获取广告位置列表
+export function get_advertising_point_list() {
+  return request({
+    url: '/common/advertising/point/list',
+    method: 'post'
   })
 }
