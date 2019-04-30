@@ -195,20 +195,20 @@ export default {
           { type: 'number', min: 0.01, message: '套餐原价不能少于1分钱', trigger: 'blur' }
         ],
         discount_price: [
-          { type: 'number', min: 0.01, message: '套餐活动价不能少于1分钱', trigger: 'blur' },
-          { required: false, trigger: 'blur', validator: validate_discount_price }
+          // { type: 'number', min: 0.01, message: '套餐活动价不能少于1分钱', trigger: 'blur' },
+          // { required: false, trigger: 'blur', validator: validate_discount_price }
         ],
         purchase_quota: [
           { required: true, message: '限购次数不能为空', trigger: 'blur' },
           { type: 'integer', min: 0, message: '限购次数必须大于等于0的整数', trigger: 'blur' }
         ],
         plan_label: [
-          { required: true, message: '请输入套餐活动标签', trigger: 'blur' },
-          { type: 'string', min: 1, max: 6, message: '套餐活动标签限6个字以内', trigger: 'blur' }
+          // { required: true, message: '请输入套餐活动标签', trigger: 'blur' },
+          // { type: 'string', min: 1, max: 6, message: '套餐活动标签限6个字以内', trigger: 'blur' }
         ],
         remark: [
-          { required: true, message: '请输入套餐价格标签', trigger: 'blur' },
-          { min: 1, max: 15, message: '套餐活动标签限10个字以内', trigger: 'blur' }
+          // { required: true, message: '请输入套餐价格标签', trigger: 'blur' },
+          // { min: 1, max: 15, message: '套餐活动标签限10个字以内', trigger: 'blur' }
         ],
         row_order: [
           { required: true, message: '请输入套餐排序', trigger: 'blur' },
