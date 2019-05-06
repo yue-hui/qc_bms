@@ -189,8 +189,17 @@ export default {
     field_mapper(data) {
       return data.map(r => {
         const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
-        const discount_start_time_label = date_formatter(r.discount_start_time, DATE_MINUTE_FORMAT)
-        const discount_end_time_label = date_formatter(r.discount_end_time, DATE_MINUTE_FORMAT)
+        let discount_start_time_label, discount_end_time_label
+        if (r.discount_start_time) {
+          discount_start_time_label = date_formatter(r.discount_start_time, DATE_MINUTE_FORMAT)
+        } else {
+          discount_start_time_label = '-'
+        }
+        if (r.discount_end_time) {
+          discount_end_time_label = date_formatter(r.discount_end_time, DATE_MINUTE_FORMAT)
+        } else {
+          discount_end_time_label = '-'
+        }
         const plan_type_label = r.plan_type === '01' ? '公开' : r.plan_type === '02' ? '不公开' : '未知'
         return {
           ...r,
