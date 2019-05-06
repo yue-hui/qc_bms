@@ -40,6 +40,9 @@ export const DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_FORMAT_WITH_POINT = 'YYYY.MM.DD'
 
 // 日期时间格式
+export const DATE_MINUTE_FORMAT = 'YYYY-MM-DD HH:mm:ss'
+
+// 日期时间格式
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
 
 // 一天的微秒数

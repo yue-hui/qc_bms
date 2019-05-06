@@ -141,7 +141,7 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
+import { DATE_MINUTE_FORMAT, DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 
@@ -189,8 +189,8 @@ export default {
     field_mapper(data) {
       return data.map(r => {
         const create_time_label = date_formatter(data.create_time, DATE_TIME_FORMAT)
-        const discount_end_time_label = date_formatter(data.discount_end_time)
-        const discount_start_time_label = date_formatter(data.discount_start_time)
+        const discount_end_time_label = date_formatter(data.discount_end_time, DATE_MINUTE_FORMAT)
+        const discount_start_time_label = date_formatter(data.discount_start_time, DATE_MINUTE_FORMAT)
         const plan_type_label = r.plan_type === '01' ? '公开' : r.plan_type === '02' ? '不公开' : '未知'
         return {
           ...r,

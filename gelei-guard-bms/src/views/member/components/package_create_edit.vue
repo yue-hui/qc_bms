@@ -134,14 +134,6 @@ export default {
     }
   },
   data: function() {
-    const validate_discount_price = (rule, value, callback) => {
-      if (value >= this.public_form.original_price) {
-        callback(new Error('套餐活动价不能大于或等于套餐原价'))
-      } else {
-        callback()
-      }
-    }
-
     const validate_date_range = (rule, value, callback) => {
       if (this.public_form.discount_price) {
         if (!value[0] || !value[1]) {

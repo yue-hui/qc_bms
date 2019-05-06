@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // 图片、文件上传接口
 export function uploadFormData(params) {
-  const urlPath = 'common/file/upload'
+  const urlPath = '/common/file/upload'
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }
