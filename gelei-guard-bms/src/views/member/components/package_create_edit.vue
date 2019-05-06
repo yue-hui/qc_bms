@@ -353,8 +353,8 @@ export default {
       }
       if (plan_type === '01') {
         const date_range = this.public_form.date_range
-        const begin_time = new Date(date_range[0]).getTime()
-        const end_time = new Date(date_range[1]).getTime()
+        const discount_start_time = new Date(date_range[0]).getTime()
+        const discount_end_time = new Date(date_range[1]).getTime()
 
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
@@ -363,8 +363,8 @@ export default {
         options['plan_label'] = this.public_form.plan_label
         options['remark'] = this.public_form.remark
         options['row_order'] = this.public_form.row_order
-        options['begin_time'] = begin_time
-        options['end_time'] = end_time
+        options['discount_end_time'] = discount_end_time
+        options['discount_start_time'] = discount_start_time
       } else if (plan_type === '02') {
         options['valid_days'] = this.un_public_form.valid_days
         options['original_price'] = this.un_public_form.original_price
