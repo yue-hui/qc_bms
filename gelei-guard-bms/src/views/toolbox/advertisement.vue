@@ -315,7 +315,7 @@ export default {
         return '上架'
       }
     },
-    change_advertising_status(row) {
+    change_advertising_status_action(row) {
       const ad_id = row.ad_id
       const is_listing = row.is_listing === '1' ? '0' : '1'
       const options = {
@@ -329,6 +329,28 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      })
+    },
+    change_advertising_status(row) {
+      let confirm_text
+      if (row.is_listing === '1') {
+        // 已上架
+        confirm_text = '你确定要下架该广告配置吗?'
+      } else if (row.is_listing === '0') {
+        // 已下架
+        confirm_text = '你确定要上架该广告配置吗?'
+      }
+      this.$confirm(confirm_text, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.change_advertising_status_action(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消上下架操作'
+        })
       })
     },
     destory_dialog(refresh = false) {

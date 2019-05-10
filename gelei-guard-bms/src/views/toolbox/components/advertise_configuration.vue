@@ -41,8 +41,8 @@
                 class="upload-demo"
                 list-type="picture">
                 <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">备注: 只能上传jpg/png文件, 图片尺寸为347x682，且不超过500kb.</div>
               </el-upload>
+              <div class="upload-file-to-server">备注: 只能上传jpg/png文件, 图片尺寸为347x682，且不超过500kb.</div>
             </el-form-item>
           </el-form>
 
@@ -104,7 +104,7 @@
 <script>
 import { ADVERTISEMENT_PLATFORM } from '@/utils/constant'
 import { add_advertising, edit_advertising } from '@/api/interactive'
-import { uploadFormData } from '@/utils/uploadResource'
+import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 
 export default {
   name: 'AdvertiseConfiguration',
@@ -333,23 +333,43 @@ export default {
       })
     },
     push_picture_to_cloud(params) {
-      if (this.form.file_list.length > 1) {
+      if (this.form.file_list.length >= 1) {
         this.$message.warning('只能上传一张图片')
         return
       }
-      const uploadData = new FormData()
-      uploadData.append('file', params.file)
-      uploadFormData(uploadData).then(res => {
+      const file = params.file
+      uploadFormDataSecondPassServer(file).then(res => {
         const remote_data = res.data
-        if (remote_data.status === 0) {
+        if (remote_data.status === 1) {
+          // 未上传, 使用 文件接口上传
+          uploadFormDataServer(file).then((res) => {
+            const upload_data = res.data
+            if (upload_data.status === 0) {
+              const url = upload_data.data.url
+              const item = {
+                name: params.file.name,
+                url
+              }
+              this.form.file_list.push(item)
+            } else {
+              this.$message.error(upload_data.message)
+            }
+          })
+        } else if (remote_data.status === -1) {
+          // 秒传失败
+          this.$message.error(remote_data.message)
+        } else if (remote_data.status === 0) {
+          // 秒传成功
           const url = remote_data.data.url
           const item = {
             name: params.file.name,
             url
           }
           this.form.file_list.push(item)
+          this.$message.success('上传成功')
         } else {
-          this.$message.error(res.message)
+          // 未知异常
+          this.$message.error(remote_data.message)
         }
       })
     },
@@ -397,8 +417,9 @@ $title_height: 40px;
         line-height: $title_height;
         padding: 0 10px;
         position: relative;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 18px;
+        color: #303133;
+        font-family : 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;
@@ -428,6 +449,11 @@ $title_height: 40px;
           width: 100%;
           /*border-bottom: 1px dashed grey;*/
           margin: 0 0 20px 0;
+        }
+
+        .upload-file-to-server {
+          font-size: 12px;
+          color: #606266;
         }
 
         .action-area {

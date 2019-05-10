@@ -512,3 +512,25 @@ export function get_advertising_point_list() {
     method: 'post'
   })
 }
+
+// 文件秒传
+export function file_second_pass(data) {
+  // const url = 'https://mstes.dev.zhixike.net/file/data/secondpass'
+  // const url = 'https://mstes.dev.zhixike.net/file/data/secondpass'
+  // /file/data/secondpass
+  return request({
+    url: '/file/data/secondpass',
+    method: 'post',
+    data
+  })
+}
+
+// 文件上传服务
+export function file_upload_server(data) {
+  const config = {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    baseURL: '/gelei-guard-bms/file'
+  }
+  const url = '/data/upload'
+  return request.post(url, data, config)
+}

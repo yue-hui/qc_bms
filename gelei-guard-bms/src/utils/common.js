@@ -1,6 +1,7 @@
 import { v1 as uuidv1 } from 'node-uuid'
 import { DATE_FORMAT, GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
 import dayjs from 'dayjs'
+import CryptoJS from 'crypto-js'
 
 export function get_uuid() {
   const string = uuidv1()
@@ -116,4 +117,29 @@ export function get_rec_type_label(rec_type) {
 
 export function build_version() {
   return dayjs().format('YYYYMMDDHHmm')
+}
+
+function arrayBufferToWordArray(ab) {
+  const i8a = new Uint8Array(ab)
+  const a = []
+  for (let i = 0; i < i8a.length; i += 4) {
+    a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3])
+  }
+  return CryptoJS.lib.WordArray.create(a, i8a.length)
+}
+
+export function calculate_file_sha256(file) {
+  return new Promise(resolve => {
+    // const encoding = 'IOS-8859-1'
+    const file_reader = new FileReader()
+    // file_reader.readAsBinaryString(file)
+    file_reader.readAsArrayBuffer(file)
+    // file_reader.readAsDataURL(file)
+    // file_reader.readAsText(file, encoding)
+    file_reader.onload = (e) => {
+      const hexstring = CryptoJS.SHA256(arrayBufferToWordArray(e.target.result)).toString()
+      console.log('hexstring:', hexstring, hexstring.toString())
+      resolve(hexstring)
+    }
+  })
 }

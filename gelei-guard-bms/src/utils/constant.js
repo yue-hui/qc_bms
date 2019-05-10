@@ -147,6 +147,10 @@ export const GRADE_LIST = [
   {
     name: '高三',
     val: '12'
+  },
+  {
+    name: '大学',
+    val: '13'
   }
 ]
 

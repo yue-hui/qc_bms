@@ -3,7 +3,7 @@
     <div class="component-card">
       <div :style="{'max-height': visiable_height}" class="dialog">
         <div class="head-area">
-          <div class="title">编辑 <span v-if="form.name"> - {{ form.name }}</span></div>
+          <div class="title">编辑 <span v-if="form.activity_name"> - {{ form.activity_name }}</span></div>
           <div class="close-icon" @click="cancel"><i class="el-message-box__close el-icon-close" /></div>
         </div>
         <div class="body-area">
@@ -79,6 +79,7 @@ export default {
     }
     return {
       form: {
+        activity_name: '',
         phones: '',
         notify_msg: '',
         is_notify: ''
@@ -103,6 +104,7 @@ export default {
     is_edit: {
       handler: function(val) {
         if (val) {
+          this.form.activity_name = this.current.activity_name || ''
           this.form.phones = this.current.phones || ''
           this.form.notify_msg = this.current.notify_msg
           this.form.is_notify = this.current.is_notify
@@ -220,8 +222,9 @@ $title_height: 40px;
         line-height: $title_height;
         padding: 0 10px;
         position: relative;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 18px;
+        color: #303133;
+        font-family : 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;

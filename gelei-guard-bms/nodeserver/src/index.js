@@ -1,17 +1,30 @@
 var express = require('express')
 var app = express()
+var fs = require('fs')
 var path = require('path')
 var serveIndex = require('serve-index')
 var bodyParser = require('body-parser')
+var multer = require('multer')
 var request = require('request')
 var sha256 = require('js-sha256')
 var argv = require('minimist')(process.argv.slice(2))
 var __port = argv['port'] || 4002
 global.env_config = argv['env_config']
 var config = require('./config.js')
+var utils = require('./utils.js')
+utils.startup()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.resolve('./static')))
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, config.UPLOAD_DIR_PATH)
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+var upload = multer({ storage })
 app.use('/gelei-guard-bms/api/*', function(req, res) {
   try {
     var method = req.method.toLowerCase()
@@ -48,7 +61,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
     res.send(encryptParams)
     return
   }
-
+  
   request({
     url: TransferReq,
     body: encryptParams,
@@ -57,6 +70,89 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
     json: true
   }, function(error, response, data) { // 错误,响应对象,请求回来的数据
     res.send(data)
+    error ? console.log(error) : '转发请求正常'
+  })
+}
+
+app.use('/gelei-guard-bms/file/*', upload.any(), function(req, res) {
+  try {
+    var method = req.method.toLowerCase()
+    var reqConType = req.headers['content-type']
+    var reqParam = null
+    // var TransferReq = req.headers['transfer-req'] || 'https://msdev.dev.zhixike.net/greenguard'
+    var TransferReq = config.baseObjURL
+    if (method === 'get') {
+      reqParam = req.query
+      TransferReq = TransferReq + req.originalUrl.split('api')[1]
+      noderequest(TransferReq, reqParam, method, reqConType, res)
+    } else if (method === 'post' || method === 'options') {
+      reqParam = req.body
+      var files = req.files
+      TransferReq = TransferReq + req.baseUrl.split('file')[1]
+      // res.send({ message: reqParam, status: 0 })
+      noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res)
+    } else {
+      res.send({
+        status: -1,
+        message: 'node 请求方式错误'
+      })
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+function noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res) {
+  if (!reqParam.sign) {
+    res.send({ message: 'node sign miss 1!', status: -1 })
+    return
+  }
+  var encryptParams = compTime(reqParam.sign, reqParam)
+  if (encryptParams.status === -1) {
+    res.send(encryptParams)
+    return
+  }
+
+  var formData = {
+    ...encryptParams
+  }
+  
+  // 添加文件信息
+  var key, file, filename, filestream
+  formData['file'] = []
+  for (var i=0; i < files.length; i++) {
+    file = files[i]
+    key = file.fieldname
+    filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
+    formData['file'].push(filestream)
+    if (key in formData) {
+      formData[key].push(filestream)
+    } else {
+      formData[key] = [filestream]
+    }
+  }
+
+  request({
+    url: TransferReq,
+    headers: reqConType,
+    method: method,
+    formData,
+    json: true
+  }, function(error, response, data) { // 错误,响应对象,请求回来的数据
+    res.send(data)
+    // 清理文件
+    for (var i=0; i < files.length; i++) {
+      var file = files[i]
+      var filepath = config.UPLOAD_DIR_PATH + '/' + file.originalname
+      fs.unlink(filepath, function(error){
+        if(error){
+          console.log(error);
+          return false;
+        }
+        console.log('删除文件成功');
+      })
+    }
+    
     error ? console.log(error) : '转发请求正常'
   })
 }

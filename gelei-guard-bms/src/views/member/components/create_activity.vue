@@ -220,7 +220,7 @@ export default {
       let current_plan
       if (plan.length) {
         current_plan = {
-          valid_days: plan.valid_days
+          valid_days: plan[0].valid_days
         }
       } else {
         current_plan = {
@@ -294,8 +294,9 @@ $z_index: 2000;
         line-height: $title_height;
         padding: 0 10px;
         position: relative;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 18px;
+        color: #303133;
+        font-family : 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;

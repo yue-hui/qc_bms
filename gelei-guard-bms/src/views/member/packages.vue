@@ -266,7 +266,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消上架操作'
+          message: '已取消上下架操作'
         })
       })
     },
