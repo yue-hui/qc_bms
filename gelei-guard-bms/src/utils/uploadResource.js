@@ -3,7 +3,6 @@ import axios from 'axios'
 import { calculate_file_sha256 } from '@/utils/common'
 import { file_second_pass } from '@/api/interactive'
 
-
 // 图片、文件上传接口
 export function uploadFormData(params) {
   const urlPath = '/data/upload'

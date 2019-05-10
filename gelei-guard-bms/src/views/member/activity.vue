@@ -8,7 +8,7 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">活动名称:</el-col>
                 <el-col :xl="16">
-                  <el-input v-model="query_sets.activity_name" size="mini" placeholder="活动名称" clearable @change="query" />
+                  <el-input v-model="query_sets.activity_name" size="mini" placeholder="活动名称" clearable @change="query_condition_change " />
                 </el-col>
               </el-row>
             </div>
@@ -136,6 +136,11 @@ export default {
       condition['page_num'] = this.page_size
       condition['activity_name'] = this.query_sets.activity_name
       return condition
+    },
+    query_condition_change() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
+      this.query()
     },
     query() {
       this.fetch_member_activity_list()

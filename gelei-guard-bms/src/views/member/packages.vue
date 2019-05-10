@@ -8,7 +8,7 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">套餐名称:</el-col>
                 <el-col :xl="16">
-                  <el-input v-model="query_sets.plan_name" size="mini" placeholder="套餐名称" clearable @change="query" />
+                  <el-input v-model="query_sets.plan_name" size="mini" placeholder="套餐名称" clearable @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
@@ -18,7 +18,7 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">套餐类型:</el-col>
                 <el-col :xl="16">
-                  <el-select v-model="query_sets.plan_type" size="mini" clearable placeholder="所有套餐类型" @change="query">
+                  <el-select v-model="query_sets.plan_type" size="mini" clearable placeholder="所有套餐类型" @change="query_condition_change">
                     <el-option
                       v-for="item in packages"
                       :key="item.value"
@@ -34,7 +34,7 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">状态:</el-col>
                 <el-col :xl="16">
-                  <el-select v-model="query_sets.is_listing" size="mini" clearable placeholder="所有状态" @change="query">
+                  <el-select v-model="query_sets.is_listing" size="mini" clearable placeholder="所有状态" @change="query_condition_change">
                     <el-option
                       v-for="item in status_list"
                       :key="item.value"
@@ -215,6 +215,11 @@ export default {
       get_member_plan_list(options).then(res => {
         this.packages_list = this.field_mapper(res.data)
       })
+    },
+    query_condition_change() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
+      this.query()
     },
     query() {
       this.fetch_member_list()

@@ -8,7 +8,12 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">订单号:</el-col>
                 <el-col :xl="16">
-                  <el-input v-model="query_sets.order_no" size="mini" placeholder="订单号" clearable @change="query_condition_change" />
+                  <el-input
+                    v-model="query_sets.order_no"
+                    size="mini"
+                    placeholder="订单号"
+                    clearable
+                    @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
@@ -35,7 +40,11 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">订单详情:</el-col>
                 <el-col :xl="16">
-                  <el-select v-model="query_sets.order_type" size="mini" placeholder="订单详情" clearable>
+                  <el-select
+                    v-model="query_sets.order_type"
+                    size="mini"
+                    placeholder="订单详情"
+                    clearable>
                     <el-option
                       v-for="item in order_source"
                       :key="item.value"
@@ -52,7 +61,12 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">订单状态:</el-col>
                 <el-col :xl="16">
-                  <el-select v-model="query_sets.order_status" size="mini" placeholder="订单状态" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.order_status"
+                    size="mini"
+                    placeholder="订单状态"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in order_status_list"
                       :key="item.value"
@@ -68,7 +82,12 @@
               <el-row>
                 <el-col :xl="8" class="order-number-list">交易方式:</el-col>
                 <el-col :xl="16">
-                  <el-select v-model="query_sets.pay_type" size="mini" placeholder="交易方式" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.pay_type"
+                    size="mini"
+                    placeholder="交易方式"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in pay_type_mode"
                       :key="item.value"
@@ -252,11 +271,14 @@ export default {
       const query_params = JSON.parse(JSON.stringify(this.query_sets))
       const order_time_range = query_params.order_time_range
       delete query_params.order_time_range
-      const begin_time = new Date(order_time_range[0]).getTime()
-      const end_time = new Date(order_time_range[1]).getTime()
-      const condition = {
-        begin_time,
-        end_time
+      let condition = {}
+      if (order_time_range) {
+        const begin_time = new Date(order_time_range[0]).getTime()
+        const end_time = new Date(order_time_range[1]).getTime()
+        condition = {
+          begin_time,
+          end_time
+        }
       }
       for (const i of Object.keys(query_params)) {
         if (query_params[i]) {
@@ -273,9 +295,11 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      this.query()
     },
     change_current: function(page) {
       this.page = page
+      this.query()
     },
     order_list_map(data) {
       return data.map(r => {
@@ -289,6 +313,8 @@ export default {
       })
     },
     query_condition_change() {
+      this.page = 1
+      this.page_size = DEFAULT_PAGE_SIZE
       this.query()
     },
     query() {
@@ -300,6 +326,7 @@ export default {
       get_order_list(data).then(res => {
         if (res.status === 0) {
           this.order_data = this.order_list_map(res.data)
+          this.total = res.total_count
         }
       })
     },

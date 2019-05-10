@@ -104,7 +104,7 @@ app.use('/gelei-guard-bms/file/*', upload.any(), function(req, res) {
 
 function noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res) {
   if (!reqParam.sign) {
-    res.send({ message: 'node sign miss 1!', status: -1 })
+    res.send({ message: 'node sign miss 2!', status: -1 })
     return
   }
   var encryptParams = compTime(reqParam.sign, reqParam)
