@@ -35,7 +35,7 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="机型">
-                    <span>{{ information.device_name }}</span>
+                    <span>{{ information.device_model_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
