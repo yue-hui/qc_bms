@@ -3,11 +3,11 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
-                <el-col :xl="8" class="order-number-list">订单号:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">订单号:</el-col>
+                <el-col :span="16">
                   <el-input
                     v-model="query_sets.order_no"
                     size="mini"
@@ -18,28 +18,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="6" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="4" class="order-number-list">交易时间:</el-col>
-                <el-col :xl="16">
-                  <el-date-picker
-                    v-model="query_sets.order_time_range"
-                    type="daterange"
-                    size="mini"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    @change="query_condition_change" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
-                <el-col :xl="8" class="order-number-list">订单详情:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">订单详情:</el-col>
+                <el-col :span="16">
                   <el-select
                     v-model="query_sets.order_type"
                     size="mini"
@@ -56,11 +39,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">订单状态:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">订单状态:</el-col>
+                <el-col :span="16">
                   <el-select
                     v-model="query_sets.order_status"
                     size="mini"
@@ -77,11 +60,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">交易方式:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">交易方式:</el-col>
+                <el-col :span="16">
                   <el-select
                     v-model="query_sets.pay_type"
                     size="mini"
@@ -98,27 +81,44 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">用户名:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">用户名:</el-col>
+                <el-col :span="16">
                   <el-input v-model="query_sets.nick_name" size="mini" clearable @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="10" class="order-number-list">用户联系方式:</el-col>
-                <el-col :xl="14">
+                <el-col :span="10" class="order-number-list">用户联系方式:</el-col>
+                <el-col :span="14">
                   <el-input v-model="query_sets.contact_phone" size="mini" clearable @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="6" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="4" class="order-number-list">交易时间:</el-col>
+                <el-col :span="16">
+                  <el-date-picker
+                    v-model="query_sets.order_time_range"
+                    type="daterange"
+                    size="mini"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    @change="query_condition_change" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="18" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button

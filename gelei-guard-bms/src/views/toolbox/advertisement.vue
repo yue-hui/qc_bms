@@ -3,21 +3,21 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
-                <el-col :xl="8" class="order-number-list">广告名称:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">广告名称:</el-col>
+                <el-col :span="16">
                   <el-input v-model="query_sets.ad_name" size="mini" placeholder="广告名称" clearable @click="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">广告类型:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">广告类型:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.ad_type" size="mini" placeholder="广告类型" clearable @click="query_condition_change">
                     <el-option
                       v-for="item in advertisement_type"
@@ -30,11 +30,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">广告位置:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">广告位置:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.ad_position" size="mini" placeholder="广告位置" clearable @click="query_condition_change">
                     <el-option
                       v-for="item in advertisement_locations"
@@ -46,11 +46,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">状态:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">状态:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.is_listing" size="mini" placeholder="状态" clearable @click="query_condition_change">
                     <el-option
                       v-for="item in advertisement_status"
@@ -62,11 +62,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">跳转平台:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">跳转平台:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.jump_target" size="mini" placeholder="跳转平台" clearable @click="query_condition_change">
                     <el-option
                       v-for="item in advertisement_platform"
@@ -78,7 +78,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg layout-right col-right-button">
+          <el-col :xs="12" :sm="8" :md="18" :lg="18" :xl="4" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_advertising">创建广告</el-button>

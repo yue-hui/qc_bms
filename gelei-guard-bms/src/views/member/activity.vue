@@ -3,17 +3,17 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="3" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
-                <el-col :xl="8" class="order-number-list">活动名称:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">活动名称:</el-col>
+                <el-col :span="16">
                   <el-input v-model="query_sets.activity_name" size="mini" placeholder="活动名称" clearable @change="query_condition_change " />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="20" class="col-bg layout-right">
+          <el-col :xs="12" :sm="16" :md="18" :lg="19" :xl="21" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_activity">创建会员活动</el-button>

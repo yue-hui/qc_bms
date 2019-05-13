@@ -3,21 +3,21 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
-                <el-col :xl="8" class="order-number-list">套餐名称:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">套餐名称:</el-col>
+                <el-col :span="16">
                   <el-input v-model="query_sets.plan_name" size="mini" placeholder="套餐名称" clearable @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">套餐类型:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">套餐类型:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.plan_type" size="mini" clearable placeholder="所有套餐类型" @change="query_condition_change">
                     <el-option
                       v-for="item in packages"
@@ -29,11 +29,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :xl="8" class="order-number-list">状态:</el-col>
-                <el-col :xl="16">
+                <el-col :span="8" class="order-number-list">状态:</el-col>
+                <el-col :span="16">
                   <el-select v-model="query_sets.is_listing" size="mini" clearable placeholder="所有状态" @change="query_condition_change">
                     <el-option
                       v-for="item in status_list"
@@ -45,7 +45,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="12" class="col-bg layout-right">
+          <el-col :xs="12" :sm="24" :md="6" :lg="9" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_package">创建套餐</el-button>
