@@ -13,3 +13,7 @@ package-lock.json
 *.ntvs*
 *.njsproj
 *.sln
+
+# 个性配置
+./src/utils/pathparse.js
+./src/utils/server.js
