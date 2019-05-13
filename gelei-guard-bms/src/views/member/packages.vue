@@ -214,6 +214,7 @@ export default {
       const options = this.get_condition_with_pagination()
       get_member_plan_list(options).then(res => {
         this.packages_list = this.field_mapper(res.data)
+        this.total = res.total_count
       })
     },
     query_condition_change() {
@@ -226,9 +227,11 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      this.fetch_member_list()
     },
     change_current: function(page) {
       this.page = page
+      this.fetch_member_list()
     },
     show_table_button_label(row) {
       if (row.is_listing === '1') {

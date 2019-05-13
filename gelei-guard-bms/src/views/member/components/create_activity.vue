@@ -63,7 +63,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="消息内容" prop="notify_msg">
-              <el-input v-model="form.notify_msg" :disabled="form.is_notify === '0'" size="mini" type="textarea" />
+              <el-input v-model="form.notify_msg" :disabled="form.is_notify === '0'" :maxlength="50" size="mini" type="textarea" />
             </el-form-item>
           </el-form>
 

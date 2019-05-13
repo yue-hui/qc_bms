@@ -156,6 +156,7 @@ export default {
               create_time_label
             }
           })
+          this.total = res.total_count
         } else {
           this.$message.error(res.message)
         }
@@ -163,9 +164,11 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      this.fetch_member_activity_list()
     },
     change_current: function(page) {
       this.page = page
+      this.fetch_member_activity_list()
     },
     edit_activity: function(row) {
       this.current_row = row

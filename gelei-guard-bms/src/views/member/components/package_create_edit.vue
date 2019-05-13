@@ -40,7 +40,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="套餐活动价" prop="discount_price">
-              <el-input v-model.number="public_form.discount_price" size="mini">
+              <el-input v-model.number="public_form.discount_price" size="mini" type="number">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
@@ -50,10 +50,10 @@
               </el-input>
             </el-form-item>
             <el-form-item label="套餐活动标签" prop="plan_label">
-              <el-input v-model="public_form.plan_label" size="mini" aria-placeholder="限时优惠" />
+              <el-input v-model="public_form.plan_label" maxlength="6" size="mini" aria-placeholder="限时优惠" />
             </el-form-item>
             <el-form-item label="套餐价格标签" prop="remark">
-              <el-input v-model="public_form.remark" size="mini" aria-placeholder="" />
+              <el-input v-model="public_form.remark" maxlength="10" size="mini" aria-placeholder="" />
             </el-form-item>
             <el-form-item label="套餐排序" prop="row_order">
               <el-input v-model.number="public_form.row_order" type="number" size="mini" />
@@ -321,17 +321,37 @@ export default {
         })
       })
     },
+    check_discount_price() {
+      // 校验
+      if (this.public_form.discount_price !== '') {
+        const discount_price = parseFloat(this.public_form.discount_price)
+        if (discount_price <= 0) {
+          this.$message.warning('套餐活动价值必须大于0')
+          return false
+        }
+        if (this.public_form.original_price) {
+          const original_price = parseFloat(this.public_form.original_price)
+          if (original_price < discount_price) {
+            this.$message.warning('套餐活动价必须小于套餐原价')
+            return false
+          }
+        }
+      }
+      return true
+    },
     async check_all_submit_field() {
       /* 校验字段值 */
       const plan_type = this.form.plan_type
       if (plan_type === '02') {
-        const validate_form = this.check_form()
-        const validate_check_un_public_form = this.check_un_public_form()
+        const validate_form = await this.check_form()
+        const validate_check_un_public_form = await this.check_un_public_form()
         return validate_form && validate_check_un_public_form
       } else {
-        const validate_form = this.check_form()
-        const validate_public_form = this.check_public_form()
-        return validate_form && validate_public_form
+        const validate_form = await this.check_form()
+        const validate_public_form = await this.check_public_form()
+        const validate_discount_price = this.check_discount_price()
+        console.log('=============', validate_form, validate_public_form, validate_discount_price)
+        return validate_form && validate_public_form && validate_discount_price
       }
     },
     on_save() {
@@ -403,7 +423,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 $title_height: 40px;
-$z_index: 2000;
+$z_index: 1000;
 .component-card-with-dialog {
   position: fixed;
   top: 0;
