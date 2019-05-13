@@ -4,22 +4,15 @@ import { calculate_file_sha256 } from '@/utils/common'
 
 // 秒传服务 - json
 export async function uploadFormDataSecondPassServer(file) {
-  const data = new FormData()
-  data.append('file', file, file.name)
-  const sha256_hex = await calculate_file_sha256(file)
-  const params = {
-    hash: sha256_hex
-  }
+  const hash = await calculate_file_sha256(file)
+  const params = { hash }
   const config = {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': 'application/json' },
     baseURL: '/gelei-guard-bms/api'
   }
+  const url = '/file/data/secondpass'
   const sign_data = getSign(params)
-  const url = '/file/data/upload'
-  const decrypt_data = JSON.parse(sign_data)
-  for (const key in decrypt_data) {
-    data.append(key, decrypt_data[key])
-  }
+  const data = JSON.parse(sign_data)
   return await axios.post(url, data, config)
 }
 
