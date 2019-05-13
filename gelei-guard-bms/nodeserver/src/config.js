@@ -4,26 +4,22 @@ var config
 switch (global.env_config) {
   case 'dev':
     config = {
-      baseURL: 'https://msdev.dev.zhixike.net/greenguard',
-      baseObjURL: 'https://msdev.dev.zhixike.net/file'
+      baseURL: 'https://msdev.dev.zhixike.net/',
     }
     break
   case 'test':
     config = {
-      baseURL: 'https://mstes.dev.zhixike.net/greenguard',
-      baseObjURL: 'https://mstes.dev.zhixike.net/file'
+      baseURL: 'https://mstes.dev.zhixike.net/',
     }
     break
   case 'prod':
     config = {
-      baseURL: 'https://ms.gwchina.cn/greenguard',
-      baseObjURL: 'https://ms.gwchina.cn/file'
+      baseURL: 'https://ms.gwchina.cn/',
     }
     break
   default:
     config = {
-      baseURL: 'https://ms.gwchina.cn/greenguard',
-      baseObjURL: 'https://ms.gwchina.cn/file'
+      baseURL: 'https://ms.gwchina.cn/',
     }
 }
 

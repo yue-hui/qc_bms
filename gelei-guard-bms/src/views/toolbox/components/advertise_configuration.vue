@@ -333,11 +333,13 @@ export default {
       })
     },
     push_picture_to_cloud(params) {
+      console.log('enter this area')
       if (this.form.file_list.length >= 1) {
         this.$message.warning('只能上传一张图片')
         return
       }
       const file = params.file
+
       uploadFormDataSecondPassServer(file).then(res => {
         const remote_data = res.data
         if (remote_data.status === 1) {
@@ -419,7 +421,7 @@ $title_height: 40px;
         position: relative;
         font-size: 18px;
         color: #303133;
-        font-family : 微软雅黑, 宋体;
+        font-family: 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;

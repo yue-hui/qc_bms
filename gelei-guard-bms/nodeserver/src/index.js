@@ -15,7 +15,9 @@ var utils = require('./utils.js')
 utils.startup()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+// 处理静态文件内容的
 app.use(express.static(path.resolve('./static')))
+
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, config.UPLOAD_DIR_PATH)
@@ -25,31 +27,6 @@ var storage = multer.diskStorage({
   }
 })
 var upload = multer({ storage })
-app.use('/gelei-guard-bms/api/*', function(req, res) {
-  try {
-    var method = req.method.toLowerCase()
-    var reqConType = req.headers['content-type']
-    var reqParam = null
-    // var TransferReq = req.headers['transfer-req'] || 'https://msdev.dev.zhixike.net/greenguard'
-    var TransferReq = config.baseURL
-    if (method === 'get') {
-      reqParam = req.query
-      TransferReq = TransferReq + req.originalUrl.split('api')[1]
-      noderequest(TransferReq, reqParam, method, reqConType, res)
-    } else if (method === 'post' || method === 'options') {
-      reqParam = req.body
-      TransferReq = TransferReq + req.baseUrl.split('api')[1]
-      noderequest(TransferReq, reqParam, method, reqConType, res)
-    } else {
-      res.send({
-        status: -1,
-        message: 'node 请求方式错误'
-      })
-    }
-  } catch (err) {
-    console.log(err)
-  }
-})
 
 function noderequest(TransferReq, reqParam, method, reqConType, res) {
   if (!reqParam.sign) {
@@ -74,34 +51,6 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
   })
 }
 
-app.use('/gelei-guard-bms/file/*', upload.any(), function(req, res) {
-  try {
-    var method = req.method.toLowerCase()
-    var reqConType = req.headers['content-type']
-    var reqParam = null
-    // var TransferReq = req.headers['transfer-req'] || 'https://msdev.dev.zhixike.net/greenguard'
-    var TransferReq = config.baseObjURL
-    if (method === 'get') {
-      reqParam = req.query
-      TransferReq = TransferReq + req.originalUrl.split('api')[1]
-      noderequest(TransferReq, reqParam, method, reqConType, res)
-    } else if (method === 'post' || method === 'options') {
-      reqParam = req.body
-      var files = req.files
-      TransferReq = TransferReq + req.baseUrl.split('file')[1]
-      // res.send({ message: reqParam, status: 0 })
-      noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res)
-    } else {
-      res.send({
-        status: -1,
-        message: 'node 请求方式错误'
-      })
-    }
-  } catch (err) {
-    console.log(err)
-  }
-})
-
 function noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res) {
   if (!reqParam.sign) {
     res.send({ message: 'node sign miss 2!', status: -1 })
@@ -112,7 +61,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
     res.send(encryptParams)
     return
   }
-
+  
   var formData = {
     ...encryptParams
   }
@@ -120,18 +69,20 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
   // 添加文件信息
   var key, file, filename, filestream
   formData['file'] = []
-  for (var i=0; i < files.length; i++) {
-    file = files[i]
-    key = file.fieldname
-    filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
-    formData['file'].push(filestream)
-    if (key in formData) {
-      formData[key].push(filestream)
-    } else {
-      formData[key] = [filestream]
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      file = files[i]
+      key = file.fieldname
+      filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
+      formData['file'].push(filestream)
+      if (key in formData) {
+        formData[key].push(filestream)
+      } else {
+        formData[key] = [filestream]
+      }
     }
   }
-
+  
   request({
     url: TransferReq,
     headers: reqConType,
@@ -141,21 +92,63 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
   }, function(error, response, data) { // 错误,响应对象,请求回来的数据
     res.send(data)
     // 清理文件
-    for (var i=0; i < files.length; i++) {
+    for (var i = 0; i < files.length; i++) {
       var file = files[i]
       var filepath = config.UPLOAD_DIR_PATH + '/' + file.originalname
-      fs.unlink(filepath, function(error){
-        if(error){
-          console.log(error);
-          return false;
+      fs.unlink(filepath, function(error) {
+        if (error) {
+          console.log(error)
+          return false
         }
-        console.log('删除文件成功');
+        console.log('删除文件成功')
       })
     }
     
     error ? console.log(error) : '转发请求正常'
   })
 }
+
+app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
+  try {
+    var method = req.method.toLowerCase()
+    var TransferReq = config.baseURL + req.originalUrl.split('api')[1]
+    if (method === 'get') {
+      // GET Request
+      var reqParam = req.query
+      var reqUserAgent = req.headers['user-agent']
+      noderequest(TransferReq, reqParam, method, reqConType, res)
+    } else if (method === 'post') {
+      // POST Request
+      var reqConType = req.headers['content-type']
+      var reqUserAgent = req.headers['user-agent']
+      var reqHeaders = {
+        'Content-Type': reqConType,
+        'User-Agent': reqUserAgent,
+      }
+      var contentTypeLower = reqConType.toLowerCase()
+      if (contentTypeLower.indexOf('application/json') !== -1) {
+        // json
+        var reqParam = req.body
+        // res.send({status: -1, message: reqParam, TransferReq})
+        noderequest(TransferReq, reqParam, method, reqHeaders, res)
+      } else if (contentTypeLower.indexOf('multipart/form-data') !== -1) {
+        // form-data
+        var reqParam = req.body
+        Object.assign(reqParam, req.query)
+        var reqFiles = req.files
+        noderequestwithformdata(TransferReq, reqParam, method, reqHeaders, reqFiles, res)
+      } else {
+        // 非法请求
+        res.send({ status: -1, message: 'unrecognized content-type: ' + reqConType, code: 10000 })
+      }
+    } else {
+      // PUT DELETE etc.
+      res.send({ status: -1, message: 'node server not support http method: ' + method })
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 function compTime(reqsign, params) {
   delete params.sign
@@ -228,19 +221,14 @@ function deepSort(source) {
   return targetObj
 }
 
-const options = {
-  'index': ['index.html', 'index.htm'],
-  'icons': true
-}
+// 支持History模式，找不到URL时全局匹配到gelei-guard-bms
+app.use('^/', function(req, res, next) {
+  //这里就是生成你默认页面的代码
+  //下面这句的意思是用一个叫做index的模板生成页面
+  const base_path = '/gelei-guard-bms/'
+  res.redirect(base_path)
+});
 
-app.use('/', serveIndex(path.resolve('./static'), options))
-app.use('/gelei-guard-bms/*', function(req, res) {
-  // 处理history模式时找不到URL的情况
-  const base_path = '/gelei-guard-bms'
-  if (req.baseUrl.indexOf(base_path) !== -1) {
-    res.redirect(base_path)
-  }
-})
 app.listen(__port, function() {
   console.log('http://localhost:' + __port)
 })

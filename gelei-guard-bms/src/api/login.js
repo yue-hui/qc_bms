@@ -3,7 +3,7 @@ import request from '@/utils/request'
 /* 登录 */
 export function login(data) {
   const options = {
-    url: 'manager/user/login ',
+    url: '/greenguard/manager/user/login ',
     method: 'post',
     data
   }
@@ -12,14 +12,14 @@ export function login(data) {
 
 export function getInfo() {
   return request({
-    url: '/manager/user/detail',
+    url: '/greenguard/manager/user/detail',
     method: 'POST'
   })
 }
 
 export function logout() {
   return request({
-    url: '/manager/user/logout',
+    url: '/greenguard/manager/user/logout',
     method: 'post'
   })
 }
@@ -27,7 +27,7 @@ export function logout() {
 /* 验证码 */
 export function get_verify_code(data) {
   const options = {
-    url: 'common/get/verify/code',
+    url: '/greenguard/common/get/verify/code',
     method: 'post',
     data
   }

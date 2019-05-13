@@ -8,6 +8,10 @@ export function get_uuid() {
   return string.replace(/-/g, '').toUpperCase()
 }
 
+export function is_array(obj) {
+  return typeof obj === 'object' && obj.constructor === Array
+}
+
 export function date_formatter(date, fomatter = DATE_FORMAT) {
   let day_js
   if (date) {
@@ -130,12 +134,8 @@ function arrayBufferToWordArray(ab) {
 
 export function calculate_file_sha256(file) {
   return new Promise(resolve => {
-    // const encoding = 'IOS-8859-1'
     const file_reader = new FileReader()
-    // file_reader.readAsBinaryString(file)
     file_reader.readAsArrayBuffer(file)
-    // file_reader.readAsDataURL(file)
-    // file_reader.readAsText(file, encoding)
     file_reader.onload = (e) => {
       const hexstring = CryptoJS.SHA256(arrayBufferToWordArray(e.target.result)).toString()
       console.log('hexstring:', hexstring, hexstring.toString())
