@@ -190,7 +190,7 @@ export default {
           this.title = '创建广告'
         } else if (val === 2) {
           this.edit_init()
-          this.title = '编辑广告 - ' + this.current.ad_name
+          this.title = this.current.ad_name
         } else {
           this.create_init()
           this.title = '广告配置'
