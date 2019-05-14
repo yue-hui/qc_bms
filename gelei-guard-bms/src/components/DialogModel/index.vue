@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     handleClose: function() {
-      console.log('x---')
     }
   }
 }

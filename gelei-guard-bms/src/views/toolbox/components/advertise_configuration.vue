@@ -156,7 +156,7 @@ export default {
         ],
         ad_position: [{ required: true, message: '广告位置为必选项', trigger: 'blur' }],
         file_list: [
-          { required: true, type: 'array', message: '请按规范上传图片', trigger: 'blur' }
+          { required: true, type: 'array', min: 1, message: '请按规范上传图片', trigger: 'blur' }
         ]
       },
       public_rules: {
@@ -315,8 +315,8 @@ export default {
       if (ad_position === '02') {
         return this.check_header_form()
       } else {
-        const validate_header_form = this.check_header_form()
-        const validate_public_form = this.check_public_form()
+        const validate_header_form = await this.check_header_form()
+        const validate_public_form = await this.check_public_form()
         return validate_header_form && validate_public_form
       }
     },
@@ -333,7 +333,6 @@ export default {
       })
     },
     push_picture_to_cloud(params) {
-      console.log('enter this area')
       if (this.form.file_list.length >= 1) {
         this.$message.warning('只能上传一张图片')
         return

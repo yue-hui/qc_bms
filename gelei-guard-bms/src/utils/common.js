@@ -138,7 +138,6 @@ export function calculate_file_sha256(file) {
     file_reader.readAsArrayBuffer(file)
     file_reader.onload = (e) => {
       const hexstring = CryptoJS.SHA256(arrayBufferToWordArray(e.target.result)).toString()
-      console.log('hexstring:', hexstring, hexstring.toString())
       resolve(hexstring)
     }
   })

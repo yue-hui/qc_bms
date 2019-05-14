@@ -40,7 +40,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="套餐活动价" prop="discount_price">
-              <el-input v-model.number="public_form.discount_price" size="mini" type="number">
+              <el-input v-model.number="public_form.discount_price" min="0" size="mini" type="number">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
@@ -92,7 +92,7 @@
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="套餐活动价" prop="original_price">
+            <el-form-item label="套餐活动价" prop="discount_price">
               <el-input v-model.number="un_public_form.discount_price" :disabled="form.plan_type === '02'" size="mini">
                 <template slot="append">元</template>
               </el-input>
@@ -137,7 +137,19 @@ export default {
     const validate_date_range = (rule, value, callback) => {
       if (this.public_form.discount_price) {
         if (!value[0] || !value[1]) {
-          callback(new Error('注: 设置套餐活动价同时必须填写活动时间'))
+          callback(new Error('填写套餐活动价同时必须填写活动时间'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+
+    const validate_discount_price = (rule, value, callback) => {
+      if (this.public_form.discount_price) {
+        if (this.public_form.discount_price > this.public_form.original_price || !this.public_form.original_price) {
+          callback(new Error('套餐的活动价不能大于套餐原价'))
         } else {
           callback()
         }
@@ -156,7 +168,7 @@ export default {
       public_form: {
         valid_days: '',
         original_price: '',
-        discount_price: '',
+        discount_price: 0,
         purchase_quota: 0,
         plan_label: '',
         remark: '限时优惠',
@@ -187,8 +199,9 @@ export default {
           { type: 'number', min: 0.01, message: '套餐原价不能少于1分钱', trigger: 'blur' }
         ],
         discount_price: [
-          // { type: 'number', min: 0.01, message: '套餐活动价不能少于1分钱', trigger: 'blur' },
-          // { required: false, trigger: 'blur', validator: validate_discount_price }
+          { required: true, message: '套餐活动价不能为空', trigger: 'blur' },
+          { type: 'number', min: 0, message: '套餐活动价不能低于0', trigger: 'blur' },
+          { required: false, trigger: 'blur', validator: validate_discount_price }
         ],
         purchase_quota: [
           { required: true, message: '限购次数不能为空', trigger: 'blur' },
@@ -257,7 +270,7 @@ export default {
       this.public_form = {
         valid_days: '',
         original_price: '',
-        discount_price: '',
+        discount_price: 0,
         purchase_quota: 0,
         plan_label: '',
         remark: '限时优惠',
@@ -350,7 +363,6 @@ export default {
         const validate_form = await this.check_form()
         const validate_public_form = await this.check_public_form()
         const validate_discount_price = this.check_discount_price()
-        console.log('=============', validate_form, validate_public_form, validate_discount_price)
         return validate_form && validate_public_form && validate_discount_price
       }
     },

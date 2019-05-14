@@ -3,7 +3,7 @@
     <div class="component-card">
       <div :style="{'max-height': visiable_height}" class="dialog">
         <div class="head-area">
-          <div class="title">编辑 <span v-if="form.activity_name"> - {{ form.activity_name }}</span></div>
+          <div class="title"><span v-if="form.activity_name"> - {{ form.activity_name }}</span></div>
           <div class="close-icon" @click="cancel"><i class="el-message-box__close el-icon-close" /></div>
         </div>
         <div class="body-area">
