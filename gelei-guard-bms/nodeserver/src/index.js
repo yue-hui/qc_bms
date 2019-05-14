@@ -1,4 +1,5 @@
 var express = require('express')
+var history = require('connect-history-api-fallback')
 var app = express()
 var fs = require('fs')
 var path = require('path')
@@ -13,10 +14,14 @@ global.env_config = argv['env_config']
 var config = require('./config.js')
 var utils = require('./utils.js')
 utils.startup()
+var history_options = {
+  index: '/gelei-guard-bms/index.html'
+}
+app.use(history(history_options))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // 处理静态文件内容的
-app.use(express.static(path.resolve('./static')))
+app.use(express.static(path.resolve('./static/')))
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -123,7 +128,7 @@ app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
       var reqUserAgent = req.headers['user-agent']
       var reqHeaders = {
         'Content-Type': reqConType,
-        'User-Agent': reqUserAgent,
+        'User-Agent': reqUserAgent
       }
       var contentTypeLower = reqConType.toLowerCase()
       if (contentTypeLower.indexOf('application/json') !== -1) {
@@ -227,7 +232,7 @@ app.use('^/', function(req, res, next) {
   //下面这句的意思是用一个叫做index的模板生成页面
   const base_path = '/gelei-guard-bms/'
   res.redirect(base_path)
-});
+})
 
 app.listen(__port, function() {
   console.log('http://localhost:' + __port)
