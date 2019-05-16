@@ -5,7 +5,8 @@
         <el-table
           :data="data_list"
           size="mini"
-          style="width: 100%">
+          style="width: 100%"
+          @sort-change="install_sort_change">
           <el-table-column
             align="center"
             label="应用名称"
@@ -54,6 +55,7 @@
             label="适用性别"
             prop="sex_label" />
           <el-table-column
+            :sortable="'custom'"
             align="center"
             label="安装次数"
             prop="install_count" />
@@ -139,7 +141,8 @@ export default {
       data_list: [],
       page: 1,
       page_size: DEFAULT_PAGE_SIZE,
-      total: 0
+      total: 0,
+      install_count_asc: '' // 是否按安装数量排序
     }
   },
   computed: {},
@@ -148,6 +151,20 @@ export default {
     this.fetch()
   },
   methods: {
+    install_sort_change(params) {
+      const order = params.order
+      if (order === 'descending') {
+        // 降序
+        this.install_count_asc = false
+      } else if (order === 'ascending') {
+        // 升序
+        this.install_count_asc = true
+      } else {
+        // 无序
+        this.install_count_asc = ''
+      }
+      this.fetch()
+    },
     table_size_change(row) {
       this.reload()
     },
@@ -183,6 +200,8 @@ export default {
     get_options() {
       const options = {}
       Object.assign(options, this.condition)
+      // 是否按安装数量排序
+      options['install_count_asc'] = this.install_count_asc
       options['page_no'] = this.page
       options['page_num'] = this.page_size
       return options
