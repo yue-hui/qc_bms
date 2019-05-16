@@ -64,7 +64,7 @@
           <el-table-column
             align="center"
             label="类型"
-            prop="device_type" />
+            prop="device_type_label" />
           <el-table-column
             align="center"
             label="会员状态"
