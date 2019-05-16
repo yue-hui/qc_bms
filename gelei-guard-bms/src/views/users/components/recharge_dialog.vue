@@ -13,17 +13,17 @@
         align="center"
         label="订单号"
         prop="order_no"
-        width="180" />
+        width="156" />
       <el-table-column
         align="center"
         label="交易单号"
         prop="pay_order_no"
-        width="150" />
+        width="136" />
       <el-table-column
         align="center"
         label="交易时间"
         prop="order_time_label"
-        width="150" />
+        width="132" />
       <el-table-column
         align="center"
         label="用户名"
@@ -35,15 +35,18 @@
       <el-table-column
         align="center"
         label="交易金额"
-        prop="order_amount_label" />
+        prop="order_amount_label"
+        width="120" />
       <el-table-column
         align="center"
         label="支付方式"
-        prop="pay_type" />
+        prop="pay_type"
+        width="100" />
       <el-table-column
         align="center"
         label="订单状态"
-        prop="order_status" />
+        prop="order_status"
+        width="100" />
     </el-table>
     <el-pagination
       :current-page="page"
@@ -88,13 +91,14 @@ export default {
     visible: {
       handler: function(val) {
         if (val) {
-          this.fetch_member_plan_flow_list()
+          this.fetch_order_list()
         }
       },
       immediate: true
     }
   },
-  mounted: function() {},
+  mounted: function() {
+  },
   methods: {
     order_list_map(data) {
       return data.map(r => {
@@ -116,16 +120,20 @@ export default {
       get_order_list(options).then(res => {
         if (res.status === 0) {
           this.recharge_list = this.order_list_map(res.data)
+          this.total = res.total_count
         }
       })
     },
+    query() {
+      this.fetch_order_list()
+    },
     table_size_change: function(size) {
       this.page_size = size
-      this.fetch_order_list()
+      this.query()
     },
     change_current: function(page) {
       this.page = page
-      this.fetch_order_list()
+      this.query()
     },
     close() {
       this.$emit('callback')

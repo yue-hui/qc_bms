@@ -12,7 +12,7 @@
               <el-input v-model="form.plan_name" :disabled="action === 2" size="mini" />
             </el-form-item>
             <el-form-item label="套餐类型" prop="plan_type">
-              <el-radio-group v-model="form.plan_type" size="mini">
+              <el-radio-group v-model="form.plan_type" :disabled="action === 2" size="mini">
                 <el-radio label="01">公开套餐</el-radio>
                 <el-radio label="02">不公开套餐</el-radio>
               </el-radio-group>

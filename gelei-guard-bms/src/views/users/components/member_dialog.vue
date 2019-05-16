@@ -8,12 +8,12 @@
       :data="member_list"
       empty-text="该用户无会员记录"
     >
-      <el-table-column property="date" label="用户名" width="150" />
-      <el-table-column property="name" label="时间" width="200" />
-      <el-table-column property="address" label="会员获得路径" />
-      <el-table-column property="address" label="获得方式" />
-      <el-table-column property="address" label="交易金额" />
-      <el-table-column property="address" label="会员有效期" />
+      <el-table-column align="center" prop="nick_name" label="用户名" width="150" />
+      <el-table-column align="center" prop="create_time_label" label="时间" width="200" />
+      <el-table-column align="center" prop="plan_name" label="会员获得路径" />
+      <el-table-column align="center" prop="acquisition_type" label="获得方式" />
+      <el-table-column align="center" prop="actual_price" label="交易金额(元)" />
+      <el-table-column align="center" prop="valid_str" label="会员有效期" />
     </el-table>
     <el-pagination
       :current-page="page"
@@ -27,8 +27,9 @@
 </template>
 
 <script>
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_MINUTE_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import { get_member_plan_flow_list } from '@/api/interactive'
+import { date_formatter } from '@/utils/common'
 
 export default {
   name: '',
@@ -72,14 +73,26 @@ export default {
         page_num: this.page_size
       }
       get_member_plan_flow_list(options).then(r => {
-        this.member_list = r.data
+        this.member_list = r.data.map(r => {
+          const create_time_label = date_formatter(r.create_time, DATE_MINUTE_FORMAT)
+          return {
+            ...r,
+            create_time_label
+          }
+        })
+        this.total = r.total_count
       })
+    },
+    query() {
+      this.fetch_member_plan_flow_list()
     },
     table_size_change: function(size) {
       this.page_size = size
+      this.query()
     },
     change_current: function(page) {
       this.page = page
+      this.query()
     },
     close() {
       this.$emit('callback')

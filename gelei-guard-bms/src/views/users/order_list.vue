@@ -160,7 +160,7 @@
           <el-table-column
             align="center"
             label="订单详情"
-            prop="order_type" />
+            prop="order_desc" />
           <el-table-column
             align="center"
             label="交易金额"
