@@ -76,7 +76,7 @@
                 <el-date-picker
                   v-model="form.date_range"
                   size="mini"
-                  type="daterange"
+                  type="datetimerange"
                   align="right"
                   unlink-panels
                   range-separator="至"

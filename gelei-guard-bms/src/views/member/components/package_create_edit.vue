@@ -63,7 +63,7 @@
                 <el-date-picker
                   v-model="public_form.date_range"
                   size="mini"
-                  type="daterange"
+                  type="datetimerange"
                   align="right"
                   unlink-panels
                   range-separator="至"
@@ -148,7 +148,7 @@ export default {
 
     const validate_discount_price = (rule, value, callback) => {
       if (this.public_form.discount_price) {
-        if (this.public_form.discount_price > this.public_form.original_price || !this.public_form.original_price) {
+        if (this.public_form.discount_price >= this.public_form.original_price || !this.public_form.original_price) {
           callback(new Error('套餐的活动价不能大于套餐原价'))
         } else {
           callback()
@@ -192,7 +192,7 @@ export default {
       public_rules: {
         valid_days: [
           { required: true, message: '套餐时长不能为空', trigger: 'blur' },
-          { type: 'integer', min: 0, message: '套餐时长不能小于0天', trigger: 'blur' }
+          { type: 'integer', min: 1, message: '套餐时长必须大于0天', trigger: 'blur' }
         ],
         original_price: [
           { required: true, message: '套餐原价不能为空', trigger: 'blur' },
@@ -200,7 +200,7 @@ export default {
         ],
         discount_price: [
           { required: true, message: '套餐活动价不能为空', trigger: 'blur' },
-          { type: 'number', min: 0, message: '套餐活动价不能低于0', trigger: 'blur' },
+          { type: 'number', min: 0, message: '套餐活动价须为整数', trigger: 'blur' },
           { required: false, trigger: 'blur', validator: validate_discount_price }
         ],
         purchase_quota: [
@@ -226,7 +226,7 @@ export default {
       un_public_rules: {
         valid_days: [
           { required: true, message: '套餐时长不能为空', trigger: 'blur' },
-          { type: 'integer', min: 0, message: '套餐时长不能小于0天', trigger: 'blur' }
+          { type: 'integer', min: 1, message: '套餐时长必须大于0天', trigger: 'blur' }
         ],
         original_price: [
           { required: true, message: '套餐原价不能为空', trigger: 'blur' }
