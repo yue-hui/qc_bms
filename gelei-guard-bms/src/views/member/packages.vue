@@ -154,7 +154,7 @@ export default {
       query_sets: {
         plan_name: '',
         plan_type: '',
-        is_listing: ''
+        is_listing: '1'
       },
       packages: PACKAGE_TYPE,
       status_list: PACKAGE_STATUS,

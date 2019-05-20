@@ -196,7 +196,7 @@ export default {
         ad_name: '',
         ad_type: '',
         ad_position: '',
-        is_listing: '',
+        is_listing: '1',
         jump_target: ''
       },
       advertisement_status: ADVERTISEMENT_STATUS,
