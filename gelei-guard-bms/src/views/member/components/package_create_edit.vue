@@ -136,7 +136,7 @@ export default {
   data: function() {
     const validate_date_range = (rule, value, callback) => {
       if (this.public_form.discount_price) {
-        if (!value[0] || !value[1]) {
+        if (value && (!value[0] || !value[1])) {
           callback(new Error('填写套餐活动价同时必须填写活动时间'))
         } else {
           callback()
