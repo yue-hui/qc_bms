@@ -72,7 +72,7 @@ export default {
   data: function() {
     const validate_notify_msg = (rule, value, callback) => {
       if (this.form.is_notify === '1' && !this.form.notify_msg) {
-        callback(new Error('消息通知 选择"是"的情况下用户须填写消息内容'))
+        callback(new Error('请输入消息通知内容，限制在50字以内'))
       } else {
         callback()
       }
