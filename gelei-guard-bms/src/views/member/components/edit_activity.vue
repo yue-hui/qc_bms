@@ -158,7 +158,7 @@ export default {
         activity_id: this.current.activity_id,
         activity_name: this.current.activity_name,
         is_notify: this.form.is_notify,
-        notify_msg: this.form.notify_msg,
+        notify_msg: this.form.notify_msg || '',
         phones: this.form.phones
       }
       edit_member_activity(options).then(res => {

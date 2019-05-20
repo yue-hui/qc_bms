@@ -191,7 +191,7 @@ export default {
         activity_type: this.form.activity_type,
         phones: this.form.phones,
         plan_id: this.form.plan_id,
-        notify_msg: this.form.notify_msg,
+        notify_msg: this.form.notify_msg || '',
         is_notify: this.form.is_notify
       }
       this.is_creating = true
