@@ -23,18 +23,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">订单详情:</el-col>
                 <el-col :span="16">
-                  <el-select
-                    v-model="query_sets.order_type"
+                  <el-input
+                    v-model="query_sets.order_desc"
                     size="mini"
                     placeholder="订单详情"
-                    clearable>
-                    <el-option
-                      v-for="item in order_source"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                      @change="query_condition_change" />
-                  </el-select>
+                    clearable
+                    @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
@@ -218,7 +212,7 @@ export default {
       query_sets: {
         order_no: '',
         order_time_range: [month_ago, now_time],
-        order_type: '',
+        order_desc: '',
         order_status: '',
         pay_type: '',
         nick_name: '',
