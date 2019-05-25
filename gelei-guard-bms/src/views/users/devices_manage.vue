@@ -129,6 +129,18 @@
               </el-row>
             </div>
           </el-col>
+          <el-col :xs="24" :sm="8" :md="24" :lg="24" :xl="16" class="col-bg layout-right col-right-button">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-button
+                  :loading="download_loading"
+                  size="mini"
+                  type="success"
+                  @click="download"><i class="el-icon-download el-icon" />导出
+                </el-button>
+              </el-row>
+            </div>
+          </el-col>
         </el-row>
       </div>
       <div class="between-search-area-and-table-display" />
@@ -189,10 +201,16 @@
 </template>
 
 <script>
-import { DATE_MINUTE_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import {
+  DATE_MINUTE_COMPACT_FORMAT,
+  DATE_MINUTE_FORMAT,
+  DEFAULT_PAGE_SIZE,
+  DEVICE_MANAGE_LIST_NAME
+} from '@/utils/constant'
 import { get_device_list } from '@/api/interactive'
 import { child_platform_type, platforms } from '@/views/toolbox/data/promotion'
 import { date_formatter, get_value_from_map_list, pure_object_null_value } from '@/utils/common'
+import dayjs from 'dayjs'
 
 export default {
   components: {},
@@ -209,6 +227,7 @@ export default {
         patriarch_phone: ''
       },
       device_list: [],
+      download_loading: false,
       platforms,
       child_platform_type,
       page: 1,
@@ -221,6 +240,37 @@ export default {
     this.fetch_device_list()
   },
   methods: {
+    download() {
+      // 下载
+      this.download_loading = true
+      const options = this.get_condition_with_pagination()
+      options['page_num'] = this.total
+      const time_string = dayjs().format(DATE_MINUTE_COMPACT_FORMAT)
+      const filename = DEVICE_MANAGE_LIST_NAME + time_string
+      get_device_list(options).then(res => {
+        const data_list = this.device_list_map(res.data)
+        import('@/utils/Export2Excel').then(excel => {
+          const t_header = ['孩子端设备ID', '平台', '设备型号', '系统版本号',
+            '家长端版本号', '中间件版本号', '孩子端版本号', '孩子端版本更新时间', '家长端手机号']
+          // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+          const filter_val = ['child_device_id', 'device_type_label', 'device_model', 'os_version',
+            'patriarch_app_version', 'middleware_version', 'child_app_version', 'child_app_update_time_label',
+            'patriarch_phone']
+          const data = this.formatJson(filter_val, data_list)
+          const options = {
+            header: t_header,
+            data,
+            filename,
+            autoWidth: true,
+            bookType: 'xlsx'
+          }
+          excel.export_json_to_excel(options)
+          this.download_loading = false
+        })
+      }).finally(() => {
+        this.download_loading = false
+      })
+    },
     table_size_change: function(size) {
       this.page_size = size
       this.query()

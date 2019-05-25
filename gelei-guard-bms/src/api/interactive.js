@@ -374,6 +374,15 @@ export function get_order_list(data) {
   })
 }
 
+// 导出订单列表
+export function export_order_list(data) {
+  return request({
+    url: '/greenguard/manager/order/list/export',
+    method: 'post',
+    data
+  })
+}
+
 // 获取会员充值流水
 export function get_member_plan_flow_list(data) {
   return request({

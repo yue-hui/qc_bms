@@ -39,8 +39,11 @@ export const DATE_FORMAT = 'YYYY-MM-DD'
 // 日期格式以点分隔
 export const DATE_FORMAT_WITH_POINT = 'YYYY.MM.DD'
 
-// 日期时间格式
+// 日期时间格式到分钟
 export const DATE_MINUTE_FORMAT = 'YYYY-MM-DD HH:mm'
+
+// 日期时间格式到分钟 - 紧凑格式
+export const DATE_MINUTE_COMPACT_FORMAT = 'YYYYMMDDHHmm'
 
 // 日期时间格式
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
@@ -51,8 +54,11 @@ export const DAY_MICROSECOND = 3600 * 24 * 1000
 // 统计详情数据名称
 export const ANALYSIS_DETAILS_NAME = '统计详情数据'
 
-// 统计详情数据名称
+// 订单管理列表表格名称
 export const ORDER_MANAGEMENT_LIST_NAME = '订单管理数据'
+
+// 设备信息管理列表名称
+export const DEVICE_MANAGE_LIST_NAME = '设备信息管理'
 
 // 学科列表
 export const SUBJECT_LIST = [
