@@ -141,7 +141,7 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_MINUTE_FORMAT, DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
+import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 
@@ -191,12 +191,12 @@ export default {
         const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
         let discount_start_time_label, discount_end_time_label
         if (r.discount_start_time) {
-          discount_start_time_label = date_formatter(r.discount_start_time, DATE_MINUTE_FORMAT)
+          discount_start_time_label = date_formatter(r.discount_start_time, DATE_TIME_FORMAT)
         } else {
           discount_start_time_label = '-'
         }
         if (r.discount_end_time) {
-          discount_end_time_label = date_formatter(r.discount_end_time, DATE_MINUTE_FORMAT)
+          discount_end_time_label = date_formatter(r.discount_end_time, DATE_TIME_FORMAT)
         } else {
           discount_end_time_label = '-'
         }

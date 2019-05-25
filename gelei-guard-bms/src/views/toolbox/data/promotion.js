@@ -87,3 +87,18 @@ export const platform_version_instructions = [
     label: '孩子端+中间件'
   }
 ]
+
+export const child_platform_type = [
+  {
+    value: '01',
+    label: 'PC端'
+  },
+  {
+    value: '02',
+    label: '苹果'
+  },
+  {
+    value: '03',
+    label: '安卓'
+  }
+]

@@ -75,6 +75,15 @@ export function get_child_record_details(data) {
   })
 }
 
+// 获取设备信息列表
+export function get_device_list(data) {
+  return request({
+    url: '/greenguard/manager/device/info/list',
+    method: 'post',
+    data
+  })
+}
+
 /*
 * 常见问题管理
 *  */
@@ -498,6 +507,19 @@ export function edit_advertising(data) {
 export function delete_advertising(data) {
   return request({
     url: '/greenguard/manager/advertising/delete',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 应用版本管理
+* */
+
+// 获取版本分布情况
+export function get_version_distribution(data) {
+  return request({
+    url: '/greenguard/manager/app/version/distribution',
     method: 'post',
     data
   })

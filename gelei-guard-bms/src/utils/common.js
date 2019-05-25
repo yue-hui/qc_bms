@@ -142,3 +142,29 @@ export function calculate_file_sha256(file) {
     }
   })
 }
+
+/*
+* 去除对象内空值
+* */
+export function pure_object_null_value(data) {
+  for (const key in data) {
+    if (!data[key]) {
+      delete data[key]
+    }
+  }
+  return data
+}
+
+/*
+* 字典列表中取出键对应的值
+* 参数 key: 键值名
+* 参数 map_list: 键值序列列表
+* 参数 default_value: 无键值匹配时默认值
+*  */
+export function get_value_from_map_list(key, map_list = [], default_value = '-') {
+  const filter_item = map_list.filter(r => r.value === key)
+  if (filter_item.length) {
+    return filter_item[0].label
+  }
+  return default_value
+}

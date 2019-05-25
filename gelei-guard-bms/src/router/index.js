@@ -49,6 +49,12 @@ export const constantRouterMap = [
         name: '订单管理',
         component: () => import('@/views/users/order_list'),
         meta: { title: '订单管理', icon: 'form' }
+      },
+      {
+        path: 'devices-manage',
+        name: '设备信息管理',
+        component: () => import('@/views/users/devices_manage'),
+        meta: { title: '设备信息管理', icon: 'devices_manage' }
       }
     ]
   },
@@ -143,6 +149,12 @@ export const constantRouterMap = [
         name: '广告配置',
         component: () => import('@/views/toolbox/advertisement'),
         meta: { title: '广告配置', icon: 'advertisement' }
+      },
+      {
+        path: 'version-list',
+        name: '版本管理',
+        component: () => import('@/views/toolbox/version_manager'),
+        meta: { title: '版本管理', icon: 'version' }
       }
     ]
   },
