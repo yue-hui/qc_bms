@@ -136,8 +136,7 @@
                   :loading="download_loading"
                   size="mini"
                   type="success"
-                  @click="download"><i class="el-icon-download el-icon" />导出
-                </el-button>
+                  @click="download"><i class="el-icon-download el-icon" />导出</el-button>
               </el-row>
             </div>
           </el-col>
@@ -153,7 +152,7 @@
             align="center"
             label="孩子端设备ID"
             prop="child_device_id"
-            width="160" />
+            width="240" />
           <el-table-column
             align="center"
             label="平台"
@@ -246,7 +245,7 @@ export default {
       const options = this.get_condition_with_pagination()
       options['page_num'] = this.total
       const time_string = dayjs().format(DATE_MINUTE_COMPACT_FORMAT)
-      const filename = DEVICE_MANAGE_LIST_NAME + time_string
+      const filename = [DEVICE_MANAGE_LIST_NAME, time_string].join('_')
       get_device_list(options).then(res => {
         const data_list = this.device_list_map(res.data)
         import('@/utils/Export2Excel').then(excel => {
@@ -270,6 +269,15 @@ export default {
       }).finally(() => {
         this.download_loading = false
       })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
     },
     table_size_change: function(size) {
       this.page_size = size
