@@ -11,7 +11,7 @@
                   <el-select
                     v-model="query_sets.platform"
                     size="mini"
-                    placeholder="交易方式"
+                    placeholder="请选择平台"
                     clearable
                     @change="query_condition_change">
                     <el-option
