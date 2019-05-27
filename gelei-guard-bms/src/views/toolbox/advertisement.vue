@@ -276,11 +276,11 @@ export default {
       return data.map(r => {
         let begin_time_label, end_time_label
         if (r.ad_position === '02') {
-          begin_time_label = date_formatter(r.begin_time, DATE_TIME_FORMAT)
-          end_time_label = date_formatter(r.end_time, DATE_TIME_FORMAT)
-        } else {
           begin_time_label = '-'
           end_time_label = '-'
+        } else {
+          begin_time_label = date_formatter(r.begin_time, DATE_TIME_FORMAT)
+          end_time_label = date_formatter(r.end_time, DATE_TIME_FORMAT)
         }
         return {
           ...r,
