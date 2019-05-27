@@ -21,42 +21,12 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">设备型号:</el-col>
-                <el-col :span="16">
-                  <el-input
-                    v-model="query_sets.device_model"
-                    size="mini"
-                    placeholder="设备型号"
-                    clearable
-                    @change="query_condition_change" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
                 <el-col :span="8" class="order-number-list">系统版本号:</el-col>
                 <el-col :span="16">
                   <el-input
                     v-model="query_sets.os_version"
                     size="mini"
                     placeholder="系统版本号"
-                    clearable
-                    @change="query_condition_change" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
-                <el-col :span="8" class="order-number-list">家长端手机号:</el-col>
-                <el-col :span="16">
-                  <el-input
-                    v-model="query_sets.patriarch_phone"
-                    size="mini"
-                    placeholder="家长端手机号"
                     clearable
                     @change="query_condition_change" />
                 </el-col>
@@ -87,21 +57,6 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="10" class="order-number-list">家长端版本号:</el-col>
-                <el-col :span="14">
-                  <el-input
-                    v-model="query_sets.patriarch_app_version"
-                    size="mini"
-                    placeholder="家长端版本号"
-                    clearable
-                    @change="query_condition_change" />
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg layout-right">
-            <div class="grid-content bg-purple-light">
-              <el-row>
                 <el-col :span="10" class="order-number-list">中间件版本号:</el-col>
                 <el-col :span="14">
                   <el-input
@@ -123,6 +78,45 @@
                     v-model="query_sets.child_app_version"
                     size="mini"
                     placeholder="孩子端版本号"
+                    clearable
+                    @change="query_condition_change" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="10" class="order-number-list"></el-col>
+                <el-col :span="14">
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">设备型号:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_sets.device_model"
+                    size="mini"
+                    placeholder="设备型号"
+                    clearable
+                    @change="query_condition_change" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">家长端手机号:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_sets.patriarch_phone"
+                    size="mini"
+                    placeholder="家长端手机号"
                     clearable
                     @change="query_condition_change" />
                 </el-col>
