@@ -435,14 +435,14 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 $title_height: 40px;
-$z_index: 1000;
+$z_index_message_dialog: 2000;
 .component-card-with-dialog {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: $z_index;
+  z-index: $z_index_message_dialog;
 
   .component-card {
     width: 100%;
@@ -459,7 +459,7 @@ $z_index: 1000;
       min-height: 400px;
       position: relative;
       background-color: #FFF;
-      z-index: $z_index + 1;
+      z-index: $z_index_message_dialog + 1;
       overflow-y: scroll;
 
       &::-webkit-scrollbar {

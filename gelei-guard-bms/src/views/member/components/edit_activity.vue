@@ -31,7 +31,12 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="消息内容" prop="notify_msg">
-              <el-input v-model="form.notify_msg" :disabled="form.is_notify === '0'" :maxlength="50" size="mini" type="textarea" />
+              <el-input
+                v-model="form.notify_msg"
+                :disabled="form.is_notify === '0'"
+                :maxlength="50"
+                size="mini"
+                type="textarea" />
             </el-form-item>
           </el-form>
 
@@ -53,6 +58,7 @@
 import { tc_type } from '@/views/member/data/example'
 import { edit_member_activity } from '@/api/interactive'
 
+const NO_NOTIFY_MESSAGE = '请输入消息通知内容，限制在50字以内'
 export default {
   name: 'EditActivity',
   beforecreate: function() {
@@ -72,7 +78,7 @@ export default {
   data: function() {
     const validate_notify_msg = (rule, value, callback) => {
       if (this.form.is_notify === '1' && !this.form.notify_msg) {
-        callback(new Error('请输入消息通知内容，限制在50字以内'))
+        callback(new Error(NO_NOTIFY_MESSAGE))
       } else {
         callback()
       }
@@ -85,13 +91,15 @@ export default {
         is_notify: ''
       },
       rules: {
+        activity_name: [],
         phones: [
-          // { required: true, message: '用户名单不能为空, 多用户以英文逗号分隔', trigger: 'blur' }
+          { required: false, message: '用户名单不能为空, 多用户以英文逗号分隔', trigger: 'blur' }
         ],
         is_notify: [
           { required: true, message: '消息通知不能为空', trigger: 'blur' }
         ],
         notify_msg: [
+          { required: false, message: '', trigger: 'blur' },
           { required: false, trigger: 'blur', validator: validate_notify_msg }
         ]
       },
@@ -173,7 +181,11 @@ export default {
     on_save() {
       this.$refs.form.validate(validate => {
         if (validate) {
-          this.save_activity()
+          if (this.form.is_notify && this.form.notify_msg === '') {
+            this.$message.error(NO_NOTIFY_MESSAGE)
+          } else {
+            this.save_activity()
+          }
         }
       })
     },
@@ -186,13 +198,14 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 $title_height: 40px;
+$z_index_message_dialog: 2000;
 .component-card-with-dialog {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 3000;
+  z-index: $z_index_message_dialog;
 
   .component-card {
     width: 100%;
@@ -224,7 +237,7 @@ $title_height: 40px;
         position: relative;
         font-size: 18px;
         color: #303133;
-        font-family : 微软雅黑, 宋体;
+        font-family: 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;
