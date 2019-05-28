@@ -40,7 +40,8 @@
               <el-col :xl="24" class="activity-item">
                 <div class="item-name">套餐原价:</div>
                 <div class="between-item-name-and-item-value" />
-                <div v-if="activity_details.original_price" class="item-value">{{ activity_details.original_price }} 元</div>
+                <div v-if="activity_details.original_price" class="item-value">{{ activity_details.original_price }} 元
+                </div>
                 <div v-else class="item-value">-</div>
               </el-col>
             </el-row>
@@ -77,24 +78,15 @@
             </div>
           </el-col>
           <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="24" class="member-area">
-            <el-row v-if="members.length" class="member-list">
-              <el-col
-                v-for="(member, index) in members"
-                :key="index"
-                :xs="8"
-                :sm="6"
-                :md="4"
-                :lg="3"
-                :xl="2"
-                class="col-bg">
-                <el-tag size="mini" class="member-tag">{{ member.phone }}</el-tag>
-              </el-col>
-            </el-row>
-            <el-row v-else class="no-member-reminder">无名单</el-row>
+            <div class="member-phone-area">
+              <div v-if="members.length" class="member-list">
+                <div v-for="(member, index) in members" :key="index" class="member-item">{{ member.phone }}</div>
+              </div>
+              <div v-else class="no-member-reminder">无名单</div>
+            </div>
           </el-col>
         </el-row>
         <!--用户名单结束-->
-
       </div>
     </div>
   </div>
@@ -103,7 +95,7 @@
 <script>
 import { get_member_activity_details, get_member_activity_user_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { DATE_TIME_FORMAT } from '@/utils/constant'
+import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
 
 export default {
   components: {},
@@ -113,7 +105,11 @@ export default {
         name: ''
       },
       members: [],
-      activity_details: {}
+      activity_details: {},
+      page_no: 1,
+      page_num: 100,
+      total: 0,
+      current_member_length: 0
     }
   },
   computed: {
@@ -142,11 +138,19 @@ export default {
     },
     fetch_member_activity_user_list() {
       const options = {
-        activity_id: this.id
+        activity_id: this.id,
+        page_no: this.page_no,
+        page_num: this.page_num
       }
       get_member_activity_user_list(options).then(res => {
         if (res.status === 0) {
-          this.members = res.data
+          this.members = [...this.members, ...res.data]
+          this.current_member_length += res.data.length
+          this.total = res.total_count
+          if (this.current_member_length < this.total) {
+            this.page_no += 1
+            this.fetch_member_activity_user_list()
+          }
         } else {
           this.$message.error(res.message)
         }
@@ -225,20 +229,45 @@ export default {
           min-height: 100px;
           border: 1px solid rgba(173, 224, 233, 0.53);
           margin-bottom: 30px;
+          position: relative;
 
-          .member-list {
-            padding: 15px;
-          }
-
-          .no-member-reminder {
-            width: 100%;
-            height: 100%;
-            min-height: 100px;
+          .member-phone-area {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            color: grey;
-            font-size: 12px;
+
+            .member-list {
+              padding: 15px;
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+
+              .member-item {
+                width: 96px;
+                height: 20px;
+                line-height: 18px;
+                font-size: 12px;
+                vertical-align: center;
+                color: #409eff;
+                border-radius: 4px;
+                padding: 0 8px;
+                border: 1px solid rgba(64, 158, 255, .2);
+                background-color: rgba(64, 158, 255, .1);
+                margin-right: 15px;
+                margin-top: 5px;
+              }
+            }
+
+            .no-member-reminder {
+              width: 100%;
+              height: 100%;
+              min-height: 100px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: grey;
+              font-size: 12px;
+            }
           }
         }
       }
