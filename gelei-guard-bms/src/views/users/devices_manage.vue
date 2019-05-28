@@ -87,9 +87,8 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="10" class="order-number-list"></el-col>
-                <el-col :span="14">
-                </el-col>
+                <el-col :span="10" class="order-number-list" />
+                <el-col :span="14" />
               </el-row>
             </div>
           </el-col>
