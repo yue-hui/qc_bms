@@ -1,7 +1,7 @@
 <template>
   <div class="component-card">
     <div class="left-item">
-      <a href="/gelei-guard-bms" class="hover-system-subject"> 格雷守护后台管理系统</a>
+      <div class="hover-system-subject" @click="go_to_home_page"> 格雷守护后台管理系统</div>
     </div>
     <div class="user-info">
       <div v-if="name" class="user-name-show">{{ name }},</div>
@@ -39,6 +39,11 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
+    },
+    go_to_home_page() {
+      const origin = window.location.origin
+      const href = origin + '/gelei-guard-bms'
+      window.location.href = href
     }
   }
 }
@@ -55,9 +60,11 @@ export default {
     padding-left: 10px;
     color: white;
     flex: 1;
-    .hover-system-subject{
+
+    .hover-system-subject {
       color: #cecece;
-      &:hover{
+
+      &:hover {
         color: rgb(64, 158, 255);
       }
     }

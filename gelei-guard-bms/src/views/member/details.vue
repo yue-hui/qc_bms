@@ -82,27 +82,26 @@
               <el-col>
                 <div class="phone-search-area">
                   <el-input
+                    v-model="phone"
                     class="search-input"
                     size="mini"
                     placeholder="请输入手机"
                     prefix-icon="el-icon-search"
-                    @change="refresh_phone"
                     clearable
-                    v-model="phone">
-                  </el-input>
+                    @change="refresh_phone" />
                 </div>
               </el-col>
 
               <template v-if="members.length">
                 <el-col
                   v-for="(member, index) in members"
-                  class="member-el-col-item"
                   :key="index"
                   :xs="6"
                   :sm="4"
                   :md="4"
                   :lg="3"
-                  :xl="2">
+                  :xl="2"
+                  class="member-el-col-item">
                   <div class="member-item">{{ member.phone }}</div>
                 </el-col>
               </template>

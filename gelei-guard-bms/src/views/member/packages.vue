@@ -64,7 +64,7 @@
             align="center"
             label="套餐名称"
             prop="plan_name"
-            width="180" />
+            width="200" />
           <el-table-column
             align="center"
             label="套餐类型"
