@@ -69,6 +69,38 @@ export const help_question_status = [
   }
 ]
 
+// 会员状态
+export const member_status_list = [
+  {
+    value: '00',
+    label: '待生效'
+  },
+  {
+    value: '01',
+    label: '已生效'
+  },
+  {
+    value: '02',
+    label: '已失效'
+  }
+]
+
+// 会员状态
+export const device_type_list = [
+  {
+    value: '01',
+    label: 'PC'
+  },
+  {
+    value: '02',
+    label: 'IOS'
+  },
+  {
+    value: '03',
+    label: 'Android'
+  }
+]
+
 export const platform_version_instructions = [
   {
     value: '01',

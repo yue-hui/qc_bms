@@ -28,6 +28,36 @@
             onkeyup="this.value=this.value.replace(/\D/g,'')"
             placeholder="请输入手机号" />
         </div>
+
+        <div class="header-block platform-block">
+          <label class="search-item">平台类型:</label>
+          <el-select
+            v-model="device_type"
+            size="mini"
+            placeholder="请选择平台类型"
+            clearable>
+            <el-option
+              v-for="item in device_type_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
+
+        <div class="header-block member-status-block">
+          <label class="search-item">会员状态:</label>
+          <el-select
+            v-model="member_status"
+            size="mini"
+            placeholder="请选择会员状态"
+            clearable>
+            <el-option
+              v-for="item in member_status_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </div>
       </div>
 
       <div class="header-line-right">
@@ -108,6 +138,7 @@ import { date_formatter } from '@/utils/common'
 import { DATE_FORMAT_WITH_POINT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
+import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
 
 export default {
   components: {
@@ -116,11 +147,15 @@ export default {
   },
   data() {
     return {
+      device_type_list,
+      member_status_list,
       page: 1,
       page_size: DEFAULT_PAGE_SIZE,
       total: 0,
       datetime_range: '',
       phone: '',
+      device_type: '',
+      member_status: '',
       table_data: [],
       current_uid: '',
       recharge_dialog_visible: false,
@@ -156,6 +191,12 @@ export default {
       const config = this.get_config()
       if (this.phone) {
         config['phone'] = '' + this.phone
+      }
+      if (this.device_type) {
+        config['device_type'] = this.device_type
+      }
+      if (this.member_status) {
+        config['member_status'] = this.member_status
       }
       if (this.datetime_range && this.datetime_range.length === 2) {
         config['begin_time'] = '' + this.datetime_range[0].getTime()
@@ -254,7 +295,7 @@ $label_height: 28px;
           height: $label_height;
           line-height: $label_height;
           padding-right: 8px;
-          min-width: 64px;
+          min-width: 70px;
           color: #4d4d4d;
           font-size: 14px;
           font-weight: 600;
@@ -263,6 +304,16 @@ $label_height: 28px;
 
       .phone-block {
         width: 200px;
+      }
+
+      .platform-block {
+        width: 200px;
+        margin-left: 20px;
+      }
+
+      .member-status-block {
+        width: 200px;
+        margin-left: 20px;
       }
 
       .search-time {
