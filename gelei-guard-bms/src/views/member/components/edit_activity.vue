@@ -181,7 +181,7 @@ export default {
     on_save() {
       this.$refs.form.validate(validate => {
         if (validate) {
-          if (this.form.is_notify && this.form.notify_msg === '') {
+          if (this.form.is_notify === '1' && this.form.notify_msg === '') {
             this.$message.error(NO_NOTIFY_MESSAGE)
           } else {
             this.save_activity()

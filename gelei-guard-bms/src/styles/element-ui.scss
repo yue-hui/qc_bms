@@ -27,3 +27,10 @@
     }
   }
 }
+
+// 禁用组件展示形态
+ .input-disable-with-selected {
+   .el-input__inner {
+     cursor: text !important;
+   }
+ }

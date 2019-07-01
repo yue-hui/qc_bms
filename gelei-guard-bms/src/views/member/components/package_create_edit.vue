@@ -9,10 +9,10 @@
         <div class="body-area">
           <el-form ref="form" :rules="rules" :model="form" label-width="120px" label-suffix=":">
             <el-form-item v-if="action === 2 && form.plan_type === '01'" label="套餐ID" prop="plan_name">
-              <el-input v-model="form.plan_id" disabled size="mini" />
+              <el-input v-model="form.plan_id" class="input-disable-with-selected" disabled size="mini" />
             </el-form-item>
             <el-form-item label="套餐名称" prop="plan_name">
-              <el-input v-model="form.plan_name" :disabled="action === 2" size="mini" />
+              <el-input v-model="form.plan_name" :disabled="action === 2" class="input-disable-with-selected" size="mini" />
             </el-form-item>
             <el-form-item label="套餐类型" prop="plan_type">
               <el-radio-group v-model="form.plan_type" :disabled="action === 2" size="mini">
@@ -551,3 +551,4 @@ $z_index_message_dialog: 2000;
   }
 }
 </style>
+
