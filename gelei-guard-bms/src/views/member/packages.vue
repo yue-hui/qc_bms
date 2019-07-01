@@ -38,6 +38,7 @@
                     v-model="query_sets.device_type"
                     size="mini"
                     placeholder="设备类型"
+                    clearable
                     @change="query_condition_change">
                     <el-option
                       v-for="item in device_type_items"
@@ -179,7 +180,7 @@ export default {
       query_sets: {
         plan_name: '',
         plan_type: '',
-        device_type: '00',
+        device_type: '',
         is_listing: '1'
       },
       device_type_items: device_type_list,

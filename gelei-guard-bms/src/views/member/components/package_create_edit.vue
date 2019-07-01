@@ -8,6 +8,9 @@
         </div>
         <div class="body-area">
           <el-form ref="form" :rules="rules" :model="form" label-width="120px" label-suffix=":">
+            <el-form-item v-if="action === 2 && form.plan_type === '01'" label="套餐ID" prop="plan_name">
+              <el-input v-model="form.plan_id" disabled size="mini" />
+            </el-form-item>
             <el-form-item label="套餐名称" prop="plan_name">
               <el-input v-model="form.plan_name" :disabled="action === 2" size="mini" />
             </el-form-item>
