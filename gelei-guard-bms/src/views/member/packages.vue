@@ -32,6 +32,26 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">设备类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.device_type"
+                    size="mini"
+                    placeholder="设备类型"
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in device_type_items"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">状态:</el-col>
                 <el-col :span="16">
                   <el-select v-model="query_sets.is_listing" size="mini" clearable placeholder="所有状态" @change="query_condition_change">
@@ -45,7 +65,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="24" :md="6" :lg="9" :xl="12" class="col-bg layout-right">
+          <el-col :xs="24" :sm="16" :md="24" :lg="4" :xl="8" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_package">创建套餐</el-button>
@@ -78,6 +98,10 @@
             align="center"
             label="套餐活动价"
             prop="discount_price" />
+          <el-table-column
+            align="center"
+            label="设备类型"
+            prop="device_type_label" />
           <el-table-column
             align="center"
             label="限购次数"
@@ -144,6 +168,7 @@ import packageCreateEdit from './components/package_create_edit'
 import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
+import { device_type_list } from '@/views/toolbox/data/promotion'
 
 export default {
   components: {
@@ -154,8 +179,10 @@ export default {
       query_sets: {
         plan_name: '',
         plan_type: '',
+        device_type: '00',
         is_listing: '1'
       },
+      device_type_items: device_type_list,
       packages: PACKAGE_TYPE,
       status_list: PACKAGE_STATUS,
       action: 0,

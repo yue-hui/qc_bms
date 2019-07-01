@@ -88,6 +88,10 @@ export const member_status_list = [
 // 会员状态
 export const device_type_list = [
   {
+    value: '00',
+    label: '不限'
+  },
+  {
     value: '01',
     label: 'PC'
   },

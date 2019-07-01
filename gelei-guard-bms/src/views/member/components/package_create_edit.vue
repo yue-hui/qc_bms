@@ -44,6 +44,20 @@
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
+            <el-form-item label="设备类型" prop="device_type">
+              <el-select
+                v-model="public_form.device_type"
+                style="width: 100%;"
+                size="mini"
+                placeholder="请选择设备类型"
+                @change="change_device_type">
+                <el-option
+                  v-for="item in device_type_items"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="限购次数" prop="purchase_quota">
               <el-input v-model.number="public_form.purchase_quota" type="number" size="mini">
                 <template slot="append">次 (0代表不限购)</template>
@@ -116,6 +130,7 @@
 
 <script>
 import { add_member_plan, update_member_plan } from '@/api/interactive'
+import { device_type_list } from '@/views/toolbox/data/promotion'
 
 export default {
   name: 'PackageCreateEdit',
@@ -160,6 +175,7 @@ export default {
 
     return {
       visiable_height: '',
+      device_type_items: device_type_list,
       form: {
         plan_id: '',
         plan_name: '',
@@ -169,6 +185,7 @@ export default {
         valid_days: '',
         original_price: '',
         discount_price: 0,
+        device_type: '00',
         purchase_quota: 0,
         plan_label: '',
         remark: '限时优惠',
@@ -202,6 +219,9 @@ export default {
           { required: true, message: '套餐活动价不能为空', trigger: 'blur' },
           { type: 'number', min: 0, message: '套餐活动价须为整数', trigger: 'blur' },
           { required: false, trigger: 'blur', validator: validate_discount_price }
+        ],
+        device_type: [
+          { required: true, message: '套餐的设备类型不能为空', trigger: 'blur' }
         ],
         purchase_quota: [
           { required: true, message: '限购次数不能为空', trigger: 'blur' },
@@ -261,6 +281,9 @@ export default {
     this.visiable_height = document.documentElement.clientHeight + 'px'
   },
   methods: {
+    change_device_type(e) {
+      this.public_form.device_type = e
+    },
     clear_data() {
       this.form = {
         plan_id: '',
@@ -271,6 +294,7 @@ export default {
         valid_days: '',
         original_price: '',
         discount_price: 0,
+        device_type: '00',
         purchase_quota: 0,
         plan_label: '',
         remark: '限时优惠',
@@ -295,6 +319,7 @@ export default {
         valid_days: current.valid_days,
         original_price: current.original_price,
         discount_price: current.discount_price,
+        device_type: current.device_type,
         purchase_quota: current.purchase_quota,
         plan_label: current.plan_label,
         remark: current.remark,
@@ -391,6 +416,7 @@ export default {
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
         options['discount_price'] = this.public_form.discount_price
+        options['device_type'] = this.public_form.device_type
         options['purchase_quota'] = this.public_form.purchase_quota
         options['plan_label'] = this.public_form.plan_label
         options['remark'] = this.public_form.remark
@@ -474,7 +500,7 @@ $z_index_message_dialog: 2000;
         position: relative;
         font-size: 18px;
         color: #303133;
-        font-family : 微软雅黑, 宋体;
+        font-family: 微软雅黑, 宋体;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;
