@@ -70,7 +70,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -79,13 +79,13 @@
 </template>
 
 <script>
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import {
   deploy_soft_recommend_group,
   forbidden_soft_recommend_group,
   get_soft_recommend_group
 } from '@/api/interactive'
 import { date_formatter, get_app_combination_status, get_grade_label, get_rec_type_label } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'ApplicationList',
@@ -100,10 +100,11 @@ export default {
   beforecreate: function() {
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       data_list: [],
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -130,7 +131,8 @@ export default {
         }
       }
     },
-    table_size_change(row) {
+    table_size_change(size) {
+      setPagenationSize(size)
       this.reload()
     },
     change_current(page) {
@@ -146,7 +148,7 @@ export default {
     },
     reset_pagination_and_load_data() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.reload()
     },
     reload() {

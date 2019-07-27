@@ -51,7 +51,7 @@
       :page-size="page_size"
       :page-sizes="[10, 20, 50, 100]"
       :total="total"
-      layout="total, prev, pager, next, jumper"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="change_current"
       @size-change="table_size_change" />
   </div>
@@ -61,6 +61,7 @@
 import { get_manager_soft_recommend_list } from '@/api/interactive'
 import { SUBJECT_LIST } from '@/utils/constant'
 import { date_formatter, get_sex_label, grade_number_map_label, subject_number_map_label } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'CombinationPanel',
@@ -81,10 +82,11 @@ export default {
     }
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       data_list: [],
       page: 1,
-      page_size: 10,
+      page_size,
       total: 0
     }
   },
@@ -130,6 +132,7 @@ export default {
     },
     table_size_change(page_size) {
       this.page_size = page_size
+      setPagenationSize(page_size)
       this.search()
     },
     change_current(page) {

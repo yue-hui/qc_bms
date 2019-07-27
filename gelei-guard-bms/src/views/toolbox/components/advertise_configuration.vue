@@ -341,7 +341,7 @@ export default {
 
       uploadFormDataSecondPassServer(file).then(res => {
         const remote_data = res.data
-        if (remote_data.status === 1) {
+        if ([1, -2, '-2'].indexOf(remote_data.status) !== -1) {
           // 未上传, 使用 文件接口上传
           uploadFormDataServer(file).then((res) => {
             const upload_data = res.data

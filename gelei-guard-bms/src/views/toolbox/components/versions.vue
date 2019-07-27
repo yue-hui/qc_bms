@@ -4,6 +4,7 @@
       :title="title"
       :visible.sync="showDialog"
       :before-close="close_dialog"
+      top="0"
       size="mini"
       width="40%">
       <el-form
@@ -23,18 +24,32 @@
             <template slot="append">MB</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="升级地址" prop="update_url">
-          <el-input v-model="form.update_url" placeholder="请输入版本的升级地址" />
-        </el-form-item>
 
         <span class="group-title">基础策略配置</span>
         <hr class="diviser">
         <el-form-item label="策略名称" prop="update_title">
           <el-input v-model="form.update_title" placeholder="请输入策略名称" />
         </el-form-item>
+        <el-form-item label="升级产品" prop="current_platform_classification">
+          <el-select
+            v-model="form.current_platform_classification"
+            size="mini"
+            placeholder="升级产品"
+            @change="change_platform_classification">
+            <el-option
+              v-for="(platform, index) in bms_platform_classification"
+              :key="index"
+              :label="platform.label"
+              :value="platform.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="升级平台" prop="platform">
           <el-radio-group v-model="form.platform">
-            <el-radio v-for="(platform, index) in platforms" :key="index" :label="platform.value">{{ platform.label }}
+            <el-radio
+              v-for="(platform, index) in update_platforms"
+              :key="index"
+              :label="platform.value"
+              @change="change_update_platform">{{ platform.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -44,6 +59,35 @@
               {{ update_model.label }}
             </el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          v-if="update_ranges.length !== 0"
+          label="升级范围"
+          prop="publish_type">
+          <el-radio-group v-model="form.publish_type">
+            <el-radio v-for="(update_range, index) in update_ranges" :key="index" :label="update_range.value">
+              {{ update_range.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="update_ranges.length !== 0" label="" prop="white_list">
+          <el-input v-model="form.white_list" :disabled="['02', '03'].indexOf(form.publish_type) === -1" :rows="3" resize="none" type="textarea" />
+        </el-form-item>
+        <el-form-item label="升级地址" prop="update_url">
+          <el-input v-model="form.update_url" placeholder="请输入版本的升级地址" />
+        </el-form-item>
+        <el-form-item v-if="need_upload_app_package" label="">
+          <el-upload
+            :http-request="push_picture_to_cloud"
+            :on-remove="remove_picture"
+            :multiple="false"
+            :limit="1"
+            :file-list="upload_file_list"
+            action=""
+            class="upload-demo"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
         </el-form-item>
 
         <span class="group-title">高级策略配置</span>
@@ -69,6 +113,7 @@
             resize="none" />
         </el-form-item>
       </el-form>
+
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
         <el-button type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
@@ -78,9 +123,10 @@
 </template>
 
 <script>
-import { platforms, update_models } from '@/views/toolbox/data/promotion'
+import { bms_platform_classification, update_models } from '@/views/toolbox/data/promotion'
 import { add_application_version, edit_application_version, get_application_version } from '@/api/interactive'
 import { POSITIVE_FLOAT } from '@/utils/constant'
+import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 
 export default {
   name: 'VersionDialog',
@@ -103,16 +149,53 @@ export default {
     }
   },
   data: function() {
+    let update_platforms = []
+    let update_ranges = []
+    if (bms_platform_classification.length) {
+      update_platforms = bms_platform_classification[0].select_item.update_platforms
+      update_ranges = bms_platform_classification[0].select_item.update_ranges
+    }
+    /* 升级范围校验 */
+    const validatePublishType = (rule, value, callback) => {
+      if (update_ranges.length !== 0) {
+        if (!value) {
+          callback(new Error('升级范围请选择全量或白名单'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    /* 白名单校验 */
+    const validateWhiteList = (rule, value, callback) => {
+      if (['02', '03'].indexOf(this.form.publish_type) !== -1) {
+        if (!this.form.white_list) {
+          callback(new Error('白名单不能为空'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
     return {
-      platforms,
+      bms_platform_classification,
+      update_platforms,
       update_models,
+      update_ranges,
+      need_upload_app_package: false,
+      upload_file_list: [],
       form: {
         app_version: '',
         file_size: '',
         update_url: '',
         update_title: '',
+        current_platform_classification: '',
         platform: '',
         is_force: '',
+        publish_type: '',
+        white_list: '',
         is_remind: '1',
         update_desc: '',
         start_strage: '1',
@@ -120,12 +203,13 @@ export default {
       },
       rules: {
         app_version: [{ required: true, trigger: 'blur', message: '目标版本号不能为空' }],
-        file_size: [
-          { type: 'string', required: true, message: '包大小只能输入数字', trigger: 'blur', pattern: POSITIVE_FLOAT }
-        ],
+        file_size: [{ type: 'string', required: true, message: '包大小只能输入数字', trigger: 'blur', pattern: POSITIVE_FLOAT }],
         update_title: [{ required: true, trigger: 'blur', message: '策略名称为必填项' }],
+        current_platform_classification: [{ required: true, trigger: 'blur', message: '升级产品为必选项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
         is_force: [{ required: true, trigger: 'blur', message: '升级方式为必选项' }],
+        publish_type: [{ trigger: 'blur', validator: validatePublishType }],
+        white_list: [{ trigger: 'blur', validator: validateWhiteList }],
         start_strage: [{ required: true, trigger: 'blur', message: '策略启动条件为必选项' }],
         end_strage: [{ required: true, trigger: 'blur', message: '策略停止条件为必选项' }],
         is_remind: [{ required: true, trigger: 'blur', message: '自动弹框规则为必选项' }],
@@ -166,13 +250,30 @@ export default {
         file_size: '',
         update_url: '',
         update_title: '',
+        current_platform_classification: '',
         platform: '',
         is_force: '',
+        publish_type: '',
+        white_list: '',
         is_remind: '1',
         update_desc: '',
         start_strage: '1',
         end_strage: '1'
       }
+    },
+    reflect_platform_classification(platform) {
+      let current_platform_classification = ''
+      let platform_classification = bms_platform_classification[0]
+      bms_platform_classification.map(r => {
+        r.select_item.update_platforms.map(res => {
+          if (res.value === platform) {
+            platform_classification = r
+          }
+        })
+      })
+      current_platform_classification = platform_classification.value
+      this.change_platform_classification(current_platform_classification)
+      return current_platform_classification
     },
     fetch_application_version() {
       const config = {
@@ -182,14 +283,18 @@ export default {
         if (res.status === 0) {
           const remote_data = res.data
           const app_version = remote_data.version
+          const current_platform_classification = this.reflect_platform_classification(remote_data.platform)
           this.form = {
             app_version,
             version_id: remote_data.version_id,
             file_size: remote_data.file_size,
             update_url: remote_data.update_url,
             update_title: remote_data.update_title,
+            current_platform_classification,
             platform: remote_data.platform,
             is_force: remote_data.is_force,
+            publish_type: remote_data.publish_type,
+            white_list: remote_data.white_list || '',
             is_remind: remote_data.is_remind,
             update_desc: remote_data.update_desc,
             start_strage: '1',
@@ -199,6 +304,75 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    change_platform_classification(platform_value) {
+      const platform_classification = bms_platform_classification.filter(r => {
+        return r.value === platform_value
+      })
+      const item = platform_classification[0].select_item
+      this.update_platforms = item.update_platforms
+      this.update_ranges = item.update_ranges
+      this.form.platform = ''
+      this.need_upload_app_package = false
+      this.form.update_url = ''
+      this.form.publish_type = ''
+      this.change_update_platform(platform_value)
+    },
+    change_update_platform(platform_val) {
+      if (['01', '02'].indexOf(platform_val) !== -1) {
+        this.need_upload_app_package = false
+      } else {
+        this.need_upload_app_package = true
+      }
+    },
+    push_picture_to_cloud(params) {
+      debugger
+      if (this.upload_file_list >= 1) {
+        this.$message.warning('只能上传一张图片')
+        return
+      }
+      const file = params.file
+
+      uploadFormDataSecondPassServer(file).then(res => {
+        const remote_data = res.data
+        if ([1, -2, '-2'].indexOf(remote_data.status) !== -1) {
+          // 未上传, 使用 文件接口上传
+          uploadFormDataServer(file).then((res) => {
+            const upload_data = res.data
+            if (upload_data.status === 0) {
+              const url = upload_data.data.url
+              const item = {
+                name: params.file.name,
+                url
+              }
+              this.upload_file_list.push(item)
+              this.form.update_url = item.url
+            } else {
+              this.$message.error(upload_data.message)
+            }
+          })
+        } else if (remote_data.status === -1) {
+          // 秒传失败
+          this.$message.error(remote_data.message)
+        } else if (remote_data.status === 0) {
+          // 秒传成功
+          const url = remote_data.data.url
+          const item = {
+            name: params.file.name,
+            url
+          }
+          this.upload_file_list.push(item)
+          this.form.update_url = item.url
+          this.$message.success('上传成功')
+        } else {
+          // 未知异常
+          this.$message.error(remote_data.message)
+        }
+      })
+    },
+    remove_picture() {
+      this.upload_file_list = []
+      this.form.update_url = ''
     },
     close_dialog() {
       this.$confirm('确认关闭？')

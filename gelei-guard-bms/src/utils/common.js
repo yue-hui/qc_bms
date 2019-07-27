@@ -12,14 +12,16 @@ export function is_array(obj) {
   return typeof obj === 'object' && obj.constructor === Array
 }
 
-export function date_formatter(date, fomatter = DATE_FORMAT) {
-  let day_js
+export function date_formatter(date, fomatter = DATE_FORMAT, is_filled = true) {
   if (date) {
-    day_js = dayjs(date)
+    return dayjs(date).format(fomatter)
   } else {
-    day_js = dayjs()
+    if (is_filled) {
+      return dayjs().format(fomatter)
+    } else {
+      return date
+    }
   }
-  return day_js.format(fomatter)
 }
 
 export function transfer_to_chinese_index(index) {

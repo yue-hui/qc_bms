@@ -9,12 +9,23 @@
       <span class="platform-group-title">发送平台类型</span>
       <hr class="diviser">
       <div class="platform-group">
-        <el-radio
-          v-for="(platform_version_instruction, index) in platform_version_instructions"
-          :key="index"
-          :label="platform_version_instruction.value"
-          v-model="platform_type">{{ platform_version_instruction.label }}
-        </el-radio>
+        <el-row gutter="24">
+          <el-col
+            v-for="(platform_version_instruction, index) in platform_version_instructions"
+            :key="index"
+            :xs="6"
+            :sm="6"
+            :md="6"
+            :lg="6"
+            :xl="6"
+          >
+            <el-radio
+              :label="platform_version_instruction.value"
+              v-model="platform_type"
+              class="multi-radio-col">{{ platform_version_instruction.label }}
+            </el-radio>
+          </el-col>
+        </el-row>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="close_panel">取 消</el-button>
@@ -118,7 +129,7 @@ export default {
   }
 
   .platform-group {
-    padding: 0 10px 0 0;
+    /*padding: 10px 10px 10px 0;*/
   }
 }
 </style>

@@ -45,6 +45,26 @@ export function get_advertising_point_list() {
 }
 
 /*
+* 首页
+* */
+// 获取整体数据
+export function get_homepage_overall_data() {
+  return request({
+    url: '/greenguard/manager/index/summary',
+    method: 'post'
+  })
+}
+
+// 获取增长数据
+export function get_homepage_growth_data(data) {
+  return request({
+    url: '/greenguard/manager/index/list',
+    method: 'post',
+    data
+  })
+}
+
+/*
 * 用户信息管理
 *  */
 
@@ -52,6 +72,15 @@ export function get_advertising_point_list() {
 export function get_parent_list(data) {
   return request({
     url: '/greenguard/manager/user/patriarch/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取家长用户（导出）列表
+export function get_patriarch_list_export(data) {
+  return request({
+    url: '/greenguard/manager/user/patriarch/list/export',
     method: 'post',
     data
   })
@@ -529,6 +558,64 @@ export function delete_advertising(data) {
 export function get_version_distribution(data) {
   return request({
     url: '/greenguard/manager/app/version/distribution',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 推荐应用专题
+* */
+
+// 获取推荐应用专题
+export function get_recommend_subject_list(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/list',
+    method: 'post',
+    data
+  })
+}
+
+// 创建推荐应用专题
+export function create_recommend_subject(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑推荐应用专题
+export function edit_recommend_subject(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 禁用推荐应用专题
+export function forbidden_recommend_subject(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/delete',
+    method: 'post',
+    data
+  })
+}
+
+// 推荐应用专题详情
+export function get_recommend_subject_detail(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/detail',
+    method: 'post',
+    data
+  })
+}
+
+// 应用专题上下架
+export function publish_recommend_subject_detail(data) {
+  return request({
+    url: '/greenguard/manager/soft/recommend/subject/publish',
     method: 'post',
     data
   })

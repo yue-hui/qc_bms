@@ -8,13 +8,14 @@
           <div class="block">
             <el-date-picker
               v-model="datetime_range"
-              clearable
               end-placeholder="结束日期"
               range-separator="至"
               start-placeholder="开始日期"
               type="daterange"
+              clearable
               size="mini"
-              unlink-panels />
+              unlink-panels
+              @change="search" />
           </div>
         </div>
 
@@ -22,11 +23,12 @@
           <label class="search-item">手机号:</label>
           <el-input
             v-model="phone"
-            clearable
             maxlength="11"
             size="mini"
+            clearable
             onkeyup="this.value=this.value.replace(/\D/g,'')"
-            placeholder="请输入手机号" />
+            placeholder="请输入手机号"
+            @change="search" />
         </div>
 
         <div class="header-block platform-block">
@@ -35,7 +37,8 @@
             v-model="device_type"
             size="mini"
             placeholder="请选择平台类型"
-            clearable>
+            clearable
+            @change="search">
             <el-option
               v-for="item in device_type_list"
               :key="item.value"
@@ -50,7 +53,8 @@
             v-model="member_status"
             size="mini"
             placeholder="请选择会员状态"
-            clearable>
+            clearable
+            @change="search">
             <el-option
               v-for="item in member_status_list"
               :key="item.value"
@@ -61,7 +65,14 @@
       </div>
 
       <div class="header-line-right">
-        <el-button type="success" size="mini" @click="search">搜索</el-button>
+        <el-button
+          :loading="download_loading"
+          class="download details-tab"
+          size="mini"
+          type="success"
+          @click="download">导出
+          <svg-icon icon-class="download" />
+        </el-button>
       </div>
     </div>
 
@@ -104,15 +115,21 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_details(scope.row)">
-                查看
-              </el-button>
-              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_recharge_dialog(scope.row)">
-                交易记录
-              </el-button>
-              <el-button size="small" style="text-decoration: underline;" type="text" @click="view_member_dialog(scope.row)">
-                会员记录
-              </el-button>
+              <el-button
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="view_details(scope.row)">查看</el-button>
+              <el-button
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="view_recharge_dialog(scope.row)">交易记录</el-button>
+              <el-button
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="view_member_dialog(scope.row)">会员记录</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -121,7 +138,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -133,12 +150,13 @@
 </template>
 
 <script>
-import { get_parent_list } from '@/api/interactive'
-import { date_formatter } from '@/utils/common'
-import { DATE_FORMAT_WITH_POINT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { get_parent_list, get_patriarch_list_export } from '@/api/interactive'
+import { date_formatter, get_grade_label_map, get_sex_label } from '@/utils/common'
+import { DATE_FORMAT, DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT } from '@/utils/constant'
 import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
 import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
@@ -146,11 +164,12 @@ export default {
     memberDialog
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       device_type_list,
       member_status_list,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0,
       datetime_range: '',
       phone: '',
@@ -159,7 +178,8 @@ export default {
       table_data: [],
       current_uid: '',
       recharge_dialog_visible: false,
-      member_dialog_visible: false
+      member_dialog_visible: false,
+      download_loading: false
     }
   },
   computed: {},
@@ -175,6 +195,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.refresh_data()
     },
     change_current: function(page) {
@@ -245,13 +266,78 @@ export default {
           const item = {
             ...r,
             vip_label,
-            create_time: date_formatter(r.create_time),
+            create_time: date_formatter(r.create_time, DATE_TIME_FORMAT),
             _id: base_index + i
           }
           table_data.push(item)
         })
         this.table_data = table_data
         this.total = res.total_count
+      })
+    },
+    download() {
+      this.download_loading = true
+      const config = this.get_params()
+      get_patriarch_list_export(config).then(res => {
+        if (res.status === 0) {
+          const remote_data = res.data
+          console.log('remote_data', remote_data)
+          this.export_excel(remote_data)
+        } else {
+          this.$message.error(res.message)
+        }
+      }).finally(() => {
+        this.download_loading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      const convert_date_time_fields = [
+        'create_time', 'begin_time', 'end_time'
+      ]
+      const convert_date_fields = [
+        'child_birthdate'
+      ]
+      const convert_sex_fields = [
+        'sex'
+      ]
+      const convert_grade_fields = [
+        'grade'
+      ]
+      const grade_map = get_grade_label_map()
+      return jsonData.map(v => filterVal.map(j => {
+        if (convert_date_time_fields.indexOf(j) !== -1) {
+          return date_formatter(v[j], DATE_TIME_FORMAT, false)
+        } else if (convert_date_fields.indexOf(j) !== -1) {
+          return date_formatter(v[j], DATE_FORMAT, false)
+        } else if (convert_grade_fields.indexOf(j) !== -1) {
+          return grade_map[v[j]]
+        } else if (convert_sex_fields.indexOf(j) !== -1) {
+          return get_sex_label(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
+    export_excel(data_list) {
+      const filename = '后台管理-家长端数据'
+      import('@/utils/Export2Excel').then(excel => {
+        const t_header = ['用户昵称', '手机号', '注册时间',
+          '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',
+          '孩子性别', '孩子出生日期', '孩子年级']
+        // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+        const filter_val = ['nick_name', 'phone', 'create_time',
+          'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
+          'child_sex', 'child_birthdate', 'child_grade']
+        const data = this.formatJson(filter_val, data_list)
+        const options = {
+          header: t_header,
+          data,
+          filename,
+          autoWidth: true,
+          bookType: 'xlsx'
+        }
+        excel.export_json_to_excel(options)
+        this.download_loading = false
       })
     }
   }

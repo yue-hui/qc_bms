@@ -52,7 +52,7 @@
             :page-size="page_size"
             :page-sizes="[100, 200, 300, 400]"
             :total="total"
-            layout="total, prev, pager, next, jumper"
+            layout="total, sizes, prev, pager, next, jumper"
             @current-change="change_current"
             @size-change="table_size_change" />
         </div>
@@ -93,7 +93,7 @@
             :page-size="page_size_child"
             :page-sizes="[100, 200, 300, 400]"
             :total="total_child"
-            layout="total, prev, pager, next, jumper"
+            layout="total, sizes, prev, pager, next, jumper"
             @current-change="change_current_child"
             @size-change="child_table_size_change" />
         </div>
@@ -103,9 +103,10 @@
 </template>
 
 <script>
-import { ANALYSIS_DETAILS_NAME, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { ANALYSIS_DETAILS_NAME } from '@/utils/constant'
 import { get_user_analysis_child_details, get_user_analysis_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: '',
@@ -120,16 +121,17 @@ export default {
     }
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       active_tab: 'parent', // child: 孩子端  parent: 家长端
       download_loading: false,
       data_list: [], // 家长端
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0,
       data_child_list: [], // 孩子端
       page_child: 1,
-      page_size_child: DEFAULT_PAGE_SIZE,
+      page_size_child: page_size,
       total_child: 0,
       date_range: []
     }
@@ -231,16 +233,18 @@ export default {
         }
       }))
     },
-    table_size_change(page_size) {
-      this.page_size = page_size
+    table_size_change(size) {
+      this.page_size = size
+      setPagenationSize(size)
       this.fetch_user_analysis_details()
     },
     change_current(page) {
       this.page = page
       this.fetch_user_analysis_details()
     },
-    child_table_size_change(page_size) {
-      this.page_size_child = page_size
+    child_table_size_change(size) {
+      this.page_size_child = size
+      setPagenationSize(size)
       this.fetch_user_analysis_child_details()
     },
     change_current_child(page) {
@@ -276,12 +280,12 @@ export default {
     search() {
       // 家长端
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.fetch_user_analysis_details()
 
       // 孩子端
       this.page_child = 1
-      this.page_size_child = DEFAULT_PAGE_SIZE
+      this.page_size_child = getPagenationSize()
       this.fetch_user_analysis_child_details()
     },
     fetch_user_analysis_details() {

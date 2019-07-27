@@ -76,7 +76,6 @@
         <div class="control-box">
           <el-button
             class="new-application-button"
-            round
             size="mini"
             type="success"
             @click="create_app">创建应用
@@ -297,10 +296,6 @@ $label_height: 28px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-
-      .control-box {
-        padding: 10px 15px;
-      }
     }
 
     .select-box-width {
@@ -316,9 +311,9 @@ $label_height: 28px;
   }
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    /*border: 1px solid #c7d5ee;*/
     height: 100%;
-    padding: 15px 25px;
+    /*padding: 15px 25px;*/
     min-height: 120px;
   }
 

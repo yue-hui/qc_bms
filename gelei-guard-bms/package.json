@@ -33,7 +33,9 @@
     "sha256": "^0.2.0",
     "v-charts": "^1.19.0",
     "vue": "2.5.17",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "3.0.1",
+    "vuedraggable": "^2.23.0",
     "vuex": "3.0.1",
     "xlsx": "^0.14.1"
   },

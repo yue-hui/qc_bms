@@ -100,7 +100,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -121,9 +121,10 @@
 import { promotion_status, platforms } from '@/views/toolbox/data/promotion'
 import versionDialog from '@/views/toolbox/components/versions'
 import syncInstructions from '@/views/toolbox/components/sync_instructions'
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_TIME_FORMAT } from '@/utils/constant'
 import { deploy_application_version, get_application_version_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
@@ -131,6 +132,7 @@ export default {
     syncInstructions
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       promotion_status,
       platforms,
@@ -139,7 +141,7 @@ export default {
       version_block: [],
       total: 0,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       show_dialog: false,
       is_create: true,
       version_id: 0
@@ -155,7 +157,7 @@ export default {
     },
     search_appllication_versions() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.fetch_application_version_list()
     },
     change_promotion_status(row) {
@@ -171,8 +173,9 @@ export default {
         return '停止'
       }
     },
-    table_size_change: function(page_size) {
-      this.page_size = page_size
+    table_size_change: function(size) {
+      this.page_size = size
+      setPagenationSize(size)
       this.fetch_application_version_list()
     },
     change_current: function(page) {

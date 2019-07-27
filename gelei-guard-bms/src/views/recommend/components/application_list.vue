@@ -80,12 +80,15 @@
             label="所在组合"
             prop="group_list">
             <template slot-scope="scope">
-              <div
-                v-for="(group, index) in scope.row.group_list"
-                :key="index"
-                class="show-list-content">
-                <el-tag size="mini">{{ group }}</el-tag>
-              </div>
+              <el-row :gutter="2">
+                <el-col
+                  v-for="(group, index) in scope.row.group_list"
+                  :key="index"
+                  :span="8"
+                  class="show-list-content">
+                  <el-tag size="mini" class="show-list-item">{{ group }}</el-tag>
+                </el-col>
+              </el-row>
             </template>
           </el-table-column>
           <el-table-column
@@ -109,7 +112,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -118,9 +121,10 @@
 </template>
 
 <script>
-import { DEFAULT_PAGE_SIZE, RATE_STARTS_COLOR } from '@/utils/constant'
+import { RATE_STARTS_COLOR } from '@/utils/constant'
 import { get_manager_soft_recommend_list } from '@/api/interactive'
 import { date_formatter, get_grade_label, get_sex_label, get_subject_label } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'ApplicationList',
@@ -137,10 +141,11 @@ export default {
   beforecreate: function() {
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       data_list: [],
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0,
       install_count_asc: '' // 是否按安装数量排序
     }
@@ -165,7 +170,8 @@ export default {
       }
       this.fetch()
     },
-    table_size_change(row) {
+    table_size_change(size) {
+      setPagenationSize(size)
       this.reload()
     },
     change_current(page) {

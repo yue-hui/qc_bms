@@ -20,7 +20,7 @@
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
           size="mini"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -32,7 +32,8 @@
 <script>
 import { get_child_record_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_TIME_FORMAT } from '@/utils/constant'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'DeviceBindRecords',
@@ -45,10 +46,11 @@ export default {
     }
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       is_show: true,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0,
       gridData: []
     }
@@ -61,6 +63,7 @@ export default {
   methods: {
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.load_data()
     },
     change_current: function(page) {

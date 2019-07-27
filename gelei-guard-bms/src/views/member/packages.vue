@@ -32,6 +32,22 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">套餐对象:</el-col>
+                <el-col :span="16">
+                  <el-select v-model="query_sets.is_member" size="mini" clearable placeholder="套餐对象" @change="query_condition_change">
+                    <el-option
+                      v-for="member in member_types"
+                      :key="member.value"
+                      :label="member.label"
+                      :value="member.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">设备类型:</el-col>
                 <el-col :span="16">
                   <el-select
@@ -66,7 +82,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="16" :md="24" :lg="4" :xl="8" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="18" :lg="19" :xl="4" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_package">创建套餐</el-button>
@@ -93,6 +109,11 @@
             width="180" />
           <el-table-column
             align="center"
+            label="套餐对象"
+            prop="is_member_label"
+            width="180" />
+          <el-table-column
+            align="center"
             label="套餐原价"
             prop="original_price" />
           <el-table-column
@@ -110,15 +131,18 @@
           <el-table-column
             align="center"
             label="活动起始时间"
-            prop="discount_start_time_label" />
+            prop="discount_start_time_label"
+            width="134"/>
           <el-table-column
             align="center"
             label="活动结束时间"
-            prop="discount_end_time_label" />
+            prop="discount_end_time_label"
+            width="134"/>
           <el-table-column
             align="center"
             label="创建时间"
-            prop="create_time_label" />
+            prop="create_time_label"
+            width="134"/>
           <el-table-column
             align="center"
             label="状态"
@@ -126,7 +150,8 @@
           <el-table-column
             align="center"
             label="操作"
-            prop="control">
+            prop="control"
+            width="180">
             <template slot-scope="scope">
               <el-button
                 size="small"
@@ -154,7 +179,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -166,30 +191,34 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
+import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { device_type_list } from '@/views/toolbox/data/promotion'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
     packageCreateEdit
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         plan_name: '',
         plan_type: '',
+        is_member: '',
         device_type: '',
         is_listing: '1'
       },
       device_type_items: device_type_list,
       packages: PACKAGE_TYPE,
+      member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
       action: 0,
       packages_list: [],
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -229,11 +258,13 @@ export default {
           discount_end_time_label = '-'
         }
         const plan_type_label = r.plan_type === '01' ? '公开' : r.plan_type === '02' ? '不公开' : '未知'
+        const is_member_label = r.is_member === '1' ? 'VIP会员用户' : '非VIP会员用户'
         return {
           ...r,
           discount_start_time_label,
           discount_end_time_label,
           plan_type_label,
+          is_member_label,
           create_time_label
         }
       })
@@ -247,7 +278,7 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.query()
     },
     query() {
@@ -255,6 +286,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.fetch_member_list()
     },
     change_current: function(page) {

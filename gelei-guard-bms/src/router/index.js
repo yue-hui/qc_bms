@@ -23,6 +23,18 @@ Vue.use(Router)
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
+  // {
+  //   path: '/homepage',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: () => import('@/views/homepage'),
+  //       name: '首页',
+  //       meta: { title: '首页', icon: 'homepage', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/users',
     component: Layout,
@@ -33,10 +45,16 @@ export const constantRouterMap = [
     children: [
       {
         path: 'information',
-        name: '用户信息管理',
-        component: () => import('@/views/users/index'),
-        meta: { title: '用户信息管理', icon: 'parents' }
+        name: '家长信息管理',
+        component: () => import('@/views/users/patriarch'),
+        meta: { title: '家长信息管理', icon: 'parents' }
       },
+      // {
+      //   path: 'children',
+      //   name: '孩子信息管理',
+      //   component: () => import('@/views/users/kids'),
+      //   meta: { title: '孩子信息管理', icon: 'kids' }
+      // },
       {
         path: 'details',
         name: '用户详细信息',
@@ -68,10 +86,16 @@ export const constantRouterMap = [
     children: [
       {
         path: 'analysis',
-        name: '总体数据',
-        component: () => import('@/views/analysis/index'),
-        meta: { title: '总体数据', icon: 'summary' }
+        name: '家长端总体数据',
+        component: () => import('@/views/analysis/patriarch'),
+        meta: { title: '家长端总体数据', icon: 'analysis_patriarch' }
       }
+      // {
+      //   path: 'children',
+      //   name: '孩子端总体数据',
+      //   component: () => import('@/views/analysis/kids'),
+      //   meta: { title: '孩子端总体数据', icon: 'analysis_kids' }
+      // }
     ]
   },
   {
@@ -121,9 +145,57 @@ export const constantRouterMap = [
         name: '推荐应用组合',
         component: () => import('@/views/recommend/combination'),
         meta: { title: '推荐应用组合', icon: 'combine' }
+      },
+      {
+        path: 'special_topic',
+        name: '推荐应用专题',
+        component: () => import('@/views/recommend/special_topic'),
+        meta: { title: '推荐应用专题', icon: 'special_topic' }
       }
     ]
   },
+  // {
+  //   path: '/app/sales',
+  //   component: Layout,
+  //   name: '销售管理',
+  //   redirect: '/app/sales/seller',
+  //   meta: { title: '销售管理', icon: 'sales' },
+  //   children: [
+  //     {
+  //       path: 'seller',
+  //       name: '销售员管理',
+  //       component: () => import('@/views/sales/seller'),
+  //       meta: { title: '销售员管理', icon: 'seller' }
+  //     },
+  //     {
+  //       path: 'sales_order',
+  //       name: '销售订单管理',
+  //       component: () => import('@/views/sales/sales_order'),
+  //       meta: { title: '销售订单管理', icon: 'sales_order' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/app/activity',
+  //   component: Layout,
+  //   name: '活动管理',
+  //   redirect: '/app/activity/list',
+  //   meta: { title: '活动管理', icon: 'activity' },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       name: '活动项管理',
+  //       component: () => import('@/views/activity/index'),
+  //       meta: { title: '活动项管理', icon: 'activity_list' }
+  //     },
+  //     {
+  //       path: 'props',
+  //       name: '活动道具管理',
+  //       component: () => import('@/views/activity/props'),
+  //       meta: { title: '活动道具管理', icon: 'activity_props' }
+  //     }
+  //   ]
+  // },
   {
     path: '/toolbox',
     component: Layout,
@@ -171,17 +243,8 @@ export const constantRouterMap = [
       meta: { title: 'role', icon: 'system' }
     }]
   },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/users/information',
-    name: '首页',
-    hidden: true,
-    children: [{
-      path: 'users',
-      component: () => import('@/views/users/index')
-    }]
-  },
+  // { path: '/', redirect: '/homepage', name: '默认页', hidden: true },
+  { path: '/', redirect: '/users/information', name: '默认页', hidden: true },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

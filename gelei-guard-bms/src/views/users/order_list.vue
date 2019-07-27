@@ -182,7 +182,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -194,7 +194,7 @@
 import {
   COMMODITY_TYPE,
   DATE_TIME_FORMAT,
-  DEFAULT_PAGE_SIZE, ORDER_MANAGEMENT_LIST_NAME,
+  ORDER_MANAGEMENT_LIST_NAME,
   ORDER_STATUS_LIST,
   TRANSCATION_MODE
 } from '@/utils/constant'
@@ -202,12 +202,14 @@ import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
 import { date_formatter, formatter_transaction_amount } from '@/utils/common'
 import { fetch_all_order_filter_list } from '@/api/merge'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {},
   data() {
     const now_time = dayjs()
     const month_ago = dayjs().subtract(1, 'month')
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         order_no: '',
@@ -224,7 +226,7 @@ export default {
       order_data: [],
       download_loading: false,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -289,6 +291,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.query()
     },
     change_current: function(page) {
@@ -308,7 +311,7 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.query()
     },
     query() {

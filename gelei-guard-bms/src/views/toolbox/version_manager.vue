@@ -60,7 +60,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -69,14 +69,15 @@
 </template>
 
 <script>
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import { get_version_distribution } from '@/api/interactive'
 import { platforms } from '@/views/toolbox/data/promotion'
 import { get_value_from_map_list, pure_object_null_value } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {},
   data() {
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         platform: ''
@@ -84,7 +85,7 @@ export default {
       version_list: [],
       platforms,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -95,6 +96,7 @@ export default {
   methods: {
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.query()
     },
     change_current: function(page) {
@@ -113,7 +115,7 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.query()
     },
     query() {

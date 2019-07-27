@@ -37,7 +37,6 @@
         <div class="control-box">
           <el-button
             class="new-combination-button"
-            round
             type="success"
             size="mini"
             @click="create_system_recomend">
@@ -45,7 +44,7 @@
           </el-button>
         </div>
         <!--<div class="control-box">-->
-        <!--<el-button type="primary" class="new-combination-button" size="mini" round @click="create_manual_recomend">创建手工推荐</el-button>-->
+        <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend">创建手工推荐</el-button>-->
         <!--</div>-->
       </div>
     </div>
@@ -181,9 +180,9 @@ $label_height: 40px;
   flex-direction: column;
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    /*border: 1px solid #c7d5ee;*/
     height: 100%;
-    padding: 15px 25px;
+    /*padding: 15px 25px;*/
     min-height: 120px;
   }
 
@@ -205,11 +204,14 @@ $label_height: 40px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    .left-sider-box-style{
+
+    .left-sider-box-style {
       display: flex;
       flex-direction: row;
+
       .control-box {
         padding: 10px 15px;
+
         .search-item {
           vertical-align: middle;
           display: inline-block;
@@ -225,12 +227,10 @@ $label_height: 40px;
       }
     }
 
-    .right-sider-box-style{
+    .right-sider-box-style {
       display: flex;
       flex-direction: row-reverse;
-      .control-box {
-        padding: 10px 15px;
-      }
+      align-items: center;
     }
   }
 }

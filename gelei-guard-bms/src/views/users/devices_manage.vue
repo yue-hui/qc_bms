@@ -184,7 +184,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -196,17 +196,18 @@
 import {
   DATE_MINUTE_COMPACT_FORMAT,
   DATE_MINUTE_FORMAT,
-  DEFAULT_PAGE_SIZE,
   DEVICE_MANAGE_LIST_NAME
 } from '@/utils/constant'
 import { get_device_list } from '@/api/interactive'
 import { child_platform_type, platforms } from '@/views/toolbox/data/promotion'
 import { date_formatter, get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 import dayjs from 'dayjs'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {},
   data() {
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         child_device_id: '',
@@ -223,7 +224,7 @@ export default {
       platforms,
       child_platform_type,
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -274,6 +275,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.query()
     },
     change_current: function(page) {
@@ -292,7 +294,7 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.query()
     },
     query() {

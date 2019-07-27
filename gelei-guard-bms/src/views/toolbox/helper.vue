@@ -67,7 +67,7 @@
           :page-size="page_size"
           :page-sizes="[10, 20, 50, 100]"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -81,21 +81,22 @@
 <script>
 import questions from '@/views/toolbox/components/questions'
 import { deploy_qa, get_questions_list } from '@/api/interactive'
-import { DEFAULT_PAGE_SIZE } from '@/utils/constant'
 import { help_question_status } from '@/views/toolbox/data/promotion'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
     questions
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       help_question_status,
       content: '格雷为您守护！',
       init: '',
       questions: [],
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0,
       is_create: true,
       show_dialog: false,
@@ -189,8 +190,9 @@ export default {
         })
       }
     },
-    table_size_change: function(page_size) {
-      this.page_size = page_size
+    table_size_change: function(size) {
+      this.page_size = size
+      setPagenationSize(size)
       this.fetch_question_list()
     },
     change_current: function(page) {
@@ -234,7 +236,7 @@ export default {
     },
     change_query_status() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.fetch_question_list()
     }
   }

@@ -20,6 +20,12 @@
                 <el-radio label="02">不公开套餐</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="套餐对象" prop="is_member">
+              <el-radio-group v-model="form.is_member" size="mini">
+                <el-radio label="1">VIP会员用户</el-radio>
+                <el-radio label="0">非VIP会员用户</el-radio>
+              </el-radio-group>
+            </el-form-item>
           </el-form>
 
           <div class="diviser" />
@@ -99,6 +105,20 @@
             :rules="un_public_rules"
             label-width="120px"
             label-suffix=":">
+            <el-form-item label="设备类型" prop="device_type">
+              <el-select
+                v-model="un_public_form.device_type"
+                style="width: 100%;"
+                size="mini"
+                placeholder="请选择设备类型"
+                @change="change_un_pub_device_type">
+                <el-option
+                  v-for="item in device_type_items"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="套餐时长" prop="valid_days">
               <el-input v-model.number="un_public_form.valid_days" size="mini" type="number">
                 <template slot="append">天</template>
@@ -182,7 +202,8 @@ export default {
       form: {
         plan_id: '',
         plan_name: '',
-        plan_type: '01'
+        plan_type: '01',
+        is_member: ''
       },
       public_form: {
         valid_days: '',
@@ -196,6 +217,7 @@ export default {
         date_range: []
       },
       un_public_form: {
+        un_public_form: '',
         valid_days: '',
         original_price: 0,
         discount_price: 0
@@ -207,6 +229,9 @@ export default {
         ],
         plan_type: [
           { required: true, message: '套餐类型为必选项', trigger: 'blur' }
+        ],
+        is_member: [
+          { required: true, message: '套餐对象为必选项', trigger: 'blur' }
         ]
       },
       public_rules: {
@@ -247,6 +272,9 @@ export default {
         ]
       },
       un_public_rules: {
+        device_type: [
+          { required: true, message: '套餐的设备类型不能为空', trigger: 'blur' }
+        ],
         valid_days: [
           { required: true, message: '套餐时长不能为空', trigger: 'blur' },
           { type: 'integer', min: 1, message: '套餐时长必须大于0天', trigger: 'blur' }
@@ -287,11 +315,15 @@ export default {
     change_device_type(e) {
       this.public_form.device_type = e
     },
+    change_un_pub_device_type(e) {
+      this.un_public_form.device_type = e
+    },
     clear_data() {
       this.form = {
         plan_id: '',
         plan_name: '',
-        plan_type: '01'
+        plan_type: '01',
+        is_member: ''
       }
       this.public_form = {
         valid_days: '',
@@ -305,6 +337,7 @@ export default {
         date_range: []
       }
       this.un_public_form = {
+        device_type: '',
         valid_days: '',
         original_price: '0',
         discount_price: '0'
@@ -315,7 +348,8 @@ export default {
       this.form = {
         plan_id: current.plan_id,
         plan_name: current.plan_name,
-        plan_type: current.plan_type
+        plan_type: current.plan_type,
+        is_member: current.is_member
       }
       const date_range = [new Date(current.discount_start_time), new Date(current.discount_end_time)]
       this.public_form = {
@@ -330,6 +364,7 @@ export default {
         date_range: date_range
       }
       this.un_public_form = {
+        device_type: current.device_type,
         valid_days: current.valid_days,
         discount_price: current.discount_price,
         original_price: current.original_price
@@ -409,7 +444,8 @@ export default {
       const plan_type = this.form.plan_type
       const options = {
         plan_name: this.form.plan_name,
-        plan_type
+        plan_type,
+        is_member: this.form.is_member
       }
       if (plan_type === '01') {
         const date_range = this.public_form.date_range
@@ -427,6 +463,7 @@ export default {
         options['discount_end_time'] = discount_end_time
         options['discount_start_time'] = discount_start_time
       } else if (plan_type === '02') {
+        options['device_type'] = this.un_public_form.device_type
         options['valid_days'] = this.un_public_form.valid_days
         options['original_price'] = this.un_public_form.original_price
         options['discount_price'] = this.un_public_form.discount_price

@@ -53,16 +53,17 @@
       :page-size="page_size"
       :page-sizes="[10, 20, 50, 100]"
       :total="total"
-      layout="total, prev, pager, next, jumper"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="change_current"
       @size-change="table_size_change" />
   </el-dialog>
 </template>
 
 <script>
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_TIME_FORMAT } from '@/utils/constant'
 import { get_order_list } from '@/api/interactive'
 import { date_formatter, formatter_transaction_amount } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: '',
@@ -79,10 +80,11 @@ export default {
     }
   },
   data: function() {
+    const page_size = getPagenationSize()
     return {
       recharge_list: [],
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
       total: 0
     }
   },
@@ -129,6 +131,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.query()
     },
     change_current: function(page) {
