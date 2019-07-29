@@ -108,7 +108,16 @@ export const bms_platform_classification = [
           label: 'OPPO中间件'
         }
       ],
-      update_ranges: []
+      update_ranges: [
+        {
+          value: '01',
+          label: '全量'
+        },
+        {
+          value: '02',
+          label: '设备ID白名单'
+        }
+      ]
     }
   }
 ]
