@@ -15,6 +15,7 @@ module.exports = {
         // target: 'http://localhost:4002', // 开发
         // target: 'http://172.168.50.58:12720', // 这里写的是访问接口的域名和端口号
         target: 'https://mstes.dev.zhixike.net/', // 测试
+        // target: 'https://mspres.dev.zhixike.net/', // 压测
         // target: 'https://ms.gwchina.cn/greenguard', // 线上环境
         changeOrigin: true,
         secure: false,

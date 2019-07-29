@@ -127,6 +127,7 @@ import { bms_platform_classification, update_models } from '@/views/toolbox/data
 import { add_application_version, edit_application_version, get_application_version } from '@/api/interactive'
 import { POSITIVE_FLOAT } from '@/utils/constant'
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
+import { pure_object_null_value } from '@/utils/common'
 
 export default {
   name: 'VersionDialog',
@@ -326,7 +327,6 @@ export default {
       }
     },
     push_picture_to_cloud(params) {
-      debugger
       if (this.upload_file_list >= 1) {
         this.$message.warning('只能上传一张图片')
         return
@@ -382,8 +382,11 @@ export default {
         .catch(_ => {
         })
     },
+    pure_form_data() {
+
+    },
     create_version() {
-      const data = Object.assign({}, this.form)
+      const data = pure_object_null_value(this.form)
       if (!data.update_url) {
         delete data.update_url
       }
@@ -397,10 +400,10 @@ export default {
       })
     },
     edit_version() {
-      const data = Object.assign({}, this.form)
-      if (!data.update_url) {
-        delete data.update_url
-      }
+      const data = pure_object_null_value(this.form)
+      // if (!data.update_url) {
+      //   delete data.update_url
+      // }
       edit_application_version(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
