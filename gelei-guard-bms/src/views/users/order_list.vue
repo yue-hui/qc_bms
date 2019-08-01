@@ -184,7 +184,15 @@
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
-          @size-change="table_size_change" />
+          @size-change="table_size_change"></el-pagination>
+      </div>
+      <div class="data-statistics">
+        <div class="data-statistics-content">
+          <div v-if="total_amount === ''" class="data-item">
+            <div class="name">合计: </div>
+            <div class="value" v-text="total_amount"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -192,11 +200,11 @@
 
 <script>
 import {
-  COMMODITY_TYPE,
-  DATE_TIME_FORMAT,
-  ORDER_MANAGEMENT_LIST_NAME,
-  ORDER_STATUS_LIST,
-  TRANSCATION_MODE
+	COMMODITY_TYPE,
+	DATE_TIME_FORMAT,
+	ORDER_MANAGEMENT_LIST_NAME,
+	ORDER_STATUS_LIST,
+	TRANSCATION_MODE
 } from '@/utils/constant'
 import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
@@ -205,177 +213,182 @@ import { fetch_all_order_filter_list } from '@/api/merge'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
-  components: {},
-  data() {
-    const now_time = dayjs()
-    const month_ago = dayjs().subtract(1, 'month')
-    const page_size = getPagenationSize()
-    return {
-      query_sets: {
-        order_no: '',
-        order_time_range: [month_ago, now_time],
-        order_desc: '',
-        order_status: '',
-        pay_type: '',
-        nick_name: '',
-        contact_phone: ''
-      },
-      order_source: COMMODITY_TYPE,
-      order_status_list: ORDER_STATUS_LIST,
-      pay_type_mode: TRANSCATION_MODE,
-      order_data: [],
-      download_loading: false,
-      page: 1,
-      page_size,
-      total: 0
-    }
-  },
-  computed: {},
-  mounted: function() {
-    this.init()
-  },
-  methods: {
-    get_order_status_style(status_name) {
-      if (status_name === '交易成功') {
-        return '#55ff5b'
-      } else if (status_name === '待支付') {
-        return '#ff0000'
-      } else if (status_name === '已支付') {
-        return '#55ff5b'
-      } else if (status_name === '已超时') {
-        return '#55965b'
-      } else if (status_name === '已退款') {
-        return '#55965b'
-      } else if (status_name === '交易取消') {
-        return '#55965b'
-      } else {
-        return ''
-      }
-    },
-    init() {
-      // 列表数据
-      this.fetch_order_list()
+	components: {},
+	data() {
+		const now_time = dayjs()
+		const month_ago = dayjs().subtract(1, 'month')
+		const page_size = getPagenationSize()
+		return {
+			query_sets: {
+				order_no: '',
+				order_time_range: [month_ago, now_time],
+				order_desc: '',
+				order_status: '',
+				pay_type: '',
+				nick_name: '',
+				contact_phone: ''
+			},
+			order_source: COMMODITY_TYPE,
+			order_status_list: ORDER_STATUS_LIST,
+			pay_type_mode: TRANSCATION_MODE,
+			order_data: [],
+			download_loading: false,
+			page: 1,
+			page_size,
+			total: 0,
+			total_amount: '' // 查询当页统计金额
+		}
+	},
+	computed: {},
+	mounted: function() {
+		this.init()
+	},
+	methods: {
+		get_order_status_style(status_name) {
+			if (status_name === '交易成功') {
+				return '#55ff5b'
+			} else if (status_name === '待支付') {
+				return '#ff0000'
+			} else if (status_name === '已支付') {
+				return '#55ff5b'
+			} else if (status_name === '已超时') {
+				return '#55965b'
+			} else if (status_name === '已退款') {
+				return '#55965b'
+			} else if (status_name === '交易取消') {
+				return '#55965b'
+			} else {
+				return ''
+			}
+		},
+		init() {
+			// 列表数据
+			this.fetch_order_list()
 
-      // 搜索列表数据
-      fetch_all_order_filter_list().then(res => {
-        this.order_source = res.order_source
-        this.order_status_list = res.order_status_list
-        this.pay_type_mode = res.pay_type_mode
-      })
-    },
-    get_condition() {
-      const query_params = JSON.parse(JSON.stringify(this.query_sets))
-      const order_time_range = query_params.order_time_range
-      delete query_params.order_time_range
-      let condition = {}
-      if (order_time_range) {
-        const begin_time = new Date(order_time_range[0]).getTime()
-        const end_time = new Date(order_time_range[1]).getTime()
-        condition = {
-          begin_time,
-          end_time
+			// 搜索列表数据
+			fetch_all_order_filter_list().then(res => {
+				this.order_source = res.order_source
+				this.order_status_list = res.order_status_list
+				this.pay_type_mode = res.pay_type_mode
+			})
+		},
+		get_condition() {
+			const query_params = JSON.parse(JSON.stringify(this.query_sets))
+			const order_time_range = query_params.order_time_range
+			delete query_params.order_time_range
+			let condition = {}
+			if (order_time_range) {
+				const begin_time = new Date(order_time_range[0]).getTime()
+				const end_time = new Date(order_time_range[1]).getTime()
+				condition = {
+					begin_time,
+					end_time
+				}
+			}
+			for (const i of Object.keys(query_params)) {
+				if (query_params[i]) {
+					condition[i] = query_params[i]
+				}
+			}
+			return condition
+		},
+		get_condition_with_pagination() {
+			const condition = this.get_condition()
+			condition['page_no'] = this.page
+			condition['page_num'] = this.page_size
+			return condition
+		},
+		table_size_change: function(size) {
+			this.page_size = size
+			setPagenationSize(size)
+			this.query()
+		},
+		change_current: function(page) {
+			this.page = page
+			this.query()
+		},
+		order_list_map(data) {
+			return data.map(r => {
+				const order_time_label = date_formatter(r.order_time, DATE_TIME_FORMAT)
+				const order_amount_label = formatter_transaction_amount(r.order_amount)
+				return {
+					...r,
+					order_amount_label,
+					order_time_label
+				}
+			})
+		},
+		query_condition_change() {
+			this.page = 1
+			this.page_size = getPagenationSize()
+			this.query()
+		},
+		query() {
+			this.fetch_order_list()
+		},
+		fetch_order_list() {
+			/* 获取订单列表 */
+			const data = this.get_condition_with_pagination()
+			get_order_list(data).then(res => {
+				if (res.status === 0) {
+					this.order_data = this.order_list_map(res.data)
+					this.total = res.total_count
+					this.total_amount = res.total_amount
+				} else {
+					this.total = 0
+					this.total_amount = 0
         }
-      }
-      for (const i of Object.keys(query_params)) {
-        if (query_params[i]) {
-          condition[i] = query_params[i]
-        }
-      }
-      return condition
-    },
-    get_condition_with_pagination() {
-      const condition = this.get_condition()
-      condition['page_no'] = this.page
-      condition['page_num'] = this.page_size
-      return condition
-    },
-    table_size_change: function(size) {
-      this.page_size = size
-      setPagenationSize(size)
-      this.query()
-    },
-    change_current: function(page) {
-      this.page = page
-      this.query()
-    },
-    order_list_map(data) {
-      return data.map(r => {
-        const order_time_label = date_formatter(r.order_time, DATE_TIME_FORMAT)
-        const order_amount_label = formatter_transaction_amount(r.order_amount)
-        return {
-          ...r,
-          order_amount_label,
-          order_time_label
-        }
-      })
-    },
-    query_condition_change() {
-      this.page = 1
-      this.page_size = getPagenationSize()
-      this.query()
-    },
-    query() {
-      this.fetch_order_list()
-    },
-    fetch_order_list() {
-      /* 获取订单列表 */
-      const data = this.get_condition_with_pagination()
-      get_order_list(data).then(res => {
-        if (res.status === 0) {
-          this.order_data = this.order_list_map(res.data)
-          this.total = res.total_count
-        }
-      })
-    },
-    download: function() {
-      this.download_loading = true
-      const condition = this.get_condition()
-      const options = {
-        ...condition,
-        page_no: 1,
-        page_num: this.total
-      }
-      const start_time_string = date_formatter(condition['begin_time'])
-      const end_time_string = date_formatter(condition['end_time'])
-      let filename
-      if (start_time_string === end_time_string) {
-        filename = [ORDER_MANAGEMENT_LIST_NAME, start_time_string].join('_')
-      } else {
-        filename = [ORDER_MANAGEMENT_LIST_NAME, start_time_string, end_time_string].join('_')
-      }
-      get_order_list(options).then(res => {
-        const data_list = this.order_list_map(res.data)
-        import('@/utils/Export2Excel').then(excel => {
-          const t_header = ['订单号', '交易单号', '交易时间', '用户名',
-            '订单详情', '交易金额', '支付方式', '订单状态', '用户联系方式']
-          // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-          const filter_val = ['order_no', 'pay_order_no', 'order_time_label', 'nick_name',
-            'order_type', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
-          const data = this.formatJson(filter_val, data_list)
-          const options = {
-            header: t_header,
-            data,
-            filename,
-            autoWidth: true,
-            bookType: 'xlsx'
-          }
-          excel.export_json_to_excel(options)
-          this.download_loading = false
-        })
-      }).finally(() => {
-        this.download_loading = false
-      })
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return v[j]
-        } else {
-          return v[j]
-        }
-      }))
-    }
-  }
+			})
+		},
+		download: function() {
+			this.download_loading = true
+			const condition = this.get_condition()
+			const options = {
+				...condition,
+				page_no: 1,
+				page_num: this.total
+			}
+			const start_time_string = date_formatter(condition['begin_time'])
+			const end_time_string = date_formatter(condition['end_time'])
+			let filename
+			if (start_time_string === end_time_string) {
+				filename = [ORDER_MANAGEMENT_LIST_NAME, start_time_string].join('_')
+			} else {
+				filename = [ORDER_MANAGEMENT_LIST_NAME, start_time_string, end_time_string].join('_')
+			}
+			get_order_list(options).then(res => {
+				const data_list = this.order_list_map(res.data)
+				import('@/utils/Export2Excel').then(excel => {
+					const t_header = ['订单号', '交易单号', '交易时间', '用户名',
+						'订单详情', '交易金额', '支付方式', '订单状态', '用户联系方式']
+					// filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+					const filter_val = ['order_no', 'pay_order_no', 'order_time_label', 'nick_name',
+						'order_type', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
+					const data = this.formatJson(filter_val, data_list)
+					const options = {
+						header: t_header,
+						data,
+						filename,
+						autoWidth: true,
+						bookType: 'xlsx'
+					}
+					excel.export_json_to_excel(options)
+					this.download_loading = false
+				})
+			}).finally(() => {
+				this.download_loading = false
+			})
+		},
+		formatJson(filterVal, jsonData) {
+			return jsonData.map(v => filterVal.map(j => {
+				if (j === 'timestamp') {
+					return v[j]
+				} else {
+					return v[j]
+				}
+			}))
+		}
+	}
 }
 </script>
 
@@ -389,6 +402,7 @@ export default {
   flex-direction: column;
 
   .content-body {
+    position: relative;
     border: 1px solid #c7d5ee;
     height: 100%;
     min-height: 120px;
@@ -423,6 +437,34 @@ export default {
 
     .table-content {
       margin: 20px;
+    }
+
+    .data-statistics {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 0 20px 20px 0;
+
+      .data-statistics-content {
+        position: relative;
+        padding: 2px 5px;
+
+        .data-item {
+          display: flex;
+          flex-direction: row;
+          font-size: 14px;
+          font-weight: normal;
+          color: #606266;
+          height: 28px;
+          line-height: 28px;
+          vertical-align: center;
+
+          .name {
+            user-select: none;
+            padding-right: 2px;
+          }
+        }
+      }
     }
   }
 }
