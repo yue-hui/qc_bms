@@ -5,7 +5,9 @@
       class="download details-tab"
       size="mini"
       type="success"
-      @click="download">导出<svg-icon icon-class="download" /></el-button>
+      @click="download">导出
+      <svg-icon icon-class="download" />
+    </el-button>
 
     <el-tabs v-model="active_tab" tab-position="top" @tab-click="tab_change">
       <el-tab-pane label="家长端 - 详细数据" name="parent">
@@ -50,7 +52,7 @@
           <el-pagination
             :current-page="page"
             :page-size="page_size"
-            :page-sizes="[100, 200, 300, 400]"
+            :page-sizes="page_sizes"
             :total="total"
             layout="total, sizes, prev, pager, next, jumper"
             @current-change="change_current"
@@ -91,7 +93,7 @@
           <el-pagination
             :current-page="page_child"
             :page-size="page_size_child"
-            :page-sizes="[100, 200, 300, 400]"
+            :page-sizes="page_sizes"
             :total="total_child"
             layout="total, sizes, prev, pager, next, jumper"
             @current-change="change_current_child"
@@ -103,15 +105,13 @@
 </template>
 
 <script>
-import { ANALYSIS_DETAILS_NAME } from '@/utils/constant'
+import { ANALYSIS_DETAILS_NAME, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_user_analysis_child_details, get_user_analysis_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: '',
-  beforecreate: function() {
-  },
   props: {
     condition: {
       type: Object,
@@ -128,12 +128,14 @@ export default {
       data_list: [], // 家长端
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       data_child_list: [], // 孩子端
       page_child: 1,
       page_size_child: page_size,
       total_child: 0,
-      date_range: []
+      details_data_list: {
+      }
     }
   },
   computed: {},
@@ -302,7 +304,8 @@ export default {
         this.total_child = res.total_count
       })
     },
-    tab_change() {}
+    tab_change() {
+    }
   }
 }
 </script>

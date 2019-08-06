@@ -68,7 +68,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -86,6 +86,7 @@ import {
 } from '@/api/interactive'
 import { date_formatter, get_app_combination_status, get_grade_label, get_rec_type_label } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 
 export default {
   name: 'ApplicationList',
@@ -105,6 +106,7 @@ export default {
       data_list: [],
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },

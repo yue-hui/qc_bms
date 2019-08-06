@@ -71,7 +71,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="update_ranges.length !== 0" label="" prop="white_list">
-          <el-input v-model="form.white_list" :disabled="['02', '03'].indexOf(form.publish_type) === -1" :rows="3" resize="none" type="textarea" />
+          <el-input
+            v-model="form.white_list"
+            :disabled="['02', '03'].indexOf(form.publish_type) === -1"
+            :rows="3"
+            resize="none"
+            type="textarea" />
         </el-form-item>
         <el-form-item label="升级地址" prop="update_url">
           <el-input v-model="form.update_url" placeholder="请输入版本的升级地址" />
@@ -131,8 +136,6 @@ import { pure_object_null_value } from '@/utils/common'
 
 export default {
   name: 'VersionDialog',
-  beforecreate: function() {
-  },
   props: {
     showDialog: {
       type: Boolean,
@@ -333,6 +336,7 @@ export default {
       }
       const file = params.file
 
+      this.form.update_url = ''
       uploadFormDataSecondPassServer(file).then(res => {
         const remote_data = res.data
         if ([1, -2, '-2'].indexOf(remote_data.status) !== -1) {

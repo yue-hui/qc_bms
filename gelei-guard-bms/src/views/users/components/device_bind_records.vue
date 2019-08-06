@@ -17,7 +17,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           size="mini"
           layout="total, sizes, prev, pager, next, jumper"
@@ -32,7 +32,7 @@
 <script>
 import { get_child_record_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { DATE_TIME_FORMAT } from '@/utils/constant'
+import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -51,6 +51,7 @@ export default {
       is_show: true,
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       gridData: []
     }

@@ -7,6 +7,9 @@ export const SYSTEM_CONSTANT = {
   'title': '格雷守护'
 }
 
+/* 表格长度 */
+export const TABLE_PAGE_SIEZS_LIST = [10, 20, 50, 100]
+
 /* 前端首页URL */
 export const HOME_PATH = '/users/information'
 

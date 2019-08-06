@@ -157,7 +157,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, prev, pager, next, jumper"
           @current-change="change_current"
@@ -179,18 +179,20 @@
 import AdvertiseConfiguration from './components/advertise_configuration'
 import {
   ADVERTISEMENT_PLATFORM,
-  ADVERTISEMENT_STATUS, DATE_TIME_FORMAT,
-  DEFAULT_PAGE_SIZE
+  ADVERTISEMENT_STATUS, DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE,
+  TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { delete_advertising, edit_advertising, get_advertising_list } from '@/api/interactive'
 import { fetch_all_advertising_filter_list } from '@/api/merge'
 import { date_formatter } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
     AdvertiseConfiguration
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         ad_name: '',
@@ -208,7 +210,8 @@ export default {
       action: 0,
       current_row: {},
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },
@@ -316,6 +319,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.fetch_advertising_list()
     },
     change_current: function(page) {

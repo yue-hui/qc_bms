@@ -49,7 +49,7 @@
     <el-pagination
       :current-page="page"
       :page-size="page_size"
-      :page-sizes="[10, 20, 50, 100]"
+      :page-sizes="page_sizes"
       :total="total"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="change_current"
@@ -59,7 +59,7 @@
 
 <script>
 import { get_manager_soft_recommend_list } from '@/api/interactive'
-import { SUBJECT_LIST } from '@/utils/constant'
+import { SUBJECT_LIST, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { date_formatter, get_sex_label, grade_number_map_label, subject_number_map_label } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
@@ -87,6 +87,7 @@ export default {
       data_list: [],
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },

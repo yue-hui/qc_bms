@@ -182,7 +182,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -196,7 +196,7 @@
 import {
   DATE_MINUTE_COMPACT_FORMAT,
   DATE_MINUTE_FORMAT,
-  DEVICE_MANAGE_LIST_NAME
+  DEVICE_MANAGE_LIST_NAME, TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { get_device_list } from '@/api/interactive'
 import { child_platform_type, platforms } from '@/views/toolbox/data/promotion'
@@ -225,6 +225,7 @@ export default {
       child_platform_type,
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },

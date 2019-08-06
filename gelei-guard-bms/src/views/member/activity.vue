@@ -77,7 +77,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -93,9 +93,10 @@
 <script>
 import createActivity from './components/create_activity'
 import editActivity from './components/edit_activity'
-import { DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE } from '@/utils/constant'
+import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_member_activity_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   components: {
@@ -103,6 +104,7 @@ export default {
     editActivity
   },
   data() {
+    const page_size = getPagenationSize()
     return {
       query_sets: {
         activity_name: ''
@@ -112,7 +114,8 @@ export default {
       activity_list: [{}],
       current_row: {},
       page: 1,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },
@@ -139,7 +142,7 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
+      this.page_size = getPagenationSize()
       this.query()
     },
     query() {
@@ -164,6 +167,7 @@ export default {
     },
     table_size_change: function(size) {
       this.page_size = size
+      setPagenationSize(size)
       this.fetch_member_activity_list()
     },
     change_current: function(page) {

@@ -110,7 +110,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { RATE_STARTS_COLOR } from '@/utils/constant'
+import { RATE_STARTS_COLOR, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_manager_soft_recommend_list } from '@/api/interactive'
 import { date_formatter, get_grade_label, get_sex_label, get_subject_label } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
@@ -146,6 +146,7 @@ export default {
       data_list: [],
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       install_count_asc: '' // 是否按安装数量排序
     }

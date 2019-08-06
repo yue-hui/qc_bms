@@ -58,7 +58,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -73,6 +73,7 @@ import { get_version_distribution } from '@/api/interactive'
 import { platforms } from '@/views/toolbox/data/promotion'
 import { get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 
 export default {
   components: {},
@@ -86,6 +87,7 @@ export default {
       platforms,
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },

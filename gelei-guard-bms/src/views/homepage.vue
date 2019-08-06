@@ -67,7 +67,7 @@
                     type="daterange"
                     size="mini"
                     unlink-panels
-                    @change="page_query"/>
+                    @change="page_query" />
                 </el-col>
               </el-row>
             </div>
@@ -121,17 +121,17 @@
           <div class="data-item">
             <div class="item-row item-title">新增注册用户</div>
             <div class="item-row item-data-section">
-              <div class="item-data">6560</div>
+              <div class="item-data">{{ growth_data.increased_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>30%</span>
+                <span>{{ growth_data.increased_user_comparison }}</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
                 <ve-pie
-                  :data="chart_data"
+                  :data="increased_user_data"
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings"
@@ -142,11 +142,11 @@
           <div class="data-item">
             <div class="item-row item-title">新增绑定设备及占比</div>
             <div class="item-row item-data-section">
-              <div class="item-data">2560</div>
+              <div class="item-data">{{ growth_data.increased_bind_device }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>30%</span>
+                <span>{{ growth_data.increased_bind_device_comparison }}%</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
@@ -163,11 +163,11 @@
           <div class="data-item">
             <div class="item-row item-title">订量成交量及占比</div>
             <div class="item-row item-data-section">
-              <div class="item-data">6560</div>
+              <div class="item-data">{{ growth_data.order_count }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>30%</span>
+                <span>{{ growth_data.order_count_comparison }}%</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
@@ -196,7 +196,7 @@
             <div class="line-chart-area">
               <ve-line
                 :ref="'chart' + line_chart_tab.name"
-                :data="chartData"
+                :data="dimension_data"
                 :settings="chart_settings"
                 class="line-chart-style" />
             </div>
@@ -211,11 +211,6 @@
 import dayjs from 'dayjs'
 import { get_homepage_growth_data, get_homepage_overall_data } from '@/api/interactive'
 
-// https://brandcolors.net/
-// Vodafone
-// const theme_color = ['#EF5C5C', '#4a4d4e', '#9C5D96', '#5e2750',
-//   '#00b0ca', '#0088CC', '#a8b400', '#fecb00',
-//   '#eb9800', '#000000']
 const theme_color = ['#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980',
   '#d87a80', '#8d98b3', '#e5cf0d', '#97b552',
   '#95706d', '#dc69aa', '#07a2a4', '#9a7fd1',
@@ -269,56 +264,26 @@ export default {
           }
         }
       },
-      chart_data: {
-        columns: ['name', 'value'],
-        center: ['50%', '50%'],
-        rows: [
-          { 'name': '家长端', 'value': 3000 },
-          { 'name': '孩子端', 'value': 3560 }
-        ]
-      },
-      device_ratio_data: {
-        columns: ['name', 'value'],
-        rows: [
-          { 'name': '公版', 'value': 1560 },
-          { 'name': 'vivo', 'value': 600 },
-          { 'name': 'oppo', 'value': 400 }
-        ]
-      },
-      order_radio_data: {
-        columns: ['name', 'value'],
-        rows: [
-          { 'name': '6个月会员', 'value': 110 },
-          { 'name': '12个月会员', 'value': 90 },
-          { 'name': '24个月会员', 'value': 60 }
-        ]
-      },
+      increased_user_data: {},
+      device_ratio_data: {},
+      order_radio_data: {},
       line_chart_tabs: [
         {
           label: '新增付费用户',
-          name: '1'
+          name: '0'
         },
         {
           label: '订单成交量',
-          name: '2'
+          name: '1'
         },
         {
           label: '充值金额',
-          name: '3'
+          name: '2'
         }
       ],
-      active_name: '1',
-      chartData: {
-        columns: ['日期', '访问用户', '下单用户', '下单率'],
-        rows: [
-          { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32 },
-          { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
-          { '日期': '1/3', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
-          { '日期': '1/4', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
-          { '日期': '1/5', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
-          { '日期': '1/6', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
-        ]
-      }
+      line_chart_tabs_data: [],
+      active_name: '0',
+      dimension_data: {}
     }
   },
   computed: {},
@@ -360,8 +325,76 @@ export default {
           // this.$message.success(r.message)
         } else {
           this.$message.error(r.message)
+          this.growth_data = []
         }
+      }).finally(() => {
+        this.update_chat_chart()
+        this.update_line_chart()
       })
+    },
+    update_chat_chart() {
+      const growth_data = this.growth_data
+      if (growth_data.length) {
+        // 新增注册用户
+        this.increased_user_data = {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { 'name': '家长端', 'value': growth_data.patriarch_count },
+            { 'name': '孩子端', 'value': growth_data.child_count }
+          ]
+        }
+        // 新增绑定设备及占比
+        const device_data = growth_data.increased_bind_device_list.map(r => {
+          return {
+            name: r.name,
+            value: r.count
+          }
+        })
+        this.device_ratio_data = {
+          columns: ['name', 'value'],
+          rows: device_data
+        }
+        // 订量成交量及占比
+        const order_data = growth_data.member_order_count_list.map(r => {
+          return {
+            name: r.name,
+            value: r.count
+          }
+        })
+        this.order_radio_data = {
+          columns: ['name', 'value'],
+          rows: order_data
+        }
+      } else {
+        this.increased_user_data = {}
+        this.device_ratio_data = {}
+        this.order_radio_data = {}
+      }
+    },
+    update_line_chart() {
+      const growth_data = this.growth_data
+      if (growth_data.length) {
+        const increased_pay_user_chart = {
+          columns: ['date', 'count'],
+          rows: growth_data.increased_pay_user_list
+        }
+        const order_count_list_chart = {
+          columns: ['date', 'count'],
+          rows: growth_data.order_count_list
+        }
+        const order_amount_list_chart = {
+          columns: ['date', 'count'],
+          rows: growth_data.order_amount_list
+        }
+        this.line_chart_tabs_data = [
+          increased_pay_user_chart,
+          order_count_list_chart,
+          order_amount_list_chart]
+      } else {
+        this.line_chart_tabs_data = [{}, {}, {}]
+      }
+      this.dimension_data = this.line_chart_tabs_data[+this.active_name]
     },
     get_query() {
       const config = {}
@@ -372,7 +405,9 @@ export default {
     page_query() {
       this.fetch_growth_data()
     },
-    tab_change(name) {
+    tab_change(obj) {
+      const active_name = obj.name
+      this.dimension_data = this.line_chart_tabs_data[+active_name]
     }
   }
 }
@@ -400,7 +435,7 @@ $box_shadow_color: #3c3c3c;
       padding: 15px 0;
       display: flex;
       flex-direction: column;
-      background-color: rgba(211, 211, 211, 0.47);
+      /*background-color: rgba(211, 211, 211, 0.47);*/
       padding: 1px solid grey;
 
       .title-area {
@@ -454,13 +489,13 @@ $box_shadow_color: #3c3c3c;
 
             .item-name {
               font-weight: 600;
-              font-size: 14px;
+              font-size: 16px;
               text-align: right;
               padding: 5px 10px;
             }
 
             .item-value {
-              font-size: 14px;
+              font-size: 28px;
               text-align: right;
               padding: 5px 10px;
             }
@@ -510,7 +545,7 @@ $box_shadow_color: #3c3c3c;
           flex-direction: column;
           border-radius: $border_radius_size;
           /*box-shadow:0px -2px 6px $box_shadow_color;
-					padding: 15px 10px;*/
+          padding: 15px 10px;*/
 
           .item-row {
             flex: 1;
@@ -634,6 +669,7 @@ $box_shadow_color: #3c3c3c;
     }
 
     .data-line-chart-area {
+      padding: 0 15px 20px 15px;
       width: 100%;
       min-height: 400;
 

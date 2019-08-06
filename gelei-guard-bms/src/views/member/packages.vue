@@ -177,7 +177,7 @@
         <el-pagination
           :current-page="page"
           :page-size="page_size"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="page_sizes"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
@@ -191,7 +191,7 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE } from '@/utils/constant'
+import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { device_type_list } from '@/views/toolbox/data/promotion'
@@ -219,6 +219,7 @@ export default {
       packages_list: [],
       page: 1,
       page_size,
+      page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
   },
