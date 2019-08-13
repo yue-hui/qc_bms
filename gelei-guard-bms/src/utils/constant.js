@@ -110,6 +110,10 @@ export const SUBJECT_LIST = [
 // 年级列表
 export const GRADE_LIST = [
   {
+    name: '一年级以下',
+    val: '0'
+  },
+  {
     name: '一年级',
     val: '1'
   },
