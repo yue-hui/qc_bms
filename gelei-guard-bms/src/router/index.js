@@ -23,18 +23,18 @@ Vue.use(Router)
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-  // {
-  //   path: '/homepage',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: () => import('@/views/homepage'),
-  //       name: '首页',
-  //       meta: { title: '首页', icon: 'homepage', noCache: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/homepage',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/homepage'),
+        name: '首页',
+        meta: { title: '首页', icon: 'homepage', noCache: true }
+      }
+    ]
+  },
   {
     path: '/users',
     component: Layout,
@@ -49,12 +49,12 @@ export const constantRouterMap = [
         component: () => import('@/views/users/patriarch'),
         meta: { title: '家长信息管理', icon: 'parents' }
       },
-      // {
-      //   path: 'children',
-      //   name: '孩子信息管理',
-      //   component: () => import('@/views/users/kids'),
-      //   meta: { title: '孩子信息管理', icon: 'kids' }
-      // },
+      {
+        path: 'children',
+        name: '孩子信息管理',
+        component: () => import('@/views/users/kids'),
+        meta: { title: '孩子信息管理', icon: 'kids' }
+      },
       {
         path: 'details',
         name: '用户详细信息',
@@ -89,13 +89,13 @@ export const constantRouterMap = [
         name: '家长端总体数据',
         component: () => import('@/views/analysis/patriarch'),
         meta: { title: '家长端总体数据', icon: 'analysis_patriarch' }
+      },
+      {
+        path: 'children',
+        name: '孩子端总体数据',
+        component: () => import('@/views/analysis/kids'),
+        meta: { title: '孩子端总体数据', icon: 'analysis_kids' }
       }
-      // {
-      //   path: 'children',
-      //   name: '孩子端总体数据',
-      //   component: () => import('@/views/analysis/kids'),
-      //   meta: { title: '孩子端总体数据', icon: 'analysis_kids' }
-      // }
     ]
   },
   {

@@ -113,6 +113,15 @@ export function get_device_list(data) {
   })
 }
 
+// 获取孩子用户列表
+export function get_user_child_list(data) {
+  return request({
+    url: '/greenguard/manager/user/child/list',
+    method: 'post',
+    data
+  })
+}
+
 /*
 * 常见问题管理
 *  */
@@ -179,6 +188,42 @@ export function get_user_analysis_summary(data) {
 export function get_user_analysis_details(data) {
   return request({
     url: '/greenguard/manager/user/analyze/list',
+    method: 'post',
+    data
+  })
+}
+
+// 孩子端-整体数据指标
+export function get_user_analysis_child_summary(data) {
+  return request({
+    url: '/greenguard/manager/user/analyze/child/summary',
+    method: 'post',
+    data
+  })
+}
+
+// 孩子端-用户增长情况
+export function get_user_analysis_child_increased(data) {
+  return request({
+    url: '/greenguard/manager/user/analyze/child/increased',
+    method: 'post',
+    data
+  })
+}
+
+// 孩子端-绑定用户增长情况
+export function get_user_analysis_child_increased_bind_user(data) {
+  return request({
+    url: '/greenguard/manager/user/analyze/child/increased/bind_user',
+    method: 'post',
+    data
+  })
+}
+
+// 孩子端-绑定设备增长情况
+export function get_user_analysis_child_increased_bind_device(data) {
+  return request({
+    url: '/greenguard/manager/user/analyze/child/increased/bind_device',
     method: 'post',
     data
   })

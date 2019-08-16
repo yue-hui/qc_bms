@@ -320,7 +320,7 @@ export default {
       }))
     },
     export_excel(data_list) {
-      const filename = '后台管理-家长端数据'
+      const filename = '用户管理-家长端数据'
       import('@/utils/Export2Excel').then(excel => {
         const t_header = ['用户昵称', '手机号', '注册时间',
           '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',

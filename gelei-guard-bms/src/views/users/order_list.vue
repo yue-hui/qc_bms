@@ -189,8 +189,9 @@
       <div class="data-statistics">
         <div class="data-statistics-content">
           <div v-if="total_amount !== ''" class="data-item">
-            <div class="name">合计: </div>
+            <div class="name">合计:</div>
             <div class="value" v-text="total_amount" />
+            <div class="name">元</div>
           </div>
         </div>
       </div>
@@ -463,6 +464,13 @@ export default {
           .name {
             user-select: none;
             padding-right: 2px;
+          }
+
+          .value {
+            color: red;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 0 2px;
           }
         }
       }

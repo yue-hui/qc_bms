@@ -125,7 +125,7 @@ $pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
     }
 
     .column-2 {
-      font-size: 24px;
+      font-size: 32px;
       font-weight: 600;
       height: $column_2_height;
       line-height: $column_2_height;
@@ -136,6 +136,10 @@ $pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
       height: $column_3_height;
       line-height: $column_3_height;
     }
+  }
+
+  .row-1, .row-2, .row-3, .row-4{
+    padding: 10px 0;
   }
 }
 
