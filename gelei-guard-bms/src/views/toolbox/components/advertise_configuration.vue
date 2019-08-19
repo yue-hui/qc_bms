@@ -11,6 +11,16 @@
             <el-form-item label="广告名称" prop="ad_name">
               <el-input v-model="form.ad_name" :disabled="action === 2" size="mini" />
             </el-form-item>
+            <el-form-item label="广告平台" prop="ad_type">
+              <el-radio-group v-model="form.platform" size="mini">
+                <el-radio
+                  v-for="(platform, index) in platform_type"
+                  :key="index"
+                  :disabled="platform.value === '02'"
+                  :label="platform.value">{{ platform.label }}
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="广告类型" prop="ad_type">
               <el-radio-group v-model="form.ad_type" size="mini">
                 <el-radio
@@ -21,7 +31,7 @@
                 </el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="广告位置" prop="ad_position">
+            <el-form-item v-if="form.ad_type === '01'" label="广告位置" prop="ad_position">
               <el-radio-group v-model="form.ad_position" size="mini">
                 <el-radio
                   v-for="(location, index) in advertisement_locations"
@@ -102,7 +112,7 @@
 </template>
 
 <script>
-import { ADVERTISEMENT_PLATFORM } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, ADVERTISEMENT_PLATFORM } from '@/utils/constant'
 import { add_advertising, edit_advertising } from '@/api/interactive'
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 
@@ -135,10 +145,20 @@ export default {
     }
   },
   data: function() {
+    const platform_type = ADVERTISE_PLATFORM_TYPES
+    const validateAdvertisePosition = (rule, value, callback) => {
+      if (!value && ['01'].indexOf(this.form.ad_type) !== -1) {
+        callback(new Error('"广告类型"为"固定位置"时, "广告位置"为必选项'))
+      } else {
+        callback()
+      }
+    }
     return {
+      platform_type,
       form: {
         ad_name: '',
-        ad_type: '01',
+        platform: '',
+        ad_type: '',
         ad_position: '',
         file_list: [],
         jump_target: '',
@@ -151,10 +171,15 @@ export default {
           { required: true, message: '请输入广告名称', trigger: 'blur' },
           { min: 1, max: 15, message: '文字长度不能超过15个字', trigger: 'blur' }
         ],
+        platform: [
+          { required: true, message: '广告平台为必选项', trigger: 'blur' }
+        ],
         ad_type: [
           { required: true, message: '广告类型为必选项', trigger: 'blur' }
         ],
-        ad_position: [{ required: true, message: '广告位置为必选项', trigger: 'blur' }],
+        ad_position: [
+          { trigger: 'blur', validator: validateAdvertisePosition }
+        ],
         file_list: [
           { required: true, type: 'array', min: 1, message: '请按规范上传图片', trigger: 'blur' }
         ]
@@ -206,7 +231,8 @@ export default {
     create_init() {
       this.form = {
         ad_name: '',
-        ad_type: '01',
+        ad_type: '',
+        platform: '',
         ad_position: '',
         file_list: [],
         jump_target: '',
@@ -233,6 +259,7 @@ export default {
       this.form = {
         ad_name: this.current.ad_name,
         ad_type: this.current.ad_type,
+        platform: this.current.platform,
         ad_position: this.current.ad_position,
         file_list,
         jump_target: this.current.jump_target,

@@ -399,3 +399,15 @@ export const ACTIVITY_TYPES = [
     label: '积分赠送活动'
   }
 ]
+
+// 平台类型
+export const ADVERTISE_PLATFORM_TYPES = [
+  {
+    value: '01',
+    label: '格雷盒子家长端'
+  },
+  {
+    value: '02',
+    label: '格雷盒子孩子端'
+  }
+]
