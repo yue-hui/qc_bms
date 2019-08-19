@@ -16,7 +16,7 @@
                 <el-radio
                   v-for="(genre, index) in advertisement_type"
                   :key="index"
-                  :disabled="genre.value !== '01'"
+                  :disabled="genre.value === '02'"
                   :label="genre.value">{{ genre.label }}
                 </el-radio>
               </el-radio-group>

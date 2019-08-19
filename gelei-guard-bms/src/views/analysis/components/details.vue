@@ -82,7 +82,7 @@ import { ANALYSIS_DETAILS_NAME, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_user_analysis_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { device_brands } from './details'
+import { device_brands } from './details_config'
 
 export default {
   name: '',

@@ -262,7 +262,7 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
         res.data.forEach((r, i, _a) => {
-          const grade_label = this.grade_label_list[grade]
+          const grade_label = this.grade_label_list[r.grade]
           const item = {
             ...r,
             grade_label,
@@ -281,7 +281,6 @@ export default {
       get_patriarch_list_export(config).then(res => {
         if (res.status === 0) {
           const remote_data = res.data
-          console.log('remote_data', remote_data)
           this.export_excel(remote_data)
         } else {
           this.$message.error(res.message)
@@ -321,10 +320,10 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-孩子端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号', '家长手机号',
+        const t_header = ['用户昵称', '家长手机号',
           '注册时间', '类型', '年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-        const filter_val = ['nick_name', 'phone', 'patriarch_phone',
+        const filter_val = ['nick_name', 'phone',
           'create_time_label', 'device_type_label', 'grade_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {
