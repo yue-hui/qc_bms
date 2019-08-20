@@ -351,7 +351,7 @@ export default {
             url
           }
           this.sendpass_second_url.push(item)
-          this.form.subject_banner_url = item.name
+          this.form.subject_banner_url = item.url
           this.$message.success('上传成功')
         } else {
           // 未知异常
