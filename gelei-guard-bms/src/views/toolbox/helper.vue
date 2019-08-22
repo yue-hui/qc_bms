@@ -133,7 +133,7 @@ import questions from '@/views/toolbox/components/questions'
 import { delete_questions, deploy_qa, get_patriarch_questions_qa_list, get_questions_list } from '@/api/interactive'
 import { help_question_status } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { ADVERTISE_PLATFORM_TYPES, QUESTION_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { pure_object_null_value } from '@/utils/common'
 
 export default {

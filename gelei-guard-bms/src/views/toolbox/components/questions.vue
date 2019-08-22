@@ -8,7 +8,7 @@
       width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <el-form-item label="帮助问题" prop="question">
-          <el-input size="mini" v-model="form.question" />
+          <el-input v-model="form.question" size="mini" />
         </el-form-item>
         <el-form-item label="所属产品" prop="product">
           <el-select v-model="form.product" size="mini" placeholder="所属产品">
@@ -29,14 +29,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="问题内容" prop="answer">
-          <tinymce size="mini" :height="200" v-model="form.answer" />
+          <tinymce :height="200" v-model="form.answer" />
         </el-form-item>
         <el-form-item :label="weight_label" prop="weight">
           <el-input-number
             v-model="form.weight"
-            size="mini"
-            :max="max"
             :min="min"
+            :max="max"
+            size="mini"
             controls-position="right" />
         </el-form-item>
       </el-form>

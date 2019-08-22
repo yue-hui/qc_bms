@@ -24,13 +24,13 @@
             align="center"
             label="年级"
             prop="grade_list"
-            width="180">
+            width="250">
             <template slot-scope="scope">
-              <el-row :gutter="2">
+              <el-row :gutter="2" class="table-item">
                 <el-col
                   v-for="(grade_label, index) in scope.row.grade_label_list"
                   :key="index"
-                  :span="12"
+                  :span="8"
                   class="show-list-content">
                   <el-tag size="mini" class="show-list-item">{{ grade_label }}</el-tag>
                 </el-col>
@@ -403,6 +403,31 @@ $label_height: 28px;
 
     .table-content {
       /*margin: 20px;*/
+
+      .table-item {
+        /*background-color: red;*/
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: start;
+        flex-wrap: wrap;
+
+        &.table-item-center {
+          justify-content: center;
+        }
+      }
+
+      .show-list-content {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        /*display: block;*/
+
+        .show-list-item {
+          min-width: 50px;
+          margin: 1px 2px;
+        }
+      }
     }
   }
 }

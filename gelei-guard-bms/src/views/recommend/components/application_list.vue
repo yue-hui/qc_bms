@@ -18,7 +18,7 @@
             label="学科"
             prop="subject_list">
             <template slot-scope="scope">
-              <el-row :gutter="1">
+              <el-row :gutter="1" class="table-item table-item-center">
                 <el-col
                   v-for="(subject_label, index) in scope.row.subject_label_list"
                   :key="index"
@@ -31,11 +31,11 @@
           </el-table-column>
           <el-table-column
             align="center"
-            width="176"
+            width="250"
             label="所属年级"
             prop="grade_list">
             <template slot-scope="scope">
-              <el-row :gutter="2">
+              <el-row :gutter="2" class="table-item">
                 <el-col
                   v-for="(grade_label, index) in scope.row.grade_label_list"
                   :key="index"
@@ -78,9 +78,10 @@
           <el-table-column
             align="center"
             label="所在组合"
+            width="250"
             prop="group_list">
             <template slot-scope="scope">
-              <el-row :gutter="2">
+              <el-row :gutter="2" class="table-item">
                 <el-col
                   v-for="(group, index) in scope.row.group_list"
                   :key="index"
@@ -259,11 +260,28 @@ export default {
   height: 100%;
 }
 
+.table-item {
+  /*background-color: red;*/
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: wrap;
+
+  &.table-item-center {
+    justify-content: center;
+  }
+}
+
 .show-list-content {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  /*display: block;*/
 
   .show-list-item {
     min-width: 50px;
+    margin: 1px 2px;
   }
 }
 
