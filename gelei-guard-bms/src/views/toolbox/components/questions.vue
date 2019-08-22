@@ -8,14 +8,33 @@
       width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <el-form-item label="帮助问题" prop="question">
-          <el-input v-model="form.question" />
+          <el-input size="mini" v-model="form.question" />
+        </el-form-item>
+        <el-form-item label="所属产品" prop="product">
+          <el-select v-model="form.product" size="mini" placeholder="所属产品">
+            <el-option
+              v-for="plan in advertise_platform_types"
+              :key="plan.value"
+              :label="plan.label"
+              :value="plan.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="问题类别" prop="type">
+          <el-select v-model="form.type" size="mini" placeholder="问题类别">
+            <el-option
+              v-for="plan in questionTypes"
+              :key="plan.value"
+              :label="plan.label"
+              :value="plan.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="问题内容" prop="answer">
-          <tinymce :height="200" v-model="form.answer" />
+          <tinymce size="mini" :height="200" v-model="form.answer" />
         </el-form-item>
         <el-form-item :label="weight_label" prop="weight">
           <el-input-number
             v-model="form.weight"
+            size="mini"
             :max="max"
             :min="min"
             controls-position="right" />
@@ -34,7 +53,7 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import { max_weight, min_weight } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, max_weight, min_weight } from '@/utils/constant'
 import { add_questions, get_questions_details, update_questions } from '@/api/interactive'
 
 export default {
@@ -49,6 +68,12 @@ export default {
       type: Boolean,
       default: true
     },
+    questionTypes: {
+      type: Object,
+      default: function() {
+        return []
+      }
+    },
     rid: {
       type: String,
       default: ''
@@ -61,19 +86,26 @@ export default {
     }
   },
   data: function() {
+    const advertise_platform_types = ADVERTISE_PLATFORM_TYPES
     return {
       visible: true,
       min: min_weight,
       max: max_weight,
+      advertise_platform_types,
+      question_types: [],
       form: {
         question: '',
         answer: '',
+        product: '',
+        type: '',
         weight: 1
       },
       weight: 1,
       rules: {
         question: [{ required: true, trigger: 'blur', message: '帮助标题不能为空' }],
         answer: [{ required: true, trigger: 'blur', message: '帮助内容不能为空' }],
+        product: [{ required: true, trigger: 'blur', message: '所属产品不能为空' }],
+        type: [{ required: true, trigger: 'blur', message: '问题类别为必选项' }],
         weight: [{ required: true, type: 'number', trigger: 'blur', min: min_weight, max: max_weight }]
       },
       weight_label: '权　　重'

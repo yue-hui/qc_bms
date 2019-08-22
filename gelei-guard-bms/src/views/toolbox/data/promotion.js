@@ -30,6 +30,18 @@ export const bms_platform_classification = [
           label: '安卓家长端'
         }
       ],
+      update_models: [
+        {
+          value: '0',
+          label: '推荐升级',
+          disabled: false
+        },
+        {
+          value: '1',
+          label: '强制升级',
+          disabled: false
+        }
+      ],
       update_ranges: [
         {
           value: '01',
@@ -54,6 +66,18 @@ export const bms_platform_classification = [
         {
           value: 'F2',
           label: '安卓孩子端'
+        }
+      ],
+      update_models: [
+        {
+          value: '0',
+          label: '推荐升级',
+          disabled: true
+        },
+        {
+          value: '1',
+          label: '强制升级',
+          disabled: false
         }
       ],
       update_ranges: [
@@ -82,6 +106,18 @@ export const bms_platform_classification = [
           label: 'OPPO孩子端'
         }
       ],
+      update_models: [
+        {
+          value: '0',
+          label: '推荐升级',
+          disabled: true
+        },
+        {
+          value: '1',
+          label: '强制升级',
+          disabled: false
+        }
+      ],
       update_ranges: [
         {
           value: '01',
@@ -106,6 +142,18 @@ export const bms_platform_classification = [
         {
           value: '23',
           label: 'OPPO中间件'
+        }
+      ],
+      update_models: [
+        {
+          value: '0',
+          label: '推荐升级',
+          disabled: false
+        },
+        {
+          value: '1',
+          label: '强制升级',
+          disabled: false
         }
       ],
       update_ranges: [
@@ -208,17 +256,6 @@ export const platform_version_instructions = [
   //   value: '33',
   //   label: '孩子端+华为中间件'
   // }
-]
-
-export const update_models = [
-  {
-    value: '0',
-    label: '推荐升级'
-  },
-  {
-    value: '1',
-    label: '强制升级'
-  }
 ]
 
 export const help_question_status = [

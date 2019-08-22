@@ -226,8 +226,14 @@ export default {
       if (this.phone) {
         config['phone'] = '' + this.phone
       }
+      if (this.patriarch_phone) {
+        config['patriarch_phone'] = '' + this.patriarch_phone
+      }
       if (this.device_type) {
         config['device_type'] = this.device_type
+      }
+      if (this.nick_name) {
+        config['nick_name'] = this.nick_name
       }
       if (this.member_status) {
         config['member_status'] = this.member_status

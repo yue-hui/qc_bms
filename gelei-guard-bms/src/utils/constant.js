@@ -389,7 +389,7 @@ export const ADVERTISEMENT_PLATFORM = [
 /* 会员活动管理 */
 
 // 活动类型
-export const ACTIVITY_TYPES = [
+export const MEMBER_ACTIVITY_TYPES = [
   {
     value: '01',
     label: '会员充值活动'
@@ -409,5 +409,16 @@ export const ADVERTISE_PLATFORM_TYPES = [
   {
     value: '02',
     label: '格雷盒子孩子端'
+  }
+]
+
+// 活动类型
+export const OPERATORS_ACTIVITY_TYPES = [
+  {
+    value: '01',
+    label: '虚拟商品'
+  }, {
+    value: '02',
+    label: '实物'
   }
 ]

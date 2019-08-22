@@ -1,37 +1,80 @@
 <template>
   <div class="content">
-
-    <div class="header-line">
-      <div class="left-sider-box-style">
-        <div class="control-box">
-          <el-select
-            v-model="query_status"
-            size="mini"
-            placeholder="请选择状态"
-            clearable
-            @change="change_query_status">
-            <el-option
-              v-for="item in help_question_status"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
-      </div>
-      <div class="right-sider-box-style">
-        <div class="control-box">
-          <el-button
-            type="success"
-            size="mini"
-            @click="add_questions"
-          >添加帮助问题
-          </el-button>
-        </div>
-      </div>
-    </div>
-
     <div class="content-body">
-      <div class="table-block">
+      <div class="search-area">
+        <el-row :gutter="10" class="row-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-row>
+                <el-col :span="8" class="order-number-list">所属产品:</el-col>
+                <el-select
+                  v-model="query_sets.product"
+                  size="mini"
+                  clearable
+                  placeholder="问题类型"
+                  @change="change_query_status">
+                  <el-option
+                    v-for="item in advertise_platform_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">问题类别:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.type"
+                    size="mini"
+                    clearable
+                    placeholder="问题类别"
+                    @change="change_query_status">
+                    <el-option
+                      v-for="item in question_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">状态:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.query_status"
+                    size="mini"
+                    placeholder="请选择状态"
+                    clearable
+                    @change="change_query_status">
+                    <el-option
+                      v-for="item in help_question_status"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="8" :md="12" :lg="8" :xl="12" class="col-bg layout-right">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-button size="mini" type="success" @click="add_questions">添加帮助问题</el-button>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+
+      <div class="table-content">
         <el-table
           :data="questions"
           size="mini"
@@ -52,13 +95,21 @@
             prop="weight"
             width="180" />
           <el-table-column
+            label="所属产品"
+            prop="product_label"
+            width="180" />
+          <el-table-column
+            label="问题类别"
+            prop="type_label"
+            width="180" />
+          <el-table-column
             label="操作"
             prop="control"
             width="260">
             <template slot-scope="scope">
               <el-button size="small" type="text" @click="edit_questions(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}
-              </el-button>
+              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}</el-button>
+              <el-button size="small" type="text" @click="del_questions(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -72,18 +123,18 @@
           @size-change="table_size_change" />
       </div>
 
-      <questions v-if="show_dialog" :is_new="is_create" :rid="record_id" @destory="close_dialog" />
-
+      <questions v-if="show_dialog" :is_new="is_create" :question-types="question_types" :rid="record_id" @destory="close_dialog" />
     </div>
   </div>
 </template>
 
 <script>
 import questions from '@/views/toolbox/components/questions'
-import { deploy_qa, get_questions_list } from '@/api/interactive'
+import { delete_questions, deploy_qa, get_patriarch_questions_qa_list, get_questions_list } from '@/api/interactive'
 import { help_question_status } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, QUESTION_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { pure_object_null_value } from '@/utils/common'
 
 export default {
   components: {
@@ -104,14 +155,36 @@ export default {
       show_dialog: false,
       deploy_name: '开启',
       record_id: '',
-      query_status: ''
+      query_sets: {
+        query_status: '',
+        type: '',
+        product: ''
+      },
+      advertise_platform_types: ADVERTISE_PLATFORM_TYPES,
+      question_types: []
     }
   },
   computed: {},
   mounted: function() {
-    this.load_data()
+    this.init_helper()
   },
   methods: {
+    init_helper() {
+      // 活动类型
+      get_patriarch_questions_qa_list().then(res => {
+        if (res.status === 0) {
+          this.question_types = res.data.map(r => {
+            return {
+              value: r.type_code,
+              label: r.type_name
+            }
+          })
+          this.load_data()
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
     show_deploy_name(row) {
       if (row.status === '1') {
         return '关闭'
@@ -192,6 +265,32 @@ export default {
         })
       }
     },
+    del_questions: function(row) {
+      /* 发布按钮 */
+      const config = {
+        record_id: row.record_id
+      }
+      config['published'] = true
+      this.$confirm('确认是否删除该帮助问题？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delete_questions(config).then(res => {
+          if (res.statusCode !== 200) {
+            this.$message.success(res.message)
+            this.load_data()
+          } else {
+            this.$message.error(res.message)
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作!'
+        })
+      })
+    },
     table_size_change: function(size) {
       this.page_size = size
       setPagenationSize(size)
@@ -202,13 +301,10 @@ export default {
       this.fetch_question_list()
     },
     get_config: function() {
-      const config = {
-        page_no: this.page,
-        page_num: this.page_size
-      }
-      if (this.query_status) {
-        config['status'] = this.query_status
-      }
+      const query_params = Object.assign({}, this.query_sets)
+      const config = pure_object_null_value(query_params)
+      config['page_no'] = this.page
+      config['page_num'] = this.page_size
       return config
     },
     show_status_label(r) {
@@ -222,17 +318,16 @@ export default {
       const config = this.get_config()
       get_questions_list(config).then(res => {
         const base_index = (config.page_no - 1) * config.page_num + 1
-        const questions = []
-        res.data.forEach((r, i, _a) => {
+        this.questions = res.data.map((r, i, _a) => {
           const status_label = this.show_status_label(r.status)
-          const question = {
+          const product_label = r.product ? r.product === '01' ? '家长端' : '孩子端' : '未知'
+          return {
             ...r,
             status_label,
-            _id: base_index + i
+            _id: base_index + i,
+            product_label
           }
-          questions.push(question)
         })
-        this.questions = questions
         this.total = res.total_count
       })
     },
@@ -253,47 +348,39 @@ $label_height: 40px;
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 0 10px 25px 10px;
+  padding: 20px 10px 25px 10px;
   display: flex;
   flex-direction: column;
 
   .content-body {
     border: 1px solid #c7d5ee;
     height: 100%;
-    padding: 15px 25px;
     min-height: 120px;
-  }
 
-  .header-line {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    .left-sider-box-style{
-      display: flex;
-      flex-direction: row;
-      .control-box {
-        padding: 10px 15px;
-        .search-item {
-          vertical-align: middle;
-          display: inline-block;
-          height: $label_height;
-          line-height: $label_height;
-          padding-right: 8px;
-          text-align: left;
-          min-width: 64px;
-          color: #4d4d4d;
-          font-size: 14px;
-          font-weight: 600;
+    .search-area {
+      padding: 20px 20px 0 20px;
+
+      .row-bg {
+        .col-bg {
+          padding: 5px 0;
+
+          &.layout-right {
+            text-align: right;
+          }
+
+          .order-number-list {
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4d4d4d;
+          }
         }
       }
     }
 
-    .right-sider-box-style{
-      display: flex;
-      flex-direction: row-reverse;
-      .control-box {
-        padding: 10px 15px;
-      }
+    .table-content {
+      margin: 20px;
     }
   }
 }

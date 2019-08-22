@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="content-body">x</div>
+    <div class="content-body">开发中...</div>
   </div>
 </template>
 

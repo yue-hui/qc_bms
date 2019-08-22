@@ -30,7 +30,7 @@
                 <el-col
                   v-for="(grade_label, index) in scope.row.grade_label_list"
                   :key="index"
-                  :span="8"
+                  :span="12"
                   class="show-list-content">
                   <el-tag size="mini" class="show-list-item">{{ grade_label }}</el-tag>
                 </el-col>

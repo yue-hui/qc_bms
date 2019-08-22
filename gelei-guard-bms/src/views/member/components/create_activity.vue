@@ -83,7 +83,7 @@
 
 <script>
 import { add_member_activity, get_member_plan_list } from '@/api/interactive'
-import { ACTIVITY_TYPES } from '@/utils/constant'
+import { MEMBER_ACTIVITY_TYPES } from '@/utils/constant'
 
 export default {
   name: 'CreateActivity',
@@ -115,7 +115,7 @@ export default {
       rules: {
         activity_name: [
           { required: true, message: '请填写活动名称', trigger: 'blur' },
-          { max: 15, message: '活动名称长度不超过15字', trigger: 'blur' }
+          { max: 20, message: '活动名称长度不超过20字', trigger: 'blur' }
         ],
         activity_type: [
           { required: true, message: '活动类型不能为空', trigger: 'blur' }
@@ -136,7 +136,7 @@ export default {
       current_plan: {
         valid_days: ''
       },
-      activity_types: ACTIVITY_TYPES,
+      activity_types: MEMBER_ACTIVITY_TYPES,
       plan_list: [],
       visiable_height: '',
       is_creating: false

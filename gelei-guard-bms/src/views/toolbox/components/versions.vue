@@ -55,7 +55,12 @@
         </el-form-item>
         <el-form-item label="升级方式" prop="is_force">
           <el-radio-group v-model="form.is_force">
-            <el-radio v-for="(update_model, index) in update_models" :key="index" :label="update_model.value">
+            <el-radio
+              v-for="(update_model, index) in update_models"
+              :disabled="update_model.disabled"
+              :key="index"
+              :label="update_model.value"
+            >
               {{ update_model.label }}
             </el-radio>
           </el-radio-group>
@@ -128,7 +133,7 @@
 </template>
 
 <script>
-import { bms_platform_classification, update_models } from '@/views/toolbox/data/promotion'
+import { bms_platform_classification } from '@/views/toolbox/data/promotion'
 import { add_application_version, edit_application_version, get_application_version } from '@/api/interactive'
 import { POSITIVE_FLOAT } from '@/utils/constant'
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
@@ -155,9 +160,11 @@ export default {
   data: function() {
     let update_platforms = []
     let update_ranges = []
+    let update_models = []
     if (bms_platform_classification.length) {
       update_platforms = bms_platform_classification[0].select_item.update_platforms
       update_ranges = bms_platform_classification[0].select_item.update_ranges
+      update_models = bms_platform_classification[0].select_item.update_models
     }
     /* 升级范围校验 */
     const validatePublishType = (rule, value, callback) => {
@@ -316,6 +323,7 @@ export default {
       const item = platform_classification[0].select_item
       this.update_platforms = item.update_platforms
       this.update_ranges = item.update_ranges
+      this.update_models = item.update_models
       this.form.platform = ''
       this.need_upload_app_package = false
       this.form.update_url = ''
@@ -385,9 +393,6 @@ export default {
         })
         .catch(_ => {
         })
-    },
-    pure_form_data() {
-
     },
     create_version() {
       const data = pure_object_null_value(this.form)

@@ -126,6 +126,15 @@ export function get_user_child_list(data) {
 * 常见问题管理
 *  */
 
+// 获取常见问题类别
+export function get_patriarch_questions_qa_list(data) {
+  return request({
+    url: '/greenguard/manager/qa/type/list',
+    method: 'post',
+    data
+  })
+}
+
 // 获取常见问题列表
 export function get_questions_list(data) {
   return request({
@@ -661,6 +670,54 @@ export function get_recommend_subject_detail(data) {
 export function publish_recommend_subject_detail(data) {
   return request({
     url: '/greenguard/manager/soft/recommend/subject/publish',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 系统参数
+*  */
+// 获取系统参数列表
+export function get_sys_configuration_list(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取系统参数详细信息
+export function get_sys_configuration_details(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/get',
+    method: 'post',
+    data
+  })
+}
+
+// 添加系统参数
+export function create_sys_configuration(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑系统参数
+export function edit_sys_configuration(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 删除系统参数
+export function delete_sys_configuration(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/delete',
     method: 'post',
     data
   })

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /* Layout */
 import Layout from '../views/layout/Layout'
+import AppMain from '@/views/layout/components/AppMain'
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
@@ -179,6 +180,7 @@ export const constantRouterMap = [
     path: '/app/activity',
     component: Layout,
     name: '活动管理',
+    alwaysShow: true,
     redirect: '/app/activity/list',
     meta: { title: '活动管理', icon: 'activity' },
     children: [
@@ -187,13 +189,13 @@ export const constantRouterMap = [
         name: '活动项管理',
         component: () => import('@/views/activity/index'),
         meta: { title: '活动项管理', icon: 'activity_list' }
-      },
-      {
-        path: 'props',
-        name: '活动道具管理',
-        component: () => import('@/views/activity/props'),
-        meta: { title: '活动道具管理', icon: 'activity_props' }
       }
+      // {
+      //   path: 'props',
+      //   name: '活动道具管理',
+      //   component: () => import('@/views/activity/props'),
+      //   meta: { title: '活动道具管理', icon: 'activity_props' }
+      // }
     ]
   },
   {
@@ -227,6 +229,33 @@ export const constantRouterMap = [
         name: '版本管理',
         component: () => import('@/views/toolbox/version_manager'),
         meta: { title: '版本管理', icon: 'version' }
+      },
+      {
+        path: 'configuration',
+        name: '系统配置',
+        alwaysShow: true,
+        component: AppMain,
+        meta: { title: '系统配置', icon: 'system_configure' },
+        children: [
+          {
+            path: 'system_parameter',
+            name: '系统参数',
+            component: () => import('@/views/system/system_parameter'),
+            meta: { title: '系统参数', icon: 'system_parameter' }
+          }
+          // {
+          //   path: 'software_policy',
+          //   name: '软件策略表',
+          //   component: () => import('@/views/system/software_policy'),
+          //   meta: { title: '软件策略表', icon: 'software_policy' }
+          // },
+          // {
+          //   path: 'high_risk_application',
+          //   name: '高危应用表',
+          //   component: () => import('@/views/system/high_risk_application'),
+          //   meta: { title: '高危应用表', icon: 'high_risk_application' }
+          // }
+        ]
       }
     ]
   },
