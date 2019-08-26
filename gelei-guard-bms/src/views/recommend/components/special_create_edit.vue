@@ -44,10 +44,7 @@
               <div class="upload-file-to-server">备注: 只能上传jpg/png文件, 图片尺寸为690x240，且不超过500kb.</div>
             </el-form-item>
             <el-form-item label="专题文案" prop="subject_details">
-              <quill-editor
-                :content="form.subject_details"
-                :options="editor_option"
-                @change="on_editor_change($event)" />
+              <el-input v-model="form.subject_details" resize="none" :rows="5" type="textarea" placeholder="请输入专题文案" />
             </el-form-item>
             <el-form-item label="应用添加" prop="record_id_list">
               <el-autocomplete
@@ -94,11 +91,6 @@
 
 <script>
 import vuedraggable from 'vuedraggable'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
-import { quillEditor } from 'vue-quill-editor'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { GRADE_LIST } from '@/utils/constant'
 import {
@@ -112,8 +104,7 @@ import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/up
 export default {
   name: 'SpecialCreateEdit',
   components: {
-    vuedraggable,
-    quillEditor
+    vuedraggable
   },
   beforecreate: function() {
   },
@@ -138,7 +129,6 @@ export default {
       soft_list: [],
       sendpass_second_url: [],
       query_soft_name: '',
-      editor_option: {},
       form: {
         subject_name: '',
         grade_list: [],
@@ -158,7 +148,7 @@ export default {
           { required: true, message: '请上传推荐应用专题图片', trigger: 'blur' }
         ],
         record_id_list: [
-          { required: true, type: 'array', message: '至少添加一个应用', trigger: 'blur', min: 1 }
+          { required: true, type: 'array', message: '至少添加一个应用', trigger: 'change', min: 1 }
         ],
         subject_details: [
           { required: true, message: '专题方案不能为空', trigger: 'blur' }
@@ -234,12 +224,14 @@ export default {
     },
     on_submit() {
       this.$refs.form.validate(valid => {
-        if ([0, 1].indexOf(this.action) !== -1) {
-          this.on_create()
-        } else {
-          this.on_save()
+        if (valid) {
+          if ([0, 1].indexOf(this.action) !== -1) {
+            this.on_create()
+          } else {
+            this.on_save()
+          }
+          this.$emit('callback', true)
         }
-        this.$emit('callback', true)
       })
     },
     on_save() {

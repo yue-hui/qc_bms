@@ -245,15 +245,14 @@ export default {
       return config
     },
     view_details: function(row) {
-      console.log('view_details')
-      // const options = {
-      //   path: '/users/details',
-      //   query: {
-      //     id: row.user_id
-      //   }
-      // }
-      // const { href } = this.$router.resolve(options)
-      // window.open(href, '_blank')
+      const options = {
+        path: '/users/details',
+        query: {
+          id: row.patriarch_id
+        }
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href, '_blank')
     },
     close_recharge_dialog: function() {
       this.recharge_dialog_visible = false
