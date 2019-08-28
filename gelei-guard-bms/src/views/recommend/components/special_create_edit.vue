@@ -44,7 +44,7 @@
               <div class="upload-file-to-server">备注: 只能上传jpg/png文件, 图片尺寸为690x240，且不超过500kb.</div>
             </el-form-item>
             <el-form-item label="专题文案" prop="subject_details">
-              <el-input v-model="form.subject_details" resize="none" :rows="5" type="textarea" placeholder="请输入专题文案" />
+              <el-input :rows="5" v-model="form.subject_details" resize="none" type="textarea" placeholder="请输入专题文案" />
             </el-form-item>
             <el-form-item label="应用添加" prop="record_id_list">
               <el-autocomplete

@@ -259,6 +259,7 @@ export default {
       if (row.is_listing === '1') {
         // 已上架 专题无法删除
         this.$message.error('该专题已上架，无法删除，请下架后操作!')
+        return
       }
       const confirm_text = '推荐应用专题"' + row.subject_name + '"需要下架才可以删除?'
       this.$confirm(confirm_text, '提示', {

@@ -722,3 +722,12 @@ export function delete_sys_configuration(data) {
     data
   })
 }
+
+// 邀请好友活动数据
+export function get_invite_statisis_data(data) {
+  return request({
+    url: '/greenguard/manager/user/invite/register/statistics/list',
+    method: 'post',
+    data
+  })
+}
