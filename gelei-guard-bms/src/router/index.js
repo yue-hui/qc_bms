@@ -238,10 +238,10 @@ export const constantRouterMap = [
       },
       {
         path: 'configuration',
-        name: '系统配置',
+        name: '数据字典',
         alwaysShow: true,
         component: AppMain,
-        meta: { title: '系统配置', icon: 'system_configure' },
+        meta: { title: '数据字典', icon: 'system_configure' },
         children: [
           {
             path: 'system_parameter',
