@@ -230,7 +230,6 @@ export default {
           } else {
             this.on_save()
           }
-          this.$emit('callback', true)
         }
       })
     },
@@ -238,6 +237,7 @@ export default {
       edit_recommend_subject(this.form).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
+          this.$emit('callback', true)
         } else {
           this.$message.error(res.message)
         }
@@ -247,6 +247,7 @@ export default {
       create_recommend_subject(this.form).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
+          this.$emit('callback', true)
         } else {
           this.$message.error(res.message)
         }
