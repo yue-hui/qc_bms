@@ -161,7 +161,7 @@
             </div>
           </div>
           <div class="data-item">
-            <div class="item-row item-title">订量成交量及占比</div>
+            <div class="item-row item-title">订单成交量及占比</div>
             <div class="item-row item-data-section">
               <div class="item-data">{{ growth_data.order_count }}</div>
               <div class="item-data-compare">
@@ -222,7 +222,7 @@ export default {
   data() {
     this.colors = theme_color
     const day = dayjs().subtract(1, 'days')
-    const pre_week = dayjs().subtract(8, 'days')
+    const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
       datetime_range: [new Date(pre_week), new Date(day)],
@@ -355,7 +355,7 @@ export default {
           columns: ['name', 'value'],
           rows: device_data
         }
-        // 订量成交量及占比
+        // 订单成交量及占比
         const order_data = growth_data.member_order_count_list.map(r => {
           return {
             name: r.name,

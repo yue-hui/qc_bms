@@ -95,7 +95,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="6" class="col-bg">
+          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="4" class="order-number-list">交易时间:</el-col>
@@ -112,7 +112,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="18" class="col-bg layout-right col-right-button">
+          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="16" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -189,7 +189,7 @@
       <div class="data-statistics">
         <div class="data-statistics-content">
           <div v-if="total_amount !== ''" class="data-item">
-            <div class="name">合计:</div>
+            <div class="name">交易成功合计:</div>
             <div class="value" v-text="total_amount" />
             <div class="name">元</div>
           </div>

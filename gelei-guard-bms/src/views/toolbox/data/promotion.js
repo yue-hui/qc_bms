@@ -49,7 +49,7 @@ export const bms_platform_classification = [
         },
         {
           value: '03',
-          label: '用户手机白名单'
+          label: '用户手机'
         }
       ]
     }
@@ -288,7 +288,7 @@ export const member_status_list = [
 // 会员状态
 export const device_type_list = [
   {
-    value: '00',
+    value: '',
     label: '不限'
   },
   {

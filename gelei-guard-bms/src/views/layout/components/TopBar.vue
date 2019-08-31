@@ -42,7 +42,7 @@ export default {
     },
     go_to_home_page() {
       const origin = window.location.origin
-      const href = origin + '/gelei-guard-bms'
+      const href = origin + '/gelei-guard-bms/'
       window.location.href = href
     }
   }

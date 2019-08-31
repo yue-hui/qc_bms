@@ -64,6 +64,22 @@
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
+                  <el-form-item label="生日">
+                    <span>{{ __date_formatter(information.birthdate, DATE_FORMAT_WITH_POINT) }}</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="收货地址">
+                    <span>-</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
                   <el-form-item label="最后使用时间">
                     <span>{{ __date_formatter(information.last_use_time) }}</span>
                   </el-form-item>
@@ -127,8 +143,9 @@ export default {
         }
       })
     },
-    __date_formatter: (t) => {
-      return date_formatter(t, DATE_TIME_FORMAT)
+    __date_formatter: (t, format = DATE_TIME_FORMAT) => {
+      // DATE_FORMAT_WITH_POINT
+      return date_formatter(t, format)
     }
   }
 }
