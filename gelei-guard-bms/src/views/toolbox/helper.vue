@@ -10,7 +10,6 @@
                 <el-select
                   v-model="query_sets.product"
                   size="mini"
-                  clearable
                   placeholder="问题类型"
                   @change="change_query_status">
                   <el-option
@@ -49,7 +48,7 @@
                 <el-col :span="8" class="order-number-list">状态:</el-col>
                 <el-col :span="16">
                   <el-select
-                    v-model="query_sets.query_status"
+                    v-model="query_sets.status"
                     size="mini"
                     placeholder="请选择状态"
                     clearable
@@ -123,7 +122,7 @@
           @size-change="table_size_change" />
       </div>
 
-      <questions v-if="show_dialog" :is_new="is_create" :question-types="question_types" :rid="record_id" @destory="close_dialog" />
+      <questions v-if="show_dialog" :is_new="is_create" :rid="record_id" @destory="close_dialog" />
     </div>
   </div>
 </template>
@@ -134,7 +133,7 @@ import { delete_questions, deploy_qa, get_patriarch_questions_qa_list, get_quest
 import { help_question_status } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { ADVERTISE_PLATFORM_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { pure_object_null_value } from '@/utils/common'
+import { get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 
 export default {
   components: {
@@ -156,9 +155,9 @@ export default {
       deploy_name: '开启',
       record_id: '',
       query_sets: {
-        query_status: '',
+        status: '',
         type: '',
-        product: ''
+        product: '01'
       },
       advertise_platform_types: ADVERTISE_PLATFORM_TYPES,
       question_types: []
@@ -171,7 +170,10 @@ export default {
   methods: {
     init_helper() {
       // 活动类型
-      get_patriarch_questions_qa_list().then(res => {
+      const config = {
+        product: this.query_sets.product
+      }
+      get_patriarch_questions_qa_list(config).then(res => {
         if (res.status === 0) {
           this.question_types = res.data.map(r => {
             return {
@@ -320,7 +322,7 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         this.questions = res.data.map((r, i, _a) => {
           const status_label = this.show_status_label(r.status)
-          const product_label = r.product ? r.product === '01' ? '家长端' : '孩子端' : '未知'
+          const product_label = get_value_from_map_list(r.product, ADVERTISE_PLATFORM_TYPES, '未知')
           return {
             ...r,
             status_label,

@@ -11,8 +11,8 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_user_percent)"
-            :class="judge_direction(statistics.increased_user_percent)"/>
-          {{ statistics.increased_user_percent }}%
+            :class="judge_direction(statistics.increased_user_percent)" />
+          {{ statistics.increased_user_percent | abs }}%
         </div>
       </div>
       <div class="row row-2">
@@ -22,8 +22,8 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_user_percent)"
-            :class="judge_direction(statistics.increased_user_percent)"/>
-          {{ statistics.increased_bind_user_percent }}%
+            :class="judge_direction(statistics.increased_user_percent)" />
+          {{ statistics.increased_bind_user_percent | abs }}%
         </div>
       </div>
       <div class="row row-3">
@@ -33,8 +33,8 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_device_percent)"
-            :class="judge_direction(statistics.increased_user_percent)"/>
-          {{ statistics.increased_bind_device_percent }}%
+            :class="judge_direction(statistics.increased_user_percent)" />
+          {{ statistics.increased_bind_device_percent | abs }}%
         </div>
       </div>
       <div class="row row-4">
@@ -54,6 +54,11 @@ export default {
   name: 'StatisticsPannel',
   beforecreate: function() {
   },
+  filters: {
+    abs: function(percent) {
+      return Math.abs(percent)
+    }
+  },
   props: {},
   data: function() {
     return {
@@ -67,7 +72,14 @@ export default {
   },
   methods: {
     judge_direction: function(direct) {
-      return +direct >= 100 ? 'upper' : 'down'
+      direct = +direct
+      if (direct > 0) {
+        return 'upper'
+      } else if (direct < 0) {
+        return 'down'
+      } else {
+        return 'fair'
+      }
     },
     load_summary: function(data) {
       get_user_analysis_child_summary(data).then(res => {
@@ -138,16 +150,20 @@ $pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
     }
   }
 
-  .row-1, .row-2, .row-3, .row-4{
+  .row-1, .row-2, .row-3, .row-4 {
     padding: 10px 0;
   }
 }
 
-.upper{
+.upper {
   color: red;
 }
 
-.down{
+.fair {
+  color: grey;
+}
+
+.down {
   color: green;
 }
 </style>

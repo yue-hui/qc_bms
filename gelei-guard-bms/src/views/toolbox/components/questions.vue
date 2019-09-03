@@ -11,7 +11,7 @@
           <el-input v-model="form.question" size="mini" />
         </el-form-item>
         <el-form-item label="所属产品" prop="product">
-          <el-select v-model="form.product" size="mini" placeholder="所属产品">
+          <el-select v-model="form.product" size="mini" placeholder="所属产品" @change="update_question_types">
             <el-option
               v-for="plan in advertise_platform_types"
               :key="plan.value"
@@ -22,7 +22,7 @@
         <el-form-item label="问题类别" prop="type">
           <el-select v-model="form.type" size="mini" placeholder="问题类别">
             <el-option
-              v-for="plan in questionTypes"
+              v-for="plan in question_types"
               :key="plan.value"
               :label="plan.label"
               :value="plan.value" />
@@ -54,7 +54,12 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import { ADVERTISE_PLATFORM_TYPES, max_weight, min_weight } from '@/utils/constant'
-import { add_questions, get_questions_details, update_questions } from '@/api/interactive'
+import {
+  add_questions,
+  get_patriarch_questions_qa_list,
+  get_questions_details,
+  update_questions
+} from '@/api/interactive'
 
 export default {
   name: '',
@@ -67,12 +72,6 @@ export default {
     is_new: {
       type: Boolean,
       default: true
-    },
-    questionTypes: {
-      type: Object,
-      default: function() {
-        return []
-      }
     },
     rid: {
       type: String,
@@ -102,7 +101,10 @@ export default {
       },
       weight: 1,
       rules: {
-        question: [{ required: true, trigger: 'blur', message: '帮助标题不能为空' }],
+        question: [
+          { required: true, trigger: 'blur', message: '帮助标题不能为空' },
+          { max: 30, trigger: 'blur', message: '帮助标题长度不超过30' }
+        ],
         answer: [{ required: true, trigger: 'blur', message: '帮助内容不能为空' }],
         product: [{ required: true, trigger: 'blur', message: '所属产品不能为空' }],
         type: [{ required: true, trigger: 'blur', message: '问题类别为必选项' }],
@@ -178,6 +180,33 @@ export default {
       }
       get_questions_details(config).then(res => {
         this.form = res.data
+        this.form.type = ''
+        const question_type = res.data.type
+        this.update_question_types().then(() => {
+          this.form.type = question_type
+        })
+      })
+    },
+    update_question_types: function() {
+      return new Promise(resolve => {
+        this.form.type = ''
+        const config = {
+          product: this.form.product
+        }
+        get_patriarch_questions_qa_list(config).then(res => {
+          if (res.status === 0) {
+            this.question_types = res.data.map(r => {
+              return {
+                value: r.type_code,
+                label: r.type_name
+              }
+            })
+          } else {
+            this.$message.error(res.message)
+            this.question_types = []
+          }
+          resolve('')
+        })
       })
     }
   }
