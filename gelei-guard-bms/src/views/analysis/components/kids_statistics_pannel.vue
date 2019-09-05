@@ -26,7 +26,7 @@
           {{ statistics.increased_bind_user_percent | abs }}%
         </div>
       </div>
-      <div class="row row-3">
+      <!--<div class="row row-3">
         <div class="column column-1">新增绑定设备</div>
         <div class="column column-2">{{ statistics.increased_bind_device }}</div>
         <div class="column column-3">
@@ -36,7 +36,7 @@
             :class="judge_direction(statistics.increased_user_percent)" />
           {{ statistics.increased_bind_device_percent | abs }}%
         </div>
-      </div>
+      </div>-->
       <div class="row row-4">
         <div class="column column-1">总注册用户数</div>
         <div class="column column-2">{{ statistics.total_user }}</div>

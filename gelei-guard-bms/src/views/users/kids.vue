@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { get_patriarch_list_export, get_user_child_list } from '@/api/interactive'
+import { get_child_list_export, get_user_child_list } from '@/api/interactive'
 import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_list } from '@/utils/common'
 import { DATE_FORMAT, DATE_TIME_FORMAT, GRADE_LIST, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { device_type_list } from '@/views/toolbox/data/promotion'
@@ -293,7 +293,7 @@ export default {
     download() {
       this.download_loading = true
       const config = this.get_params()
-      get_patriarch_list_export(config).then(res => {
+      get_child_list_export(config).then(res => {
         if (res.status === 0) {
           const remote_data = res.data.map(r => {
             const child_grade = '' + r.child_grade

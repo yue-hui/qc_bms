@@ -132,6 +132,15 @@ export function get_user_child_list(data) {
   })
 }
 
+// 导出孩子的用户数据列表
+export function get_child_list_export(data) {
+  return request({
+    url: '/greenguard/manager/user/child/list/export',
+    method: 'post',
+    data
+  })
+}
+
 /*
 * 常见问题管理
 *  */

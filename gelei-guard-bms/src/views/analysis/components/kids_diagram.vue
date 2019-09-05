@@ -7,9 +7,9 @@
       <el-tab-pane label="新增绑定用户" name="2">
         <ve-line ref="chart2" :data="options" />
       </el-tab-pane>
-      <el-tab-pane label="新增绑定设备" name="3">
+      <!--<el-tab-pane label="新增绑定设备" name="3">
         <ve-line ref="chart3" :data="options" />
-      </el-tab-pane>
+      </el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
