@@ -285,10 +285,30 @@ export const member_status_list = [
   }
 ]
 
-// 会员状态
+// 设备平台类型列表
 export const device_type_list = [
   {
     value: '',
+    label: '不限'
+  },
+  {
+    value: '01',
+    label: 'PC'
+  },
+  {
+    value: '02',
+    label: 'IOS'
+  },
+  {
+    value: '03',
+    label: 'Android'
+  }
+]
+
+// 会员套餐的设备列表
+export const MEMBER_DEVICE_LIST_RANGE = [
+  {
+    value: '00',
     label: '不限'
   },
   {

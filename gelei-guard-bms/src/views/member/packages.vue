@@ -194,7 +194,7 @@ import packageCreateEdit from './components/package_create_edit'
 import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { device_type_list } from '@/views/toolbox/data/promotion'
+import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -211,7 +211,7 @@ export default {
         device_type: '',
         is_listing: '1'
       },
-      device_type_items: device_type_list,
+      device_type_items: MEMBER_DEVICE_LIST_RANGE,
       packages: PACKAGE_TYPE,
       member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
@@ -355,6 +355,12 @@ export default {
       this.current = row
     },
     delete_shelf: function(row) {
+      if (row.is_listing === '1') {
+        // 已上架
+        const warngin_message = '当前会员套餐已上架无法直接删除'
+        this.$message.warning(warngin_message)
+        return
+      }
       const confirm_text = '套餐"' + row.plan_name + '"需要下架才可以删除?'
       this.$confirm(confirm_text, '提示', {
         confirmButtonText: '确定',

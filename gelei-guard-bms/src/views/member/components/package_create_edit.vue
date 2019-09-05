@@ -56,6 +56,7 @@
             <el-form-item label="设备类型" prop="device_type">
               <el-select
                 v-model="public_form.device_type"
+                :disabled="action === 2"
                 style="width: 100%;"
                 size="mini"
                 placeholder="请选择设备类型"
@@ -107,6 +108,7 @@
             label-suffix=":">
             <el-form-item label="设备类型" prop="device_type">
               <el-select
+                :disabled="action === 2"
                 v-model="un_public_form.device_type"
                 style="width: 100%;"
                 size="mini"
@@ -153,7 +155,7 @@
 
 <script>
 import { add_member_plan, update_member_plan } from '@/api/interactive'
-import { device_type_list } from '@/views/toolbox/data/promotion'
+import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
 
 export default {
   name: 'PackageCreateEdit',
@@ -198,7 +200,7 @@ export default {
 
     return {
       visiable_height: '',
-      device_type_items: device_type_list,
+      device_type_items: MEMBER_DEVICE_LIST_RANGE,
       form: {
         plan_id: '',
         plan_name: '',

@@ -47,6 +47,7 @@ export function get_advertising_point_list() {
 /*
 * 首页
 * */
+
 // 获取整体数据
 export function get_homepage_overall_data() {
   return request({
@@ -67,6 +68,15 @@ export function get_homepage_growth_data(data) {
 /*
 * 用户信息管理
 *  */
+
+// 获取用户来源列表
+export function get_user_reg_from_list(data) {
+  return request({
+    url: '/greenguard/common/user/reg_from/list',
+    method: 'post',
+    data
+  })
+}
 
 // 获取家长用户列表
 export function get_parent_list(data) {
@@ -678,6 +688,7 @@ export function publish_recommend_subject_detail(data) {
 /*
 * 系统参数
 *  */
+
 // 获取系统参数列表
 export function get_sys_configuration_list(data) {
   return request({
@@ -691,6 +702,15 @@ export function get_sys_configuration_list(data) {
 export function get_sys_configuration_details(data) {
   return request({
     url: '/greenguard/manager/sys/param/get',
+    method: 'post',
+    data
+  })
+}
+
+// 获取系统类型列表
+export function get_sys_param_type_list(data) {
+  return request({
+    url: '/greenguard/manager/sys/param/get/type/list',
     method: 'post',
     data
   })

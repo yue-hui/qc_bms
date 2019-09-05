@@ -89,7 +89,6 @@
 <script>
 import CreateAndEditParameter from './components/create_and_edit_parameter'
 import { MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { delete_sys_configuration, get_sys_configuration_list } from '@/api/interactive'
 
@@ -108,7 +107,6 @@ export default {
       query_sets: {
         p_type_name: ''
       },
-      device_type_items: device_type_list,
       packages: PACKAGE_TYPE,
       member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
@@ -193,32 +191,6 @@ export default {
     change_current: function(page) {
       this.page = page
       this.fetch_data()
-    },
-    change_shelf_status: function(row) {
-      let confirm_text,
-        is_listing
-      if (row.is_listing === '1') {
-        // 已上架
-        confirm_text = '你确定要下架该套餐吗?'
-        is_listing = '0'
-      } else if (row.is_listing === '0') {
-        // 已下架
-        confirm_text = '你确定要上架该套餐吗?'
-        is_listing = '1'
-      }
-      console.log(is_listing)
-      this.$confirm(confirm_text, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 更新记录
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消上下架操作'
-        })
-      })
     },
     close_package_dialog(refresh = false) {
       this.action = 0

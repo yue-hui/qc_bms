@@ -1,106 +1,116 @@
 <template>
   <div class="content">
-
-    <div class="header-line">
-      <div class="header-line-left">
-        <div class="header-block search-time">
-          <label class="search-item">注册时间:</label>
-          <div class="block">
-            <el-date-picker
-              v-model="datetime_range"
-              end-placeholder="结束日期"
-              range-separator="至"
-              start-placeholder="开始日期"
-              type="daterange"
-              clearable
-              size="mini"
-              unlink-panels
-              @change="search" />
-          </div>
-        </div>
-
-        <div class="header-block phone-block">
-          <label class="search-item">手机号:</label>
-          <el-input
-            v-model="phone"
-            maxlength="11"
-            size="mini"
-            clearable
-            onkeyup="this.value=this.value.replace(/\D/g,'')"
-            placeholder="请输入手机号"
-            @change="search" />
-        </div>
-
-        <div class="header-block phone-block">
-          <label class="search-item">昵称:</label>
-          <el-input
-            v-model="nick_name"
-            size="mini"
-            clearable
-            placeholder="请输入用户昵称"
-            @change="search" />
-        </div>
-
-        <div class="header-block patriarch-phone-block">
-          <label class="search-item">家长手机号:</label>
-          <el-input
-            v-model="patriarch_phone"
-            maxlength="11"
-            size="mini"
-            clearable
-            onkeyup="this.value=this.value.replace(/\D/g,'')"
-            placeholder="请输入家长手机号"
-            @change="search" />
-        </div>
-
-        <div class="header-block platform-block">
-          <label class="search-item">平台类型:</label>
-          <el-select
-            v-model="device_type"
-            size="mini"
-            placeholder="请选择平台类型"
-            clearable
-            @change="search">
-            <el-option
-              v-for="item in device_type_list"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
-
-        <div class="header-block member-status-block">
-          <label class="search-item">会员状态:</label>
-          <el-select
-            v-model="member_status"
-            size="mini"
-            placeholder="请选择会员状态"
-            clearable
-            @change="search">
-            <el-option
-              v-for="item in member_status_list"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
-      </div>
-
-      <div class="header-line-right">
-        <el-button
-          :loading="download_loading"
-          class="download details-tab"
-          size="mini"
-          type="success"
-          @click="download">导出
-          <svg-icon icon-class="download" />
-        </el-button>
-      </div>
-    </div>
-
-    <hr class="hr-diviser">
-
     <div class="content-body">
+      <div class="search-area">
+        <el-row :gutter="10" class="row-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="3" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">手机号:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_set.phone"
+                    maxlength="11"
+                    size="mini"
+                    clearable
+                    onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    placeholder="请输入手机号"
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="3" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">孩子昵称:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_set.nick_name"
+                    size="mini"
+                    clearable
+                    placeholder="请输入用户昵称"
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">家长手机号:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_set.patriarch_phone"
+                    maxlength="11"
+                    size="mini"
+                    clearable
+                    onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    placeholder="请输入家长手机号"
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">平台类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.device_type"
+                    size="mini"
+                    placeholder="请选择平台类型"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in device_type_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">注册时间:</el-col>
+                <el-col :span="16">
+                  <el-date-picker
+                    v-model="query_set.datetime_range"
+                    end-placeholder="结束日期"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    type="daterange"
+                    clearable
+                    size="mini"
+                    unlink-panels
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="18" :lg="18" :xl="6" class="col-bg layout-right">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-button
+                  :loading="download_loading"
+                  class="download details-tab"
+                  size="mini"
+                  type="success"
+                  @click="download">导出
+                  <svg-icon icon-class="download" />
+                </el-button>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+
+      <div class="between-search-area-and-table-display" />
+
       <div class="table-content table-block">
         <el-table
           :data="table_data"
@@ -118,7 +128,7 @@
             width="180" />
           <el-table-column
             align="center"
-            label="手机号"
+            label="孩子手机号"
             prop="phone" />
           <el-table-column
             align="center"
@@ -145,7 +155,8 @@
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
-                @click="view_details(scope.row)">查看</el-button>
+                @click="view_details(scope.row)">查看
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -164,30 +175,32 @@
 
 <script>
 import { get_patriarch_list_export, get_user_child_list } from '@/api/interactive'
-import { date_formatter, get_grade_label_map, get_sex_label } from '@/utils/common'
+import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_list } from '@/utils/common'
 import { DATE_FORMAT, DATE_TIME_FORMAT, GRADE_LIST, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
+import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   data() {
     const page_size = getPagenationSize()
-    const grade_label_list = GRADE_LIST
+    const grade_label_list = []
     GRADE_LIST.forEach(c => {
       grade_label_list[c.val] = c.name
     })
     return {
       device_type_list,
       grade_label_list,
-      member_status_list,
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
-      datetime_range: '',
-      phone: '',
-      device_type: '',
-      member_status: '',
+      query_set: {
+        datetime_range: '',
+        phone: '',
+        nick_name: '',
+        patriarch_phone: '',
+        device_type: ''
+      },
       table_data: [],
       current_uid: '',
       recharge_dialog_visible: false,
@@ -223,24 +236,21 @@ export default {
     },
     get_params: function() {
       const config = this.get_config()
-      if (this.phone) {
-        config['phone'] = '' + this.phone
+      if (this.query_set.phone) {
+        config['phone'] = '' + this.query_set.phone
       }
-      if (this.patriarch_phone) {
-        config['patriarch_phone'] = '' + this.patriarch_phone
+      if (this.query_set.patriarch_phone) {
+        config['patriarch_phone'] = '' + this.query_set.patriarch_phone
       }
-      if (this.device_type) {
-        config['device_type'] = this.device_type
+      if (this.query_set.device_type) {
+        config['device_type'] = this.query_set.device_type
       }
-      if (this.nick_name) {
-        config['nick_name'] = this.nick_name
+      if (this.query_set.nick_name) {
+        config['nick_name'] = this.query_set.nick_name
       }
-      if (this.member_status) {
-        config['member_status'] = this.member_status
-      }
-      if (this.datetime_range && this.datetime_range.length === 2) {
-        config['begin_time'] = '' + this.datetime_range[0].getTime()
-        config['end_time'] = '' + this.datetime_range[1].getTime()
+      if (this.query_set.datetime_range && this.query_set.datetime_range.length === 2) {
+        config['begin_time'] = '' + this.query_set.datetime_range[0].getTime()
+        config['end_time'] = '' + this.query_set.datetime_range[1].getTime()
       }
       return config
     },
@@ -285,7 +295,14 @@ export default {
       const config = this.get_params()
       get_patriarch_list_export(config).then(res => {
         if (res.status === 0) {
-          const remote_data = res.data
+          const remote_data = res.data.map(r => {
+            const child_grade = '' + r.child_grade
+            const child_grade_label = get_value_from_map_list(child_grade, GRADE_LIST, '-', '2')
+            return {
+              ...r,
+              child_grade_label
+            }
+          })
           this.export_excel(remote_data)
         } else {
           this.$message.error(res.message)
@@ -325,11 +342,11 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-孩子端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '家长手机号',
+        const t_header = ['用户昵称', '孩子手机号', '家长手机号',
           '注册时间', '类型', '年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-        const filter_val = ['nick_name', 'phone',
-          'create_time_label', 'device_type_label', 'grade_label']
+        const filter_val = ['nick_name', 'phone', 'patriarch_phone',
+          'create_time', 'device_type_label', 'child_grade_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {
           header: t_header,
@@ -359,81 +376,39 @@ $label_height: 28px;
   .content-body {
     border: 1px solid #c7d5ee;
     height: 100%;
-    padding: 15px 25px;
     min-height: 120px;
 
-  }
+    .search-area {
+      padding: 20px 20px 0 20px;
 
-  .header-line {
-    display: flex;
-    flex-direction: row;
+      .row-bg {
+        .col-bg {
+          padding: 5px 0;
 
-    .header-line-left {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
+          &.layout-right {
+            text-align: right;
+          }
 
-      .header-block {
-        display: flex;
-        flex-direction: row;
-        margin-left: 10px;
-
-        &:first-child {
-          margin-left: 0;
+          .order-number-list {
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4d4d4d;
+          }
         }
-
-        .search-item {
-          vertical-align: middle;
-          display: inline-block;
-          height: $label_height;
-          line-height: $label_height;
-          padding-right: 8px;
-          min-width: 70px;
-          color: #4d4d4d;
-          font-size: 14px;
-          font-weight: 600;
-        }
-      }
-
-      .phone-block {
-        width: 200px;
-      }
-
-      .patriarch-phone-block {
-        width: 270px;
-        color: red;
-        .search-item{
-          width: 140px !important;
-        }
-      }
-
-      .platform-block {
-        width: 200px;
-        margin-left: 20px;
-      }
-
-      .member-status-block {
-        width: 200px;
-        margin-left: 20px;
-      }
-
-      .search-time {
-        width: 440px;
       }
     }
 
-    .header-line-right {
-      min-width: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .between-search-area-and-table-display {
+      height: 1px;
+      margin: 10px 20px 15px 20px;
+      background-color: #d0d0d7;
+    }
+
+    .table-content {
+      margin: 20px;
     }
   }
-
-  /*.hr-diviser {*/
-  /*border-top: solid #c8c8c8 1px;*/
-  /*width: 100%;*/
-  /*border-bottom: 0;*/
-  /*}*/
 }
 </style>

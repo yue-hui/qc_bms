@@ -67,8 +67,8 @@
 <script>
 import DeviceCard from './device_card'
 import DeviceBindRecords from './device_bind_records'
-import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
-import { date_formatter, get_sex_label, transfer_to_chinese_index } from '@/utils/common'
+import { DATE_TIME_FORMAT, get_chinese_index, GRADE_LIST } from '@/utils/constant'
+import { date_formatter, get_sex_label, get_value_from_map_list, transfer_to_chinese_index } from '@/utils/common'
 
 export default {
   name: 'Child',
@@ -117,9 +117,10 @@ export default {
   watch: {
     child: {
       handler(new_child, old_child) {
+        const grade_name = get_value_from_map_list('' + new_child.grade, GRADE_LIST, '-', '2')
         this.child_new = {
           ...new_child,
-          grade_name: this.transfer_grade(new_child.grade)
+          grade_name
         }
       },
       immediate: true

@@ -163,10 +163,18 @@ export function pure_object_null_value(data) {
 * 参数 map_list: 键值序列列表
 * 参数 default_value: 无键值匹配时默认值
 *  */
-export function get_value_from_map_list(key, map_list = [], default_value = '-') {
-  const filter_item = map_list.filter(r => r.value === key)
-  if (filter_item.length) {
-    return filter_item[0].label
+export function get_value_from_map_list(key, map_list = [], default_value = '-', map_list_type = '1') {
+  // map_list_type map_list的格式
+  if (map_list_type === '1') {
+    const filter_item = map_list.filter(r => r.value === key)
+    if (filter_item.length) {
+      return filter_item[0].label
+    }
+  } else if (map_list_type === '2') {
+    const filter_item = map_list.filter(r => r.val === key)
+    if (filter_item.length) {
+      return filter_item[0].name
+    }
   }
   return default_value
 }

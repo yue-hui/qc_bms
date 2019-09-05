@@ -84,7 +84,6 @@
 <script>
 import CreateAndEditHighRiskApplication from './components/create_and_edit_high_risk_application'
 import { MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -98,7 +97,6 @@ export default {
       query_sets: {
         item_name: ''
       },
-      device_type_items: device_type_list,
       packages: PACKAGE_TYPE,
       member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
@@ -170,7 +168,6 @@ export default {
         confirm_text = '你确定要上架该套餐吗?'
         is_listing = '1'
       }
-      console.log(is_listing)
       this.$confirm(confirm_text, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

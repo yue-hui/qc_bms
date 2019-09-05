@@ -4,7 +4,6 @@
       :before-close="handle_close"
       :title="title"
       :visible.sync="isShow"
-      size="mini"
       width="50%">
 
       <div class="show-dialog-pannel">
@@ -390,6 +389,8 @@ export default {
             icon_url: r.icon_url
           }
         })
+      }).catch(() => {
+        this.app_list = []
       })
     }
   }

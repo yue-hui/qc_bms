@@ -91,7 +91,6 @@
 
 <script>
 import vuedraggable from 'vuedraggable'
-import { device_type_list } from '@/views/toolbox/data/promotion'
 import { GRADE_LIST } from '@/utils/constant'
 import {
   create_recommend_subject,
@@ -125,7 +124,6 @@ export default {
     return {
       visiable_height: '',
       grade_list,
-      device_type_items: device_type_list,
       soft_list: [],
       sendpass_second_url: [],
       query_soft_name: '',
@@ -254,7 +252,6 @@ export default {
       })
     },
     change_grade(grade) {
-      console.log('grade', grade)
     },
     change_device_type(e) {
       this.public_form.device_type = e

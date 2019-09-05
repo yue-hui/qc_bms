@@ -422,3 +422,15 @@ export const OPERATORS_ACTIVITY_TYPES = [
     label: '实物'
   }
 ]
+
+// 会员类型
+export const PATRIARCH_MEMBER_TYPES = [
+  {
+    value: '01',
+    label: '体验会员'
+  },
+  {
+    value: '02',
+    label: '付费会员'
+  }
+]

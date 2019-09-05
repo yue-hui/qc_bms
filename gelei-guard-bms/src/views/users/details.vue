@@ -58,21 +58,21 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="注册时间">
-                    <span>{{ __date_formatter(information.create_time) }}</span>
+                    <span>{{ information.create_time | formatter_date_string }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="生日">
-                    <span>{{ __date_formatter(information.birthdate, DATE_FORMAT_WITH_POINT) }}</span>
+                    <span>{{ information.birthdate | formatter_date_with_point_string }}</span>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="收货地址">
-                    <span>-</span>
+                    <span>{{ information.address || '-' }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -81,7 +81,7 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="最后使用时间">
-                    <span>{{ __date_formatter(information.last_use_time) }}</span>
+                    <span>{{ information.last_use_time | formatter_date_string }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -104,11 +104,19 @@
 import child from './components/child'
 import { get_parent_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
-import { DATE_TIME_FORMAT } from '@/utils/constant'
+import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT } from '@/utils/constant'
 
 export default {
   components: {
     child
+  },
+  filters: {
+    formatter_date_with_point_string: function(time) {
+      return date_formatter(time, DATE_FORMAT_WITH_POINT)
+    },
+    formatter_date_string: function(time) {
+      return date_formatter(time, DATE_TIME_FORMAT)
+    }
   },
   data() {
     return {
@@ -142,10 +150,6 @@ export default {
           this.$message.error(res.message)
         }
       })
-    },
-    __date_formatter: (t, format = DATE_TIME_FORMAT) => {
-      // DATE_FORMAT_WITH_POINT
-      return date_formatter(t, format)
     }
   }
 }

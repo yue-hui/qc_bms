@@ -64,9 +64,9 @@ import { pure_object_null_value } from '@/utils/common'
 import {
   create_sys_configuration,
   edit_sys_configuration,
-  get_sys_configuration_details
+  get_sys_configuration_details, get_sys_param_type_list
 } from '@/api/interactive'
-import { SYSTEM_CONFIGURATION_TYPES, SYSTEM_ENABLE_STATUS } from '@/views/system/data/system_parameter'
+import { SYSTEM_ENABLE_STATUS } from '@/views/system/data/system_parameter'
 
 export default {
   name: 'ParameterDialog',
@@ -87,11 +87,10 @@ export default {
     }
   },
   data: function() {
-    const system_configuration_types = SYSTEM_CONFIGURATION_TYPES
     const system_enable_status = SYSTEM_ENABLE_STATUS
     return {
       dialog_title_name: '系统参数',
-      system_configuration_types,
+      system_configuration_types: [],
       system_enable_status,
       form: {
         p_id: '',
@@ -146,6 +145,7 @@ export default {
   },
   watch: {},
   mounted: function() {
+    this.fetch_sys_param_type_list()
     if (this.isNew) {
       this.form = this.init_pannel_data()
     } else {
@@ -165,6 +165,21 @@ export default {
         row_order: '',
         remark: ''
       }
+    },
+    fetch_sys_param_type_list() {
+      // 获取系统参数列表
+      get_sys_param_type_list().then(res => {
+        if (res.status === 0) {
+          this.system_configuration_types = res.data.map(r => {
+            return {
+              value: r,
+              name: r
+            }
+          })
+        } else {
+          this.system_configuration_types = []
+        }
+      })
     },
     fetch_pannel_data() {
       const config = {

@@ -104,7 +104,6 @@ import {
   publish_recommend_subject_detail
 } from '@/api/interactive'
 import { date_formatter, get_grade_label } from '@/utils/common'
-import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -115,7 +114,6 @@ export default {
     const page_size = getPagenationSize()
     return {
       query_sets: {},
-      device_type_items: device_type_list,
       packages: PACKAGE_TYPE,
       status_list: PACKAGE_STATUS,
       action: 0,

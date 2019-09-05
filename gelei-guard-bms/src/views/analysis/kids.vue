@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     init_data: function() {
-      const begin_time = dayjs().subtract(1, 'month').subtract(1, 'day').valueOf()
+      const begin_time = dayjs().subtract(1, 'month').valueOf()
       const end_time = dayjs().subtract(1, 'day').valueOf()
       this.datetime_range = [begin_time, end_time]
       this.condition = {
