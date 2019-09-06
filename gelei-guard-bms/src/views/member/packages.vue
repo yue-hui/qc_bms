@@ -357,11 +357,11 @@ export default {
     delete_shelf: function(row) {
       if (row.is_listing === '1') {
         // 已上架
-        const warngin_message = '当前会员套餐已上架无法直接删除'
+        const warngin_message = '套餐需下架才可以删除'
         this.$message.warning(warngin_message)
         return
       }
-      const confirm_text = '套餐"' + row.plan_name + '"需要下架才可以删除?'
+      const confirm_text = '你确定要删除该套餐吗？'
       this.$confirm(confirm_text, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

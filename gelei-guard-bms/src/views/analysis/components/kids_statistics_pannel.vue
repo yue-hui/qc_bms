@@ -11,7 +11,7 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_user_percent)"
-            :class="judge_direction(statistics.increased_user_percent)" />
+            :class="increased_user_percent_class" />
           {{ statistics.increased_user_percent | abs }}%
         </div>
       </div>
@@ -22,7 +22,7 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_user_percent)"
-            :class="judge_direction(statistics.increased_user_percent)" />
+            :class="increased_bind_user_percent_class" />
           {{ statistics.increased_bind_user_percent | abs }}%
         </div>
       </div>
@@ -56,7 +56,11 @@ export default {
   },
   filters: {
     abs: function(percent) {
-      return Math.abs(percent)
+      if (percent === undefined) {
+        return ''
+      } else {
+        return Math.abs(percent)
+      }
     }
   },
   props: {},
@@ -65,7 +69,22 @@ export default {
       statistics: {}
     }
   },
-  computed: {},
+  computed: {
+    increased_user_percent_class: function() {
+      if (this.statistics && this.statistics.increased_user_percent) {
+        return this.judge_direction(this.statistics.increased_user_percent)
+      } else {
+        return ''
+      }
+    },
+    increased_bind_user_percent_class: function() {
+      if (this.statistics && this.statistics.increased_bind_user_percent) {
+        return this.judge_direction(this.statistics.increased_bind_user_percent)
+      } else {
+        return ''
+      }
+    }
+  },
   watch: {},
   mounted: function() {
     this.search()

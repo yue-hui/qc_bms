@@ -65,27 +65,6 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员状态:</el-col>
-                <el-col :span="16">
-                  <el-select
-                    v-model="query_set.member_status"
-                    size="mini"
-                    placeholder="会员状态"
-                    clearable
-                    @change="search">
-                    <el-option
-                      v-for="item in member_status_list"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
                 <el-col :span="8" class="order-number-list">用户来源:</el-col>
                 <el-col :span="16">
                   <el-select
@@ -108,8 +87,22 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="8" class="order-number-list">会员有效天数:</el-col>
-                <el-col :span="16">
-                  <el-input v-model="query_set.valid_days" clearable size="mini" placeholder="会员有效天数" @change="search" />
+                <el-col :span="16" class="valid-date-range">
+                  <div class="valid-value-area">
+                    <el-input
+                      v-model="query_set.valid_days"
+                      type="number"
+                      clearable
+                      size="mini"
+                      @change="search" />
+                    <span class="valid-date-span">-</span>
+                    <el-input
+                      v-model="query_set.valid_days"
+                      type="number"
+                      clearable
+                      size="mini"
+                      @change="search" />
+                  </div>
                 </el-col>
               </el-row>
             </div>
@@ -185,6 +178,10 @@
             align="center"
             label="会员类型"
             prop="vip_label" />
+          <el-table-column
+            align="center"
+            label="会员有效天数"
+            prop="valid_days_label" />
           <el-table-column
             align="center"
             label="操作"
@@ -355,7 +352,12 @@ export default {
       get_user_reg_from_list().then(res => {
         // 获取用户注册来源
         if (res.status === 0) {
-          this.user_sources = res.data
+          this.user_sources = res.data.map(r => {
+            return {
+              label: r.reg_from_label,
+              value: r.reg_from
+            }
+          })
         } else {
           this.user_sources = []
           this.$message.error(res.message)
@@ -391,9 +393,11 @@ export default {
           } else {
             vip_label = ''
           }
+          const valid_days_label = r.valid_days + '天'
           const item = {
             ...r,
             vip_label,
+            valid_days_label,
             create_time: date_formatter(r.create_time, DATE_TIME_FORMAT),
             _id: base_index + i
           }
@@ -519,6 +523,21 @@ $label_height: 28px;
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+          }
+
+          .valid-date-range {
+            padding: 0 10px;
+
+            .valid-value-area {
+              display: flex;
+              justify-content: space-between;
+              flex-direction: row;
+              align-items: center;
+
+              .valid-date-span {
+                padding: 0 10px;
+              }
+            }
           }
         }
       }

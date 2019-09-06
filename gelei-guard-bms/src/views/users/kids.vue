@@ -23,7 +23,7 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="3" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">孩子昵称:</el-col>
+                <el-col :span="8" class="order-number-list">用户昵称:</el-col>
                 <el-col :span="16">
                   <el-input
                     v-model="query_set.nick_name"
@@ -76,6 +76,27 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">年级:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.grade"
+                    size="mini"
+                    placeholder="请选择孩子的年级"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in grade_list"
+                      :key="item.val"
+                      :label="item.name"
+                      :value="item.val" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">注册时间:</el-col>
                 <el-col :span="16">
                   <el-date-picker
@@ -92,7 +113,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="18" :lg="18" :xl="6" class="col-bg layout-right">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -183,13 +204,15 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 export default {
   data() {
     const page_size = getPagenationSize()
-    const grade_label_list = []
+    const grade_name_array = []
     GRADE_LIST.forEach(c => {
-      grade_label_list[c.val] = c.name
+      grade_name_array[c.val] = c.name
     })
+    const grade_list = GRADE_LIST
     return {
       device_type_list,
-      grade_label_list,
+      grade_name_array,
+      grade_list,
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
@@ -199,7 +222,8 @@ export default {
         phone: '',
         nick_name: '',
         patriarch_phone: '',
-        device_type: ''
+        device_type: '',
+        grade: ''
       },
       table_data: [],
       current_uid: '',
@@ -248,6 +272,9 @@ export default {
       if (this.query_set.nick_name) {
         config['nick_name'] = this.query_set.nick_name
       }
+      if (this.query_set.grade) {
+        config['grade'] = this.query_set.grade
+      }
       if (this.query_set.datetime_range && this.query_set.datetime_range.length === 2) {
         config['begin_time'] = '' + this.query_set.datetime_range[0].getTime()
         config['end_time'] = '' + this.query_set.datetime_range[1].getTime()
@@ -277,7 +304,7 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
         res.data.forEach((r, i, _a) => {
-          const grade_label = this.grade_label_list[r.grade]
+          const grade_label = this.grade_name_array[r.grade]
           const item = {
             ...r,
             grade_label,
@@ -342,7 +369,7 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-孩子端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '孩子手机号', '家长手机号',
+        const t_header = ['用户昵称', '手机号', '家长手机号',
           '注册时间', '类型', '年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
         const filter_val = ['nick_name', 'phone', 'patriarch_phone',

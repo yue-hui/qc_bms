@@ -112,10 +112,18 @@ export default {
   },
   filters: {
     formatter_date_with_point_string: function(time) {
-      return date_formatter(time, DATE_FORMAT_WITH_POINT)
+      if (time) {
+        return date_formatter(time, DATE_FORMAT_WITH_POINT)
+      } else {
+        return ''
+      }
     },
     formatter_date_string: function(time) {
-      return date_formatter(time, DATE_TIME_FORMAT)
+      if (time) {
+        return date_formatter(time, DATE_TIME_FORMAT)
+      } else {
+        return ''
+      }
     }
   },
   data() {
