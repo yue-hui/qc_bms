@@ -176,34 +176,34 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/app/activity',
-    component: Layout,
-    name: '活动管理',
-    alwaysShow: true,
-    redirect: '/app/activity/list',
-    meta: { title: '活动管理', icon: 'activity' },
-    children: [
-      // {
-      //   path: 'list',
-      //   name: '活动项管理',
-      //   component: () => import('@/views/activity/index'),
-      //   meta: { title: '活动项管理', icon: 'activity_list' }
-      // },
-      {
-        path: 'invatation',
-        name: '邀请好友数据',
-        component: () => import('@/views/activity/invatation'),
-        meta: { title: '邀请好友数据', icon: 'invatation' }
-      }
-      // {
-      //   path: 'props',
-      //   name: '活动道具管理',
-      //   component: () => import('@/views/activity/props'),
-      //   meta: { title: '活动道具管理', icon: 'activity_props' }
-      // }
-    ]
-  },
+  // {
+  //   path: '/app/activity',
+  //   component: Layout,
+  //   name: '活动管理',
+  //   alwaysShow: true,
+  //   redirect: '/app/activity/list',
+  //   meta: { title: '活动管理', icon: 'activity' },
+  //   children: [
+  //     // {
+  //     //   path: 'list',
+  //     //   name: '活动项管理',
+  //     //   component: () => import('@/views/activity/index'),
+  //     //   meta: { title: '活动项管理', icon: 'activity_list' }
+  //     // },
+  //     {
+  //       path: 'invatation',
+  //       name: '邀请好友数据',
+  //       component: () => import('@/views/activity/invatation'),
+  //       meta: { title: '邀请好友数据', icon: 'invatation' }
+  //     }
+  //     // {
+  //     //   path: 'props',
+  //     //   name: '活动道具管理',
+  //     //   component: () => import('@/views/activity/props'),
+  //     //   meta: { title: '活动道具管理', icon: 'activity_props' }
+  //     // }
+  //   ]
+  // },
   {
     path: '/toolbox',
     component: Layout,
