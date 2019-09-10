@@ -151,10 +151,10 @@
             align="center"
             label="手机号"
             prop="phone" />
-          <!--<el-table-column
+          <el-table-column
             align="center"
             label="家长手机号"
-            prop="patriarch_phone" />-->
+            prop="patriarch_phone" />
           <el-table-column
             align="center"
             label="注册时间"
