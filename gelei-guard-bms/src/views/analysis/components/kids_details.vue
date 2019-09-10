@@ -174,7 +174,6 @@ export default {
     search() {
       // 孩子端
       this.page_child = 1
-      this.page_size_child = getPagenationSize()
       this.fetch_user_analysis_child_details()
     },
     fetch_user_analysis_child_details() {

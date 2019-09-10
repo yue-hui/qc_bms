@@ -214,7 +214,6 @@ export default {
     search() {
       // 家长端
       this.page = 1
-      this.page_size = getPagenationSize()
       this.fetch_user_analysis_details()
     },
     fetch_user_analysis_details() {

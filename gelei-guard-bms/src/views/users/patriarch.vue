@@ -303,6 +303,7 @@ export default {
           return
         }
       }
+      this.page = 1
       this.refresh_data()
     },
     table_size_change: function(size) {
