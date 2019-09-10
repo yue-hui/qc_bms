@@ -336,7 +336,7 @@ export default {
     change_query_status() {
       this.page = 1
       this.page_size = getPagenationSize()
-      this.fetch_question_list()
+      this.init_helper()
     }
   }
 }
