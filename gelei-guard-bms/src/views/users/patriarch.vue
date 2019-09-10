@@ -90,18 +90,22 @@
                 <el-col :span="16" class="valid-date-range">
                   <div class="valid-value-area">
                     <el-input
-                      v-model="query_set.valid_days"
-                      type="number"
+                      v-model="query_set.begin_valid_days"
+                      type="tel"
+                      min="0"
                       clearable
                       size="mini"
-                      @change="search" />
+                      @blur="search"
+                      @input="input_pure_number(query_set.begin_valid_days)" />
                     <span class="valid-date-span">-</span>
                     <el-input
-                      v-model="query_set.valid_days"
-                      type="number"
+                      v-model="query_set.end_valid_days"
+                      type="tel"
+                      min="0"
                       clearable
                       size="mini"
-                      @change="search" />
+                      @blur="search"
+                      @input="input_pure_number(query_set.end_valid_days, false)" />
                   </div>
                 </el-col>
               </el-row>
@@ -177,7 +181,8 @@
           <el-table-column
             align="center"
             label="会员类型"
-            prop="vip_label" />
+            prop="vip_label"
+            width="220" />
           <el-table-column
             align="center"
             label="会员有效天数"
@@ -261,7 +266,8 @@ export default {
         member_type: '',
         member_status: '',
         reg_from: '',
-        valid_days: '',
+        begin_valid_days: '',
+        end_valid_days: '',
         datetime_range: ''
       },
       table_data: [],
@@ -276,11 +282,27 @@ export default {
     this.init()
   },
   methods: {
+    input_pure_number(valid_days, is_start = true) {
+      const new_valid_days = valid_days.replace(/[^\d]/g, '')
+      this.$nextTick(() => {
+        if (is_start) {
+          this.query_set.begin_valid_days = new_valid_days
+        } else {
+          this.query_set.end_valid_days = new_valid_days
+        }
+      })
+    },
     init() {
       this.refresh_data()
       this.fetch_register_source_list()
     },
     search(e) {
+      if (this.query_set.begin_valid_days && this.query_set.end_valid_days) {
+        if (parseInt(this.query_set.begin_valid_days) > this.query_set.end_valid_days) {
+          this.$message.error('会员有效开始天数应小于结束有效天数')
+          return
+        }
+      }
       this.refresh_data()
     },
     table_size_change: function(size) {
@@ -319,8 +341,11 @@ export default {
       if (this.query_set.reg_from) {
         config['reg_from'] = this.query_set.reg_from
       }
-      if (this.query_set.valid_days) {
-        config['valid_days'] = this.query_set.valid_days
+      if (this.query_set.begin_valid_days) {
+        config['begin_valid_days'] = this.query_set.begin_valid_days
+      }
+      if (this.query_set.end_valid_days) {
+        config['end_valid_days'] = this.query_set.end_valid_days
       }
       return config
     },
@@ -373,25 +398,25 @@ export default {
         res.data.forEach((r, i, _a) => {
           let vip_label
           if (r.member_type === '01') {
-            vip_label = '体验会员'
-            if (r.status === '00') {
-              vip_label += '(待生效)'
-            } else if (r.status === '01') {
-              vip_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT), '-',
-                date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), '）'].join('')
-            } else {
-              vip_label += '(已失效)'
-            }
+            vip_label = 'VIP体验会员'
           } else if (r.member_type === '02') {
             // 付费会员不用显示
             // vip_label = '付费会员'
-            vip_label = ''
-          }
-          if (r.begin_time && r.end_time) {
-            vip_label = ['VIP体验会员（', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
-              '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), '）'].join('')
+            vip_label = 'VIP会员'
           } else {
             vip_label = ''
+          }
+          if (r.member_status === '00') {
+            vip_label += '(待生效)'
+          } else if (r.member_status === '01') {
+            if (r.begin_time && r.end_time) {
+              vip_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+                '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
+            } else {
+              vip_label += '(已生效)'
+            }
+          } else if (r.member_status === '02') {
+            vip_label += '(已失效)'
           }
           const valid_days_label = r.valid_days + '天'
           const item = {
@@ -410,14 +435,28 @@ export default {
     download() {
       this.download_loading = true
       const config = this.get_params()
+      delete config.page_no
+      delete config.page_num
       get_patriarch_list_export(config).then(res => {
         if (res.status === 0) {
           const remote_data = res.data.map(r => {
             let member_type_label = ''
             if (r.member_type === '01') {
-              member_type_label = '体验会员'
+              member_type_label = 'VIP体验会员'
             } else if (r.member_type === '02') {
-              member_type_label = '付费会员'
+              member_type_label = 'VIP会员'
+            }
+            if (r.member_status === '00') {
+              member_type_label += '(待生效)'
+            } else if (r.member_status === '01') {
+              if (r.begin_time && r.end_time) {
+                member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+                  '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
+              } else {
+                member_type_label += '(已生效)'
+              }
+            } else if (r.member_status === '02') {
+              member_type_label += '(已失效)'
             }
             const child_sex_label = r.child_sex === '1' ? '男' : '女'
             const child_grade = '' + r.child_grade

@@ -137,11 +137,15 @@ export default {
         })
     },
     save: function() {
-      if (this.is_new) {
-        this.create_questions()
-      } else {
-        this.edit_questions()
-      }
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          if (this.is_new) {
+            this.create_questions()
+          } else {
+            this.edit_questions()
+          }
+        }
+      })
     },
     create_questions: function() {
       const data = this.form
@@ -179,12 +183,15 @@ export default {
         'record_id': this.rid
       }
       get_questions_details(config).then(res => {
-        this.form = res.data
-        this.form.type = ''
-        const question_type = res.data.type
-        this.update_question_types().then(() => {
-          this.form.type = question_type
-        })
+        debugger
+        if (res.status === 0) {
+          this.form = res.data
+          const question_type = res.data.type
+          this.form.type = ''
+          this.update_question_types().then(() => {
+            this.form.type = question_type
+          })
+        }
       })
     },
     update_question_types: function() {

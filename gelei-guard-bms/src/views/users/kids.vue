@@ -97,8 +97,8 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">注册时间:</el-col>
-                <el-col :span="16">
+                <el-col :span="6" class="order-number-list">注册时间:</el-col>
+                <el-col :span="18">
                   <el-date-picker
                     v-model="query_set.datetime_range"
                     end-placeholder="结束日期"
@@ -149,12 +149,12 @@
             width="180" />
           <el-table-column
             align="center"
-            label="孩子手机号"
+            label="手机号"
             prop="phone" />
-          <el-table-column
+          <!--<el-table-column
             align="center"
             label="家长手机号"
-            prop="patriarch_phone" />
+            prop="patriarch_phone" />-->
           <el-table-column
             align="center"
             label="注册时间"
@@ -320,10 +320,12 @@ export default {
     download() {
       this.download_loading = true
       const config = this.get_params()
+      delete config.page_no
+      delete config.page_num
       get_child_list_export(config).then(res => {
         if (res.status === 0) {
           const remote_data = res.data.map(r => {
-            const child_grade = '' + r.child_grade
+            const child_grade = '' + r.grade
             const child_grade_label = get_value_from_map_list(child_grade, GRADE_LIST, '-', '2')
             return {
               ...r,
@@ -369,10 +371,10 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-孩子端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号', '家长手机号',
+        const t_header = ['用户昵称', '手机号',
           '注册时间', '类型', '年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-        const filter_val = ['nick_name', 'phone', 'patriarch_phone',
+        const filter_val = ['nick_name', 'phone',
           'create_time', 'device_type_label', 'child_grade_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {

@@ -84,7 +84,7 @@
                 <span>同比</span>
                 <span v-if="true" class="upper">↑</span>
                 <span v-else class="down">↓</span>
-                <span>{{ growth_data.increased_bind_user_comparison }}</span>
+                <span>{{ growth_data.increased_bind_user_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-reminder">(转化率{{ growth_data.increased_bind_user_conversion }}%)</div>
@@ -96,7 +96,7 @@
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>{{ growth_data.increased_pay_user_comparison }}</span>
+                <span>{{ growth_data.increased_pay_user_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-reminder">(转化率{{ growth_data.increased_pay_user_conversion }}%)</div>
@@ -108,7 +108,7 @@
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↑</span>
-                <span>{{ growth_data.order_amount_comparison }}</span>
+                <span>{{ growth_data.order_amount_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-reminder">
@@ -125,7 +125,7 @@
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>{{ growth_data.increased_user_comparison }}</span>
+                <span>{{ growth_data.increased_user_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
@@ -146,7 +146,7 @@
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>{{ growth_data.increased_bind_device_comparison }}%</span>
+                <span>{{ growth_data.increased_bind_device_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
@@ -167,7 +167,7 @@
               <div class="item-data-compare">
                 <span>同比</span>
                 <span>↓</span>
-                <span>{{ growth_data.order_count_comparison }}%</span>
+                <span>{{ growth_data.order_count_comparison | abs }}%</span>
               </div>
             </div>
             <div class="item-row item-chart-area">
@@ -219,6 +219,14 @@ const theme_color = ['#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980',
 
 export default {
   components: {},
+  filters: {
+    abs: function(value) {
+      if (value === undefined) {
+        return ''
+      }
+      return Math.abs(value)
+    }
+  },
   data() {
     this.colors = theme_color
     const day = dayjs().subtract(1, 'days')

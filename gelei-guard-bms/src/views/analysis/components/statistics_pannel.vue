@@ -95,9 +95,6 @@ export default {
   watch: {},
   mounted: function() {
     this.search()
-    setTimeout(() => {
-      console.log('====', this.judge_direction(this.statistics.increased_bind_user_percent))
-    }, 5000)
   },
   methods: {
     judge_direction: function(direct = 0) {
