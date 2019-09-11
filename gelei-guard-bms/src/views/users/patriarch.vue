@@ -243,6 +243,7 @@ import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
 import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -251,6 +252,8 @@ export default {
   },
   data() {
     const page_size = getPagenationSize()
+    const begin_time = new Date(dayjs().subtract(30, 'days'))
+    const end_time = new Date(dayjs().subtract(1, 'days'))
     return {
       device_type_list,
       member_status_list,
@@ -268,7 +271,7 @@ export default {
         reg_from: '',
         begin_valid_days: '',
         end_valid_days: '',
-        datetime_range: ''
+        datetime_range: [begin_time, end_time]
       },
       table_data: [],
       current_uid: '',

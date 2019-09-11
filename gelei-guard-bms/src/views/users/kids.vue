@@ -200,6 +200,7 @@ import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_
 import { DATE_FORMAT, DATE_TIME_FORMAT, GRADE_LIST, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import dayjs from 'dayjs'
 
 export default {
   data() {
@@ -209,6 +210,8 @@ export default {
       grade_name_array[c.val] = c.name
     })
     const grade_list = GRADE_LIST
+    const begin_time = new Date(dayjs().subtract(30, 'days'))
+    const end_time = new Date(dayjs().subtract(1, 'days'))
     return {
       device_type_list,
       grade_name_array,
@@ -218,7 +221,7 @@ export default {
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       query_set: {
-        datetime_range: '',
+        datetime_range: [begin_time, end_time],
         phone: '',
         nick_name: '',
         patriarch_phone: '',

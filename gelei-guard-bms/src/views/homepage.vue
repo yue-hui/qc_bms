@@ -82,7 +82,8 @@
               <div class="item-data">{{ growth_data.increase_bind_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span v-if="true" class="upper">↑</span>
+                <span v-if="growth_data.increased_bind_user_comparison < 0" class="upper">↑</span>
+                <span v-else-if="growth_data.increased_bind_user_comparison === 0">-</span>
                 <span v-else class="down">↓</span>
                 <span>{{ growth_data.increased_bind_user_comparison | abs }}%</span>
               </div>
@@ -95,7 +96,9 @@
               <div class="item-data">{{ growth_data.increased_pay_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span>↓</span>
+                <span v-if="growth_data.increased_pay_user_comparison > 0" class="upper">↑</span>
+                <span v-else-if="growth_data.increased_pay_user_comparison === 0">-</span>
+                <span v-else class="down">↓</span>
                 <span>{{ growth_data.increased_pay_user_comparison | abs }}%</span>
               </div>
             </div>
@@ -107,7 +110,9 @@
               <div class="item-data">{{ growth_data.order_amount }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span>↑</span>
+                <span v-if="growth_data.order_amount_comparison > 0" class="upper">↑</span>
+                <span v-else-if="growth_data.order_amount_comparison === 0">-</span>
+                <span v-else class="down">↓</span>
                 <span>{{ growth_data.order_amount_comparison | abs }}%</span>
               </div>
             </div>
@@ -124,7 +129,9 @@
               <div class="item-data">{{ growth_data.increased_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span>↓</span>
+                <span v-if="growth_data.increased_user_comparison > 0" class="upper">↑</span>
+                <span v-else-if="growth_data.increased_user_comparison === 0">-</span>
+                <span v-else class="down">↓</span>
                 <span>{{ growth_data.increased_user_comparison | abs }}%</span>
               </div>
             </div>
@@ -145,7 +152,9 @@
               <div class="item-data">{{ growth_data.increased_bind_device }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span>↓</span>
+                <span v-if="growth_data.increased_bind_device_comparison > 0" class="upper">↑</span>
+                <span v-else-if="growth_data.increased_bind_device_comparison === 0">-</span>
+                <span v-else class="down">↓</span>
                 <span>{{ growth_data.increased_bind_device_comparison | abs }}%</span>
               </div>
             </div>
@@ -166,7 +175,9 @@
               <div class="item-data">{{ growth_data.order_count }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <span>↓</span>
+                <span v-if="growth_data.order_count_comparison > 0" class="upper">↑</span>
+                <span v-else-if="growth_data.order_count_comparison === 0">-</span>
+                <span v-else class="down">↓</span>
                 <span>{{ growth_data.order_count_comparison | abs }}%</span>
               </div>
             </div>
