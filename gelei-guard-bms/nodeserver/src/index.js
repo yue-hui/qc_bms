@@ -66,11 +66,11 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
     res.send(encryptParams)
     return
   }
-  
+
   var formData = {
     ...encryptParams
   }
-  
+
   // 添加文件信息
   var key, file, filename, filestream
   formData['file'] = []
@@ -87,7 +87,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
       }
     }
   }
-  
+
   request({
     url: TransferReq,
     headers: reqConType,
@@ -108,7 +108,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
         console.log('删除文件成功')
       })
     }
-    
+
     error ? console.log(error) : '转发请求正常'
   })
 }
