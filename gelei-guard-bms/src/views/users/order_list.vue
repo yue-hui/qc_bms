@@ -365,7 +365,7 @@ export default {
             '订单详情', '交易金额', '支付方式', '订单状态', '用户联系方式']
           // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
           const filter_val = ['order_no', 'pay_order_no', 'order_time_label', 'nick_name',
-            'order_type', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
+            'order_desc', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
           const data = this.formatJson(filter_val, data_list)
           const options = {
             header: t_header,

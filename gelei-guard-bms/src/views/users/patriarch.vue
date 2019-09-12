@@ -402,7 +402,7 @@ export default {
         res.data.forEach((r, i, _a) => {
           let vip_label
           if (r.member_type === '01') {
-            vip_label = 'VIP体验会员'
+            vip_label = '体验用户'
           } else if (r.member_type === '02') {
             // 付费会员不用显示
             // vip_label = '付费会员'
@@ -411,16 +411,16 @@ export default {
             vip_label = ''
           }
           if (r.member_status === '00') {
-            vip_label += '(待生效)'
+            // vip_label += '(待生效)'
           } else if (r.member_status === '01') {
             if (r.begin_time && r.end_time) {
               vip_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
                 '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
             } else {
-              vip_label += '(已生效)'
+              // vip_label += '(已生效)'
             }
           } else if (r.member_status === '02') {
-            vip_label += '(已失效)'
+            // vip_label += '(已失效)'
           }
           const valid_days_label = r.valid_days + '天'
           const item = {
@@ -446,21 +446,21 @@ export default {
           const remote_data = res.data.map(r => {
             let member_type_label = ''
             if (r.member_type === '01') {
-              member_type_label = 'VIP体验会员'
+              member_type_label = '体验用户'
             } else if (r.member_type === '02') {
               member_type_label = 'VIP会员'
             }
             if (r.member_status === '00') {
-              member_type_label += '(待生效)'
+              // member_type_label += '(待生效)'
             } else if (r.member_status === '01') {
               if (r.begin_time && r.end_time) {
                 member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
                   '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
               } else {
-                member_type_label += '(已生效)'
+                // member_type_label += '(已生效)'
               }
             } else if (r.member_status === '02') {
-              member_type_label += '(已失效)'
+              // member_type_label += '(已失效)'
             }
             const child_sex_label = r.child_sex === '1' ? '男' : '女'
             const child_grade = '' + r.child_grade
