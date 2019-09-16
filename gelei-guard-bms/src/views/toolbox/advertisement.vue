@@ -23,7 +23,7 @@
                       v-for="item in advertisement_type"
                       :key="item.value"
                       :label="item.label"
-                      :disabled="item.value !== '01'"
+                      :disabled="item.value === '03'"
                       :value="item.value" />
                   </el-select>
                 </el-col>

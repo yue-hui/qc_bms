@@ -400,16 +400,7 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
         res.data.forEach((r, i, _a) => {
-          let vip_label
-          if (r.member_type === '01') {
-            vip_label = '体验用户'
-          } else if (r.member_type === '02') {
-            // 付费会员不用显示
-            // vip_label = '付费会员'
-            vip_label = 'VIP会员'
-          } else {
-            vip_label = ''
-          }
+          let vip_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, '')
           if (r.member_status === '00') {
             // vip_label += '(待生效)'
           } else if (r.member_status === '01') {
