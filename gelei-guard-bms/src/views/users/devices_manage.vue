@@ -129,7 +129,8 @@
                   :loading="download_loading"
                   size="mini"
                   type="success"
-                  @click="download"><i class="el-icon-download el-icon" />导出</el-button>
+                  @click="download"><i class="el-icon-download el-icon" />导出
+                </el-button>
               </el-row>
             </div>
           </el-col>
@@ -196,7 +197,7 @@
 import {
   DATE_MINUTE_COMPACT_FORMAT,
   DATE_MINUTE_FORMAT,
-  DEVICE_MANAGE_LIST_NAME, TABLE_PAGE_SIEZS_LIST
+  DEVICE_MANAGE_LIST_NAME, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { get_device_list } from '@/api/interactive'
 import { child_platform_type, platforms } from '@/views/toolbox/data/promotion'
@@ -242,25 +243,39 @@ export default {
       const time_string = dayjs().format(DATE_MINUTE_COMPACT_FORMAT)
       const filename = [DEVICE_MANAGE_LIST_NAME, time_string].join('_')
       get_device_list(options).then(res => {
-        const data_list = this.device_list_map(res.data)
-        import('@/utils/Export2Excel').then(excel => {
-          const t_header = ['孩子端设备ID', '平台', '设备型号', '系统版本号',
-            '家长端版本号', '中间件版本号', '孩子端版本号', '孩子端版本更新时间', '家长端手机号']
-          // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-          const filter_val = ['child_device_id', 'device_type_label', 'device_model', 'os_version',
-            'patriarch_app_version', 'middleware_version', 'child_app_version', 'child_app_update_time_label',
-            'patriarch_phone']
-          const data = this.formatJson(filter_val, data_list)
-          const options = {
-            header: t_header,
-            data,
-            filename,
-            autoWidth: true,
-            bookType: 'xlsx'
+        if (res.status === 0) {
+          if (res.total_count >= EXPORT_MAX_RECORD_LENGTH) {
+            const options = {
+              title: '提示',
+              type: 'warning',
+              message: EXPORT_OVER_MAX_TIPS_REMINDER,
+              duration: 0
+            }
+            this.$notify(options)
+            return
           }
-          excel.export_json_to_excel(options)
-          this.download_loading = false
-        })
+          const data_list = this.device_list_map(res.data)
+          import('@/utils/Export2Excel').then(excel => {
+            const t_header = ['孩子端设备ID', '平台', '设备型号', '系统版本号',
+              '家长端版本号', '中间件版本号', '孩子端版本号', '孩子端版本更新时间', '家长端手机号']
+            // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+            const filter_val = ['child_device_id', 'device_type_label', 'device_model', 'os_version',
+              'patriarch_app_version', 'middleware_version', 'child_app_version', 'child_app_update_time_label',
+              'patriarch_phone']
+            const data = this.formatJson(filter_val, data_list)
+            const options = {
+              header: t_header,
+              data,
+              filename,
+              autoWidth: true,
+              bookType: 'xlsx'
+            }
+            excel.export_json_to_excel(options)
+            this.download_loading = false
+          })
+        } else {
+          this.$message.error(res.message)
+        }
       }).finally(() => {
         this.download_loading = false
       })

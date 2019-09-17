@@ -235,7 +235,7 @@ import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_
 import {
   DATE_FORMAT,
   DATE_FORMAT_WITH_POINT,
-  DATE_TIME_FORMAT, GRADE_LIST,
+  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, GRADE_LIST,
   PATRIARCH_MEMBER_TYPES,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
@@ -432,8 +432,20 @@ export default {
       const config = this.get_params()
       delete config.page_no
       delete config.page_num
+      config['page_no'] = 1
+      config['page_num'] = this.total
       get_patriarch_list_export(config).then(res => {
         if (res.status === 0) {
+          if (res.total_count >= EXPORT_MAX_RECORD_LENGTH) {
+            const options = {
+              title: '提示',
+              type: 'warning',
+              message: EXPORT_OVER_MAX_TIPS_REMINDER,
+              duration: 0
+            }
+            this.$notify(options)
+            return
+          }
           const remote_data = res.data.map(r => {
             let member_type_label = ''
             if (r.member_type === '01') {

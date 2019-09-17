@@ -1,4 +1,6 @@
 /* 签名时间偏移量 */
+import { extendPath } from 'echarts/src/util/graphic'
+
 export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 
 /* 系统常量配置 */
@@ -9,6 +11,11 @@ export const SYSTEM_CONSTANT = {
 
 /* 表格长度 */
 export const TABLE_PAGE_SIEZS_LIST = [10, 20, 50, 100]
+
+/* 导出数据记录上限值 */
+export const EXPORT_MAX_RECORD_LENGTH = 10000
+/* 超过导出上限时的提示语 */
+export const EXPORT_OVER_MAX_TIPS_REMINDER = '最多只能导出1W条数据噢!'
 
 /* 前端首页URL */
 export const HOME_PATH = '/users/information'

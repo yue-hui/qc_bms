@@ -56,7 +56,12 @@
 </template>
 
 <script>
-import { ANALYSIS_DETAILS_NAME, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import {
+  ANALYSIS_DETAILS_NAME,
+  EXPORT_MAX_RECORD_LENGTH,
+  EXPORT_OVER_MAX_TIPS_REMINDER,
+  TABLE_PAGE_SIEZS_LIST
+} from '@/utils/constant'
 import { get_user_analysis_child_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
@@ -105,24 +110,38 @@ export default {
         filename = [ANALYSIS_DETAILS_NAME, '孩子端', start_time_string, end_time_string].join('_')
       }
       get_user_analysis_child_details(options).then(res => {
-        const data_list = res.data
-        import('@/utils/Export2Excel').then(excel => {
-          const t_header = ['时间', '新增用户数', '新增绑定用户数', '当前绑定用户数',
-            '累计绑定用户数', '累计用户数']
-          // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-          const filter_val = ['date', 'increased_user', 'increased_bind_user', 'cur_total_bind_user',
-            'total_bind_user', 'total_user']
-          const data = this.formatJson(filter_val, data_list)
-          const options = {
-            header: t_header,
-            data,
-            filename,
-            autoWidth: true,
-            bookType: 'xlsx'
+        if (res.status === 0) {
+          if (res.total_count >= EXPORT_MAX_RECORD_LENGTH) {
+            const options = {
+              title: '提示',
+              type: 'warning',
+              message: EXPORT_OVER_MAX_TIPS_REMINDER,
+              duration: 0
+            }
+            this.$notify(options)
+            return
           }
-          excel.export_json_to_excel(options)
-          this.download_loading = false
-        })
+          const data_list = res.data
+          import('@/utils/Export2Excel').then(excel => {
+            const t_header = ['时间', '新增用户数', '新增绑定用户数', '当前绑定用户数',
+              '累计绑定用户数', '累计用户数']
+            // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+            const filter_val = ['date', 'increased_user', 'increased_bind_user', 'cur_total_bind_user',
+              'total_bind_user', 'total_user']
+            const data = this.formatJson(filter_val, data_list)
+            const options = {
+              header: t_header,
+              data,
+              filename,
+              autoWidth: true,
+              bookType: 'xlsx'
+            }
+            excel.export_json_to_excel(options)
+            this.download_loading = false
+          })
+        } else {
+          this.$message.error(res.message)
+        }
       }).finally(() => {
         this.download_loading = false
       })

@@ -197,7 +197,13 @@
 <script>
 import { get_child_list_export, get_user_child_list } from '@/api/interactive'
 import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_list } from '@/utils/common'
-import { DATE_FORMAT, DATE_TIME_FORMAT, GRADE_LIST, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import {
+  DATE_FORMAT,
+  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH,
+  EXPORT_OVER_MAX_TIPS_REMINDER,
+  GRADE_LIST,
+  TABLE_PAGE_SIEZS_LIST
+} from '@/utils/constant'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import dayjs from 'dayjs'
@@ -326,8 +332,20 @@ export default {
       const config = this.get_params()
       delete config.page_no
       delete config.page_num
+      config['page_no'] = 1
+      config['page_num'] = this.total
       get_child_list_export(config).then(res => {
         if (res.status === 0) {
+          if (res.total_count >= EXPORT_MAX_RECORD_LENGTH) {
+            const options = {
+              title: '提示',
+              type: 'warning',
+              message: EXPORT_OVER_MAX_TIPS_REMINDER,
+              duration: 0
+            }
+            this.$notify(options)
+            return
+          }
           const remote_data = res.data.map(r => {
             const child_grade = '' + r.grade
             const child_grade_label = get_value_from_map_list(child_grade, GRADE_LIST, '-', '2')
