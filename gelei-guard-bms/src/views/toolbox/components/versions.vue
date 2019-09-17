@@ -218,7 +218,7 @@ export default {
         update_title: [
           { required: true, trigger: 'blur', message: '策略名称为必填项' },
           { max: 12, trigger: 'blur', message: '策略名称长度不能超过12个字' }
-          ],
+        ],
         current_platform_classification: [{ required: true, trigger: 'blur', message: '升级产品为必选项' }],
         platform: [{ required: true, trigger: 'blur', message: '升级平台为必选项' }],
         is_force: [{ required: true, trigger: 'blur', message: '升级方式为必选项' }],
