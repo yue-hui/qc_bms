@@ -393,10 +393,10 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-孩子端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号',
+        const t_header = ['用户昵称', '手机号', '家长手机号',
           '注册时间', '类型', '年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-        const filter_val = ['nick_name', 'phone',
+        const filter_val = ['nick_name', 'phone', 'patriarch_phone',
           'create_time', 'device_type_label', 'child_grade_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {
