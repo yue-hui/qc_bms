@@ -292,6 +292,7 @@ export default {
       options['ad_name'] = this.form.ad_name
       options['ad_type'] = this.form.ad_type
       options['ad_position'] = this.form.ad_position
+      options['platform'] = this.form.platform
       options['ad_photo_url'] = this.form.file_list[0].url
       return options
     },
