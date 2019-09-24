@@ -206,7 +206,7 @@ import {
 } from '@/utils/constant'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 export default {
   data() {

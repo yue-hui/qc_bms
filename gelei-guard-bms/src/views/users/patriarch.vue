@@ -243,7 +243,7 @@ import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
 import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 export default {
   components: {
