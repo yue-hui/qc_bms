@@ -1,5 +1,5 @@
 /* 签名时间偏移量 */
-import { extendPath } from 'echarts/src/util/graphic'
+// import { extendPath } from 'echarts/src/util/graphic'
 
 export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 

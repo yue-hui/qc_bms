@@ -216,13 +216,13 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 export default {
   components: {},
   data() {
-    const now_time = dayjs()
-    const month_ago = dayjs().subtract(1, 'month')
+    // const now_time = dayjs()
+    // const month_ago = dayjs().subtract(1, 'month')
     const page_size = getPagenationSize()
     return {
       query_sets: {
         order_no: '',
-        order_time_range: [month_ago, now_time],
+        order_time_range: [],
         order_desc: '',
         order_status: '',
         pay_type: '',
@@ -279,7 +279,7 @@ export default {
       const order_time_range = query_params.order_time_range
       delete query_params.order_time_range
       let condition = {}
-      if (order_time_range) {
+      if (order_time_range[0] && order_time_range[1]) {
         const begin_time = new Date(order_time_range[0]).getTime()
         const end_time = new Date(order_time_range[1]).getTime()
         condition = {

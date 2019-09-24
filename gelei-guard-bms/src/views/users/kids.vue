@@ -216,8 +216,8 @@ export default {
       grade_name_array[c.val] = c.name
     })
     const grade_list = GRADE_LIST
-    const begin_time = new Date(dayjs().subtract(30, 'days'))
-    const end_time = new Date(dayjs().subtract(1, 'days'))
+    // const begin_time = new Date(dayjs().subtract(30, 'days'))
+    // const end_time = new Date(dayjs().subtract(1, 'days'))
     return {
       device_type_list,
       grade_name_array,
@@ -227,7 +227,7 @@ export default {
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       query_set: {
-        datetime_range: [begin_time, end_time],
+        datetime_range: [],
         phone: '',
         nick_name: '',
         patriarch_phone: '',
