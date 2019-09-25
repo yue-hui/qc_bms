@@ -33,7 +33,7 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_device_percent)"
-            :class="increased_bind_user_percent_class" />
+            :class="increased_bind_device_class" />
           {{ statistics.increased_bind_device_percent | abs }}%
         </div>
       </div>
@@ -85,8 +85,8 @@ export default {
       }
     },
     increased_bind_device_class: function() {
-      if (this.statistics && this.statistics.increased_bind_device) {
-        return this.judge_direction(this.statistics.increased_bind_device)
+      if (this.statistics && this.statistics.increased_bind_device_percent) {
+        return this.judge_direction(this.statistics.increased_bind_device_percent)
       } else {
         return ''
       }
