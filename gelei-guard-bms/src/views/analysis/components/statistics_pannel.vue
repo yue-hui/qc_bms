@@ -33,7 +33,7 @@
           日
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_device_percent)"
-            :class="increased_bind_device_class" />
+            :class="increased_bind_user_percent_class" />
           {{ statistics.increased_bind_device_percent | abs }}%
         </div>
       </div>
