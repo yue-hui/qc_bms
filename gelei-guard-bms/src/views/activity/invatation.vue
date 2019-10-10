@@ -12,7 +12,7 @@
                 <svg-icon class="svg-icon uv" icon-class="uv" />
               </div>
               <div class="right">
-                <span class="item-data">{{ invatation.total_count || 100 }}</span>
+                <span class="item-data">{{ invatation.total_count || '-' }}</span>
                 <span class="item-label">邀请页UV</span>
               </div>
             </div>
@@ -21,7 +21,7 @@
                 <svg-icon class="svg-icon share-people" icon-class="share_people" />
               </div>
               <div class="right">
-                <span class="item-data">{{ invatation.total_count || 100 }}</span>
+                <span class="item-data">{{ invatation.total_count || '-' }}</span>
                 <span class="item-label">分享人数</span>
               </div>
             </div>
@@ -30,7 +30,7 @@
                 <svg-icon class="svg-icon invatated-people" icon-class="invatated_people" />
               </div>
               <div class="right">
-                <span class="item-data">{{ invatation.total_count || 100 }}</span>
+                <span class="item-data">{{ invatation.total_count || '-' }}</span>
                 <span class="item-label">被邀请页UV</span>
               </div>
             </div>
