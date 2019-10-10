@@ -57,6 +57,7 @@
         v-for="(device, index) in child_new.device_list"
         :key="index"
         :device="device"
+        :child-id="child_new.user_id"
         :index="cardIndex" />
     </el-card>
 

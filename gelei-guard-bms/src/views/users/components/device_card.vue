@@ -6,6 +6,13 @@
         <el-collapse-item name="1">
           <template slot="title">
             {{ device_index }}<span :class="bind_type_color">{{ bind_type_name }}</span>
+            <div class="device-tools">
+              <div class="tools-area">
+                <div v-if="device.bind_type === '1'" class="un-lock-icon" @click.stop="confirm_un_lock_child_device">
+                  <svg-icon class="icon" icon-class="unlock" />
+                </div>
+              </div>
+            </div>
           </template>
           <div>
             <el-form ref="form" class="gg-user-details-with-all" label-suffix=":" label-width="140px">
@@ -79,6 +86,7 @@
 <script>
 import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
+import { unbind_user_device } from '@/api/interactive'
 
 export default {
   name: 'DeviceCard',
@@ -94,6 +102,10 @@ export default {
     index: {
       type: Number,
       default: 0
+    },
+    childId: {
+      type: String,
+      default: ''
     }
   },
   data: function() {
@@ -145,6 +157,34 @@ export default {
     },
     __date_formatter: (t) => {
       return date_formatter(t, DATE_TIME_FORMAT)
+    },
+    confirm_un_lock_child_device() {
+      const confirm_text = '确认解绑该孩子设备么？'
+      this.$confirm(confirm_text, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.un_lock()
+      }).catch(() => {
+        this.$message.info('用户已取消解绑操作')
+      })
+    },
+    un_lock() {
+      // 解锁
+      console.log(this.childId, this.device.device_id)
+      const data = {
+        child_user_id: this.childId,
+        child_device_id: this.device.device_id
+      }
+      unbind_user_device(data).then(res => {
+        if (res.status === 0) {
+          this.$message.success(res.message)
+          window.location.href = window.location.href
+        } else {
+          this.$message.error(res.message)
+        }
+      })
     }
   }
 }
@@ -154,11 +194,45 @@ export default {
 .component-card {
   width: 100%;
   height: 100%;
-  .show-binding-status{
+  position: relative;
+
+  .show-binding-status {
     color: #4aff24;
   }
-  .show-binded-status{
+
+  .show-binded-status {
     color: #ea4d45;
+  }
+
+  .device-tools {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    bottom: 0;
+    height: 32px;
+
+    .tools-area {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 100px;
+      padding: 0 5px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .un-lock-icon {
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        z-index: 100000000;
+        padding: 0 5px;
+
+        &:hover {
+          color: #4aff24;
+        }
+      }
+    }
   }
 }
 </style>

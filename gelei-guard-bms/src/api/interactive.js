@@ -105,6 +105,15 @@ export function get_parent_details(data) {
   })
 }
 
+// 设备管理 - 为孩子解绑设备
+export function unbind_user_device(data) {
+  return request({
+    url: '/greenguard/manager/device/unbind',
+    method: 'post',
+    data
+  })
+}
+
 // 用户信息管理 - 获取孩子设备操作（绑定或解绑）记录
 export function get_child_record_details(data) {
   return request({
@@ -752,10 +761,28 @@ export function delete_sys_configuration(data) {
   })
 }
 
+/* 用户邀请注册 */
 // 邀请好友活动数据
 export function get_invite_statisis_data(data) {
   return request({
     url: '/greenguard/manager/user/invite/register/statistics/list',
+    method: 'post',
+    data
+  })
+}
+
+// 邀请注册活动详情
+export function get_invite_register_activity_info() {
+  return request({
+    url: '/greenguard/manager/user/invite/register/activity/info',
+    method: 'post'
+  })
+}
+
+// 编辑邀请注册活动
+export function edit_invite_register_activity(data) {
+  return request({
+    url: '/greenguard/manager/user/invite/register/activity/edit',
     method: 'post',
     data
   })
