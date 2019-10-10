@@ -451,16 +451,6 @@ export default {
     update_line_chart() {
       const growth_data = this.growth_data
       if (Object.keys(growth_data).length) {
-        growth_data.increased_pay_user_list = [
-          { 'date': '2019-10-03', 'count': 5 },
-          { 'date': '2019-10-04', 'count': 65 },
-          { 'date': '2019-10-05', 'count': 76 },
-          { 'date': '2019-10-06', 'count': 767 },
-          { 'date': '2019-10-07', 'count': 6778 },
-          { 'date': '2019-10-08', 'count': 7675 },
-          { 'date': '2019-10-09', 'count': 6655 }
-        ]
-        console.log('=========', growth_data.increased_pay_user_list)
         const increased_pay_user_chart = {
           columns: ['date', 'count'],
           rows: growth_data.increased_pay_user_list
@@ -477,7 +467,6 @@ export default {
           increased_pay_user_chart,
           order_count_list_chart,
           order_amount_list_chart]
-        console.log('======333======', this.line_chart_tabs_data)
       } else {
         this.line_chart_tabs_data = [{}, {}, {}]
       }
