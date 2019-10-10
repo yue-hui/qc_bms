@@ -82,8 +82,14 @@
               <div class="item-data">{{ growth_data.increase_bind_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.increased_bind_user_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.increased_bind_user_comparison === 0" class="fair" icon-class="fair_direction" />
+                <svg-icon
+                  v-if="growth_data.increased_bind_user_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.increased_bind_user_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
                 <svg-icon v-else class="down" icon-class="down_direction" />
                 <span>{{ growth_data.increased_bind_user_comparison | abs }}%</span>
               </div>
@@ -96,9 +102,18 @@
               <div class="item-data">{{ growth_data.increased_pay_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.increased_pay_user_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.increased_pay_user_comparison === 0" class="fair" icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
+                <svg-icon
+                  v-if="growth_data.increased_pay_user_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.increased_pay_user_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
+                <svg-icon
+                  v-else
+                  class="down"
+                  icon-class="down_direction" />
                 <span>{{ growth_data.increased_pay_user_comparison | abs }}%</span>
               </div>
             </div>
@@ -110,9 +125,18 @@
               <div class="item-data">{{ growth_data.order_amount }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.order_amount_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.order_amount_comparison === 0" class="fair" icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
+                <svg-icon
+                  v-if="growth_data.order_amount_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.order_amount_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
+                <svg-icon
+                  v-else
+                  class="down"
+                  icon-class="down_direction" />
                 <span>{{ growth_data.order_amount_comparison | abs }}%</span>
               </div>
             </div>
@@ -129,9 +153,18 @@
               <div class="item-data">{{ growth_data.increased_user }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.increased_user_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.increased_user_comparison === 0" class="fair" icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
+                <svg-icon
+                  v-if="growth_data.increased_user_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.increased_user_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
+                <svg-icon
+                  v-else
+                  class="down"
+                  icon-class="down_direction" />
                 <span>{{ growth_data.increased_user_comparison | abs }}%</span>
               </div>
             </div>
@@ -152,9 +185,18 @@
               <div class="item-data">{{ growth_data.increased_bind_device }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.increased_bind_device_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.increased_bind_device_comparison === 0" class="fair" icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
+                <svg-icon
+                  v-if="growth_data.increased_bind_device_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.increased_bind_device_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
+                <svg-icon
+                  v-else
+                  class="down"
+                  icon-class="down_direction" />
                 <span>{{ growth_data.increased_bind_device_comparison | abs }}%</span>
               </div>
             </div>
@@ -175,8 +217,14 @@
               <div class="item-data">{{ growth_data.order_count }}</div>
               <div class="item-data-compare">
                 <span>同比</span>
-                <svg-icon v-if="growth_data.order_count_comparison < 0" class="upper" icon-class="upper_direction" />
-                <svg-icon v-else-if="growth_data.order_count_comparison === 0" class="fair" icon-class="fair_direction" />
+                <svg-icon
+                  v-if="growth_data.order_count_comparison < 0"
+                  class="upper"
+                  icon-class="upper_direction" />
+                <svg-icon
+                  v-else-if="growth_data.order_count_comparison === 0"
+                  class="fair"
+                  icon-class="fair_direction" />
                 <svg-icon v-else class="down" icon-class="down_direction" />
                 <span>{{ growth_data.order_count_comparison | abs }}%</span>
               </div>
@@ -256,6 +304,11 @@ export default {
       growth_data: {},
       chart_settings: {
         hoverAnimation: false,
+        labelMap: {
+          date: '日期',
+          count: '用户数量',
+          amount: '充值金额'
+        },
         radius: 80,
         offsetY: 120,
         itemStyle: {
@@ -300,7 +353,11 @@ export default {
           name: '2'
         }
       ],
-      line_chart_tabs_data: [],
+      line_chart_tabs_data: [
+        [],
+        [],
+        []
+      ],
       active_name: '0',
       dimension_data: {}
     }
@@ -393,7 +450,17 @@ export default {
     },
     update_line_chart() {
       const growth_data = this.growth_data
-      if (growth_data.length) {
+      if (Object.keys(growth_data).length) {
+        growth_data.increased_pay_user_list = [
+          { 'date': '2019-10-03', 'count': 5 },
+          { 'date': '2019-10-04', 'count': 65 },
+          { 'date': '2019-10-05', 'count': 76 },
+          { 'date': '2019-10-06', 'count': 767 },
+          { 'date': '2019-10-07', 'count': 6778 },
+          { 'date': '2019-10-08', 'count': 7675 },
+          { 'date': '2019-10-09', 'count': 6655 }
+        ]
+        console.log('=========', growth_data.increased_pay_user_list)
         const increased_pay_user_chart = {
           columns: ['date', 'count'],
           rows: growth_data.increased_pay_user_list
@@ -403,13 +470,14 @@ export default {
           rows: growth_data.order_count_list
         }
         const order_amount_list_chart = {
-          columns: ['date', 'count'],
+          columns: ['date', 'amount'],
           rows: growth_data.order_amount_list
         }
         this.line_chart_tabs_data = [
           increased_pay_user_chart,
           order_count_list_chart,
           order_amount_list_chart]
+        console.log('======333======', this.line_chart_tabs_data)
       } else {
         this.line_chart_tabs_data = [{}, {}, {}]
       }
@@ -426,6 +494,22 @@ export default {
     },
     tab_change(obj) {
       const active_name = obj.name
+      if (active_name === '0') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '用户数量'
+        }
+      } else if (active_name === '1') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '成交量'
+        }
+      } else if (active_name === '2') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          amount: '充值金额'
+        }
+      }
       this.dimension_data = this.line_chart_tabs_data[+active_name]
     }
   }
