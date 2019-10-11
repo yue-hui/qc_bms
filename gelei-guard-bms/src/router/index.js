@@ -198,9 +198,9 @@ export const constantRouterMap = [
       },
       {
         path: 'invatation/details',
-        name: '邀请好友详情',
+        name: '邀请好友配置',
         component: () => import('@/views/activity/invatation_details'),
-        meta: { title: '邀请好友详情', icon: 'invatation_user' }
+        meta: { title: '邀请好友配置', icon: 'invatation_user' }
       }
       // {
       //   path: 'props',
