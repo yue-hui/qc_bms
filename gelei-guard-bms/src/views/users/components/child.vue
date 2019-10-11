@@ -58,7 +58,7 @@
         :key="index"
         :device="device"
         :child-id="child_new.user_id"
-        :index="cardIndex" />
+        :index="index" />
     </el-card>
 
     <device-bind-records v-if="show_bind_record" :params="bind_records_params" :child-id="current_child_id" @refresh="close_bind_records" />

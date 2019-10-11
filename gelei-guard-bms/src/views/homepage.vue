@@ -523,14 +523,13 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     border: 1px solid #c7d5ee;
     height: 100%;
     min-height: 100px;
+    min-width: 1260px;
 
     .total-data-area {
       width: 100%;
       padding: 15px 0;
       display: flex;
       flex-direction: column;
-      /*background-color: rgba(211, 211, 211, 0.47);*/
-      padding: 1px solid grey;
 
       .title-area {
         width: 100%;
@@ -544,6 +543,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
 
       .summary-items-area {
         width: 100%;
+        min-width: 1150px;
         display: flex;
         flex-direction: row;
         align-item: center;
@@ -726,6 +726,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             height: 40px;
             font-size: 16px;
             font-weight: 600;
+            border-bottom: 1px solid $border_line_color;
           }
 
           .item-data-section {
@@ -773,7 +774,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     .data-line-chart-area {
       padding: 0 15px 20px 15px;
       width: 100%;
-      min-height: 400;
+      min-height: 400px;
 
       .line-chart-area {
         height: 400px;
