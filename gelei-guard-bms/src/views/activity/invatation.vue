@@ -86,7 +86,7 @@
               prop="register_count" />
             <el-table-column
               align="center"
-              label="奖励会员天数"
+              label="邀请奖励会员天数"
               prop="member_days" />
           </el-table>
           <el-pagination
