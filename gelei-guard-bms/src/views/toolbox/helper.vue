@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="gelei-content">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
@@ -346,7 +346,7 @@ export default {
 $select_box_witdh: 120px;
 $label_height: 40px;
 
-.content {
+.gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/

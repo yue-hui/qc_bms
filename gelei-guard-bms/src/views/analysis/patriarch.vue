@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="gelei-content">
     <!--搜索栏 start -->
     <div class="header-line">
       <div class="header-line-left">
@@ -120,7 +120,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 $label_height: 28px;
 
-.content {
+.gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/

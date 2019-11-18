@@ -78,8 +78,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'gladmin',
-        password: 'gl2018.',
+        username: '',
+        password: '',
         verify: '',
         verify_uid: ''
       },

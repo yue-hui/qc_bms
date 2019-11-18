@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="gelei-content">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
@@ -390,7 +390,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.content {
+.gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/

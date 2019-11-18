@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="gelei-content">
     <div class="content-body">
       <div class="total-data-area">
         <div class="title-area"><span class="title">整体数据</span></div>
@@ -79,70 +79,104 @@
           <div class="data-item">
             <div class="item-row item-title">新增绑定用户</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.increase_bind_user }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.increased_bind_user_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.increased_bind_user_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
-                <span>{{ growth_data.increased_bind_user_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.increase_bind_user }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_bind_user_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_bind_user_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.increased_bind_user_comparison | abs }}%</span>
+                </span>
+                <span>
+                  <label class="item-label">转化率: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_bind_user_conversion < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_bind_user_conversion === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span>{{ growth_data.increased_bind_user_conversion | abs }}%</span>
+                </span>
+              </p>
             </div>
-            <div class="item-row item-reminder">(转化率{{ growth_data.increased_bind_user_conversion }}%)</div>
+            <multi-process :items="items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">新增付费用户</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.increased_pay_user }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.increased_pay_user_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.increased_pay_user_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon
-                  v-else
-                  class="down"
-                  icon-class="down_direction" />
-                <span>{{ growth_data.increased_pay_user_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.increased_pay_user }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_pay_user_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_pay_user_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.increased_pay_user_comparison | abs }}%</span>
+                </span>
+                <span>
+                  <label class="item-label">转化率: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_pay_user_conversion < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_pay_user_conversion === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span>{{ growth_data.increased_pay_user_conversion | abs }}%</span>
+                </span>
+              </p>
             </div>
-            <div class="item-row item-reminder">(转化率{{ growth_data.increased_pay_user_conversion }}%)</div>
+            <multi-process :items="items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">充值金额</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.order_amount }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.order_amount_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.order_amount_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon
-                  v-else
-                  class="down"
-                  icon-class="down_direction" />
-                <span>{{ growth_data.order_amount_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.order_amount }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.order_amount_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.order_amount_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.order_amount_comparison | abs }}%</span>
+                </span>
+                <span />
+              </p>
             </div>
-            <div class="item-row item-reminder">
-              <span>-</span>
-            </div>
+            <multi-process :items="items_list" />
           </div>
         </div>
         <div class="diviser-with-cmount-and-chart" />
@@ -150,23 +184,25 @@
           <div class="data-item">
             <div class="item-row item-title">新增注册用户</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.increased_user }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.increased_user_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.increased_user_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon
-                  v-else
-                  class="down"
-                  icon-class="down_direction" />
-                <span>{{ growth_data.increased_user_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.increased_user }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_user_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_user_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.increased_user_comparison | abs }}%</span>
+                </span>
+              </p>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
@@ -182,23 +218,25 @@
           <div class="data-item">
             <div class="item-row item-title">新增绑定设备及占比</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.increased_bind_device }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.increased_bind_device_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.increased_bind_device_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon
-                  v-else
-                  class="down"
-                  icon-class="down_direction" />
-                <span>{{ growth_data.increased_bind_device_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.increased_bind_device }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.increased_bind_device_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.increased_bind_device_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.increased_bind_device_comparison | abs }}%</span>
+                </span>
+              </p>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
@@ -214,20 +252,25 @@
           <div class="data-item">
             <div class="item-row item-title">订单成交量及占比</div>
             <div class="item-row item-data-section">
-              <div class="item-data">{{ growth_data.order_count }}</div>
-              <div class="item-data-compare">
-                <span>同比</span>
-                <svg-icon
-                  v-if="growth_data.order_count_comparison < 0"
-                  class="upper"
-                  icon-class="upper_direction" />
-                <svg-icon
-                  v-else-if="growth_data.order_count_comparison === 0"
-                  class="fair"
-                  icon-class="fair_direction" />
-                <svg-icon v-else class="down" icon-class="down_direction" />
-                <span>{{ growth_data.order_count_comparison | abs }}%</span>
-              </div>
+              <p class="item-subscribe">
+                <span>
+                  <label class="item-label">总数: </label>
+                  <span class="total-count">{{ growth_data.order_count }}</span>
+                </span>
+                <span>
+                  <label class="item-label">同比: </label>
+                  <svg-icon
+                    v-if="growth_data.order_count_comparison < 0"
+                    class="upper"
+                    icon-class="upper_direction" />
+                  <svg-icon
+                    v-else-if="growth_data.order_count_comparison === 0"
+                    class="fair"
+                    icon-class="fair_direction" />
+                  <svg-icon v-else class="down" icon-class="down_direction" />
+                  <span class="item-number">{{ growth_data.order_count_comparison | abs }}%</span>
+                </span>
+              </p>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
@@ -235,7 +278,7 @@
                   :data="order_radio_data"
                   :legend-visible="true"
                   :extend="chart_extend"
-                  :settings="chart_settings"
+                  :settings="chart_settings_array"
                   height="240px" />
               </div>
             </div>
@@ -268,6 +311,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import MultiProcess from '@/components/MultiProcess'
 import { get_homepage_growth_data, get_homepage_overall_data } from '@/api/interactive'
 
 const theme_color = ['#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980',
@@ -277,7 +321,6 @@ const theme_color = ['#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980',
   '#c9ab00', '#7eb00a', '#6f5553', '#c14089']
 
 export default {
-  components: {},
   filters: {
     abs: function(value) {
       if (value === undefined) {
@@ -286,12 +329,27 @@ export default {
       return Math.abs(value)
     }
   },
+  components: {
+    MultiProcess
+  },
   data() {
     this.colors = theme_color
     const day = dayjs().subtract(1, 'days')
     const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
+      items_list: [
+        {
+          name: 'IOS',
+          value: 50,
+          color: 'red'
+        },
+        {
+          name: '安卓',
+          value: 100,
+          color: 'yellow'
+        }
+      ],
       datetime_range: [new Date(pre_week), new Date(day)],
       query_sets: {},
       overall_data: {
@@ -323,6 +381,17 @@ export default {
         },
         series: {
           center: ['20%', '50%']
+        }
+      },
+      chart_settings_array: {
+        hoverAnimation: false,
+        level: [
+          ['IOS', '安卓'],
+          ['6个月会员', '12个月会员', '24个月会员']
+        ],
+        offsetY: 100,
+        series: {
+          center: ['40%', '50%']
         }
       },
       chart_extend: {
@@ -446,6 +515,17 @@ export default {
         this.increased_user_data = {}
         this.device_ratio_data = {}
         this.order_radio_data = {}
+        this.order_radio_data = {
+          columns: ['name', 'value'],
+          center: ['20%', '50%'],
+          rows: [
+            { 'name': '6个月会员', 'value': 80 },
+            { 'name': '12个月会员', 'value': 160 },
+            { 'name': '24个月会员', 'value': 110 },
+            { 'name': 'IOS', 'value': 80 },
+            { 'name': '安卓', 'value': 120 }
+          ]
+        }
       }
     },
     update_line_chart() {
@@ -510,7 +590,7 @@ $border_line_color: #c7d5ee;
 $border_radius_size: 10px;
 $box_shadow_color: #3c3c3c;
 $radio_fair_color: rgba(0, 0, 0, 0.71);
-.content {
+.gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
@@ -662,25 +742,41 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             align-items: flex-end;
             padding: 20px 15px;
 
-            .item-data {
-              font-size: 28px;
-              font-weight: 600;
-              padding-right: 20px;
-            }
+            .item-subscribe {
+              width: 100%;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+              justify-content: space-between;
 
-            .item-data-compare {
-              font-size: 12px;
+              span {
+                .item-label {
+                  font-size: 12px;
+                  font-weight: 200;
+                }
 
-              .upper {
-                color: green;
-              }
+                .item-number {
+                  font-size: 12px;
+                  font-weight: 200;
+                }
 
-              .fair {
-                color: $radio_fair_color;
-              }
+                .total-count {
+                  font-size: 28px;
+                  font-weight: bolder;
+                }
 
-              .down {
-                color: red;
+                .upper {
+                  color: green;
+                }
+
+                .fair {
+                  color: $radio_fair_color;
+                }
+
+                .down {
+                  color: red;
+                }
               }
             }
           }
@@ -734,6 +830,46 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             flex-direction: row;
             vertical-align: bottom;
             align-items: flex-end;
+
+            .item-subscribe {
+              width: 100%;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+
+              span {
+                flex: 1;
+                text-align: left;
+
+                .item-label {
+                  font-size: 12px;
+                  font-weight: 200;
+                }
+
+                .item-number {
+                  font-size: 12px;
+                  font-weight: 200;
+                }
+
+                .total-count {
+                  font-size: 28px;
+                  font-weight: bolder;
+                }
+
+                .upper {
+                  color: green;
+                }
+
+                .fair {
+                  color: $radio_fair_color;
+                }
+
+                .down {
+                  color: red;
+                }
+              }
+            }
 
             .item-data {
               font-size: 28px;
