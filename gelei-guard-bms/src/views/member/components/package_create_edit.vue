@@ -488,6 +488,12 @@ export default {
       // 保存
       const options = this.get_options()
       options['plan_id'] = this.form.plan_id
+      console.log('options', options)
+      if (this.form.plan_id === '02') {
+        // 非公开套餐，不传device_type
+        // 防止后台报"非公开套餐无法修改支持的设备类型"
+        delete options.device_type
+      }
       update_member_plan(options).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
