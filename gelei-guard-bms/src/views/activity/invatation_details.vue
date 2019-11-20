@@ -5,8 +5,18 @@
         <el-form-item label="邀请注册活动名称">
           <el-input v-model="form.name" size="mini" />
         </el-form-item>
-        <el-form-item size="mini" label="会员套餐id">
-          <el-select v-model="form.member_plan_id" size="mini" placeholder="请选择活动区域">
+        <el-form-item size="mini" label="会员套餐ID">
+          <el-select
+            v-model="form.member_plan_id"
+            :remote-method="user_search_member_plan_by_plan_name"
+            size="mini"
+            filterable
+            clearable
+            remote
+            class="plan-list-select"
+            placeholder="请选择活动区域"
+            @change="member_plan_list_change"
+            @clear="clear_member_plan_list">
             <el-option
               v-for="(membership, index) in membership_package_list"
               :key="index"
@@ -16,7 +26,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="会员套餐名称">
-          <el-input v-model="form.member_plane_name" size="mini" />
+          <el-input v-model="form.member_plan_name" size="mini" />
         </el-form-item>
         <el-form-item label="活动时间">
           <el-date-picker
@@ -95,20 +105,41 @@ export default {
         }
       })
     },
-    load_member_list() {
-      get_member_plan_list().then(res => {
-        if (res.status === 0) {
-          const remote_data = res.data
-          this.membership_package_list = remote_data.map(r => {
-            return {
-              value: r.plan_id,
-              label: r.plan_name
-            }
-          })
-          this.init_page()
-        } else {
-          this.$message.error(res.message)
+    user_search_member_plan_by_plan_name(plan_name) {
+      this.fetch_member_plan_list(plan_name)
+    },
+    clear_member_plan_list() {
+      this.form.member_plan_id = ''
+      this.fetch_member_plan_list()
+    },
+    fetch_member_plan_list(plan_name) {
+      return new Promise((resolve, reject) => {
+        const config = {
+          plan_type: '02'
         }
+        if (plan_name) {
+          config['plan_name'] = plan_name
+        }
+        get_member_plan_list(config).then(res => {
+          if (res.status === 0) {
+            const remote_data = res.data
+            this.membership_package_list = remote_data.map(r => {
+              return {
+                value: r.plan_id,
+                label: r.plan_name
+              }
+            })
+          } else {
+            this.$message.error(res.message)
+          }
+        }).finally(() => {
+          resolve()
+        })
+      })
+    },
+    load_member_list() {
+      this.fetch_member_plan_list().then(() => {
+        this.init_page()
       })
     },
     init_page() {
@@ -133,6 +164,10 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    member_plan_list_change(plan_id) {
+      const member_plan = this.membership_package_list.find(r => r.value === plan_id)
+      this.form.member_plan_name = member_plan.label
     }
   }
 }
@@ -155,6 +190,10 @@ export default {
 
     .invatation-form {
       width: 800px;
+
+      .plan-list-select {
+        width: 200px;
+      }
     }
   }
 }
