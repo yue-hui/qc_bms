@@ -112,7 +112,7 @@
                 </span>
               </p>
             </div>
-            <multi-process :items="items_list" />
+            <multi-process v-if="increase_bind_items_list.length" :items="increase_bind_items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">新增付费用户</div>
@@ -150,7 +150,7 @@
                 </span>
               </p>
             </div>
-            <multi-process :items="items_list" />
+            <multi-process :items="increased_pay_items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">充值金额</div>
@@ -176,7 +176,7 @@
                 <span />
               </p>
             </div>
-            <multi-process :items="items_list" />
+            <multi-process :items="order_amount_items_list" />
           </div>
         </div>
         <div class="diviser-with-cmount-and-chart" />
@@ -338,18 +338,9 @@ export default {
     const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
-      items_list: [
-        {
-          name: 'IOS',
-          value: 50,
-          color: 'red'
-        },
-        {
-          name: '安卓',
-          value: 100,
-          color: 'yellow'
-        }
-      ],
+      increase_bind_items_list: [],
+      increased_pay_items_list: [],
+      order_amount_items_list: [],
       datetime_range: [new Date(pre_week), new Date(day)],
       query_sets: {},
       overall_data: {
@@ -473,6 +464,7 @@ export default {
           this.growth_data = []
         }
       }).finally(() => {
+        this.update_platform_ratio()
         this.update_chat_chart()
         this.update_line_chart()
       })
@@ -551,6 +543,50 @@ export default {
         this.line_chart_tabs_data = [{}, {}, {}]
       }
       this.dimension_data = this.line_chart_tabs_data[+this.active_name]
+    },
+    update_platform_ratio() {
+      const growth_data = this.growth_data
+      const ios_color = '#2ec7c9'
+      const and_color = '#b6a2de'
+      // 新增绑定平台类型占比
+      this.increase_bind_items_list = [
+        {
+          name: 'IOS',
+          value: growth_data.increase_bind_android_user,
+          color: ios_color
+        },
+        {
+          name: '安卓',
+          value: growth_data.increase_bind_ios_user,
+          color: and_color
+        }
+      ]
+      // 新增付费平台类型占比
+      this.increased_pay_items_list = [
+        {
+          name: 'IOS',
+          value: growth_data.increased_pay_ios_user,
+          color: ios_color
+        },
+        {
+          name: '安卓',
+          value: growth_data.increased_pay_android_user,
+          color: and_color
+        }
+      ]
+      // 充值金额平台类型占比
+      this.order_amount_items_list = [
+        {
+          name: 'IOS',
+          value: growth_data.ios_order_amount,
+          color: ios_color
+        },
+        {
+          name: '安卓',
+          value: growth_data.android_order_amount,
+          color: and_color
+        }
+      ]
     },
     get_query() {
       const config = {}

@@ -20,21 +20,24 @@ export default {
   },
   data() {
     return {
-      offset_width: 0,
-      inner_items: []
+      offset_width: 0
+    }
+  },
+  computed: {
+    inner_items: function() {
+      const item_value_list = this.items.map(r => +r.value)
+      const max_width = Math.max(...item_value_list)
+      return this.items.map(r => {
+        const width = parseInt((r.value / max_width) * this.offset_width)
+        return {
+          ...r,
+          width
+        }
+      })
     }
   },
   mounted: function() {
     this.offset_width = this.$el.offsetWidth - 20 - 120
-    const item_value_list = this.items.map(r => +r.value)
-    const max_width = Math.max(...item_value_list)
-    this.inner_items = this.items.map(r => {
-      const width = parseInt((r.value / max_width) * this.offset_width)
-      return {
-        ...r,
-        width
-      }
-    })
   }
 }
 </script>

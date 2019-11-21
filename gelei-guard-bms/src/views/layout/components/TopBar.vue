@@ -62,6 +62,7 @@ export default {
     flex: 1;
 
     .hover-system-subject {
+      font-size: 16px;
       color: #cecece;
 
       &:hover {
