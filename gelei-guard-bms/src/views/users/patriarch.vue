@@ -564,8 +564,8 @@ $label_height: 28px;
           }
 
           .order-number-list {
-            /*height: 28px;*/
-            /*line-height: 28px;*/
+            height: 28px;
+            line-height: 28px;
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
