@@ -94,7 +94,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="8" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="6" class="order-number-list">注册时间:</el-col>
@@ -113,7 +113,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="24" class="col-bg layout-right">
+          <el-col :xs="24" :sm="24" :md="10" :lg="12" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -446,6 +446,7 @@ $label_height: 28px;
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
         }
       }

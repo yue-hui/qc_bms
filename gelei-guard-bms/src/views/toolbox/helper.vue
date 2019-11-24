@@ -7,17 +7,19 @@
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="8" class="order-number-list">所属产品:</el-col>
-                <el-select
-                  v-model="query_sets.product"
-                  size="mini"
-                  placeholder="问题类型"
-                  @change="change_query_status">
-                  <el-option
-                    v-for="item in advertise_platform_types"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value" />
-                </el-select>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.product"
+                    size="mini"
+                    placeholder="问题类型"
+                    @change="change_query_status">
+                    <el-option
+                      v-for="item in advertise_platform_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -63,7 +65,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="12" :lg="8" :xl="12" class="col-bg layout-right">
+          <el-col :xs="24" :sm="8" :md="6" :lg="8" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="add_questions">添加帮助问题</el-button>
@@ -376,6 +378,7 @@ $label_height: 40px;
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
         }
       }

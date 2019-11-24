@@ -260,6 +260,8 @@ export default {
         padding-left: 10px;
         background-color: #304156;
         color: #FFFFFF;
+        display: flex;
+        align-items: center;
 
         .title {
           font-size: 16px;
@@ -289,6 +291,7 @@ export default {
               font-size: 14px;
               font-weight: bold;
               color: #4d4d4d;
+              white-space: nowrap;
             }
           }
         }
@@ -410,6 +413,8 @@ export default {
 
         .tools-area {
           padding-right: 10px;
+          display: flex;
+          align-items: center;
 
           .details-tab {
             border: 0;

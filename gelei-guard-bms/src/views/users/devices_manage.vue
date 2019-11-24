@@ -3,7 +3,7 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="8" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="8" class="order-number-list">孩子端设备ID:</el-col>
@@ -54,11 +54,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="8" :lg="6" :xl="4" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="10" class="order-number-list">中间件版本号:</el-col>
-                <el-col :span="14">
+                <el-col :span="8" class="order-number-list">中间件版本号:</el-col>
+                <el-col :span="16">
                   <el-input
                     v-model="query_sets.middleware_version"
                     size="mini"
@@ -87,14 +87,6 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="10" class="order-number-list" />
-                <el-col :span="14" />
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
                 <el-col :span="8" class="order-number-list">设备型号:</el-col>
                 <el-col :span="16">
                   <el-input
@@ -107,7 +99,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="8" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="8" class="order-number-list">家长端手机号:</el-col>
@@ -122,7 +114,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="24" :lg="24" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="24" :sm="8" :md="16" :lg="24" :xl="16" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -372,6 +364,7 @@ export default {
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
         }
       }

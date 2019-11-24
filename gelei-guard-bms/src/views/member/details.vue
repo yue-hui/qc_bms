@@ -226,6 +226,7 @@ export default {
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
 
           .title-area {

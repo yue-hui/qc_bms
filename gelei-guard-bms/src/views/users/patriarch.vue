@@ -83,7 +83,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="7" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="8" class="order-number-list">会员有效天数:</el-col>
@@ -111,11 +111,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="8" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="10" :lg="5" :xl="8" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="4" class="order-number-list">注册时间:</el-col>
-                <el-col :span="16">
+                <el-col :span="20">
                   <el-date-picker
                     v-model="query_set.datetime_range"
                     end-placeholder="结束日期"
@@ -130,7 +130,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="18" :lg="19" :xl="16" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="7" :lg="19" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -564,11 +564,12 @@ $label_height: 28px;
           }
 
           .order-number-list {
-            height: 28px;
-            line-height: 28px;
+            /*height: 28px;*/
+            /*line-height: 28px;*/
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
 
           .valid-date-range {

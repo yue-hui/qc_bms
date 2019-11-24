@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span>整体数据指标(昨日)</span>
+      <span class="summary-title">整体数据指标(昨日)</span>
     </div>
     <div class="component-card">
       <div class="row row-1">
@@ -123,6 +123,9 @@ $column_1_height: 28px;
 $column_2_height: 40px;
 $column_3_height: 28px;
 $pannel_border_color: 1px solid rgba(192, 214, 206, 0.4);
+.summary-title {
+  font-size: 16px;
+}
 
 .component-card {
   width: 100%;

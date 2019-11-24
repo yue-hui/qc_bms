@@ -731,6 +731,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             font-size: 14px;
             font-weight: bold;
             color: #4d4d4d;
+            white-space: nowrap;
           }
         }
       }

@@ -1,117 +1,116 @@
 <template>
-  <div class="content">
-
-    <div class="header-line">
-      <div class="header-line-left">
-        <div class="control-box">
-          <div class="header-block search-time">
-            <label class="search-item">年级:</label>
-            <div class="block">
-              <el-select
-                v-model="information.grade_from"
-                class="select-box-width"
-                clearable
-                size="mini"
-                placeholder="请选择年级"
-                @change="next_tick_query">
-                <el-option
-                  v-for="item in grade_list_1"
-                  :key="item.val"
-                  :label="item.name"
-                  :value="item.val" />
-              </el-select>
-              <span class="grade-to-word">至</span>
-              <el-select
-                v-model="information.grade_to"
-                class="select-box-width"
-                clearable
-                size="mini"
-                placeholder="请选择年级"
-                @change="next_tick_query">
-                <el-option
-                  v-for="item in grade_list_2"
-                  :key="item.val"
-                  :label="item.name"
-                  :value="item.val" />
-              </el-select>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-box">
-          <div class="header-block phone-block">
-            <label class="search-item">学科:</label>
-            <el-select
-              v-model="information.subject"
-              class="select-box-width"
-              clearable
-              collapse-tags
-              multiple
-              size="mini"
-              placeholder="请选择学科"
-              @change="next_tick_query">
-              <el-option
-                v-for="item in subject_list"
-                :key="item.val"
-                :label="item.name"
-                :value="item.val" />
-            </el-select>
-          </div>
-        </div>
-
-        <div class="control-box">
-          <div class="header-block phone-block">
-            <label class="search-item">应用名称:</label>
-            <el-input
-              v-model="information.app_name"
-              size="mini"
-              class="select-box-width"
-              clearable
-              @change="next_tick_query" />
-          </div>
-        </div>
-      </div>
-
-      <div class="header-line-right">
-        <div class="control-box">
-          <el-button
-            class="new-application-button"
-            size="mini"
-            type="success"
-            @click="create_app">创建应用
-          </el-button>
-        </div>
-      </div>
-    </div>
-
-    <!--<div class="new-application">-->
-    <!--<el-button-->
-    <!--class="new-application-button"-->
-    <!--round-->
-    <!--size="mini"-->
-    <!--type="success"-->
-    <!--@click="create_app">创建应用-->
-    <!--</el-button>-->
-    <!--</div>-->
-
-    <!--<hr class="hr-diviser">-->
+  <div class="gelei-content">
 
     <div class="content-body">
+      <div class="search-area">
+        <el-row :gutter="10" class="row-bg">
+          <el-col :xs="12" :sm="8" :md="8" :lg="6" :xl="6" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="4" class="order-number-list">年级:</el-col>
+                <el-col :span="20" class="order-value-list">
+                  <el-select
+                    v-model="information.grade_from"
+                    class="select-box-width"
+                    clearable
+                    size="mini"
+                    placeholder="请选择年级"
+                    @change="next_tick_query">
+                    <el-option
+                      v-for="item in grade_list_1"
+                      :key="item.val"
+                      :label="item.name"
+                      :value="item.val" />
+                  </el-select>
+                  <span class="grade-to-word">至</span>
+                  <el-select
+                    v-model="information.grade_to"
+                    class="select-box-width"
+                    clearable
+                    size="mini"
+                    placeholder="请选择年级"
+                    @change="next_tick_query">
+                    <el-option
+                      v-for="item in grade_list_2"
+                      :key="item.val"
+                      :label="item.name"
+                      :value="item.val" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="6" :md="6" :lg="4" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">学科:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="information.subject"
+                    class="select-box-width"
+                    clearable
+                    collapse-tags
+                    multiple
+                    size="mini"
+                    placeholder="请选择学科"
+                    @change="next_tick_query">
+                    <el-option
+                      v-for="item in subject_list"
+                      :key="item.val"
+                      :label="item.name"
+                      :value="item.val" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">应用名称:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="information.app_name"
+                    size="mini"
+                    class="select-box-width"
+                    clearable
+                    @change="next_tick_query" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="4" :md="4" :lg="8" :xl="10" class="col-bg layout-right">
+            <el-row>
+              <el-button
+                class="download details-tab"
+                size="mini"
+                type="success"
+                @click="create_app">创建应用
+                <svg-icon icon-class="download" />
+              </el-button>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="between-search-area-and-table-display" />
 
-      <!--推荐应用列表-->
-      <application-list
-        ref="app_list"
-        :condition="condition"
-        @reflex="reflex" />
+      <div class="content-body">
 
-      <!--添加新应用-->
-      <application-create
-        ref="app_dialog"
-        :current="current_app"
-        :is-create="is_create"
-        :is-show="show_app_dialog"
-        @receive="receive" />
+        <!--推荐应用列表-->
+        <application-list
+          ref="app_list"
+          :condition="condition"
+          @reflex="reflex" />
 
+        <!--添加新应用-->
+        <application-create
+          ref="app_dialog"
+          :current="current_app"
+          :is-create="is_create"
+          :is-show="show_app_dialog"
+          @receive="receive" />
+
+      </div>
     </div>
   </div>
 </template>
@@ -228,93 +227,80 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$select_box_witdh: 160px;
 $label_height: 28px;
 
-.content {
+.gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 0 10px 25px 10px;
+  padding: 20px 10px 25px 10px;
   display: flex;
   flex-direction: column;
 
-  .header-line {
-    display: flex;
-    flex-direction: row;
-
-    .header-line-left {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-
-      .control-box {
-        padding: 10px 15px;
-
-        .search-item {
-          vertical-align: middle;
-          display: inline-block;
-          height: $label_height;
-          line-height: $label_height;
-          padding-right: 8px;
-          text-align: left;
-          min-width: 64px;
-          color: #4d4d4d;
-          font-size: 14px;
-          font-weight: 600;
-        }
-      }
-
-      .header-block {
-        display: flex;
-        flex-direction: row;
-
-        .search-item {
-          vertical-align: middle;
-          display: inline-block;
-          height: $label_height;
-          line-height: $label_height;
-          padding-right: 8px;
-          min-width: 64px;
-          color: #4d4d4d;
-          font-size: 14px;
-          font-weight: 600;
-        }
-      }
-
-      .phone-block {
-        width: 280px;
-      }
-
-      .search-time {
-        width: 500px;
-      }
-    }
-
-    .header-line-right {
-      min-width: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .select-box-width {
-      width: $select_box_witdh;
-    }
-
-    .grade-to-word {
-      color: #4d4d4d;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 0 10px;
-    }
-  }
-
   .content-body {
-    /*border: 1px solid #c7d5ee;*/
+    border: 1px solid #c7d5ee;
     height: 100%;
-    /*padding: 15px 25px;*/
     min-height: 120px;
+
+    .search-area {
+      padding: 20px 20px 0 20px;
+
+      .row-bg {
+        .col-bg {
+          padding: 5px 0;
+
+          &.layout-right {
+            text-align: right;
+          }
+
+          .order-number-list {
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4d4d4d;
+            white-space: nowrap;
+          }
+
+          .order-value-list {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: left;
+
+            .grade-to-word {
+              padding: 0 5px;
+              font-size: 14px;
+            }
+          }
+
+          .valid-date-range {
+            padding: 0 10px;
+
+            .valid-value-area {
+              display: flex;
+              justify-content: space-between;
+              flex-direction: row;
+              align-items: center;
+
+              .valid-date-span {
+                padding: 0 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .between-search-area-and-table-display {
+      height: 1px;
+      margin: 10px 20px 15px 20px;
+      background-color: #d0d0d7;
+    }
+
+    .content-body {
+      margin: 20px;
+    }
   }
 
   .new-application {
