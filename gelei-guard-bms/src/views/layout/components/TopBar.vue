@@ -64,6 +64,7 @@ export default {
     .hover-system-subject {
       font-size: 16px;
       color: #cecece;
+      display: inline-block;
 
       &:hover {
         color: rgb(64, 158, 255);
