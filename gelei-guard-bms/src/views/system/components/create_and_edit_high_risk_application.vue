@@ -15,16 +15,16 @@
         <el-form-item v-if="isNew === 2" label="软件ID" prop="app_version">
           <el-input v-model="form.soft_id" disabled placeholder="请输入目标版本号" />
         </el-form-item>
-        <el-form-item label="包名" prop="app_version">
+        <el-form-item label="包名" prop="bundle_id">
           <el-input v-model="form.bundle_id" placeholder="请输入软件包名" />
         </el-form-item>
-        <el-form-item label="软件名称" prop="app_version">
+        <el-form-item label="软件名称" prop="soft_name">
           <el-input v-model="form.soft_name" placeholder="请输入软件名称" />
         </el-form-item>
-        <el-form-item label="软件图标" prop="app_version">
+        <el-form-item label="软件图标" prop="soft_icon">
           <el-input v-model="form.soft_icon" placeholder="请输入软件图标链接" />
         </el-form-item>
-        <el-form-item label="code" prop="app_version">
+        <el-form-item label="code" prop="type_code">
           <el-input v-model="form.type_code" placeholder="请输入code" />
         </el-form-item>
       </el-form>
@@ -74,7 +74,10 @@ export default {
         type_code: ''
       },
       rules: {
-        app_version: []
+        bundle_id: [{ required: true, trigger: 'blur', message: '包名为必填项' }],
+        soft_name: [{ required: true, trigger: 'blur', message: '软件名称为必填项' }],
+        soft_icon: [{ required: false, trigger: 'blur' }],
+        type_code: [{ required: true, trigger: 'blur', message: 'code为必填项' }]
       }
     }
   },
