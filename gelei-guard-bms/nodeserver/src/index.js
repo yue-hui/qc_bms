@@ -67,28 +67,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
     return
   }
 
-  var formData = {
-    ...encryptParams
-  }
-
-  // 添加文件信息
-  var key, file, filename, filestream
-  formData['file'] = []
-  if (files) {
-    for (var i = 0; i < files.length; i++) {
-      file = files[i]
-      key = file.fieldname
-      filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
-      formData['file'].push(filestream)
-      if (key in formData) {
-        formData[key].push(filestream)
-      } else {
-        formData[key] = [filestream]
-      }
-    }
-  }
-
-  request({
+  r = request({
     url: TransferReq,
     headers: reqConType,
     method: method,
@@ -111,6 +90,25 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
 
     error ? console.log(error) : '转发请求正常'
   })
+  
+  var formData = r.form()
+  for (key of Object.keys(encryptParams)) {
+    formData.append(key, encryptParams[key])
+  }
+  // var formData = {
+  //   ...encryptParams
+  // }
+  
+  // 添加文件信息
+  var key, file, filename, filestream
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      file = files[i]
+      key = file.fieldname
+      filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
+      formData.append('file', filestream, {...file})
+    }
+  }
 }
 
 app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {

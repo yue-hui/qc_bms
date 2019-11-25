@@ -109,7 +109,6 @@
           :is-create="is_create"
           :is-show="show_app_dialog"
           @receive="receive" />
-
       </div>
     </div>
   </div>

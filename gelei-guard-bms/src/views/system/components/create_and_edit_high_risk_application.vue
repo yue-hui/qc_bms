@@ -96,7 +96,6 @@ export default {
   },
   watch: {},
   mounted: function() {
-    console.log('is new: ', this.isNew)
     if (this.isNew === 1) {
       this.form = this.init_application_version()
     } else if (this.isNew === 2) {
