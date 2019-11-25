@@ -291,17 +291,24 @@ export default {
         align-items: center;
         position: relative;
 
+        &:hover {
+          img.origin {
+            float: inside;
+            transfrom: scale(4.8);
+            width: 96px;
+            height: 96px;
+          }
+          .soft-name {
+            padding-left: 5px;
+            font-weight: bolder;
+            font-size: 14px;
+          }
+        }
+
         img {
           transition: all 0.5s;
           width: 20px;
           height: 20px;
-        }
-
-        img.origin:hover {
-          float: inside;
-          transfrom: scale(4.8);
-          width: 96px;
-          height: 96px;
         }
 
         .soft-name {
