@@ -47,7 +47,7 @@
               <div class="soft-item">
                 <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" class="origin" alt="软件图标">
                 <img v-else src="@/assets/imgs/bg_icon_no.png" title="软件默认图标" class="default" alt="软件默认图标">
-                <span class="soft-name">{{ scope.row.soft_name }}</span>
+                <span class="soft-name" :class="{origin: !!scope.row.soft_icon}">{{ scope.row.soft_name }}</span>
               </div>
             </template>
           </el-table-column>
@@ -298,7 +298,7 @@ export default {
             width: 96px;
             height: 96px;
           }
-          .soft-name {
+          .soft-name.origin {
             padding-left: 5px;
             font-weight: bolder;
             font-size: 14px;
