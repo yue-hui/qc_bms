@@ -254,19 +254,19 @@ export const constantRouterMap = [
             name: '系统参数',
             component: () => import('@/views/system/system_parameter'),
             meta: { title: '系统参数', icon: 'system_parameter' }
-          }
+          },
           // {
           //   path: 'software_policy',
           //   name: '软件策略表',
           //   component: () => import('@/views/system/software_policy'),
           //   meta: { title: '软件策略表', icon: 'software_policy' }
           // },
-          // {
-          //   path: 'high_risk_application',
-          //   name: '高危应用表',
-          //   component: () => import('@/views/system/high_risk_application'),
-          //   meta: { title: '高危应用表', icon: 'high_risk_application' }
-          // }
+          {
+            path: 'high_risk_application',
+            name: '高危应用表',
+            component: () => import('@/views/system/high_risk_application'),
+            meta: { title: '高危应用表', icon: 'high_risk_application' }
+          }
         ]
       }
     ]

@@ -761,7 +761,57 @@ export function delete_sys_configuration(data) {
   })
 }
 
+/*
+  高危应用
+ */
+
+// 高危应用列表
+export function get_high_risk_soft_list(data) {
+  return request({
+    url: '/greenguard/manager/risk/soft/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取高危软件详情
+export function get_high_risk_soft_detail(data) {
+  return request({
+    url: '/greenguard/manager/risk/soft/get',
+    method: 'post',
+    data
+  })
+}
+
+// 添加高危软件
+export function add_high_risk_soft(data) {
+  return request({
+    url: '/greenguard/manager/risk/soft/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑高危软件
+export function edit_high_risk_soft(data) {
+  return request({
+    url: '/greenguard/manager/risk/soft/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 批量删除高危软件
+export function delete_multi_high_risk_soft(data) {
+  return request({
+    url: '/greenguard/manager/risk/soft/delete',
+    method: 'post',
+    data
+  })
+}
+
 /* 用户邀请注册 */
+
 // 邀请好友活动数据
 export function get_invite_statisis_data(data) {
   return request({

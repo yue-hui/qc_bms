@@ -9,9 +9,9 @@
                 <el-col :span="8" class="order-number-list">模糊搜索:</el-col>
                 <el-col :span="16">
                   <el-input
-                    v-model="query_sets.item_name"
+                    v-model="query_sets.soft_name"
                     size="mini"
-                    placeholder="记录信息"
+                    placeholder="软件名称"
                     clearable
                     @change="query_condition_change" />
                 </el-col>
@@ -21,7 +21,7 @@
           <el-col :xs="12" :sm="8" :md="18" :lg="19" :xl="20" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_records">创建记录</el-button>
+                <el-button size="mini" type="success" @click="create_high_risk_app">新建</el-button>
               </el-row>
             </div>
           </el-col>
@@ -34,29 +34,33 @@
           size="mini"
           style="width: 100%">
           <el-table-column
-            label="参数ID"
-            prop="p_id" />
+            label="软件ID"
+            prop="soft_id" />
           <el-table-column
-            label="参数类型"
-            prop="p_type" />
+            label="包名"
+            width="400"
+            prop="bundle_id" />
           <el-table-column
-            label="参数类型名称"
-            prop="p_type_name" />
+            label="软件名称"
+            prop="soft_name">
+            <template slot-scope="scope">
+              <div class="soft-item">
+                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" class="origin" alt="软件图标">
+                <img v-else src="@/assets/imgs/bg_icon_no.png" title="软件默认图标" class="default" alt="软件默认图标">
+                <span class="soft-name">{{ scope.row.soft_name }}</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column
-            label="参数显示名称"
-            prop="p_label" />
+            label="code"
+            prop="type_code" />
           <el-table-column
-            label="参数值"
-            prop="p_value" />
-          <el-table-column
-            label="是否可用"
-            prop="enabled" />
-          <el-table-column
-            label="排序号"
-            prop="row_order" />
-          <el-table-column
-            label="备注"
-            prop="remark" />
+            label="创建时间"
+            prop="create_time">
+            <template slot-scope="scope">
+              {{ scope.row.create_time | formatter_date_string }}
+            </template>
+          </el-table-column>
           <el-table-column
             label="操作"
             prop="control">
@@ -77,22 +81,40 @@
       </div>
     </div>
 
-    <create-and-edit-high-risk-application :show-dialog="show_records_pannel" :is-new="true" @destory="destory_pannel" />
+    <create-and-edit-high-risk-application
+      v-if="action !== 0"
+      :show-dialog="show_records_pannel"
+      :is-new="action"
+      :rid="current_soft_id"
+      @destory="destory_pannel" />
   </div>
 </template>
 
 <script>
 import CreateAndEditHighRiskApplication from './components/create_and_edit_high_risk_application'
-import { MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { delete_multi_high_risk_soft, get_high_risk_soft_list } from '@/api/interactive'
+import { date_formatter } from '@/utils/common'
 
 export default {
   components: {
     CreateAndEditHighRiskApplication
   },
+  filters: {
+    formatter_date_string: function(time) {
+      if (time) {
+        return date_formatter(time, DATE_TIME_FORMAT)
+      } else {
+        return ''
+      }
+    }
+  },
   data() {
+    const img_error_icon = 'this.src="' + require('@/assets/imgs/bg_icon_no.png') + '"'
     const page_size = getPagenationSize()
     return {
+      img_error_icon,
       show_records_pannel: false,
       query_sets: {
         item_name: ''
@@ -100,6 +122,7 @@ export default {
       packages: PACKAGE_TYPE,
       member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
+      current_soft_id: '',
       action: 0,
       parameter: [],
       page: 1,
@@ -118,9 +141,12 @@ export default {
       if (update) {
         this.fetch_data()
       }
+      this.action = 0
       this.show_records_pannel = false
     },
-    create_records: function() {
+    create_high_risk_app: function() {
+      this.action = 1
+      this.current_soft_id = ''
       this.show_records_pannel = true
     },
     get_condition() {
@@ -131,6 +157,8 @@ export default {
           condition[i] = query_params[i]
         }
       }
+      condition['page_no'] = this.page
+      condition['page_num'] = this.page_size
       return condition
     },
     get_condition_with_pagination() {
@@ -156,29 +184,28 @@ export default {
       this.page = page
       this.fetch_data()
     },
-    change_shelf_status: function(row) {
-      let confirm_text,
-        is_listing
-      if (row.is_listing === '1') {
-        // 已上架
-        confirm_text = '你确定要下架该套餐吗?'
-        is_listing = '0'
-      } else if (row.is_listing === '0') {
-        // 已下架
-        confirm_text = '你确定要上架该套餐吗?'
-        is_listing = '1'
-      }
+    delete_configration: function(row) {
+      const confirm_text = '你确定要删除该高危应用吗?'
       this.$confirm(confirm_text, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 更新记录
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消上下架操作'
+        const config = {
+          soft_id: row.soft_id
+        }
+        delete_multi_high_risk_soft(config).then(res => {
+          if (res.status === 0) {
+            this.query.item_name = ''
+            this.fetch_data()
+            this.$message.success(res.message)
+          } else {
+            this.$message.error(res.message)
+          }
         })
+      }).catch(() => {
+        this.$message.info('用户已取消操作')
       })
     },
     close_package_dialog(refresh = false) {
@@ -188,12 +215,26 @@ export default {
         this.fetch_data()
       }
     },
-    create_package() {
-      this.action = 1
-      this.current = {}
+    edit_configration: function(row) {
+      this.action = 2
+      this.current_soft_id = row.soft_id
+      this.show_records_pannel = true
     },
     fetch_data: function() {
-      //
+      // 获取高危应用
+      const config = this.get_condition()
+      get_high_risk_soft_list(config).then(res => {
+        if (res.status === 0) {
+          this.parameter = res.data.map((_c, _i) => {
+            return {
+              ..._c
+            }
+          })
+          this.total = res.total_count
+        } else {
+          this.$message.error(res.message)
+        }
+      })
     }
   }
 }
@@ -244,6 +285,29 @@ export default {
 
     .table-content {
       margin: 20px;
+
+      .soft-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        img {
+          transition: all 0.5s;
+          width: 20px;
+          height: 20px;
+        }
+
+        img.origin:hover {
+          float: inside;
+          transfrom: scale(4.8);
+          width: 96px;
+          height: 96px;
+        }
+
+        .soft-name {
+          padding-left: 5px;
+        }
+      }
     }
   }
 }

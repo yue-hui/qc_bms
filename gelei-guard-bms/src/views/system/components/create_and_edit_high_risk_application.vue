@@ -4,7 +4,6 @@
       :title="title"
       :visible.sync="showDialog"
       :before-close="close_dialog"
-      size="mini"
       width="40%">
       <el-form
         ref="form"
@@ -13,8 +12,20 @@
         label-suffix=":"
         size="mini"
         label-width="120px">
-        <el-form-item label="目标版本号" prop="app_version">
-          <el-input v-model="form.app_version" placeholder="请输入目标版本号" />
+        <el-form-item v-if="isNew === 2" label="软件ID" prop="app_version">
+          <el-input v-model="form.soft_id" disabled placeholder="请输入目标版本号" />
+        </el-form-item>
+        <el-form-item label="包名" prop="app_version">
+          <el-input v-model="form.bundle_id" placeholder="请输入软件包名" />
+        </el-form-item>
+        <el-form-item label="软件名称" prop="app_version">
+          <el-input v-model="form.soft_name" placeholder="请输入软件名称" />
+        </el-form-item>
+        <el-form-item label="软件图标" prop="app_version">
+          <el-input v-model="form.soft_icon" placeholder="请输入软件图标链接" />
+        </el-form-item>
+        <el-form-item label="code" prop="app_version">
+          <el-input v-model="form.type_code" placeholder="请输入code" />
         </el-form-item>
       </el-form>
 
@@ -28,7 +39,11 @@
 
 <script>
 import { pure_object_null_value } from '@/utils/common'
-import { add_application_version, edit_application_version } from '@/api/interactive'
+import {
+  add_high_risk_soft,
+  edit_high_risk_soft,
+  get_high_risk_soft_detail
+} from '@/api/interactive'
 
 export default {
   name: 'ParameterDialog',
@@ -39,9 +54,9 @@ export default {
       default: false
     },
     isNew: {
-      type: Boolean,
+      type: Number,
       required: true,
-      default: false
+      default: 0
     },
     rid: {
       type: String,
@@ -52,7 +67,11 @@ export default {
     return {
       dialog_title_name: '高危应用',
       form: {
-        app_version: ''
+        soft_id: '',
+        bundle_id: '',
+        soft_name: '',
+        soft_icon: '',
+        type_code: ''
       },
       rules: {
         app_version: []
@@ -61,14 +80,14 @@ export default {
   },
   computed: {
     title: function() {
-      if (this.isNew) {
+      if (this.isNew === 1) {
         return '创建' + this.dialog_title_name
       } else {
         return '编辑' + this.dialog_title_name
       }
     },
     show_save_label: function() {
-      if (this.isNew) {
+      if (this.isNew === 1) {
         return '创 建'
       } else {
         return '保 存'
@@ -77,9 +96,10 @@ export default {
   },
   watch: {},
   mounted: function() {
-    if (this.isNew) {
+    console.log('is new: ', this.isNew)
+    if (this.isNew === 1) {
       this.form = this.init_application_version()
-    } else {
+    } else if (this.isNew === 2) {
       // this.form = this.currentVersion
       this.fetch_pannel_data()
     }
@@ -88,10 +108,31 @@ export default {
     init_application_version() {
       // 初化数据
       return {
-        app_version: ''
+        soft_id: '',
+        bundle_id: '',
+        soft_name: '',
+        soft_icon: '',
+        type_code: ''
       }
     },
     fetch_pannel_data() {
+      // 获取高危软件详情
+      const config = {
+        soft_id: this.rid
+      }
+      get_high_risk_soft_detail(config).then(res => {
+        if (res.status === 0) {
+          // 获取成功
+          const remote_data = res.data
+          this.form.soft_id = remote_data.soft_id
+          this.form.bundle_id = remote_data.bundle_id
+          this.form.soft_name = remote_data.soft_name
+          this.form.soft_icon = remote_data.soft_icon
+          this.form.type_code = remote_data.type_code
+        } else {
+          this.$message.error(res.message)
+        }
+      })
     },
     close_dialog() {
       this.$confirm('确认关闭？')
@@ -101,12 +142,9 @@ export default {
         .catch(_ => {
         })
     },
-    create_records_item() {
+    create_high_risk_item() {
       const data = pure_object_null_value(this.form)
-      if (!data.update_url) {
-        delete data.update_url
-      }
-      add_application_version(data).then((res) => {
+      add_high_risk_soft(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
         } else {
@@ -115,12 +153,9 @@ export default {
         }
       })
     },
-    edit_records_item() {
+    edit_high_risk_item() {
       const data = pure_object_null_value(this.form)
-      // if (!data.update_url) {
-      //   delete data.update_url
-      // }
-      edit_application_version(data).then((res) => {
+      edit_high_risk_soft(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
         } else {
@@ -133,10 +168,10 @@ export default {
       // 创建策略
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.isNew) {
-            this.create_records_item()
+          if (this.isNew === 1) {
+            this.create_high_risk_item()
           } else {
-            this.edit_records_item()
+            this.edit_high_risk_item()
           }
         }
       })
