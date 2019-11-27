@@ -64,6 +64,13 @@ export default {
     }
   },
   data: function() {
+    const validateCode = (rule, value, callback) => {
+      if (typeof value === 'number' || /^[0-9]+$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('code必须为数字'))
+      }
+    }
     return {
       dialog_title_name: '高危应用',
       form: {
@@ -74,11 +81,19 @@ export default {
         type_code: ''
       },
       rules: {
-        bundle_id: [{ required: true, trigger: 'blur', message: '包名为必填项' }],
-        soft_name: [{ required: true, trigger: 'blur', message: '软件名称为必填项' }],
-        soft_icon: [{ required: false, trigger: 'blur' }],
+        bundle_id: [
+          { required: true, trigger: 'blur', message: '包名为必填项' },
+          { required: true, max: 1024, message: '包名长度过长' }
+        ],
+        soft_name: [
+          { required: true, trigger: 'blur', message: '软件名称为必填项' },
+          { required: true, max: 512, message: '软件名称长度过长' }
+        ],
+        soft_icon: [
+          { required: false, trigger: 'blur' }
+        ],
         type_code: [
-          { type: 'number', trigger: 'blur', message: 'code为数字类型' },
+          { type: 'number', trigger: 'blur', validator: validateCode },
           { required: true, trigger: 'blur', message: 'code为必填项' }
         ]
       }

@@ -181,7 +181,7 @@ export const constantRouterMap = [
     component: Layout,
     name: '活动管理',
     alwaysShow: true,
-    redirect: '/app/activity/list',
+    redirect: '/app/activity/invatation',
     meta: { title: '活动管理', icon: 'activity' },
     children: [
       // {
@@ -247,6 +247,7 @@ export const constantRouterMap = [
         name: '数据字典',
         alwaysShow: true,
         component: AppMain,
+        redirect: '/toolbox/configuration/system_parameter',
         meta: { title: '数据字典', icon: 'system_configure' },
         children: [
           {
