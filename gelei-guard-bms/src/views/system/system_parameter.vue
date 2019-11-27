@@ -30,6 +30,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="parameter"
           size="mini"
           style="width: 100%">
@@ -100,6 +101,7 @@ export default {
     const table_height = document.querySelector('body').clientHeight - 300
     const page_size = getPagenationSize()
     return {
+      loading: false,
       table_height,
       show_records_pannel: false,
       record_id: '',
@@ -206,6 +208,7 @@ export default {
     fetch_data: function() {
       // 获取系统参数列表
       const config = this.get_condition()
+      this.loading = true
       get_sys_configuration_list(config).then(res => {
         if (res.status === 0) {
           this.parameter = res.data.map((_c, _i) => {
@@ -221,6 +224,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

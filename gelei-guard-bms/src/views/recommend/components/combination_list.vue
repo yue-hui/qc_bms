@@ -3,6 +3,7 @@
     <div>
       <div class="table-block">
         <el-table
+          v-loading="loading"
           :data="data_list"
           :stripe="true"
           size="mini"
@@ -103,6 +104,7 @@ export default {
   data: function() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       data_list: [],
       page: 1,
       page_size,
@@ -163,6 +165,7 @@ export default {
       this.load_data(config)
     },
     load_data(config) {
+      this.loading = true
       get_soft_recommend_group(config).then(res => {
         this.data_list = res.data.map(r => {
           const time_transfer = date_formatter(r.create_time)
@@ -175,6 +178,8 @@ export default {
           }
         })
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     edit_is_enabled(row) {

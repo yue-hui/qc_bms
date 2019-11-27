@@ -77,6 +77,7 @@
 
       <div class="table-content">
         <el-table
+          v-loading="loading"
           :data="questions"
           size="mini"
           style="width: 100%">
@@ -144,6 +145,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       help_question_status,
       content: '格雷为您守护！',
       init: '',
@@ -175,6 +177,7 @@ export default {
       const config = {
         product: this.query_sets.product
       }
+      this.loading = true
       get_patriarch_questions_qa_list(config).then(res => {
         if (res.status === 0) {
           this.question_types = res.data.map(r => {
@@ -187,6 +190,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     show_deploy_name(row) {

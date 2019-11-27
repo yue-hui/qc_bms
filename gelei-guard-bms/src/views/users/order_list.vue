@@ -129,6 +129,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="order_data"
           size="mini"
           style="width: 100%">
@@ -220,6 +221,7 @@ export default {
     // const month_ago = dayjs().subtract(1, 'month')
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         order_no: '',
         order_time_range: [],
@@ -331,6 +333,7 @@ export default {
     fetch_order_list() {
       /* 获取订单列表 */
       const data = this.get_condition_with_pagination()
+      this.loading = true
       get_order_list(data).then(res => {
         if (res.status === 0) {
           this.order_data = this.order_list_map(res.data)
@@ -340,6 +343,8 @@ export default {
           this.total = 0
           this.total_amount = 0
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     download: function() {

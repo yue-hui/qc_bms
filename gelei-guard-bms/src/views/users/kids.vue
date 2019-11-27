@@ -134,6 +134,7 @@
 
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="table_data"
           size="mini"
           style="width: 100%">
@@ -219,6 +220,7 @@ export default {
     // const begin_time = new Date(dayjs().subtract(30, 'days'))
     // const end_time = new Date(dayjs().subtract(1, 'days'))
     return {
+      loading: false,
       device_type_list,
       grade_name_array,
       grade_list,
@@ -309,6 +311,7 @@ export default {
     },
     refresh_data: function() {
       const config = this.get_params()
+      this.loading = true
       get_user_child_list(config).then(res => {
         const table_data = []
         const base_index = (config.page_no - 1) * config.page_num + 1
@@ -325,6 +328,8 @@ export default {
         })
         this.table_data = table_data
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     download() {

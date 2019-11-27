@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="content-body">
+    <div v-loading="loading" class="content-body">
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
           <span>个人信息</span>
@@ -128,6 +128,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       information: {},
       edit: {
         nick_name: true,
@@ -151,12 +152,15 @@ export default {
       const config = {
         user_id: this.$route.query.id
       }
+      this.loading = true
       get_parent_details(config).then(res => {
         if (res.status === 0) {
           this.information = res.data
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

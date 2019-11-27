@@ -55,6 +55,7 @@
     <div class="content-body">
       <div class="table-block">
         <el-table
+          v-loading="loading"
           :data="version_block"
           size="mini"
           style="width: 100%">
@@ -134,6 +135,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       promotion_status,
       platforms,
       current_platform_type: '',
@@ -204,6 +206,7 @@ export default {
     },
     fetch_application_version_list() {
       const config = this.get_config()
+      this.loading = true
       get_application_version_list(config).then((res) => {
         //
         if (res.status === 0) {
@@ -231,6 +234,8 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     destory(status) {

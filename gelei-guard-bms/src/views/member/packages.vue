@@ -94,6 +94,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="packages_list"
           size="mini"
           style="width: 100%">
@@ -204,6 +205,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         plan_name: '',
         plan_type: '',
@@ -271,10 +273,13 @@ export default {
       })
     },
     fetch_member_list() {
+      this.loading = true
       const options = this.get_condition_with_pagination()
       get_member_plan_list(options).then(res => {
         this.packages_list = this.field_mapper(res.data)
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     query_condition_change() {

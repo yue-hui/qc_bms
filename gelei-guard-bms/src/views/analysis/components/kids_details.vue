@@ -13,6 +13,7 @@
       <el-tab-pane label="孩子端 - 详细数据" name="child">
         <div class="table-block">
           <el-table
+            v-loading="loading"
             :data="data_child_list"
             size="mini"
             style="width: 100%">
@@ -79,6 +80,7 @@ export default {
   data: function() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       active_tab: 'child', // child: 孩子端  parent: 家长端
       download_loading: false,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
@@ -197,9 +199,12 @@ export default {
     },
     fetch_user_analysis_child_details() {
       const options = this.get_child_options()
+      this.loading = true
       get_user_analysis_child_details(options).then(res => {
         this.data_child_list = res.data
         this.total_child = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     tab_change() {

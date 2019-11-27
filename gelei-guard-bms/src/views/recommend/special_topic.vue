@@ -12,6 +12,7 @@
     <div class="content-body">
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="recommend_subject_list"
           size="mini"
           style="width: 100%">
@@ -113,6 +114,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {},
       packages: PACKAGE_TYPE,
       status_list: PACKAGE_STATUS,
@@ -170,10 +172,13 @@ export default {
       })
     },
     fetch_recommend_subject_list() {
+      this.loading = true
       const options = this.get_condition_with_pagination()
       get_recommend_subject_list(options).then(res => {
         this.recommend_subject_list = this.field_mapper(res.data)
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     query_condition_change() {

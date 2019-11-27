@@ -64,6 +64,7 @@
         </div>
         <div class="table-content table-block">
           <el-table
+            v-loading="loading"
             :data="invatation_list"
             size="mini"
             style="width: 100%">
@@ -115,6 +116,7 @@ export default {
     const activities = OPERATORS_ACTIVITY_TYPES
     const page_size = getPagenationSize()
     return {
+      loading: false,
       download_loading: false,
       activities,
       invatation: {
@@ -133,6 +135,7 @@ export default {
   },
   methods: {
     reload_page: function() {
+      this.loading = true
       const config = this.get_params()
       get_invite_statisis_data(config).then(res => {
         if (res.status === 0) {
@@ -147,6 +150,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     change_current: function(page) {

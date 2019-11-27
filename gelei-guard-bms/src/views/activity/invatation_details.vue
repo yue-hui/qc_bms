@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="content-body">
+    <div v-loading="loading" class="content-body">
       <el-form ref="form" :model="form" size="mini" class="invatation-form" label-width="140px">
         <el-form-item label="邀请注册活动名称">
           <el-input v-model="form.name" size="mini" />
@@ -62,6 +62,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       form: {
         name: '',
         member_plan_id: '',
@@ -138,8 +139,13 @@ export default {
       })
     },
     load_member_list() {
+      this.loading = true
       this.fetch_member_plan_list().then(() => {
         this.init_page()
+      }).finally(() => {
+        setTimeout(() => {
+          this.loading = false
+        }, 300)
       })
     },
     init_page() {
@@ -163,6 +169,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     member_plan_list_change(plan_id) {

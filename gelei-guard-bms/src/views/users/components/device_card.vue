@@ -156,6 +156,9 @@ export default {
     handleChange: (a) => {
     },
     __date_formatter: (t) => {
+      if (!t) {
+        return ''
+      }
       return date_formatter(t, DATE_TIME_FORMAT)
     },
     confirm_un_lock_child_device() {

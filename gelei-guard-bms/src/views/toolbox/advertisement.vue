@@ -90,6 +90,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="adv_data"
           size="mini"
           style="width: 100%">
@@ -194,6 +195,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         ad_name: '',
         ad_type: '',
@@ -299,6 +301,7 @@ export default {
     fetch_advertising_list() {
       /* 拉取广告配置列表 */
       const options = this.get_condition_with_pagination()
+      this.loading = true
       get_advertising_list(options).then(res => {
         if (res.status === 0) {
           this.adv_data = this.formatter_data(res.data)
@@ -306,6 +309,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     async fetch_advertising_filter_list() {

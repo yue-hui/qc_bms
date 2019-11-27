@@ -29,6 +29,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="version_list"
           size="mini"
           style="width: 100%">
@@ -80,6 +81,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         platform: ''
       },
@@ -135,11 +137,14 @@ export default {
     fetch_version_distribution_list() {
       /* 获取订单列表 */
       const data = this.get_condition_with_pagination()
+      this.loading = true
       get_version_distribution(data).then(res => {
         if (res.status === 0) {
           this.version_list = this.version_distribution_map(res.data)
           this.total = res.total_count
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

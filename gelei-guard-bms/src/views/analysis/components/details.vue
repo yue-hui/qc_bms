@@ -29,6 +29,7 @@
     </div>
     <div class="table-block">
       <el-table
+        v-loading="loading"
         :data="data_list"
         size="mini"
         style="width: 100%">
@@ -102,6 +103,7 @@ export default {
   data: function() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       device_brands,
       device_brand: {
         name: '家长端',
@@ -237,9 +239,12 @@ export default {
     },
     fetch_user_analysis_details() {
       const options = this.get_options()
+      this.loading = true
       get_user_analysis_details(options).then(res => {
         this.data_list = res.data
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

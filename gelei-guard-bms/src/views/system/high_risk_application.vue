@@ -30,6 +30,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="parameter"
           size="mini"
           style="width: 100%">
@@ -45,9 +46,9 @@
             prop="soft_name">
             <template slot-scope="scope">
               <div class="soft-item">
-                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" class="origin" alt="软件图标">
+                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" :onerror="img_error_icon" class="origin" alt="软件图标">
                 <img v-else src="@/assets/imgs/bg_icon_no.png" title="软件默认图标" class="default" alt="软件默认图标">
-                <span class="soft-name" :class="{origin: !!scope.row.soft_icon}">{{ scope.row.soft_name }}</span>
+                <span :class="{origin: !!scope.row.soft_icon}" class="soft-name">{{ scope.row.soft_name }}</span>
               </div>
             </template>
           </el-table-column>
@@ -114,6 +115,7 @@ export default {
     const img_error_icon = 'this.src="' + require('@/assets/imgs/bg_icon_no.png') + '"'
     const page_size = getPagenationSize()
     return {
+      loading: false,
       img_error_icon,
       show_records_pannel: false,
       query_sets: {
@@ -223,6 +225,7 @@ export default {
     fetch_data: function() {
       // 获取高危应用
       const config = this.get_condition()
+      this.loading = true
       get_high_risk_soft_list(config).then(res => {
         if (res.status === 0) {
           this.parameter = res.data.map((_c, _i) => {
@@ -234,6 +237,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

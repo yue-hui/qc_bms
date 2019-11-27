@@ -131,6 +131,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="device_list"
           size="mini"
           style="width: 100%">
@@ -202,6 +203,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         child_device_id: '',
         device_type: '',
@@ -322,11 +324,14 @@ export default {
     fetch_device_list() {
       /* 获取订单列表 */
       const data = this.get_condition_with_pagination()
+      this.loading = true
       get_device_list(data).then(res => {
         if (res.status === 0) {
           this.device_list = this.device_list_map(res.data)
           this.total = res.total_count
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

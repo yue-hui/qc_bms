@@ -25,6 +25,7 @@
       <div class="between-search-area-and-table-display" />
       <div class="table-content table-block">
         <el-table
+          v-loading="loading"
           :data="activity_list"
           size="mini"
           style="width: 100%">
@@ -106,6 +107,7 @@ export default {
   data() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       query_sets: {
         activity_name: ''
       },
@@ -150,6 +152,7 @@ export default {
     },
     fetch_member_activity_list() {
       const options = this.get_options()
+      this.loading = true
       get_member_activity_list(options).then(res => {
         if (res.status === 0) {
           this.activity_list = res.data.map(r => {
@@ -163,6 +166,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     table_size_change: function(size) {

@@ -3,6 +3,7 @@
     <div>
       <div class="table-block">
         <el-table
+          v-loading="loading"
           :data="data_list"
           size="mini"
           style="width: 100%"
@@ -144,6 +145,7 @@ export default {
   data: function() {
     const page_size = getPagenationSize()
     return {
+      loading: false,
       data_list: [],
       page: 1,
       page_size,
@@ -226,6 +228,7 @@ export default {
     },
     fetch() {
       const options = this.get_options()
+      this.loading = true
       get_manager_soft_recommend_list(options).then(res => {
         this.data_list = res.data.map(r => {
           const age_label = r.start_age !== r.end_age ? [r.start_age, '-', r.end_age, '岁'].join('') : [r.start_age, '岁'].join('')
@@ -241,6 +244,8 @@ export default {
           }
         })
         this.total = res.total_count
+      }).finally(() => {
+        this.loading = false
       })
     },
     search() {

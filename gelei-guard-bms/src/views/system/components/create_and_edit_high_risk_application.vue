@@ -77,7 +77,10 @@ export default {
         bundle_id: [{ required: true, trigger: 'blur', message: '包名为必填项' }],
         soft_name: [{ required: true, trigger: 'blur', message: '软件名称为必填项' }],
         soft_icon: [{ required: false, trigger: 'blur' }],
-        type_code: [{ required: true, trigger: 'blur', message: 'code为必填项' }]
+        type_code: [
+          { type: 'number', trigger: 'blur', message: 'code为数字类型' },
+          { required: true, trigger: 'blur', message: 'code为必填项' }
+        ]
       }
     }
   },
