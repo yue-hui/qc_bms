@@ -286,7 +286,7 @@ export const constantRouterMap = [
     }]
   },
   // { path: '/', redirect: '/homepage', name: '默认页', hidden: true },
-  { path: '/', redirect: '/users/information', name: '默认页', hidden: true },
+  { path: '/', redirect: '/homepage', name: '默认页', hidden: true },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -1,55 +1,68 @@
 <template>
   <div class="content">
-
-    <div class="header-line">
-      <div class="left-sider-box-style">
-        <div class="control-box">
-          <el-select
-            v-model="current_promotion_status"
-            size="mini"
-            placeholder="请选择状态"
-            clearable
-            @change="change_promotion_status">
-            <el-option
-              v-for="item in promotion_status"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
-        <div class="control-box">
-          <el-select
-            v-model="current_platform_type"
-            size="mini"
-            placeholder="请选择平台"
-            clearable
-            @change="change_promotion_platform">
-            <el-option
-              v-for="item in platforms"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value" />
-          </el-select>
-        </div>
-      </div>
-      <div class="right-sider-box-style">
-        <div class="control-box">
-          <el-button
-            type="success"
-            size="mini"
-            @click="sync_version"
-          >发送同步版本指令
-          </el-button>
-        </div>
-        <div class="control-box">
-          <el-button
-            type="success"
-            size="mini"
-            @click="create_app_version"
-          >创建应用升级策略
-          </el-button>
-        </div>
-      </div>
+    <div class="search-area">
+      <el-row :gutter="10" class="row-bg">
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-row>
+              <el-col :span="8" class="order-number-list">状态:</el-col>
+              <el-col :span="16">
+                <el-select
+                  v-model="current_promotion_status"
+                  size="mini"
+                  placeholder="请选择状态"
+                  clearable
+                  @change="change_promotion_status">
+                  <el-option
+                    v-for="item in promotion_status"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple-light">
+            <el-row>
+              <el-col :span="8" class="order-number-list">平台:</el-col>
+              <el-col :span="16">
+                <el-select
+                  v-model="current_platform_type"
+                  size="mini"
+                  placeholder="请选择平台"
+                  clearable
+                  @change="change_promotion_platform">
+                  <el-option
+                    v-for="item in platforms"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="8" :md="12" :lg="12" :xl="16" class="col-bg layout-right col-right-button">
+          <div class="grid-content bg-purple-light">
+            <el-row>
+              <el-button
+                type="success"
+                size="mini"
+                @click="sync_version"
+              >发送同步版本指令
+              </el-button>
+              <el-button
+                type="success"
+                size="mini"
+                @click="create_app_version"
+              >创建应用升级策略
+              </el-button>
+            </el-row>
+          </div>
+        </el-col>
+      </el-row>
     </div>
 
     <div class="content-body">
@@ -322,6 +335,29 @@ export default {
   padding: 0 10px 25px 10px;
   display: flex;
   flex-direction: column;
+
+  .search-area {
+    padding: 20px 20px 0 20px;
+
+    .row-bg {
+      .col-bg {
+        padding: 5px 0;
+
+        &.col-right-button {
+          text-align: right;
+        }
+
+        .order-number-list {
+          height: 28px;
+          line-height: 28px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #4d4d4d;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
 
   .content-body {
     border: 1px solid #c7d5ee;

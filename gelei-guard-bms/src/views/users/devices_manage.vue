@@ -114,7 +114,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="16" :lg="24" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="12" :sm="16" :md="16" :lg="6" :xl="20" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button

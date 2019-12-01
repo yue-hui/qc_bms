@@ -211,7 +211,7 @@
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings"
-                  height="240px" />
+                  height="280px" />
               </div>
             </div>
           </div>
@@ -245,7 +245,7 @@
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings"
-                  height="240px" />
+                  height="280px" />
               </div>
             </div>
           </div>
@@ -279,7 +279,7 @@
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings_array"
-                  height="240px" />
+                  height="280px" />
               </div>
             </div>
           </div>
@@ -387,9 +387,9 @@ export default {
       },
       chart_extend: {
         legend: {
-          orient: 'vertical',
-          x: 'right',
-          y: 'center',
+          orient: 'horizontal',
+          x: 'center',
+          y: 'bottom',
           textStyle: {
             color: '#A0A0A0',
             fontSize: 12
@@ -471,7 +471,7 @@ export default {
     },
     update_chat_chart() {
       const growth_data = this.growth_data
-      if (growth_data.length) {
+      if (Object.keys(growth_data).length) {
         // 新增注册用户
         this.increased_user_data = {
           columns: ['name', 'value'],
@@ -493,10 +493,23 @@ export default {
           rows: device_data
         }
         // 订单成交量及占比
-        const order_data = growth_data.member_order_count_list.map(r => {
+        const field_filter_list = ['IOS', '安卓', '6个月会员', '12个月会员', '24个月会员']
+        const order_data = growth_data.member_order_count_list.filter(r => field_filter_list.indexOf(r.name) !== -1).map(r => {
           return {
             name: r.name,
             value: r.count
+          }
+        })
+        // 后台返回数据格式不正确，前端用数据填补
+        field_filter_list.forEach(_c => {
+          const _item = order_data.filter(r => r.name === _c)
+          if (_item.length === 0) {
+            order_data.push(
+              {
+                name: _c,
+                value: 0
+              }
+            )
           }
         })
         this.order_radio_data = {
@@ -504,18 +517,25 @@ export default {
           rows: order_data
         }
       } else {
-        this.increased_user_data = {}
+        this.increased_user_data = {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { 'name': '家长端', 'value': growth_data.patriarch_count },
+            { 'name': '孩子端', 'value': growth_data.child_count }
+          ]
+        }
         this.device_ratio_data = {}
         this.order_radio_data = {}
         this.order_radio_data = {
           columns: ['name', 'value'],
           center: ['20%', '50%'],
           rows: [
-            { 'name': '6个月会员', 'value': 80 },
-            { 'name': '12个月会员', 'value': 160 },
-            { 'name': '24个月会员', 'value': 110 },
-            { 'name': 'IOS', 'value': 80 },
-            { 'name': '安卓', 'value': 120 }
+            { 'name': '6个月会员', 'value': 0 },
+            { 'name': '12个月会员', 'value': 0 },
+            { 'name': '24个月会员', 'value': 0 },
+            { 'name': 'IOS', 'value': 0 },
+            { 'name': '安卓', 'value': 0 }
           ]
         }
       }
