@@ -177,7 +177,7 @@ export default {
   flex-direction: column;
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    border: 1px solid #EAEAEA;
     height: 100%;
     padding: 15px 25px;
     min-height: 120px;

@@ -1,6 +1,7 @@
 $header_height: 60px !default;
-$sidebar_container_width: 180px !default;
-$min_sidebar_container_width: 180px !default;
+$sidebar_container_width: 200px !default;
+$min_sidebar_container_width: 200px !default;
+$mobile_sidebar_container_width: 300px !default;
 #app {
   // 主体区域
   .main-container {
@@ -56,7 +57,7 @@ $min_sidebar_container_width: 180px !default;
     .el-menu {
       border: none;
       height: 100%;
-      width: 100% !important;
+      //width: 100% !important;
     }
 
     .is-active > .el-submenu__title {
@@ -126,18 +127,22 @@ $min_sidebar_container_width: 180px !default;
   //适配移动端
   .mobile {
     .main-container {
-      margin-left: 0px;
+      margin-left: $mobile_sidebar_container_width;
     }
 
     .sidebar-container {
       transition: transform .28s;
-      width: 180px !important;
+      width: $mobile_sidebar_container_width !important;
     }
 
     &.hideSidebar {
       .sidebar-container {
         transition-duration: 0.3s;
         transform: translate3d(-180px, 0, 0);
+        width: 36px !important;
+      }
+      .main-container{
+        margin-left: 0;
       }
     }
   }

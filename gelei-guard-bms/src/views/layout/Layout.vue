@@ -73,7 +73,7 @@ export default {
       min-height: 60px;
       width: 100%;
       /*background-color: deepskyblue;*/
-      background-color: #062e3c;
+      background: #222736;
     }
 
     .bms-body {

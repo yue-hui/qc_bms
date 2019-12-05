@@ -183,7 +183,6 @@ export default {
         'record_id': this.rid
       }
       get_questions_details(config).then(res => {
-        debugger
         if (res.status === 0) {
           this.form = res.data
           const question_type = res.data.type

@@ -47,7 +47,7 @@ export default {
 	display: inline-block;
 	cursor: pointer;
 	width: 20px;
-	height: 20px;
+	height: 50px;
 	transform: rotate(90deg);
 	transition: .38s;
 	transform-origin: 50% 50%;

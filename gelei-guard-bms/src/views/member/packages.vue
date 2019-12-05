@@ -101,13 +101,11 @@
           <el-table-column
             align="center"
             label="套餐名称"
-            prop="plan_name"
-            width="200" />
+            prop="plan_name" />
           <el-table-column
             align="center"
             label="套餐类型"
-            prop="plan_type_label"
-            width="180" />
+            prop="plan_type_label" />
           <el-table-column
             align="center"
             label="套餐对象"
@@ -404,7 +402,7 @@ export default {
   flex-direction: column;
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    border: 1px solid #EAEAEA;
     height: 100%;
     min-height: 120px;
 

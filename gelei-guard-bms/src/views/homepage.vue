@@ -5,48 +5,33 @@
         <div class="title-area"><span class="title">整体数据</span></div>
         <div class="summary-items-area">
           <div :style="'background-color: ' + theme_color[0]" class="summary-item">
-            <div class="item-icon">
-              <svg-icon icon-class="payed_user" />
-            </div>
             <div class="item-info">
-              <div class="item-name">付费用户数</div>
               <div class="item-value">{{ overall_data.pay_member_count }}</div>
+              <div class="item-name">付费用户数</div>
             </div>
           </div>
           <div :style="'background-color: ' + theme_color[1]" class="summary-item">
-            <div class="item-icon">
-              <svg-icon icon-class="experience" />
-            </div>
             <div class="item-info">
-              <div class="item-name">体验用户数</div>
               <div class="item-value">{{ overall_data.experience_member_count }}</div>
+              <div class="item-name">体验用户数</div>
             </div>
           </div>
           <div :style="'background-color: ' + theme_color[2]" class="summary-item">
-            <div class="item-icon">
-              <svg-icon icon-class="expired_time" />
-            </div>
             <div class="item-info">
-              <div class="item-name">即将到期会员</div>
               <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
+              <div class="item-name">即将到期会员</div>
             </div>
           </div>
           <div :style="'background-color: ' + theme_color[3]" class="summary-item">
-            <div class="item-icon">
-              <svg-icon icon-class="volume" />
-            </div>
             <div class="item-info">
-              <div class="item-name">订单成交量</div>
               <div class="item-value">{{ overall_data.order_count }}</div>
+              <div class="item-name">订单成交量</div>
             </div>
           </div>
           <div :style="'background-color: ' + theme_color[4]" class="summary-item">
-            <div class="item-icon">
-              <svg-icon icon-class="recharge_amount" />
-            </div>
             <div class="item-info">
+              <div class="item-value">¥{{ overall_data.order_amount }}</div>
               <div class="item-name">充值金额</div>
-              <div class="item-value">{{ overall_data.order_amount }}</div>
             </div>
           </div>
         </div>
@@ -65,7 +50,7 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     type="daterange"
-                    size="mini"
+                    size="medium"
                     unlink-panels
                     @change="page_query" />
                 </el-col>
@@ -81,105 +66,123 @@
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
-                  <label class="item-label">总数: </label>
                   <span class="total-count">{{ growth_data.increase_bind_user }}</span>
+                  <label class="item-label">总数</label>
                 </span>
                 <span>
-                  <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_bind_user_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_bind_user_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.increased_bind_user_comparison | abs }}%</span>
+                  <span class="total-count">{{ growth_data.increase_bind_ios_user }}</span>
+                  <label class="item-label">苹果</label>
                 </span>
                 <span>
-                  <label class="item-label">转化率: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_bind_user_conversion < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_bind_user_conversion === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span>{{ growth_data.increased_bind_user_conversion | abs }}%</span>
+                  <span class="total-count">{{ growth_data.increase_bind_android_user }}</span>
+                  <label class="item-label">安卓</label>
+                </span>
+              </p>
+              <div class="diviser" />
+              <p class="ratio-data">
+                <span>
+                  <span class="ratio-name">同比:</span>
+                  <span
+                    :class="{green: growth_data.increased_bind_user_comparison < 0, red: growth_data.increased_bind_user_comparison > 0, blue: growth_data.increased_bind_user_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_bind_user_comparison | abs }}%
+                    <template v-if="growth_data.increased_bind_user_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.increased_bind_user_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
+                </span>
+                <span>
+                  <span class="ratio-name">转化率:</span>
+                  <span
+                    :class="{green: growth_data.increased_bind_user_conversion < 0, red: growth_data.increased_bind_user_conversion > 0, blue: growth_data.increased_bind_user_conversion === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_bind_user_conversion | abs }}%
+                    <template v-if="growth_data.increased_bind_user_conversion > 0">↑</template>
+                    <template v-else-if="growth_data.increased_bind_user_conversion === 0" />
+                    <template v-else>↓</template>
+                  </span>
                 </span>
               </p>
             </div>
-            <multi-process v-if="increase_bind_items_list.length" :items="increase_bind_items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">新增付费用户</div>
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
-                  <label class="item-label">总数: </label>
                   <span class="total-count">{{ growth_data.increased_pay_user }}</span>
+                  <label class="item-label">总数</label>
                 </span>
                 <span>
-                  <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_pay_user_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_pay_user_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.increased_pay_user_comparison | abs }}%</span>
+                  <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
+                  <label class="item-label">苹果</label>
                 </span>
                 <span>
-                  <label class="item-label">转化率: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_pay_user_conversion < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_pay_user_conversion === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span>{{ growth_data.increased_pay_user_conversion | abs }}%</span>
+                  <span class="total-count">{{ growth_data.increased_pay_android_user }}</span>
+                  <label class="item-label">安卓</label>
+                </span>
+              </p>
+              <div class="diviser" />
+              <p class="ratio-data">
+                <span>
+                  <span class="ratio-name">同比:</span>
+                  <span
+                    :class="{green: growth_data.increased_pay_user_comparison < 0, red: growth_data.increased_pay_user_comparison > 0, blue: growth_data.increased_pay_user_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_pay_user_comparison | abs }}%
+                    <template v-if="growth_data.increased_pay_user_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.increased_pay_user_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
+                </span>
+                <span>
+                  <span class="ratio-name">转化率:</span>
+                  <span
+                    :class="{green: growth_data.increased_pay_user_conversion < 0, red: growth_data.increased_pay_user_conversion > 0, blue: growth_data.increased_pay_user_conversion === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_pay_user_conversion | abs }}%
+                    <template v-if="growth_data.increased_pay_user_conversion > 0">↑</template>
+                    <template v-else-if="growth_data.increased_pay_user_conversion === 0" />
+                    <template v-else>↓</template>
+                  </span>
                 </span>
               </p>
             </div>
-            <multi-process :items="increased_pay_items_list" />
           </div>
           <div class="data-item">
             <div class="item-row item-title">充值金额</div>
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
-                  <label class="item-label">总数: </label>
-                  <span class="total-count">{{ growth_data.order_amount }}</span>
+                  <span class="total-count">¥{{ growth_data.order_amount }}</span>
+                  <label class="item-label">总数</label>
                 </span>
                 <span>
-                  <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.order_amount_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.order_amount_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.order_amount_comparison | abs }}%</span>
+                  <span class="total-count">¥{{ growth_data.ios_order_amount }}</span>
+                  <label class="item-label">苹果</label>
                 </span>
-                <span />
+                <span>
+                  <span class="total-count">¥{{ growth_data.android_order_amount }}</span>
+                  <label class="item-label">安卓</label>
+                </span>
+              </p>
+              <div class="diviser" />
+              <p class="ratio-data">
+                <span>
+                  <span class="ratio-name">同比:</span>
+                  <span
+                    :class="{green: growth_data.order_amount_comparison < 0, red: growth_data.order_amount_comparison > 0, blue: growth_data.order_amount_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.order_amount_comparison | abs }}%
+                    <template v-if="growth_data.order_amount_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.order_amount_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
+                </span>
               </p>
             </div>
-            <multi-process :items="order_amount_items_list" />
           </div>
         </div>
-        <div class="diviser-with-cmount-and-chart" />
         <div class="ratio-with-chart-area">
           <div class="data-item">
             <div class="item-row item-title">新增注册用户</div>
@@ -190,28 +193,26 @@
                   <span class="total-count">{{ growth_data.increased_user }}</span>
                 </span>
                 <span>
-                  <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_user_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_user_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.increased_user_comparison | abs }}%</span>
+                  <span class="item-label">同比: </span>
+                  <span
+                    :class="{green: growth_data.increased_user_comparison < 0, red: growth_data.increased_user_comparison > 0, blue: growth_data.increased_user_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_user_comparison | abs }}%
+                    <template v-if="growth_data.increased_user_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.increased_user_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
                 </span>
               </p>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
-                <ve-pie
+                <ve-ring
                   :data="increased_user_data"
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings"
-                  height="280px" />
+                  height="205px" />
               </div>
             </div>
           </div>
@@ -225,27 +226,25 @@
                 </span>
                 <span>
                   <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.increased_bind_device_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.increased_bind_device_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.increased_bind_device_comparison | abs }}%</span>
+                  <span
+                    :class="{green: growth_data.increased_bind_device_comparison < 0, red: growth_data.increased_bind_device_comparison > 0, blue: growth_data.increased_bind_device_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.increased_bind_device_comparison | abs }}%
+                    <template v-if="growth_data.increased_bind_device_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.increased_bind_device_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
                 </span>
               </p>
             </div>
             <div class="item-row item-chart-area">
               <div class="chart">
-                <ve-pie
+                <ve-ring
                   :data="device_ratio_data"
                   :legend-visible="true"
                   :extend="chart_extend"
                   :settings="chart_settings"
-                  height="280px" />
+                  height="205px" />
               </div>
             </div>
           </div>
@@ -259,16 +258,14 @@
                 </span>
                 <span>
                   <label class="item-label">同比: </label>
-                  <svg-icon
-                    v-if="growth_data.order_count_comparison < 0"
-                    class="upper"
-                    icon-class="upper_direction" />
-                  <svg-icon
-                    v-else-if="growth_data.order_count_comparison === 0"
-                    class="fair"
-                    icon-class="fair_direction" />
-                  <svg-icon v-else class="down" icon-class="down_direction" />
-                  <span class="item-number">{{ growth_data.order_count_comparison | abs }}%</span>
+                  <span
+                    :class="{green: growth_data.order_count_comparison < 0, red: growth_data.order_count_comparison > 0, blue: growth_data.order_count_comparison === 0 }"
+                    class="ratio-value">
+                    {{ growth_data.order_count_comparison | abs }}%
+                    <template v-if="growth_data.order_count_comparison > 0">↑</template>
+                    <template v-else-if="growth_data.order_count_comparison === 0" />
+                    <template v-else>↓</template>
+                  </span>
                 </span>
               </p>
             </div>
@@ -276,10 +273,10 @@
               <div class="chart">
                 <ve-pie
                   :data="order_radio_data"
-                  :legend-visible="true"
+                  :legend-visible="false"
                   :extend="chart_extend"
                   :settings="chart_settings_array"
-                  height="280px" />
+                  height="205px" />
               </div>
             </div>
           </div>
@@ -314,11 +311,15 @@ import dayjs from 'dayjs'
 import MultiProcess from '@/components/MultiProcess'
 import { get_homepage_growth_data, get_homepage_overall_data } from '@/api/interactive'
 
-const theme_color = ['#2ec7c9', '#b6a2de', '#5ab1ef', '#ffb980',
-  '#d87a80', '#8d98b3', '#e5cf0d', '#97b552',
+const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
+  '#FFA069', '#8d98b3', '#e5cf0d', '#97b552',
   '#95706d', '#dc69aa', '#07a2a4', '#9a7fd1',
   '#588dd5', '#f5994e', '#c05050', '#59678c',
   '#c9ab00', '#7eb00a', '#6f5553', '#c14089']
+
+const echart_colors = [
+  '#338DE8', '#ED6060', '#EFAE3E', '#3CE5D5', '#92CC52'
+]
 
 export default {
   filters: {
@@ -333,7 +334,6 @@ export default {
     MultiProcess
   },
   data() {
-    this.colors = theme_color
     const day = dayjs().subtract(1, 'days')
     const pre_week = dayjs().subtract(7, 'days')
     return {
@@ -369,31 +369,34 @@ export default {
               show: false
             }
           }
-        },
-        series: {
-          center: ['20%', '50%']
         }
       },
       chart_settings_array: {
         hoverAnimation: false,
+        radius: 70,
+        label: {
+          show: false
+        },
         level: [
           ['IOS', '安卓'],
           ['6个月会员', '12个月会员', '24个月会员']
         ],
-        offsetY: 100,
-        series: {
-          center: ['40%', '50%']
-        }
+        offsetY: 180
       },
       chart_extend: {
+        color: echart_colors,
         legend: {
-          orient: 'horizontal',
-          x: 'center',
-          y: 'bottom',
+          orient: 'vertical',
+          x: '244',
+          y: 'center',
           textStyle: {
             color: '#A0A0A0',
             fontSize: 12
           }
+        },
+        series: {
+          type: 'pie',
+          center: [90, '50%']
         }
       },
       increased_user_data: {},
@@ -643,37 +646,43 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 $border_line_color: #c7d5ee;
-$border_radius_size: 10px;
+$border_radius_size: 5px;
 $box_shadow_color: #3c3c3c;
 $radio_fair_color: rgba(0, 0, 0, 0.71);
 .gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 20px 10px 25px 10px;
+  padding: 20px 40px 36px 40px;
   display: flex;
   flex-direction: column;
-  background-color: #f8f6e7;
+  background-color: #fafafa;
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    /*border: 1px solid #c7d5ee;*/
     height: 100%;
     min-height: 100px;
     min-width: 1260px;
 
     .total-data-area {
       width: 100%;
-      padding: 15px 0;
+      padding: 23px 30px 48px 30px;
       display: flex;
       flex-direction: column;
+      background: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      border-radius: 5px;
+      border-radius: 5px;
+      margin-bottom: 40px;
 
       .title-area {
         width: 100%;
         padding: 0 15px 15px 15px;
 
         .title {
-          font-size: 16px;
-          font-weight: 600;
+          font-family: PingFangSC-Regular;
+          font-size: 20px;
+          color: #454545;
         }
       }
 
@@ -687,21 +696,14 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         padding: 0 15px 15px 15px;
         user-select: none;
 
-        .summary-item-area {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
         .summary-item {
-          width: 210px;
-          height: 80px;
+          width: 260px;
+          height: 120px;
           border-radius: $border_radius_size;
           display: flex;
           flex-direction: row;
-          padding: 10px;
-          box-shadow: 2px 2px 10px $box_shadow_color;
+          padding: 22px 24px;
+          flex-basis: calc((100% - 80px) / 5);
 
           .item-icon {
             font-size: 48px;
@@ -713,21 +715,22 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           .item-info {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: start;
             justify-content: center;
             color: white;
+            text-align: left;
 
             .item-name {
-              font-weight: 600;
+              font-family: PingFangSC-Regular;
               font-size: 16px;
-              text-align: right;
-              padding: 5px 10px;
+              color: #FFFFFF;
             }
 
             .item-value {
-              font-size: 28px;
-              text-align: right;
-              padding: 5px 10px;
+              text-align: left;
+              font-size: 36px;
+              color: #FFFFFF;
+              margin-bottom: 4px;
             }
           }
         }
@@ -735,7 +738,13 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     }
 
     .search-area {
-      padding: 20px 20px 0 20px;
+      padding: 29px 30px;
+      background: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      border-radius: 5px;
+      border-radius: 5px;
+      height: 100px;
+      margin-bottom: 40px;
 
       .row-bg {
         .col-bg {
@@ -746,12 +755,12 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           }
 
           .order-number-list {
-            height: 28px;
-            line-height: 28px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #4d4d4d;
+            height: 36px;
+            line-height: 36px;
             white-space: nowrap;
+            font-family: PingFangSC-Regular;
+            font-size: 16px;
+            color: #454545;
           }
         }
       }
@@ -759,45 +768,43 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
 
     .data-comparison-area {
       width: 100%;
+      margin-bottom: 30px;
 
       .new-user-and-amount-area {
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding: 0 15px 15px 15px;
         margin: 20px 0;
 
         .data-item {
-          min-width: 400px;
-          min-height: 120px;
-          border: 1px solid rgba(128, 128, 128, 0.52);
+          flex-basis: calc((100% - 40px) / 3);
+          min-width: 380px;
+          min-height: 220px;
           display: flex;
           flex-direction: column;
+          background: #FFFFFF;
+          border: 1px solid #EAEAEA;
           border-radius: $border_radius_size;
-          /*box-shadow:0px -2px 6px $box_shadow_color;
-          padding: 15px 10px;*/
-
-          .item-row {
-            flex: 1;
-            padding: 10px 15px;
-          }
+          padding: 34px 35px 27px 32px;
 
           .item-title {
-            font-size: 16px;
-            font-weight: 600;
-            border-bottom: 1px solid $border_line_color;
             border-top-left-radius: $border_radius_size;
             border-top-right-radius: $border_radius_size;
             user-select: none;
+            font-family: PingFangSC-Regular;
+            font-size: 20px;
+            color: #454545;
+            height: 28px;
+            line-height: 28px;
           }
 
           .item-data-section {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             vertical-align: bottom;
             align-items: flex-end;
-            padding: 20px 15px;
+            margin-top: 41px;
 
             .item-subscribe {
               width: 100%;
@@ -808,9 +815,13 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               justify-content: space-between;
 
               span {
+                display: flex;
+                flex-direction: column;
+
                 .item-label {
-                  font-size: 12px;
-                  font-weight: 200;
+                  font-family: PingFangSC-Regular;
+                  font-size: 14px;
+                  color: #454545;
                 }
 
                 .item-number {
@@ -819,8 +830,10 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 }
 
                 .total-count {
+                  font-family: PingFangSC-Regular;
                   font-size: 28px;
-                  font-weight: bolder;
+                  color: #454545;
+                  margin-bottom: 10px;
                 }
 
                 .upper {
@@ -836,6 +849,43 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 }
               }
             }
+
+            .diviser {
+              height: 1px;
+              background-color: #EAEAEA;
+              width: 100%;
+            }
+
+            .ratio-data {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+
+              .ratio-name {
+                font-family: PingFangSC-Regular;
+                font-size: 14px;
+                color: #454545;
+              }
+
+              .ratio-value {
+                font-family: PingFangSC-Regular;
+                font-size: 20px;
+                color: #000000;
+                line-height: 20px;
+
+                &.green {
+                  color: #5EC821;
+                }
+
+                &.red {
+                  color: #F14F4F;
+                }
+
+                &.blue {
+                  color: #368EE0;
+                }
+              }
+            }
           }
 
           .item-reminder {
@@ -848,38 +898,32 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         }
       }
 
-      .diviser-with-cmount-and-chart {
-        height: 1px;
-        width: 100%;
-        margin: 20px 0;
-        background-color: $border_line_color;
-      }
-
       .ratio-with-chart-area {
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding: 0 15px 15px 15px;
         margin: 20px 0;
 
         .data-item {
-          min-width: 400px;
-          min-height: 120px;
-          border: 1px solid rgba(128, 128, 128, 0.52);
+          flex-basis: calc((100% - 40px) / 3);
+          min-width: 380px;
+          min-height: 300px;
           display: flex;
           flex-direction: column;
           border-radius: $border_radius_size;
-
-          .item-row {
-            padding: 10px 15px;
-          }
+          background: #FFFFFF;
+          background: #FFFFFF;
+          border: 1px solid #EAEAEA;
+          padding: 34px 35px 27px 32px;
 
           .item-title {
-            height: 40px;
-            font-size: 16px;
-            font-weight: 600;
-            border-bottom: 1px solid $border_line_color;
+            height: 28px;
+            line-height: 28px;
+            font-family: PingFangSC-Regular;
+            font-size: 20px;
+            color: #454545;
+            margin-bottom: 33px;
           }
 
           .item-data-section {
@@ -894,36 +938,45 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               display: flex;
               align-items: center;
               flex-direction: row;
+              height: 50px;
+              margin: 0;
 
               span {
                 flex: 1;
                 text-align: left;
+                height: 50px;
+                line-height: 50px;
 
                 .item-label {
-                  font-size: 12px;
-                  font-weight: 200;
+                  font-family: PingFangSC-Regular;
+                  font-size: 14px;
+                  color: #454545;
+                  font-weight: 400;
+                  vertical-align: bottom;
                 }
 
-                .item-number {
-                  font-size: 12px;
-                  font-weight: 200;
+                .ratio-value {
+                  font-family: PingFangSC-Regular;
+                  font-size: 20px;
+                  color: #000000;
+                  line-height: 20px;
+
+                  &.green {
+                    color: #5EC821;
+                  }
+
+                  &.red {
+                    color: #F14F4F;
+                  }
+
+                  &.blue {
+                    color: #368EE0;
+                  }
                 }
 
                 .total-count {
-                  font-size: 28px;
+                  font-size: 36px;
                   font-weight: bolder;
-                }
-
-                .upper {
-                  color: green;
-                }
-
-                .fair {
-                  color: $radio_fair_color;
-                }
-
-                .down {
-                  color: red;
                 }
               }
             }
@@ -965,7 +1018,6 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     }
 
     .data-line-chart-area {
-      padding: 0 15px 20px 15px;
       width: 100%;
       min-height: 400px;
 

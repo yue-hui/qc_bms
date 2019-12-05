@@ -224,7 +224,6 @@
           @size-change="table_size_change" />
       </div>
     </div>
-
     <recharge-dialog :visible="recharge_dialog_visible" :uid="current_uid" @callback="close_recharge_dialog" />
     <member-dialog :visible="member_dialog_visible" :uid="current_uid" @callback="close_member_dialog" />
   </div>
@@ -553,7 +552,7 @@ $label_height: 28px;
   flex-direction: column;
 
   .content-body {
-    border: 1px solid #c7d5ee;
+    border: 1px solid #EAEAEA;
     height: 100%;
     min-height: 120px;
 
@@ -598,7 +597,7 @@ $label_height: 28px;
     .between-search-area-and-table-display {
       height: 1px;
       margin: 10px 20px 15px 20px;
-      background-color: #d0d0d7;
+      background-color: #EAEAEA;
     }
 
     .table-content {
