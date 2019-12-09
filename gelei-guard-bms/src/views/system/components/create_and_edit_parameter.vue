@@ -34,7 +34,7 @@
         <el-form-item label="参数" prop="p_value">
           <el-input v-model="form.p_value" placeholder="参数" />
         </el-form-item>
-        <el-form-item label="状态" prop="enabled">
+        <el-form-item label="是否可用" prop="enabled">
           <el-radio-group v-model="form.enabled" size="mini">
             <el-radio label="1">是</el-radio>
             <el-radio label="0">否</el-radio>
