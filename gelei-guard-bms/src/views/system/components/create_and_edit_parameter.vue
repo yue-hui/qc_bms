@@ -17,7 +17,7 @@
           <el-input v-model="form.p_id" placeholder="ID" disabled />
         </el-form-item>
         <el-form-item label="类型" prop="p_type">
-          <el-select v-model="form.p_type" size="mini" placeholder="请输入参数类型">
+          <el-select v-model="form.p_type" size="mini" filterable clearable class="select-line-style" placeholder="请输入参数类型">
             <el-option
               v-for="plan in system_configuration_types"
               :key="plan.value"
@@ -35,13 +35,10 @@
           <el-input v-model="form.p_value" placeholder="参数" />
         </el-form-item>
         <el-form-item label="状态" prop="enabled">
-          <el-select v-model="form.enabled" size="mini" placeholder="状态">
-            <el-option
-              v-for="plan in system_enable_status"
-              :key="plan.value"
-              :label="plan.label"
-              :value="plan.value" />
-          </el-select>
+          <el-radio-group v-model="form.enabled" size="mini">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="0">否</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="row_order">
           <el-input v-model="form.row_order" type="number" placeholder="排序" />
@@ -258,6 +255,10 @@ export default {
     border-left: 0;
     border-right: 0;
     border-top: 1px solid #d8bdbd;
+  }
+
+  .select-line-style {
+    width: 100%;
   }
 }
 </style>

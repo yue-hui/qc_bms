@@ -213,7 +213,7 @@ export default {
         if (res.status === 0) {
           this.parameter = res.data.map((_c, _i) => {
             const _id = _i + this.page_size * (this.page - 1) + 1
-            const enabled_label = _c.enabled ? '是' : '否'
+            const enabled_label = _c.enabled === '1' ? '是' : '否'
             return {
               ..._c,
               _id,
