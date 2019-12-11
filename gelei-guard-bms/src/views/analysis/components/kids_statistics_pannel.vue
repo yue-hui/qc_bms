@@ -8,7 +8,7 @@
         <div class="column column-1">新增注册用户</div>
         <div class="column column-2">{{ statistics.increased_user }}</div>
         <div class="column column-3">
-          日
+          同比
           <svg-icon
             :icon-class="judge_direction(statistics.increased_user_percent)"
             :class="increased_user_percent_class" />
@@ -19,7 +19,7 @@
         <div class="column column-1">新增绑定用户</div>
         <div class="column column-2">{{ statistics.increased_bind_user }}</div>
         <div class="column column-3">
-          日
+          同比
           <svg-icon
             :icon-class="judge_direction(statistics.increased_bind_user_percent)"
             :class="increased_bind_user_percent_class" />
