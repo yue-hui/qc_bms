@@ -74,10 +74,10 @@
               </el-input>
             </el-form-item>
             <el-form-item label="套餐活动标签" prop="plan_label">
-              <el-input v-model="public_form.plan_label" maxlength="6" size="mini" aria-placeholder="限时优惠" />
+              <el-input v-model="public_form.plan_label" maxlength="10" size="mini" aria-placeholder="限时优惠" />
             </el-form-item>
             <el-form-item label="套餐价格标签" prop="remark">
-              <el-input v-model="public_form.remark" maxlength="10" size="mini" aria-placeholder="" />
+              <el-input v-model="public_form.remark" maxlength="20" size="mini" aria-placeholder="" />
             </el-form-item>
             <el-form-item label="套餐排序" prop="row_order">
               <el-input v-model.number="public_form.row_order" type="number" size="mini" />
