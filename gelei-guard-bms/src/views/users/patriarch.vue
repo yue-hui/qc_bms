@@ -95,7 +95,7 @@
                       min="0"
                       clearable
                       size="mini"
-                      @blur="search"
+                      @blur="blur_search"
                       @input="input_pure_number(query_set.begin_valid_days)" />
                     <span class="valid-date-span">-</span>
                     <el-input
@@ -104,7 +104,7 @@
                       min="0"
                       clearable
                       size="mini"
-                      @blur="search"
+                      @blur="blur_search"
                       @input="input_pure_number(query_set.end_valid_days, false)" />
                   </div>
                 </el-col>
@@ -299,6 +299,13 @@ export default {
     init() {
       this.refresh_data()
       this.fetch_register_source_list()
+    },
+    blur_search(e) {
+      if (this.query_set.begin_valid_days === '' && this.query_set.end_valid_days === '') {
+        // 空数据无需查询
+      } else {
+        this.search(e)
+      }
     },
     search(e) {
       if (this.query_set.begin_valid_days && this.query_set.end_valid_days) {
