@@ -1,8 +1,8 @@
 <template>
   <div class="component-card">
-    <div class="left-item" @click="go_to_home_page">
-      <img src="@/assets/imgs/logo.png" alt="">
-      <div class="hover-system-subject">格雷守护后台管理系统
+    <div class="left-item">
+      <img src="@/assets/imgs/logo.png" alt="" @click="go_to_home_page">
+      <div class="hover-system-subject" @click="go_to_home_page">格雷守护后台管理系统
       </div>
     </div>
     <div class="user-info">

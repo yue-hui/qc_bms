@@ -43,8 +43,8 @@
 
       <div class="button-block">
         <div class="button-group">
+          <el-button size="mini" @click="cancel">取 消</el-button>
           <el-button type="primary" size="mini" @click="save">保 存</el-button>
-          <el-button type="primary" size="mini" @click="cancel">取 消</el-button>
         </div>
       </div>
     </el-dialog>

@@ -3,7 +3,7 @@
     <div class="component-card">
       <div :style="{'max-height': visiable_height}" class="dialog">
         <div class="head-area">
-          <div class="title"><span v-if="form.activity_name">{{ form.activity_name }}</span></div>
+          <div class="title"><span v-if="form.activity_name">编辑会员活动 - {{ form.activity_name }}</span></div>
           <div class="close-icon" @click="cancel"><i class="el-message-box__close el-icon-close" /></div>
         </div>
         <div class="body-area">
@@ -43,8 +43,8 @@
           <el-form ref="form" :model="form" label-width="120px" label-suffix=":">
             <el-form-item>
               <div class="action-area">
+                <el-button size="mini" @click="cancel">取消</el-button>
                 <el-button size="mini" type="primary" @click="on_save">确定</el-button>
-                <el-button size="mini" type="primary" @click="cancel">取消</el-button>
               </div>
             </el-form-item>
           </el-form>

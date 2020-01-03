@@ -70,8 +70,8 @@
           <el-form label-width="120px" label-suffix=":">
             <el-form-item>
               <div class="action-area">
+                <el-button size="mini" @click="cancel">取消</el-button>
                 <el-button :disabled="is_creating" size="mini" type="primary" @click="on_create">确定</el-button>
-                <el-button size="mini" type="primary" @click="cancel">取消</el-button>
               </div>
             </el-form-item>
           </el-form>

@@ -100,8 +100,8 @@
           <el-form label-width="120px" label-suffix=":">
             <el-form-item>
               <div class="action-area">
+                <el-button size="mini" @click="close_dialog">取消</el-button>
                 <el-button :disabled="save_flag" size="mini" type="primary" @click="on_save">保存</el-button>
-                <el-button size="mini" type="primary" @click="close_dialog">取消</el-button>
               </div>
             </el-form-item>
           </el-form>
