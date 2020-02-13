@@ -101,7 +101,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="close_dialog">取消</el-button>
-                <el-button :disabled="save_flag" size="mini" type="primary" @click="on_save">保存</el-button>
+                <el-button :disabled="save_flag" size="mini" type="primary" @click="on_save">{{ save_btn_label }}</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -213,12 +213,15 @@ export default {
         if (val === 1) {
           this.create_init()
           this.title = '创建广告'
+          this.save_btn_label = '创建'
         } else if (val === 2) {
           this.edit_init()
           this.title = this.current.ad_name
+          this.save_btn_label = '保存'
         } else {
           this.create_init()
           this.title = '广告配置'
+          this.save_btn_label = '保存'
         }
       },
       immediate: true

@@ -28,6 +28,12 @@
               :value="plan.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="展现形式" prop="type">
+          <el-radio-group v-model="form.display_type">
+            <el-radio label="richtext">富文本内容</el-radio>
+            <el-radio label="link">H5</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="问题内容" prop="answer">
           <tinymce :height="200" v-model="form.answer" />
         </el-form-item>
@@ -44,7 +50,7 @@
       <div class="button-block">
         <div class="button-group">
           <el-button size="mini" @click="cancel">取 消</el-button>
-          <el-button type="primary" size="mini" @click="save">保 存</el-button>
+          <el-button type="primary" :disabled="is_busy" size="mini" @click="save">保 存</el-button>
         </div>
       </div>
     </el-dialog>
@@ -91,12 +97,14 @@ export default {
       min: min_weight,
       max: max_weight,
       advertise_platform_types,
+      is_busy: false,
       question_types: [],
       form: {
         question: '',
         answer: '',
         product: '',
         type: '',
+        display_type: 'richtext',
         weight: 1
       },
       weight: 1,
@@ -148,6 +156,7 @@ export default {
       })
     },
     create_questions: function() {
+      this.is_busy = true
       const data = this.form
       add_questions(data).then(res => {
         if (res.status === 0) {
@@ -156,9 +165,12 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     edit_questions: function() {
+      this.is_busy = true
       const data = JSON.parse(JSON.stringify(this.form))
       data['record_id'] = this.rid
       update_questions(data).then(res => {
@@ -168,6 +180,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     refresh() {

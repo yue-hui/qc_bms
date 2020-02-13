@@ -150,7 +150,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel">取 消</el-button>
-        <el-button size="mini" type="primary" @click="emmit_application">确 定</el-button>
+        <el-button size="mini" type="primary" :disabled="is_busy" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -345,6 +345,7 @@ export default {
     },
     create(config) {
       // 创建接口
+      this.is_busy = true
       create_soft_remmend(config).then(res => {
         if (res.status === 0) {
           this.$emit('receive', false)
@@ -352,10 +353,13 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     edit(config) {
       // 编辑接口
+      this.is_busy = true
       edit_soft_remmend(config).then(res => {
         if (res.status === 0) {
           this.$emit('receive', false)
@@ -363,6 +367,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     change_app(rec_bundle_id) {

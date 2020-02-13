@@ -126,7 +126,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button type="primary" size="mini" @click.once="create_update_strage">{{ show_save_label }}</el-button>
+        <el-button type="primary" size="mini" :disabled="is_busy" @click="create_update_strage">{{ show_save_label }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -195,6 +195,7 @@ export default {
       update_platforms,
       update_models,
       update_ranges,
+      is_busy: false,
       need_upload_app_package: false,
       upload_file_list: [],
       form: {
@@ -402,6 +403,7 @@ export default {
       if (!data.update_url) {
         delete data.update_url
       }
+      this.is_busy = true
       add_application_version(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
@@ -409,6 +411,8 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     edit_version() {
@@ -416,6 +420,7 @@ export default {
       // if (!data.update_url) {
       //   delete data.update_url
       // }
+      this.is_busy = true
       edit_application_version(data).then((res) => {
         if (res.status === 0) {
           this.$emit('destory', true)
@@ -423,6 +428,8 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     create_update_strage() {

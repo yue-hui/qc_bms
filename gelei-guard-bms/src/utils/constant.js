@@ -441,3 +441,15 @@ export const PATRIARCH_MEMBER_TYPES = [
     label: 'VIP会员'
   }
 ]
+
+// 设备使用间隔
+export const DEVICE_USER_INTERVALS = [
+  {
+    value: '01',
+    label: '每小时'
+  },
+  {
+    value: '02',
+    label: '每天'
+  }
+]

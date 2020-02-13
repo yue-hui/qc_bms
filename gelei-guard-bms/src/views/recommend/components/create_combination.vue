@@ -76,7 +76,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="$emit('receive', false)">取 消</el-button>
-        <el-button size="mini" type="primary" @click="emmit_application">确 定</el-button>
+        <el-button size="mini" :disabled="is_busy" type="primary" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -122,6 +122,7 @@ export default {
       rec_type: '1', // 1 - 系统推荐、2 - 手动推荐
       grade_list: GRADE_LIST,
       subject_list: SUBJECT_LIST,
+      is_busy: false,
       combination_form: {
         rec_group_id: '',
         group_name: '',
@@ -211,6 +212,7 @@ export default {
     },
     create(config) {
       // 创建接口
+      this.is_busy = true
       create_soft_recommend_group(config).then(res => {
         if (res.status === 0) {
           this.$emit('receive', false)
@@ -219,9 +221,11 @@ export default {
           this.$message.error(res.message)
         }
       })
+      this.is_busy = false
     },
     edit(config) {
       // 编辑接口
+      this.is_busy = true
       edit_soft_recommend_group(config).then(res => {
         if (res.status !== 0) {
           this.$message.error(res.message)
@@ -229,6 +233,7 @@ export default {
           this.$message.success(res.message)
         }
       })
+      this.is_busy = false
       this.$emit('receive', false)
     },
     change_condition() {

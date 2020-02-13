@@ -79,7 +79,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="close_dialog">取消</el-button>
-                <el-button size="mini" type="primary" @click="on_submit">确定</el-button>
+                <el-button size="mini" :disabled="is_busy" type="primary" @click="on_submit">确定</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -123,6 +123,7 @@ export default {
     const grade_list = GRADE_LIST
     return {
       visiable_height: '',
+      is_busy: false,
       grade_list,
       soft_list: [],
       sendpass_second_url: [],
@@ -232,6 +233,7 @@ export default {
       })
     },
     on_save() {
+      this.is_busy = true
       edit_recommend_subject(this.form).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
@@ -239,9 +241,12 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     on_create() {
+      this.is_busy = true
       create_recommend_subject(this.form).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
@@ -249,6 +254,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     change_grade(grade) {

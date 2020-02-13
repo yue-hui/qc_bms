@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" @click="init_page">重置</el-button>
-          <el-button size="mini" type="primary" @click="save_invatation">保存</el-button>
+          <el-button size="mini" type="primary" :disabled="is_busy" @click="save_invatation">保存</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       loading: false,
+      is_busy: false,
       form: {
         name: '',
         member_plan_id: '',
@@ -97,6 +98,7 @@ export default {
       return params
     },
     save_invatation() {
+      this.is_busy = true
       const data = this.get_config()
       edit_invite_register_activity(data).then(res => {
         if (res.status === 0) {
@@ -104,6 +106,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     user_search_member_plan_by_plan_name(plan_name) {

@@ -29,7 +29,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="close_panel">取 消</el-button>
-        <el-button size="mini" type="primary" @click="make_sure">确 定</el-button>
+        <el-button size="mini" type="primary" :disabled="is_busy" @click="make_sure">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -48,7 +48,8 @@ export default {
     return {
       platform_version_instructions,
       platform_type: '',
-      dialog_visible: false
+      dialog_visible: false,
+      is_busy: false
     }
   },
   computed: {},
@@ -95,6 +96,7 @@ export default {
       const config = {
         platform: this.platform_type
       }
+      this.is_busy = true
       sync_platform_to_all(config).then(r => {
         if (r.status === 0) {
           this.dialog_visible = false
@@ -102,6 +104,8 @@ export default {
         } else {
           this.$message.error(r.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     }
   }

@@ -50,7 +50,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <el-button type="primary" size="mini" :disabled="is_busy" @click="create_update_strage">{{ show_save_label }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -89,6 +89,7 @@ export default {
       dialog_title_name: '系统参数',
       system_configuration_types: [],
       system_enable_status,
+      is_busy: false,
       form: {
         p_id: '',
         p_type: '',
@@ -199,6 +200,7 @@ export default {
         })
     },
     create_records_item() {
+      this.is_busy = true
       const data = pure_object_null_value(this.form)
       create_sys_configuration(data).then((res) => {
         if (res.status === 0) {
@@ -208,9 +210,12 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     edit_records_item() {
+      this.is_busy = true
       const data = pure_object_null_value(this.form)
       edit_sys_configuration(data).then((res) => {
         if (res.status === 0) {
@@ -219,6 +224,8 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     create_update_strage() {

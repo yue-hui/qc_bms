@@ -143,7 +143,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="close_dialog">取消</el-button>
-                <el-button size="mini" type="primary" @click="on_save">保存</el-button>
+                <el-button size="mini" type="primary" :disabled="is_busy" @click="on_save">保存</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -201,6 +201,8 @@ export default {
     return {
       visiable_height: '',
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
+      save_btn_label: '保存',
+      is_busy: false,
       form: {
         plan_id: '',
         plan_name: '',
@@ -298,14 +300,19 @@ export default {
         }
 
         let title
+        let save_btn_label
         if (val === 1) {
           title = '创建会员套餐'
+          save_btn_label = '创建'
         } else if (val === 2) {
           title = '编辑会员套餐'
+          save_btn_label = '保存'
         } else {
           title = ''
+          save_btn_label = '保存'
         }
         this.title = title
+        this.save_btn_label = save_btn_label
       },
       immediate: true
     }
@@ -474,6 +481,7 @@ export default {
     },
     create_package() {
       // 创建
+      this.is_busy = true
       const options = this.get_options()
       add_member_plan(options).then(res => {
         if (res.status === 0) {
@@ -482,10 +490,13 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     save_package() {
       // 保存
+      this.is_busy = true
       const options = this.get_options()
       options['plan_id'] = this.form.plan_id
       if (this.form.plan_type === '02') {
@@ -500,6 +511,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     }
   }

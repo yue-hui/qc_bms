@@ -31,7 +31,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <el-button type="primary" size="mini" :disabled="is_busy" @click="create_update_strage">{{ show_save_label }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -73,6 +73,7 @@ export default {
     }
     return {
       dialog_title_name: '高危应用',
+      is_busy: false,
       form: {
         soft_id: '',
         bundle_id: '',
@@ -163,6 +164,7 @@ export default {
         })
     },
     create_high_risk_item() {
+      this.is_busy = true
       const data = pure_object_null_value(this.form)
       add_high_risk_soft(data).then((res) => {
         if (res.status === 0) {
@@ -171,9 +173,12 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     edit_high_risk_item() {
+      this.is_busy = true
       const data = pure_object_null_value(this.form)
       edit_high_risk_soft(data).then((res) => {
         if (res.status === 0) {
@@ -182,6 +187,8 @@ export default {
           this.$message.error(res.message)
           this.$emit('destory', false)
         }
+      }).finally(() => {
+        this.is_busy = false
       })
     },
     create_update_strage() {
