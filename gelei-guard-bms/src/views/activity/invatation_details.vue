@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" @click="init_page">重置</el-button>
-          <el-button size="mini" type="primary" :disabled="is_busy" @click="save_invatation">保存</el-button>
+          <el-button :disabled="is_busy" size="mini" type="primary" @click="save_invatation">保存</el-button>
         </el-form-item>
       </el-form>
     </div>

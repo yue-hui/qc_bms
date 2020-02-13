@@ -50,7 +50,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button type="primary" size="mini" :disabled="is_busy" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <el-button :disabled="is_busy" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
       </span>
     </el-dialog>
   </div>

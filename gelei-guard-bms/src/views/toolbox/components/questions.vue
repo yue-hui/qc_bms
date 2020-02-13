@@ -28,14 +28,27 @@
               :value="plan.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="展现形式" prop="type">
-          <el-radio-group v-model="form.display_type">
-            <el-radio label="richtext">富文本内容</el-radio>
-            <el-radio label="link">H5</el-radio>
+        <el-form-item label="展现形式" prop="show_type">
+          <el-radio-group v-model="form.show_type" @change="show_type_change">
+            <el-radio
+              v-for="(item, index) in help_show_types"
+              v-model="form.show_type"
+              :key="index"
+              :label="item.value"
+              @change="show_type_change">{{ item.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="问题内容" prop="answer">
-          <tinymce :height="200" v-model="form.answer" />
+        <el-form-item :label="content_label" prop="answer">
+          <tinymce
+            v-show="show_tinymce === true"
+            :height="200"
+            v-model="form.answer" />
+          <el-input
+            v-show="show_tinymce === false"
+            v-model="form.answer"
+            size="mini"
+            placeholder="请输入链接地址" />
         </el-form-item>
         <el-form-item :label="weight_label" prop="weight">
           <el-input-number
@@ -50,7 +63,7 @@
       <div class="button-block">
         <div class="button-group">
           <el-button size="mini" @click="cancel">取 消</el-button>
-          <el-button type="primary" :disabled="is_busy" size="mini" @click="save">保 存</el-button>
+          <el-button :disabled="is_busy" type="primary" size="mini" @click="save">保 存</el-button>
         </div>
       </div>
     </el-dialog>
@@ -59,18 +72,19 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import { ADVERTISE_PLATFORM_TYPES, max_weight, min_weight } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, HELP_SHOW_TYPES, max_weight, min_weight } from '@/utils/constant'
 import {
   add_questions,
   get_patriarch_questions_qa_list,
   get_questions_details,
   update_questions
 } from '@/api/interactive'
+import { validateURL } from '@/utils/validate'
+
+const SHOW_TYPE_DEFAULT = '01'
 
 export default {
-  name: '',
-  beforecreate: function() {
-  },
+  name: 'Question',
   components: {
     Tinymce
   },
@@ -91,20 +105,44 @@ export default {
     }
   },
   data: function() {
-    const advertise_platform_types = ADVERTISE_PLATFORM_TYPES
+    const validateAnswer = (rule, value, callback) => {
+      if (['01', undefined].indexOf(this.form.show_type) !== -1) {
+        if (value) {
+          callback()
+        } else {
+          callback(new Error('帮助问题的答案不能为空'))
+        }
+      } else if (this.form.show_type === '02') {
+        if (value) {
+          if (!validateURL(value)) {
+            callback(new Error('答案链接地址不合法'))
+          } else {
+            callback()
+          }
+        } else {
+          callback(new Error('答案的链接为必填项'))
+        }
+      } else {
+        callback()
+      }
+    }
     return {
+      title: '添加帮助问题',
       visible: true,
       min: min_weight,
       max: max_weight,
-      advertise_platform_types,
+      help_show_types: HELP_SHOW_TYPES,
+      advertise_platform_types: ADVERTISE_PLATFORM_TYPES,
       is_busy: false,
+      content_label: '问题内容',
+      show_tinymce: null,
       question_types: [],
       form: {
         question: '',
         answer: '',
         product: '',
         type: '',
-        display_type: 'richtext',
+        show_type: SHOW_TYPE_DEFAULT,
         weight: 1
       },
       weight: 1,
@@ -113,26 +151,46 @@ export default {
           { required: true, trigger: 'blur', message: '帮助标题不能为空' },
           { max: 30, trigger: 'blur', message: '帮助标题长度不超过30' }
         ],
-        answer: [{ required: true, trigger: 'blur', message: '帮助内容不能为空' }],
+        answer: [{ required: true, trigger: 'blur', validator: validateAnswer }],
         product: [{ required: true, trigger: 'blur', message: '所属产品不能为空' }],
         type: [{ required: true, trigger: 'blur', message: '问题类别为必选项' }],
+        show_type: [{ required: true, trigger: 'blur', message: '展现形式为必选项' }],
         weight: [{ required: true, type: 'number', trigger: 'blur', min: min_weight, max: max_weight }]
       },
       weight_label: '权　　重'
     }
   },
-  computed: {
-    title: function() {
-      if (this.is_new) {
-        return '添加帮助问题'
-      } else {
-        return '编辑帮助问题'
-      }
+  watch: {
+    is_new: {
+      handler(newer) {
+        if (newer) {
+          this.title = '添加帮助问题'
+        } else {
+          this.title = '编辑帮助问题'
+        }
+      },
+      immediate: true
+    },
+    form: {
+      handler(older, newer) {
+        if (newer) {
+          let content_label = '问题内容'
+          if ([SHOW_TYPE_DEFAULT, undefined].indexOf(newer.show_type) !== -1) {
+            content_label = '问题内容'
+          } else {
+            content_label = '答案链接'
+          }
+          this.$nextTick(() => {
+            this.content_label = content_label
+          })
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
-  watch: {},
   mounted: function() {
-    !this.is_new && this.load_data()
+    this.is_new ? (this.show_tinymce = true) : this.load_data()
   },
   methods: {
     before_close(done) {
@@ -143,6 +201,14 @@ export default {
         })
         .catch(_ => {
         })
+    },
+    show_type_change: function(show_type) {
+      console.log('show_type', show_type)
+      if (show_type === '01') {
+        this.show_tinymce = true
+      } else {
+        this.show_tinymce = false
+      }
     },
     save: function() {
       this.$refs.form.validate(valid => {
@@ -199,6 +265,14 @@ export default {
       get_questions_details(config).then(res => {
         if (res.status === 0) {
           this.form = res.data
+          if (!res.data.show_type) {
+            this.form.show_type = SHOW_TYPE_DEFAULT
+          }
+          if (this.form.show_type === SHOW_TYPE_DEFAULT) {
+            this.show_tinymce = true
+          } else {
+            this.show_tinymce = false
+          }
           const question_type = res.data.type
           this.form.type = ''
           this.update_question_types().then(() => {

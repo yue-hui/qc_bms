@@ -76,7 +76,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="$emit('receive', false)">取 消</el-button>
-        <el-button size="mini" :disabled="is_busy" type="primary" @click="emmit_application">确 定</el-button>
+        <el-button :disabled="is_busy" size="mini" type="primary" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -372,11 +372,12 @@ export default {
   }
 }
 
-.application-items{
+.application-items {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  .application-item{
+
+  .application-item {
     padding: 0 5px;
   }
 }

@@ -150,7 +150,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel">取 消</el-button>
-        <el-button size="mini" type="primary" :disabled="is_busy" @click="emmit_application">确 定</el-button>
+        <el-button :disabled="is_busy" size="mini" type="primary" @click="emmit_application">确 定</el-button>
       </span>
     </el-dialog>
   </div>

@@ -101,8 +101,12 @@
             prop="product_label"
             width="180" />
           <el-table-column
-            label="问题类别"
+            label="问题类型"
             prop="type_label"
+            width="180" />
+          <el-table-column
+            label="展现形式"
+            prop="show_type_label"
             width="180" />
           <el-table-column
             label="操作"
@@ -135,7 +139,7 @@ import questions from '@/views/toolbox/components/questions'
 import { delete_questions, deploy_qa, get_patriarch_questions_qa_list, get_questions_list } from '@/api/interactive'
 import { help_question_status } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { ADVERTISE_PLATFORM_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { ADVERTISE_PLATFORM_TYPES, HELP_SHOW_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 
 export default {
@@ -330,11 +334,13 @@ export default {
         this.questions = res.data.map((r, i, _a) => {
           const status_label = this.show_status_label(r.status)
           const product_label = get_value_from_map_list(r.product, ADVERTISE_PLATFORM_TYPES, '未知')
+          const show_type_label = get_value_from_map_list(r.show_type, HELP_SHOW_TYPES, '富文本')
           return {
             ...r,
             status_label,
             _id: base_index + i,
-            product_label
+            product_label,
+            show_type_label
           }
         })
         this.total = res.total_count

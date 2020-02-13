@@ -419,6 +419,18 @@ export const ADVERTISE_PLATFORM_TYPES = [
   }
 ]
 
+// 帮助与反馈 - 展现形式
+export const HELP_SHOW_TYPES = [
+  {
+    value: '01',
+    label: '富文本内容'
+  },
+  {
+    value: '02',
+    label: 'H5链接'
+  }
+]
+
 // 活动类型
 export const OPERATORS_ACTIVITY_TYPES = [
   {
