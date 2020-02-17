@@ -74,6 +74,12 @@ export const constantRouterMap = [
         name: '设备信息管理',
         component: () => import('@/views/users/devices_manage'),
         meta: { title: '设备信息管理', icon: 'devices_manage' }
+      },
+      {
+        path: 'devices-record',
+        name: '设备使用记录',
+        component: () => import('@/views/users/devices_record'),
+        meta: { title: '设备使用记录', icon: 'devices_record' }
       }
     ]
   },

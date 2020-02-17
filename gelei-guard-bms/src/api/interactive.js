@@ -150,6 +150,15 @@ export function get_child_list_export(data) {
   })
 }
 
+// 获取孩子端 - 设备使用记录
+export function get_child_use_recorder(data) {
+  return request({
+    url: '/greenguard/manager/device/getAppUsage',
+    method: 'post',
+    data
+  })
+}
+
 /*
 * 常见问题管理
 *  */
