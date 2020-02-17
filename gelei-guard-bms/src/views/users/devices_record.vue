@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { DATE_TIME_FORMAT, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
 import { date_formatter, pure_object_null_value } from '@/utils/common'
@@ -234,7 +234,7 @@ export default {
         if (this.query_sets.use_interval === '01') {
           record_time_label = [r.record_time.slice(0, 4), r.record_time.slice(4, 6), r.record_time.slice(6, 8)].join('-') + r.record_time.slice(10, 12) + ':00:00'
         } else {
-          record_time_label = date_formatter(+r.record_time, DATE_TIME_FORMAT)
+          record_time_label = date_formatter(+r.record_time, DATE_FORMAT)
         }
         return {
           ...r,
