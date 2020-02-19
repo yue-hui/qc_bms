@@ -17,6 +17,11 @@ switch (global.env_config) {
       baseURL: 'https://ms.gwchina.cn/',
     }
     break
+  case 'uat':
+    config = {
+      baseURL: 'https://ms-new.gwchina.cn/',
+    }
+    break
   case 'pres':
     config = {
       baseURL: 'https://mspres.dev.zhixike.net/',

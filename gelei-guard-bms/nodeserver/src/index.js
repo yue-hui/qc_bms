@@ -43,7 +43,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
     res.send(encryptParams)
     return
   }
-  
+
   request({
     url: TransferReq,
     body: encryptParams,
@@ -90,7 +90,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
 
     error ? console.log(error) : '转发请求正常'
   })
-  
+
   var formData = r.form()
   for (key of Object.keys(encryptParams)) {
     formData.append(key, encryptParams[key])
@@ -98,7 +98,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
   // var formData = {
   //   ...encryptParams
   // }
-  
+
   // 添加文件信息
   var key, file, filename, filestream
   if (files) {
@@ -158,7 +158,7 @@ function compTime(reqsign, params) {
   const reqStamp = reqsign.substring(0, 13)
   const currentTime = +new Date()
   const timediff = currentTime - reqStamp
-  if (timediff > 0 && (timediff / 1000) > 10) {
+  if (timediff > 0 && (timediff / 1000) > 20) {
     console.log(timediff / 1000)
     return { message: 'node sign miss 2!', status: -1 }
   }

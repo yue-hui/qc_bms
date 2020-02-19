@@ -153,6 +153,13 @@ export default {
         callback()
       }
     }
+    const validateJumpArgs = (rule, value, callback) => {
+      if (!value && this.form.jump_target !== '无') {
+        callback(new Error('当"图片跳转目标"不为选项"无"时，"跳转参数"为必填项'))
+      } else {
+        callback()
+      }
+    }
     return {
       platform_type,
       form: {
@@ -189,7 +196,8 @@ export default {
           { type: 'string', required: true, trigger: 'blur', message: '请输入广告名称跳转目录' }
         ],
         jump_args: [
-          { type: 'string', required: true, trigger: 'blur', message: '图片跳转目标为必选项' }
+          // { type: 'string', required: true, trigger: 'blur', message: '图片跳转目标为必选项' }
+          { trigger: 'blur', validator: validateJumpArgs }
         ],
         row_order: [
           { type: 'number', required: true, trigger: 'blur', message: '图片排序不能为空' },

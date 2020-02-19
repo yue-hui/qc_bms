@@ -390,6 +390,10 @@ export const ADVERTISEMENT_PLATFORM = [
   {
     value: '03',
     label: '微信小程序'
+  },
+  {
+    value: '无',
+    label: '无'
   }
 ]
 
