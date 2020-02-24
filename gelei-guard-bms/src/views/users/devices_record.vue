@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_FORMAT, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
 import { date_formatter, pure_object_null_value } from '@/utils/common'
@@ -219,8 +219,8 @@ export default {
         this.query_sets.datetime_range = ['', '']
       } else {
         const now = new Date()
-        const week = new Date(now.getTime() + 7 * 24 * 3600 * 1000)
-        this.query_sets.datetime_range = [now, week]
+        const pre_week = new Date(now.getTime() - 7 * 24 * 3600 * 1000)
+        this.query_sets.datetime_range = [pre_week, now]
       }
       this.query_condition_change()
     },
@@ -232,7 +232,7 @@ export default {
       let record_time_label
       return data.map(r => {
         if (this.query_sets.use_interval === '01') {
-          record_time_label = [r.record_time.slice(0, 4), r.record_time.slice(4, 6), r.record_time.slice(6, 8)].join('-') + r.record_time.slice(10, 12) + ':00:00'
+          record_time_label = [r.record_time.slice(0, 4), r.record_time.slice(4, 6), r.record_time.slice(6, 8)].join('-') + ' ' + r.record_time.slice(8, 10) + ':00:00'
         } else {
           record_time_label = date_formatter(+r.record_time, DATE_FORMAT)
         }
