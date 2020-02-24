@@ -219,7 +219,7 @@ export default {
         this.query_sets.datetime_range = ['', '']
       } else {
         const now = new Date()
-        const pre_week = new Date(now.getTime() - 7 * 24 * 3600 * 1000)
+        const pre_week = new Date(now.getTime() - 6 * 24 * 3600 * 1000)
         this.query_sets.datetime_range = [pre_week, now]
       }
       this.query_condition_change()

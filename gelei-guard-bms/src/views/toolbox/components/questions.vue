@@ -34,8 +34,7 @@
               v-for="(item, index) in help_show_types"
               v-model="form.show_type"
               :key="index"
-              :label="item.value"
-              @change="show_type_change">{{ item.label }}
+              :label="item.value">{{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -43,10 +42,10 @@
           <tinymce
             v-show="show_tinymce === true"
             :height="200"
-            v-model="form.answer" />
+            v-model="tinymce_content" />
           <el-input
             v-show="show_tinymce === false"
-            v-model="form.answer"
+            v-model="link_url"
             size="mini"
             placeholder="请输入链接地址" />
         </el-form-item>
@@ -137,6 +136,8 @@ export default {
       content_label: '问题内容',
       show_tinymce: null,
       question_types: [],
+      tinymce_content: '',
+      link_url: '',
       form: {
         question: '',
         answer: '',
@@ -203,7 +204,6 @@ export default {
         })
     },
     show_type_change: function(show_type) {
-      console.log('show_type', show_type)
       if (show_type === '01') {
         this.show_tinymce = true
       } else {
@@ -211,6 +211,11 @@ export default {
       }
     },
     save: function() {
+      if (this.form.show_type === '01') {
+        this.form.answer = this.tinymce_content
+      } else {
+        this.form.answer = this.link_url
+      }
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.is_new) {
@@ -270,8 +275,10 @@ export default {
           }
           if (this.form.show_type === SHOW_TYPE_DEFAULT) {
             this.show_tinymce = true
+            this.tinymce_content = this.form.answer
           } else {
             this.show_tinymce = false
+            this.link_url = this.form.answer
           }
           const question_type = res.data.type
           this.form.type = ''
