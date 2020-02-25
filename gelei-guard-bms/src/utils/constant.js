@@ -46,6 +46,9 @@ export const DEFAULT_PAGE_SIZE = 10
 // dayjs 日期格式
 export const DATE_FORMAT = 'YYYY-MM-DD'
 
+// 日期格式无分隔
+export const DATE_FORMAT_WITH_NONE = 'YYYYMMDD'
+
 // 日期格式以点分隔
 export const DATE_FORMAT_WITH_POINT = 'YYYY.MM.DD'
 

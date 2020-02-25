@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { DATE_FORMAT, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_FORMAT, DATE_FORMAT_WITH_NONE, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
 import { date_formatter, get_start_or_end_timestamp, pure_object_null_value } from '@/utils/common'
@@ -201,8 +201,10 @@ export default {
       condition['child_device_id'] = query_sets.child_device_id
       const use_interval = query_sets.use_interval
       if (use_interval === '02') {
-        condition['begin_time'] = get_start_or_end_timestamp(query_sets.datetime_range[0])
-        condition['end_time'] = get_start_or_end_timestamp(query_sets.datetime_range[1], false)
+        condition['begin_time'] = get_start_or_end_timestamp(query_sets.datetime_range[0], true, true)
+        condition['end_time'] = get_start_or_end_timestamp(query_sets.datetime_range[1], false, true)
+        condition['begin_time'] = date_formatter(condition['begin_time'], DATE_FORMAT_WITH_NONE)
+        condition['end_time'] = date_formatter(condition['end_time'], DATE_FORMAT_WITH_NONE)
       }
       condition = pure_object_null_value(condition)
       return condition
