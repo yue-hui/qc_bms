@@ -156,7 +156,13 @@
 </template>
 
 <script>
-import { DATE_FORMAT, DATE_FORMAT_WITH_NONE, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import {
+  DATE_FORMAT,
+  DATE_FORMAT_WITH_CN,
+  DATE_FORMAT_WITH_NONE,
+  DEVICE_USER_INTERVALS,
+  TABLE_PAGE_SIEZS_LIST
+} from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
 import { date_formatter, get_start_or_end_timestamp, pure_object_null_value } from '@/utils/common'
@@ -243,9 +249,9 @@ export default {
       let record_time_label
       return data.map(r => {
         if (this.query_sets.use_interval === '01') {
-          record_time_label = [r.record_time.slice(0, 4), r.record_time.slice(4, 6), r.record_time.slice(6, 8)].join('-') + ' ' + r.record_time.slice(8, 10) + ':00:00'
+          record_time_label = r.record_time.slice(0, 4) + '年' + r.record_time.slice(4, 6) + '月' + r.record_time.slice(6, 8) + '日 ' + r.record_time.slice(8, 10) + '时'
         } else {
-          record_time_label = date_formatter(+r.record_time, DATE_FORMAT)
+          record_time_label = date_formatter([r.record_time.slice(0, 4), r.record_time.slice(4, 6), r.record_time.slice(6, 8)].join('-'), DATE_FORMAT_WITH_CN)
         }
         return {
           ...r,

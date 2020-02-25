@@ -43,6 +43,9 @@ export const max_weight = 3
 // 分页参数
 export const DEFAULT_PAGE_SIZE = 10
 
+// dayjs 日期格式,中文
+export const DATE_FORMAT_WITH_CN = 'YYYY年MM月DD日'
+
 // dayjs 日期格式
 export const DATE_FORMAT = 'YYYY-MM-DD'
 
