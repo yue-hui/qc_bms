@@ -109,6 +109,7 @@
             prop="phone" />
           <el-table-column
             align="center"
+            width="230"
             label="孩子设备ID"
             prop="device_id" />
           <el-table-column
@@ -121,7 +122,8 @@
             prop="soft_name">
             <template slot-scope="scope">
               <div class="soft-item">
-                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" :onerror="img_error_icon" class="origin" alt="软件图标">
+                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" :onerror="img_error_icon" class="origin"
+                     alt="软件图标">
                 <span class="soft-name">{{ scope.row.soft_name }}</span>
               </div>
             </template>
@@ -173,7 +175,7 @@ export default {
         child_device_id: '',
         use_interval: '01',
         soft_name: '',
-        datetime_range: ['', '']
+        datetime_range: [new Date(), new Date()]
       },
       total: 0,
       page: 1,
@@ -218,7 +220,7 @@ export default {
     },
     user_intervals_change: function(item) {
       if (item === '01') {
-        this.query_sets.datetime_range = ['', '']
+        this.query_sets.datetime_range = [new Date(), new Date()]
       } else {
         const now = new Date()
         const pre_week = new Date(now.getTime() - 6 * 24 * 3600 * 1000)
@@ -310,14 +312,17 @@ export default {
 
     .table-content {
       margin: 20px;
+
       .soft-item {
         display: flex;
         align-items: center;
         justify-content: center;
+
         img {
           width: 32px;
           height: 32px;
         }
+
         .soft-name {
           padding-left: 4px;
         }
