@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "gelei-guard-bms",
+      "cwd": "C:\\Windows\\System32\\cmd.exe",
+      "script": "npm",
+      "args": "run test",
+      "node_args": [],
+      "timestamp": "YYYY-MM-DD HH:mm Z",
+      "watch": true,
+      "min_uptime": 100,
+      "instances": 1
+    }
+  ]
+}

@@ -12,6 +12,9 @@ export function is_array(obj) {
   return typeof obj === 'object' && obj.constructor === Array
 }
 
+/*
+* 格式化时间
+* */
 export function date_formatter(date, fomatter = DATE_FORMAT, is_filled = true) {
   if (date) {
     return dayjs(date).format(fomatter)
@@ -21,6 +24,24 @@ export function date_formatter(date, fomatter = DATE_FORMAT, is_filled = true) {
     } else {
       return date
     }
+  }
+}
+
+/*
+* 获取指定时间当天的时间戳，取起始时间
+* */
+export function get_start_or_end_timestamp(date, is_start = true, is_timestamp = false) {
+  const time = date_formatter(date, DATE_FORMAT)
+  let time_string
+  if (is_start) {
+    time_string = time + ' 00:00:00'
+  } else {
+    time_string = time + ' 23:59:59'
+  }
+  if (is_timestamp) {
+    return new Date(time_string).getTime()
+  } else {
+    return time_string
   }
 }
 

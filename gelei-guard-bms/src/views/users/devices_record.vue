@@ -76,6 +76,7 @@
                 <el-col :span="16">
                   <el-date-picker
                     v-model="query_sets.datetime_range"
+                    :disabled="query_sets.use_interval === '01'"
                     end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -156,7 +157,7 @@
 import { DATE_FORMAT, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
-import { date_formatter, pure_object_null_value } from '@/utils/common'
+import { date_formatter, get_start_or_end_timestamp, pure_object_null_value } from '@/utils/common'
 
 export default {
   name: 'DevicesRecord',
@@ -198,8 +199,8 @@ export default {
       condition['child_device_id'] = query_sets.child_device_id
       const use_interval = query_sets.use_interval
       if (use_interval === '02') {
-        condition['begin_time'] = query_sets.datetime_range[0].getTime()
-        condition['end_time'] = query_sets.datetime_range[1].getTime()
+        condition['begin_time'] = get_start_or_end_timestamp(query_sets.datetime_range[0])
+        condition['end_time'] = get_start_or_end_timestamp(query_sets.datetime_range[1], false)
       }
       condition = pure_object_null_value(condition)
       return condition
@@ -213,6 +214,7 @@ export default {
       this.fetch_child_device_use_app_recorder()
     },
     search: function() {
+      this.query()
     },
     user_intervals_change: function(item) {
       if (item === '01') {
