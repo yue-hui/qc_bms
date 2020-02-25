@@ -67,7 +67,7 @@
             label-width="120px"
             label-suffix=":">
             <el-form-item label="图片跳转目标" prop="jump_target">
-              <el-radio-group v-model="form.jump_target" size="mini">
+              <el-radio-group v-model="form.jump_target" size="mini" @change="change_jump_target">
                 <el-radio
                   v-for="(platform, index) in advertisement_platform"
                   :key="index"
@@ -76,7 +76,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="跳转参数" prop="jump_args">
-              <el-input v-model="form.jump_args" size="mini" />
+              <el-input v-model="form.jump_args" :disabled="form.jump_target === '无'" size="mini" />
             </el-form-item>
             <el-form-item label="图片排序" prop="row_order">
               <el-input v-model.number="form.row_order" type="number" size="mini" />
@@ -279,6 +279,12 @@ export default {
         date_range: date_range
       }
     },
+    change_jump_target(item) {
+      if (item === '无') {
+        // 无时清空用户输入参数, 在保存时处理
+        // this.form.jump_args = ''
+      }
+    },
     dialog_card_action() {
       this.$emit('callback')
     },
@@ -296,7 +302,12 @@ export default {
         const end_time = new Date(date_range[1]).getTime()
         options['row_order'] = this.form.row_order
         options['jump_target'] = this.form.jump_target
-        options['jump_args'] = this.form.jump_args
+        if (options['jump_target'] === '无') {
+          // 跳转目标为"无"时,跳转参数为空
+          options['jump_args'] = ''
+        } else {
+          options['jump_args'] = this.form.jump_args
+        }
         options['begin_time'] = begin_time
         options['end_time'] = end_time
       }

@@ -122,8 +122,12 @@
             prop="soft_name">
             <template slot-scope="scope">
               <div class="soft-item">
-                <img v-if="scope.row.soft_icon" :src="scope.row.soft_icon" :onerror="img_error_icon" class="origin"
-                     alt="软件图标">
+                <img
+                  v-if="scope.row.soft_icon"
+                  :src="scope.row.soft_icon"
+                  :onerror="img_error_icon"
+                  class="origin"
+                  alt="软件图标">
                 <span class="soft-name">{{ scope.row.soft_name }}</span>
               </div>
             </template>
@@ -157,7 +161,6 @@
 
 <script>
 import {
-  DATE_FORMAT,
   DATE_FORMAT_WITH_CN,
   DATE_FORMAT_WITH_NONE,
   DEVICE_USER_INTERVALS,
@@ -236,7 +239,7 @@ export default {
       }
       this.query_condition_change()
     },
-    table_size_change: function() {
+    table_size_change: function(size) {
       this.page_size = size
       setPagenationSize(size)
       this.fetch_child_device_use_app_recorder()
