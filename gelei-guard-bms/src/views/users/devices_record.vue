@@ -155,7 +155,7 @@
 
 <script>
 import { DATE_FORMAT, DEVICE_USER_INTERVALS, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { getPagenationSize } from '@/utils/auth'
+import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { get_child_use_recorder } from '@/api/interactive'
 import { date_formatter, get_start_or_end_timestamp, pure_object_null_value } from '@/utils/common'
 
@@ -227,8 +227,13 @@ export default {
       this.query_condition_change()
     },
     table_size_change: function() {
+      this.page_size = size
+      setPagenationSize(size)
+      this.fetch_child_device_use_app_recorder()
     },
-    change_current: function() {
+    change_current: function(page) {
+      this.page = page
+      this.fetch_child_device_use_app_recorder()
     },
     transfer_data: function(data) {
       let record_time_label
