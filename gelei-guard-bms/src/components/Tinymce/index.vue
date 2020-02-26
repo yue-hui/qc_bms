@@ -90,12 +90,15 @@ export default {
       window.tinymce.init({
         language: this.language,
         selector: `#${this.tinymceId}`,
+        relative_urls: false, //新加
+        remove_script_host: false, //新加
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
         menubar: this.menubar,
         plugins: plugins,
+        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
         code_dialog_height: 450,
@@ -103,7 +106,7 @@ export default {
         advlist_bullet_styles: 'square',
         advlist_number_styles: 'default',
         imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
-        default_link_target: '_blank',
+        default_link_target: '_self',
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
