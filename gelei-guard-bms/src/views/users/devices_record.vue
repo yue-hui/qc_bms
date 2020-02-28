@@ -84,7 +84,7 @@
                     clearable
                     size="mini"
                     unlink-panels
-                    @change="search" />
+                    @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
@@ -225,10 +225,8 @@ export default {
     query() {
       this.fetch_child_device_use_app_recorder()
     },
-    search: function() {
-      this.query()
-    },
     user_intervals_change: function(item) {
+      this.page = 1
       if (item === '01') {
         this.query_sets.datetime_range = [new Date(), new Date()]
       } else if (item === '') {
