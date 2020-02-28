@@ -90,8 +90,8 @@ export default {
       window.tinymce.init({
         language: this.language,
         selector: `#${this.tinymceId}`,
-        relative_urls: false, //新加
-        remove_script_host: false, //新加
+        relative_urls: false, // 新加
+        remove_script_host: false, // 新加
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
