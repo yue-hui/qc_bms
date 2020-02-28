@@ -158,8 +158,8 @@ function compTime(reqsign, params) {
   const reqStamp = reqsign.substring(0, 13)
   const currentTime = +new Date()
   const timediff = currentTime - reqStamp
-  if (timediff > 0 && (timediff / 1000) > 20) {
-    console.log(timediff / 1000)
+  if (timediff > 0 && (timediff / 1000) > 40) {
+    console.log('request timeout: ', timediff / 1000)
     return { message: 'node sign miss 2!', status: -1 }
   }
   console.log('确认' + reqsign)
