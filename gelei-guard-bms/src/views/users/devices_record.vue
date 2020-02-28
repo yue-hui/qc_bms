@@ -182,7 +182,7 @@ export default {
       query_sets: {
         phone: '',
         child_device_id: '',
-        use_interval: '01',
+        use_interval: '',
         soft_name: '',
         datetime_range: [new Date(), new Date()]
       },
@@ -197,7 +197,6 @@ export default {
   },
   computed: {},
   mounted: function() {
-    this.fetch_child_device_use_app_recorder()
   },
   methods: {
     get_condition_with_pagination() {
