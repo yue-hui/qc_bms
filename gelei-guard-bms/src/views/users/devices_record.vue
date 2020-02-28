@@ -76,7 +76,7 @@
                 <el-col :span="16">
                   <el-date-picker
                     v-model="query_sets.datetime_range"
-                    :disabled="query_sets.use_interval === '01'"
+                    :disabled="query_sets.use_interval === '01' || query_sets.use_interval === ''"
                     end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -109,7 +109,7 @@
             prop="phone" />
           <el-table-column
             align="center"
-            width="230"
+            width="236"
             label="孩子设备ID"
             prop="device_id" />
           <el-table-column
@@ -231,6 +231,9 @@ export default {
     user_intervals_change: function(item) {
       if (item === '01') {
         this.query_sets.datetime_range = [new Date(), new Date()]
+      } else if (item === '') {
+        const now = new Date()
+        this.query_sets.datetime_range = [now, now]
       } else {
         const now = new Date()
         const pre_week = new Date(now.getTime() - 6 * 24 * 3600 * 1000)
