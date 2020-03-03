@@ -88,18 +88,23 @@ export default {
       }
     },
     date_range_change(values) {
-      this.condition = {
-        begin_time: this.datetime_range[0].getTime(),
-        end_time: this.datetime_range[1].getTime()
+      if (this.datetime_range) {
+        this.condition = {
+          begin_time: this.datetime_range[0].getTime(),
+          end_time: this.datetime_range[1].getTime()
+        }
+      } else {
+        this.condition = {}
       }
       this.$nextTick(() => {
         this.search()
       })
     },
     get_config() {
-      const config = {
-        begin_time: this.datetime_range[0].getTime(),
-        end_time: this.datetime_range[1].getTime()
+      const config = {}
+      if (this.datetime_range) {
+        config['begin_time'] = this.datetime_range[0].getTime()
+        config['end_time'] = this.datetime_range[1].getTime()
       }
       return config
     },

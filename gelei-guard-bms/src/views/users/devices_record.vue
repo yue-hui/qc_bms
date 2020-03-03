@@ -209,10 +209,12 @@ export default {
       condition['child_device_id'] = query_sets.child_device_id
       const use_interval = query_sets.use_interval
       if (use_interval === '02') {
-        condition['begin_time'] = get_start_or_end_timestamp(query_sets.datetime_range[0], true, true)
-        condition['end_time'] = get_start_or_end_timestamp(query_sets.datetime_range[1], false, true)
-        condition['begin_time'] = date_formatter(condition['begin_time'], DATE_FORMAT_WITH_NONE)
-        condition['end_time'] = date_formatter(condition['end_time'], DATE_FORMAT_WITH_NONE)
+        if (query_sets.datetime_range) {
+          condition['begin_time'] = get_start_or_end_timestamp(query_sets.datetime_range[0], true, true)
+          condition['end_time'] = get_start_or_end_timestamp(query_sets.datetime_range[1], false, true)
+          condition['begin_time'] = date_formatter(condition['begin_time'], DATE_FORMAT_WITH_NONE)
+          condition['end_time'] = date_formatter(condition['end_time'], DATE_FORMAT_WITH_NONE)
+        }
       }
       condition = pure_object_null_value(condition)
       return condition

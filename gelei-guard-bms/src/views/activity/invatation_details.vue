@@ -91,10 +91,12 @@ export default {
         }
       })
       const date_range = this.form.datetime_range
-      const begin_time = dayjs(date_range[0]).valueOf()
-      params['begin_time'] = begin_time
-      const end_time = dayjs(date_range[1]).valueOf()
-      params['end_time'] = end_time
+      if (date_range && date_range[0] && date_range[1]) {
+        const begin_time = dayjs(date_range[0]).valueOf()
+        params['begin_time'] = begin_time
+        const end_time = dayjs(date_range[1]).valueOf()
+        params['end_time'] = end_time
+      }
       return params
     },
     save_invatation() {

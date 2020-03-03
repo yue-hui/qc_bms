@@ -613,8 +613,10 @@ export default {
     },
     get_query() {
       const config = {}
-      config['begin_time'] = this.datetime_range[0].getTime()
-      config['end_time'] = this.datetime_range[1].getTime()
+      if (this.datetime_range) {
+        config['begin_time'] = this.datetime_range[0].getTime()
+        config['end_time'] = this.datetime_range[1].getTime()
+      }
       return config
     },
     page_query() {

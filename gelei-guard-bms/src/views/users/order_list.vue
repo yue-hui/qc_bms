@@ -281,7 +281,7 @@ export default {
       const order_time_range = query_params.order_time_range
       delete query_params.order_time_range
       let condition = {}
-      if (order_time_range[0] && order_time_range[1]) {
+      if (order_time_range && order_time_range[0] && order_time_range[1]) {
         const begin_time = new Date(order_time_range[0]).getTime()
         const end_time = new Date(order_time_range[1]).getTime()
         condition = {

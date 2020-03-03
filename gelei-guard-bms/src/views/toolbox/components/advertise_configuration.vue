@@ -297,9 +297,6 @@ export default {
         ad_position
       }
       if (ad_position !== '02') {
-        const date_range = this.form.date_range
-        const begin_time = new Date(date_range[0]).getTime()
-        const end_time = new Date(date_range[1]).getTime()
         options['row_order'] = this.form.row_order
         options['jump_target'] = this.form.jump_target
         if (options['jump_target'] === '无') {
@@ -308,8 +305,13 @@ export default {
         } else {
           options['jump_args'] = this.form.jump_args
         }
-        options['begin_time'] = begin_time
-        options['end_time'] = end_time
+        const date_range = this.form.date_range
+        if (date_range) {
+          const begin_time = new Date(date_range[0]).getTime()
+          const end_time = new Date(date_range[1]).getTime()
+          options['begin_time'] = begin_time
+          options['end_time'] = end_time
+        }
       }
       options['ad_name'] = this.form.ad_name
       options['ad_type'] = this.form.ad_type
