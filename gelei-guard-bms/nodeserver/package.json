@@ -6,7 +6,7 @@
     "test": "nodemon src/index.js --port=4004 --env_config=test",
     "dev": "nodemon src/index.js --port 4004 --env_config=dev",
     "prod": "nodemon src/index.js --port 4004 --env_config=prod",
-    "uat": "nodemon src/index.js --port 4004 --env_config=uat",
+    "beta": "nodemon src/index.js --port 4004 --env_config=beta",
     "pres": "nodemon src/index.js --port 4004 --env_config=pres"
   },
   "author": "yexl",

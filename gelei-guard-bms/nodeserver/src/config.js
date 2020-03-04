@@ -17,9 +17,9 @@ switch (global.env_config) {
       baseURL: 'https://ms.gwchina.cn/',
     }
     break
-  case 'uat':
+  case 'beta':
     config = {
-      baseURL: 'https://ms-new.gwchina.cn/',
+      baseURL: 'https://ms-beta.gwchina.cn/',
     }
     break
   case 'pres':
