@@ -275,6 +275,12 @@ export const constantRouterMap = [
             meta: { title: '高危应用表', icon: 'high_risk_application' }
           }
         ]
+      },
+      {
+        path: 'business-cooperation',
+        name: '商务合作注册页',
+        component: () => import('@/views/toolbox/business_cooperation'),
+        meta: { title: '商务合作注册页', icon: 'business_cooperation' }
       }
     ]
   },

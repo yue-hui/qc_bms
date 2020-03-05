@@ -1,0 +1,280 @@
+<template>
+  <div class="component-card">
+    <el-dialog
+      v-loading="loading"
+      ref="dialog_pannel"
+      :title="title"
+      :before-close="handle_close"
+      :visible.sync="dialog_visible"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+      top="5vh"
+      width="30%">
+      <el-form ref="form" :model="form" :rules="rules" label-suffix=":" label-width="120px" class="demo-ruleForm">
+        <el-form-item label="合作渠道名称" prop="channel_name">
+          <el-input v-model="form.channel_name" size="mini" />
+        </el-form-item>
+        <el-form-item label="渠道描述" prop="channel_desc">
+          <el-input v-model="form.channel_desc" type="textarea" size="mini" />
+        </el-form-item>
+        <el-form-item label="渠道联系人" prop="channel_contacts">
+          <el-input v-model="form.channel_contacts" size="mini" />
+        </el-form-item>
+        <el-form-item label="渠道联系方式" prop="contact_info">
+          <el-input v-model="form.contact_info" size="mini" />
+        </el-form-item>
+        <el-form-item v-if="!is_created" label="渠道编号">
+          <el-input v-model="form.channel_no" disabled size="mini" />
+        </el-form-item>
+        <el-form-item label="图片上传" prop="file_list">
+          <el-upload
+            :http-request="push_picture_to_cloud"
+            :on-remove="remove_picture"
+            :multiple="false"
+            :limit="1"
+            :file-list="form.file_list"
+            action=""
+            class="upload-demo"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+          <div class="upload-file-to-server">备注: 图片尺寸为347*682，格式为PNG, JPG。</div>
+        </el-form-item>
+        <el-form-item label="规则介绍" prop="rule">
+          <el-input v-model="form.rule" type="textarea" size="mini" />
+        </el-form-item>
+        <el-form-item v-if="!is_created" label="渠道链接">
+          <el-input v-model="virtual_channel_url" disabled size="mini" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="cancel">取 消</el-button>
+        <el-button size="mini" type="primary" @click="save">保 存</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
+import {
+  edit_business_cooperation,
+  get_business_cooperation_details
+} from '@/api/interactive'
+import { get_h5_domain } from '@/utils/common'
+
+export default {
+  name: 'CreateOrEditBusinessCooperation',
+  props: {
+    condition: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    },
+    dialog_visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: function() {
+    return {
+      title: '',
+      loading: false,
+      virtual_channel_url: '',
+      form: {
+        channel_no: '',
+        channel_name: '',
+        channel_desc: '',
+        channel_contacts: '',
+        contact_info: '',
+        channel_id: '',
+        file_list: [],
+        rule: '',
+        channel_url: ''
+      },
+      pic_file_list: [],
+      rules: {
+        channel_name: [
+          { required: true, message: '请输入广告名称', trigger: 'blur' }
+        ],
+        channel_url: [
+          { required: true, message: '请输入图片上传', trigger: 'blur' }
+        ],
+        channel_desc: [
+          { required: true, message: '渠道描述为必填项', trigger: 'blur' }
+        ],
+        file_list: [
+          { required: true, message: '渠道背影图为必传项', trigger: 'blur' }
+        ],
+        rule: [
+          { required: true, message: '规则介绍为必填项', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  computed: {
+    is_created: function() {
+      return Object.keys(this.condition).length === 0
+    }
+  },
+  watch: {
+    dialog_visible: {
+      handler: function(visible) {
+        if (visible) {
+          this.init_dialog()
+        }
+      },
+      immediate: true
+    }
+  },
+  mounted: function() {
+  },
+  methods: {
+    handle_close() {
+      this.cancel()
+    },
+    init_dialog() {
+      if (this.is_created) {
+        // 新建
+        this.title = '创建商务合作注册页'
+        this.form = {
+          channel_no: '',
+          channel_name: '',
+          channel_desc: '',
+          channel_contacts: '',
+          contact_info: '',
+          channel_id: '',
+          file_list: [],
+          rule: '',
+          channel_url: ''
+        }
+      } else {
+        // 编辑
+        const config = {
+          channel_id: this.condition.channel_id
+        }
+        this.loading = true
+        get_business_cooperation_details(config).then(res => {
+          // 获取注册来源详情
+          if (res.status === 0) {
+            this.form = res.data
+            this.form.file_list = [
+              {
+                name: '',
+                status: 'success',
+                uid: new Date().getTime(),
+                url: this.form.img_url
+              }
+            ]
+            this.title = res.data.channel_name
+            this.virtual_channel_url = this.build_channel_url(res.data.channel_id)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).finally(() => {
+          this.loading = false
+        })
+      }
+    },
+    build_channel_url(channel_id) {
+      const h5_domain = get_h5_domain()
+      return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+    },
+    push_picture_to_cloud(params) {
+      if (this.form.file_list.length >= 1) {
+        this.$message.warning('只能上传一张图片')
+        return
+      }
+      const file = params.file
+
+      uploadFormDataSecondPassServer(file).then(res => {
+        const remote_data = res.data
+        if ([1, -2, '-2'].indexOf(remote_data.status) !== -1) {
+          // 未上传, 使用 文件接口上传
+          uploadFormDataServer(file).then((res) => {
+            const upload_data = res.data
+            if (upload_data.status === 0) {
+              const url = upload_data.data.url
+              const item = {
+                name: params.file.name,
+                url
+              }
+              this.form.file_list.push(item)
+            } else {
+              this.$message.error(upload_data.message)
+            }
+          })
+        } else if (remote_data.status === -1) {
+          // 秒传失败
+          this.$message.error(remote_data.message)
+        } else if (remote_data.status === 0) {
+          // 秒传成功
+          const url = remote_data.data.url
+          const item = {
+            name: params.file.name,
+            url
+          }
+          this.form.file_list.push(item)
+          this.$message.success('上传成功')
+        } else {
+          // 未知异常
+          this.$message.error(remote_data.message)
+        }
+      })
+    },
+    remove_picture() {
+      this.form.file_list = []
+    },
+    cancel() {
+      this.$emit('receive', false)
+    },
+    save() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          if (this.is_created) {
+            this.modified_business_cooperation()
+          } else {
+            this.modified_business_cooperation()
+          }
+        }
+      })
+    },
+    get_params() {
+      const config = {
+        channel_name: this.form.channel_name,
+        channel_desc: this.form.channel_desc,
+        channel_contacts: this.form.channel_contacts,
+        contact_info: this.form.contact_info,
+        img_url: this.form.file_list[0].url,
+        rule: this.form.rule
+      }
+      if (!this.is_created) {
+        // 编辑状态
+        config['channel_no'] = this.form.channel_no
+        config['channel_id'] = this.form.channel_id
+        config['channel_url'] = this.virtual_channel_url
+      }
+      return config
+    },
+    modified_business_cooperation() {
+      const config = this.get_params()
+      edit_business_cooperation(config).then(res => {
+        if (res.status === 0) {
+          this.$message.success(res.message)
+          this.$emit('receive')
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.component-card {
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -846,3 +846,35 @@ export function edit_invite_register_activity(data) {
     data
   })
 }
+
+/*
+* 商务合作注册页
+* */
+
+// 创建或编辑商务注册页
+export function edit_business_cooperation(data) {
+  return request({
+    url: '/greenguard/manager/channel/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}
+
+// 获取商务注册页详情
+export function get_business_cooperation_details(data) {
+  return request({
+    url: '/greenguard/manager/channel/info',
+    method: 'post',
+    data
+  })
+}
+
+// 获取商务注册页列表
+export function get_business_cooperation_list(data) {
+  return request({
+    url: '/greenguard/manager/channel/list',
+    method: 'post',
+    data
+  })
+}
+

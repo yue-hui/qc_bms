@@ -199,3 +199,18 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
   }
   return default_value
 }
+
+/*
+* 获取环境配置的URL
+* */
+export function get_h5_domain(relative = true) {
+  let domain
+  if (process.env.NODE_ENV === 'development') {
+    domain = 'https://g8ddev.dev.zhixike.net'
+  } else if (process.env.NODE_ENV === 'production') {
+    domain = 'https://greenguard-h5.gwchina.cn'
+  } else {
+    domain = 'https://g8dtes.dev.zhixike.net'
+  }
+  return domain
+}

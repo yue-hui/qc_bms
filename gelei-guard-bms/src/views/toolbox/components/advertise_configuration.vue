@@ -118,8 +118,6 @@ import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/up
 
 export default {
   name: 'AdvertiseConfiguration',
-  beforecreate: function() {
-  },
   props: {
     action: {
       type: Number,
@@ -214,7 +212,6 @@ export default {
       visiable_height: ''
     }
   },
-  computed: {},
   watch: {
     action: {
       handler: function(val) {
