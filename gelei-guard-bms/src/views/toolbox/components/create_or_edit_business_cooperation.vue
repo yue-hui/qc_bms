@@ -12,16 +12,16 @@
       width="30%">
       <el-form ref="form" :model="form" :rules="rules" label-suffix=":" label-width="120px" class="demo-ruleForm">
         <el-form-item label="合作渠道名称" prop="channel_name">
-          <el-input v-model="form.channel_name" size="mini" />
+          <el-input v-model="form.channel_name" maxlength="30" size="mini" />
         </el-form-item>
         <el-form-item label="渠道描述" prop="channel_desc">
           <el-input v-model="form.channel_desc" type="textarea" size="mini" />
         </el-form-item>
         <el-form-item label="渠道联系人" prop="channel_contacts">
-          <el-input v-model="form.channel_contacts" size="mini" />
+          <el-input v-model="form.channel_contacts" maxlength="30" size="mini" />
         </el-form-item>
         <el-form-item label="渠道联系方式" prop="contact_info">
-          <el-input v-model="form.contact_info" size="mini" />
+          <el-input v-model="form.contact_info" maxlength="30" size="mini" />
         </el-form-item>
         <el-form-item v-if="!is_created" label="渠道编号">
           <el-input v-model="form.channel_no" disabled size="mini" />
