@@ -134,47 +134,53 @@ export default {
     handle_close() {
       this.cancel()
     },
+    reset_form() {
+      this.form = {
+        channel_no: '',
+        channel_name: '',
+        channel_desc: '',
+        channel_contacts: '',
+        contact_info: '',
+        channel_id: '',
+        file_list: [],
+        rule: '',
+        channel_url: ''
+      }
+    },
+    load_form_data() {
+      // 编辑
+      const config = {
+        channel_id: this.condition.channel_id
+      }
+      this.loading = true
+      get_business_cooperation_details(config).then(res => {
+        // 获取注册来源详情
+        if (res.status === 0) {
+          this.form = res.data
+          this.form.file_list = [
+            {
+              name: '',
+              status: 'success',
+              uid: new Date().getTime(),
+              url: this.form.img_url
+            }
+          ]
+          this.title = res.data.channel_name
+          this.virtual_channel_url = this.build_channel_url(res.data.channel_id)
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     init_dialog() {
       if (this.is_created) {
         // 新建
         this.title = '创建商务合作注册页'
-        this.form = {
-          channel_no: '',
-          channel_name: '',
-          channel_desc: '',
-          channel_contacts: '',
-          contact_info: '',
-          channel_id: '',
-          file_list: [],
-          rule: '',
-          channel_url: ''
-        }
+        this.reset_form()
       } else {
-        // 编辑
-        const config = {
-          channel_id: this.condition.channel_id
-        }
-        this.loading = true
-        get_business_cooperation_details(config).then(res => {
-          // 获取注册来源详情
-          if (res.status === 0) {
-            this.form = res.data
-            this.form.file_list = [
-              {
-                name: '',
-                status: 'success',
-                uid: new Date().getTime(),
-                url: this.form.img_url
-              }
-            ]
-            this.title = res.data.channel_name
-            this.virtual_channel_url = this.build_channel_url(res.data.channel_id)
-          } else {
-            this.$message.error(res.msg)
-          }
-        }).finally(() => {
-          this.loading = false
-        })
+        this.load_form_data()
       }
     },
     build_channel_url(channel_id) {
@@ -228,6 +234,7 @@ export default {
     },
     cancel() {
       this.$emit('receive', false)
+      this.reset_form()
     },
     save() {
       this.$refs.form.validate((valid) => {
@@ -262,6 +269,7 @@ export default {
       edit_business_cooperation(config).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
+          this.reset_form()
           this.$emit('receive')
         } else {
           this.$message.error(res.message)

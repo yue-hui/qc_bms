@@ -51,7 +51,7 @@
             prop="channel_name"
             width="240">
             <template slot-scope="scope">
-              <a :href="scope.row.channel_url" class="channel-link" target="_blank">{{ scope.row.channel_name }}</a>
+              <a :href="scope.row.virtual_channel_url" class="channel-link" target="_blank">{{ scope.row.channel_name }}</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -110,7 +110,7 @@ import createOrEditBusinessCooperation from './components/create_or_edit_busines
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_business_cooperation_list } from '@/api/interactive'
-import { date_formatter } from '@/utils/common'
+import { date_formatter, get_h5_domain } from '@/utils/common'
 
 export default {
   name: 'BusinessCooperation',
@@ -138,7 +138,6 @@ export default {
       download_loading: false
     }
   },
-  computed: {},
   mounted: function() {
     this.fetch_business_cooperation()
   },
@@ -198,6 +197,10 @@ export default {
       }
       this.show_pannel = false
     },
+    build_channel_url(channel_id) {
+      const h5_domain = get_h5_domain()
+      return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+    },
     fetch_business_cooperation: function() {
       const config = this.get_params()
       get_business_cooperation_list(config).then(res => {
@@ -205,9 +208,11 @@ export default {
           this.table_data = res.data.map((r, index) => {
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
             const row_id = (this.page - 1) * this.page_size + index + 1
+            const virtual_channel_url = this.build_channel_url(r.channel_id)
             return {
               ...r,
               row_id,
+              virtual_channel_url,
               create_time_label
             }
           })

@@ -44,6 +44,8 @@ function getSign(params) {
       arr[i] = JSON.stringify(deepSort(element))
       // console.log(element)
     }
+    // 其它类型转译成字符串类型
+    if (arr[i] !== undefined) arr[i] = String(arr[i])
   })
   // 排序
   arr.sort()

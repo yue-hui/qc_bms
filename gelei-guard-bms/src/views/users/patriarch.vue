@@ -181,6 +181,10 @@
             prop="reg_from_label" />
           <el-table-column
             align="center"
+            label="来源渠道"
+            prop="channel_name" />
+          <el-table-column
+            align="center"
             label="会员类型"
             prop="vip_label"
             width="220" />
@@ -191,6 +195,7 @@
           <el-table-column
             align="center"
             label="操作"
+            width="174"
             prop="control">
             <template slot-scope="scope">
               <el-button
@@ -525,11 +530,11 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-家长端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '会员类型',
+        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型',
           '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',
           '孩子性别', '孩子出生日期', '孩子年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
-        const filter_val = ['nick_name', 'phone', 'create_time', 'reg_from_label', 'member_type_label',
+        const filter_val = ['nick_name', 'phone', 'create_time', 'reg_from_label', 'channel_name', 'member_type_label',
           'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
           'child_sex_label', 'child_birthdate', 'child_grade_label']
         const data = this.formatJson(filter_val, data_list)

@@ -185,6 +185,8 @@ function getSign(timeStamp, compSign, params) {
     if (Array.isArray(element)) {
       arr[i] = JSON.stringify(deepSort(element))
     }
+    // 处理字符串
+    arr[i] = String(arr[i])
   })
   arr.sort()
   // 加密
