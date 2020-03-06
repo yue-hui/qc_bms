@@ -208,7 +208,7 @@ export function get_h5_domain(relative = true) {
   if (process.env.NODE_ENV === 'development') {
     domain = 'https://g8ddev.dev.zhixike.net'
   } else if (process.env.NODE_ENV === 'production') {
-    domain = 'https://greenguard-h5.gwchina.cn'
+    domain = 'https://' + window.location.host
   } else {
     domain = 'https://g8dtes.dev.zhixike.net'
   }

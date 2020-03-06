@@ -185,13 +185,12 @@ function getSign(timeStamp, compSign, params) {
     if (Array.isArray(element)) {
       arr[i] = JSON.stringify(deepSort(element))
     }
-    // 处理字符串
-    arr[i] = String(arr[i])
+    // 其它类型转译成字符串类型
+    if (arr[i] !== undefined) arr[i] = String(arr[i])
   })
   arr.sort()
   // 加密
   const str = arr.join('')
-  console.log(111111111111111111111111111)
   console.log(str)
   const sign = sha256(str)
   // 返回所有参数
