@@ -34,6 +34,22 @@
             <el-row :gutter="24">
               <el-col :span="8">
                 <div class="grid-content bg-purple">
+                  <el-form-item label="用户来源">
+                    <span>{{ information.reg_from_label }}</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="来源渠道">
+                    <span>{{ information.channel_name }}</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
                   <el-form-item label="机型">
                     <span>{{ information.device_model_name }}</span>
                   </el-form-item>
