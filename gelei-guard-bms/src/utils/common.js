@@ -205,12 +205,19 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
 * */
 export function get_h5_domain(relative = true) {
   let domain
-  if (process.env.NODE_ENV === 'development') {
-    domain = 'https://g8ddev.dev.zhixike.net'
-  } else if (process.env.NODE_ENV === 'production') {
-    domain = 'https://' + window.location.host
+  const hostname = window.location.hostname
+  if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net'].indexOf(hostname) !== -1) {
+    // 开发与测试环境
+    domain = hostname
+  } else if (hostname === 'greenguard-bms-beta.gwchina.cn') {
+    // Beta环境
+    domain = 'greenguard-h5-beta.gwchina.cn'
+  } else if (hostname === 'greenguard-bms.gwchina.cn') {
+    // 线上环境
+    domain = 'greenguard-h5.gwchina.cn'
   } else {
-    domain = 'https://g8dtes.dev.zhixike.net'
+    // 其它转到开发环境域名
+    domain = 'g8ddev.dev.zhixike.net'
   }
-  return domain
+  return 'https://' + domain
 }
