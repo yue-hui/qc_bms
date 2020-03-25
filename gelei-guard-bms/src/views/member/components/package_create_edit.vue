@@ -20,6 +20,13 @@
                 <el-radio label="02">不公开套餐</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="会员类型" prop="member_type">
+              <el-radio-group v-model="form.member_type" size="mini">
+                <el-radio v-for="(member, index) in patriarch_member_types" :key="index" :label="member.value">
+                  {{ member.label }}
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="套餐对象" prop="is_member">
               <el-radio-group v-model="form.is_member" size="mini">
                 <el-radio label="1">VIP会员用户</el-radio>
@@ -156,6 +163,7 @@
 <script>
 import { add_member_plan, update_member_plan } from '@/api/interactive'
 import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
+import { PATRIARCH_MEMBER_TYPES } from '@/utils/constant'
 
 export default {
   name: 'PackageCreateEdit',
@@ -197,7 +205,7 @@ export default {
         callback()
       }
     }
-
+    const patriarch_member_types = PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1)
     return {
       visiable_height: '',
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
@@ -207,8 +215,10 @@ export default {
         plan_id: '',
         plan_name: '',
         plan_type: '01',
+        member_type: '',
         is_member: ''
       },
+      patriarch_member_types,
       public_form: {
         valid_days: '',
         original_price: '',
@@ -233,6 +243,9 @@ export default {
         ],
         plan_type: [
           { required: true, message: '套餐类型为必选项', trigger: 'blur' }
+        ],
+        member_type: [
+          { required: true, message: '会员类型为必选项', trigger: 'blur' }
         ],
         is_member: [
           { required: true, message: '套餐对象为必选项', trigger: 'blur' }
@@ -289,7 +302,6 @@ export default {
       }
     }
   },
-  computed: {},
   watch: {
     action: {
       handler: function(val) {
@@ -332,7 +344,8 @@ export default {
         plan_id: '',
         plan_name: '',
         plan_type: '01',
-        is_member: ''
+        is_member: '',
+        member_type: ''
       }
       this.public_form = {
         valid_days: '',
@@ -358,7 +371,8 @@ export default {
         plan_id: current.plan_id,
         plan_name: current.plan_name,
         plan_type: current.plan_type,
-        is_member: current.is_member
+        is_member: current.is_member,
+        member_type: current.member_type
       }
       const date_range = [new Date(current.discount_start_time), new Date(current.discount_end_time)]
       this.public_form = {
@@ -380,7 +394,7 @@ export default {
       }
     },
     dialog_card_action() {
-      this.$emit('callback')
+      // this.$emit('callback')
     },
     close_dialog() {
       this.$emit('callback')
@@ -454,7 +468,8 @@ export default {
       const options = {
         plan_name: this.form.plan_name,
         plan_type,
-        is_member: this.form.is_member
+        is_member: this.form.is_member,
+        member_type: this.form.member_type
       }
       if (plan_type === '01') {
         options['valid_days'] = this.public_form.valid_days
@@ -467,10 +482,8 @@ export default {
         options['row_order'] = this.public_form.row_order
         const date_range = this.public_form.date_range
         if (date_range) {
-          const discount_start_time = new Date(date_range[0]).getTime()
-          const discount_end_time = new Date(date_range[1]).getTime()
-          options['discount_end_time'] = discount_end_time
-          options['discount_start_time'] = discount_start_time
+          options['discount_start_time'] = new Date(date_range[0]).getTime()
+          options['discount_end_time'] = new Date(date_range[1]).getTime()
         }
       } else if (plan_type === '02') {
         options['device_type'] = this.un_public_form.device_type
@@ -554,14 +567,13 @@ $z_index_message_dialog: 2000;
       }
 
       .head-area {
-        display: block;
         height: $title_height;
         line-height: $title_height;
         padding: 0 10px;
         position: relative;
         font-size: 18px;
         color: #303133;
-        font-family: 微软雅黑, 宋体;
+        font-family: PingFangSC-Regular, 微软雅黑, serif;
         display: flex;
         flex-direction: row;
         background-color: #fbfbff;

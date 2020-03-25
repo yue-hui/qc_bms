@@ -16,6 +16,12 @@
               <div class="item-name">体验用户数</div>
             </div>
           </div>
+          <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+            <div class="item-info">
+              <div class="item-value">{{ overall_data.telecom_count || '--' }}</div>
+              <div class="item-name">电信付费用户数</div>
+            </div>
+          </div>
           <div :style="'background-color: ' + theme_color[2]" class="summary-item">
             <div class="item-info">
               <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
@@ -110,16 +116,24 @@
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_user }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_user || '--' }}</span>
                   <label class="item-label">总数</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
-                  <label class="item-label">苹果</label>
+                  <span class="total-count">{{ growth_data.increased_pay_ios_user || '--' }}</span>
+                  <label class="item-label">IOS</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_android_user }}</span>
-                  <label class="item-label">安卓</label>
+                  <span class="total-count">{{ growth_data.increased_pay_android_user || '--' }}</span>
+                  <label class="item-label">微信</label>
+                </span>
+                <span>
+                  <span class="total-count">{{ growth_data.increased_pay_ali_user || '--' }}</span>
+                  <label class="item-label">支付宝</label>
+                </span>
+                <span>
+                  <span class="total-count">{{ growth_data.increased_pay_telecom_user || '--' }}</span>
+                  <label class="item-label">电信</label>
                 </span>
               </p>
               <div class="diviser" />
@@ -152,20 +166,49 @@
           <div class="data-item">
             <div class="item-row item-title">充值金额</div>
             <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <span class="total-count">¥{{ growth_data.order_amount }}</span>
-                  <label class="item-label">总数</label>
-                </span>
-                <span>
-                  <span class="total-count">¥{{ growth_data.ios_order_amount }}</span>
-                  <label class="item-label">苹果</label>
-                </span>
-                <span>
-                  <span class="total-count">¥{{ growth_data.android_order_amount }}</span>
-                  <label class="item-label">安卓</label>
-                </span>
-              </p>
+              <div class="item-row-box">
+                <div class="item-subscribe-line">
+                  <div>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">
+                      <template v-if="growth_data.order_amount">¥</template>
+                      {{ growth_data.order_amount || '--' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="item-subscribe-line">
+                  <div>
+                    <label class="item-label">微信: </label>
+                    <span class="total-count">
+                      <template v-if="growth_data.we_chat_order_amount">¥</template>
+                      {{ growth_data.we_chat_order_amount || '--' }}
+                    </span>
+                  </div>
+                  <div>
+                    <label class="item-label">IOS: </label>
+                    <span class="total-count">
+                      <template v-if="growth_data.ios_order_amount">¥</template>
+                      {{ growth_data.ios_order_amount || '--' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="item-subscribe-line">
+                  <div>
+                    <label class="item-label">支付宝: </label>
+                    <span class="total-count">
+                      <template v-if="growth_data.ali_order_amount">¥</template>
+                      {{ growth_data.ali_order_amount || '--' }}
+                    </span>
+                  </div>
+                  <div>
+                    <label class="item-label">电信: </label>
+                    <span class="total-count">
+                      <template v-if="growth_data.telecom_order_amount">¥</template>
+                      {{ growth_data.telecom_order_amount || '--' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
               <div class="diviser" />
               <p class="ratio-data">
                 <span>
@@ -378,8 +421,8 @@ export default {
           show: false
         },
         level: [
-          ['IOS', '安卓'],
-          ['6个月会员', '12个月会员', '24个月会员']
+          ['普通会员', '高级会员'],
+          ['IOS', '微信', '支付宝', '电信']
         ],
         offsetY: 180
       },
@@ -412,15 +455,15 @@ export default {
           name: '1'
         },
         {
+          label: '电信充值金额',
+          name: '3'
+        },
+        {
           label: '充值金额',
           name: '2'
         }
       ],
-      line_chart_tabs_data: [
-        [],
-        [],
-        []
-      ],
+      line_chart_tabs_data: [{}, {}, {}, {}],
       active_name: '0',
       dimension_data: {}
     }
@@ -461,6 +504,8 @@ export default {
       get_homepage_growth_data(config).then(r => {
         if (r.status === 0) {
           this.growth_data = r.data
+          this.growth_data.ali_order_amount = r.data.ali_order_amount.toFixed(2)
+          this.growth_data.telecom_order_amount = r.data.telecom_order_amount.toFixed(2)
           // this.$message.success(r.message)
         } else {
           this.$message.error(r.message)
@@ -496,13 +541,33 @@ export default {
           rows: device_data
         }
         // 订单成交量及占比
-        const field_filter_list = ['IOS', '安卓', '6个月会员', '12个月会员', '24个月会员']
-        const order_data = growth_data.member_order_count_list.filter(r => field_filter_list.indexOf(r.name) !== -1).map(r => {
-          return {
-            name: r.name,
-            value: r.count
+        const field_filter_list = ['IOS', '微信', '支付宝', '电信']
+        const order_data = [
+          {
+            name: '普通会员',
+            value: growth_data.vip_order_count
+          },
+          {
+            name: '高级会员',
+            value: growth_data.svip_order_count
+          },
+          {
+            name: 'IOS',
+            value: growth_data.ios_order_count
+          },
+          {
+            name: '微信',
+            value: growth_data.we_chat_order_count
+          },
+          {
+            name: '支付宝',
+            value: growth_data.ali_order_count
+          },
+          {
+            name: '电信',
+            value: growth_data.telecom_order_count
           }
-        })
+        ]
         // 后台返回数据格式不正确，前端用数据填补
         field_filter_list.forEach(_c => {
           const _item = order_data.filter(r => r.name === _c)
@@ -519,6 +584,7 @@ export default {
           columns: ['name', 'value'],
           rows: order_data
         }
+        this.chart_settings_array.level[1] = field_filter_list
       } else {
         this.increased_user_data = {
           columns: ['name', 'value'],
@@ -529,7 +595,6 @@ export default {
           ]
         }
         this.device_ratio_data = {}
-        this.order_radio_data = {}
         this.order_radio_data = {
           columns: ['name', 'value'],
           center: ['20%', '50%'],
@@ -558,12 +623,17 @@ export default {
           columns: ['date', 'amount'],
           rows: growth_data.order_amount_list
         }
+        const telecom_order_amount_list_chart = {
+          columns: ['date', 'amount'],
+          rows: growth_data.telecom_order_amount_list || []
+        }
         this.line_chart_tabs_data = [
           increased_pay_user_chart,
           order_count_list_chart,
-          order_amount_list_chart]
+          order_amount_list_chart,
+          telecom_order_amount_list_chart]
       } else {
-        this.line_chart_tabs_data = [{}, {}, {}]
+        this.line_chart_tabs_data = [{}, {}, {}, {}]
       }
       this.dimension_data = this.line_chart_tabs_data[+this.active_name]
     },
@@ -639,6 +709,11 @@ export default {
           date: '日期',
           amount: '充值金额'
         }
+      } else if (active_name === '3') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          amount: '充值金额'
+        }
       }
       this.dimension_data = this.line_chart_tabs_data[+active_name]
     }
@@ -674,7 +749,6 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
       background: #FFFFFF;
       border: 1px solid #EAEAEA;
       border-radius: 5px;
-      border-radius: 5px;
       margin-bottom: 40px;
 
       .title-area {
@@ -682,7 +756,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         padding: 0 15px 15px 15px;
 
         .title {
-          font-family: PingFangSC-Regular;
+          font-family: PingFangSC-Regular, 微软雅黑, serif;
           font-size: 20px;
           color: #454545;
         }
@@ -693,7 +767,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         min-width: 1150px;
         display: flex;
         flex-direction: row;
-        align-item: center;
+        align-items: center;
         justify-content: space-between;
         padding: 0 15px 15px 15px;
         user-select: none;
@@ -705,7 +779,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           display: flex;
           flex-direction: row;
           padding: 22px 24px;
-          flex-basis: calc((100% - 80px) / 5);
+          flex-basis: calc((100% - 80px) / 6);
 
           .item-icon {
             font-size: 48px;
@@ -723,7 +797,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             text-align: left;
 
             .item-name {
-              font-family: PingFangSC-Regular;
+              font-family: PingFangSC-Regular, 微软雅黑, serif;
               font-size: 16px;
               color: #FFFFFF;
             }
@@ -744,7 +818,6 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
       background: #FFFFFF;
       border: 1px solid #EAEAEA;
       border-radius: 5px;
-      border-radius: 5px;
       height: 100px;
       margin-bottom: 40px;
 
@@ -760,7 +833,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             height: 36px;
             line-height: 36px;
             white-space: nowrap;
-            font-family: PingFangSC-Regular;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
             font-size: 16px;
             color: #454545;
           }
@@ -794,7 +867,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             border-top-left-radius: $border_radius_size;
             border-top-right-radius: $border_radius_size;
             user-select: none;
-            font-family: PingFangSC-Regular;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
             font-size: 20px;
             color: #454545;
             height: 28px;
@@ -821,7 +894,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 flex-direction: column;
 
                 .item-label {
-                  font-family: PingFangSC-Regular;
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
                   font-size: 14px;
                   color: #454545;
                 }
@@ -832,7 +905,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 }
 
                 .total-count {
-                  font-family: PingFangSC-Regular;
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
                   font-size: 28px;
                   color: #454545;
                   margin-bottom: 10px;
@@ -852,6 +925,56 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               }
             }
 
+            .item-row-box {
+              width: 100%;
+              height: 58px;
+              margin: 16px auto;
+
+              .item-subscribe-line {
+                width: 100%;
+                position: relative;
+                display: flex;
+                flex-direction: row;
+
+                div {
+                  width: 50%;
+
+                  .item-label {
+                    font-family: PingFangSC-Regular, 微软雅黑, serif;
+                    font-size: 14px;
+                    color: #454545;
+                    width: 46px;
+                    display: inline-block;
+                  }
+
+                  .item-number {
+                    font-size: 12px;
+                    font-weight: 200;
+                  }
+
+                  .total-count {
+                    padding-left: 7px;
+                    font-family: PingFangSC-Regular, 微软雅黑, serif;
+                    font-size: 16px;
+                    color: #454545;
+                    margin-bottom: 10px;
+                  }
+
+                  .upper {
+                    color: green;
+                  }
+
+                  .fair {
+                    color: $radio_fair_color;
+                  }
+
+                  .down {
+                    color: red;
+                  }
+                }
+              }
+            }
+
             .diviser {
               height: 1px;
               background-color: #EAEAEA;
@@ -864,13 +987,13 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               justify-content: space-between;
 
               .ratio-name {
-                font-family: PingFangSC-Regular;
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
                 font-size: 14px;
                 color: #454545;
               }
 
               .ratio-value {
-                font-family: PingFangSC-Regular;
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
                 font-size: 20px;
                 color: #000000;
                 line-height: 20px;
@@ -915,14 +1038,13 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           flex-direction: column;
           border-radius: $border_radius_size;
           background: #FFFFFF;
-          background: #FFFFFF;
           border: 1px solid #EAEAEA;
           padding: 34px 35px 27px 32px;
 
           .item-title {
             height: 28px;
             line-height: 28px;
-            font-family: PingFangSC-Regular;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
             font-size: 20px;
             color: #454545;
             margin-bottom: 33px;
@@ -950,7 +1072,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 line-height: 50px;
 
                 .item-label {
-                  font-family: PingFangSC-Regular;
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
                   font-size: 14px;
                   color: #454545;
                   font-weight: 400;
@@ -958,7 +1080,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 }
 
                 .ratio-value {
-                  font-family: PingFangSC-Regular;
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
                   font-size: 20px;
                   color: #000000;
                   line-height: 20px;

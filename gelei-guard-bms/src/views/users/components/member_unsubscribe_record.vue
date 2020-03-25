@@ -5,12 +5,13 @@
       :before-close="before_close"
       top="20vh"
       size="mini"
-      title="设备操作记录">
+      title="电信会员退订记录">
       <el-table
         v-loading="loading"
         :data="gridData"
+        empty-text="该用户没有退订记录"
         size="mini">
-        <el-table-column property="time" label="时间" width="150" />
+        <el-table-column property="time_label" label="时间" width="150" />
         <el-table-column property="desc" label="事件描述" />
       </el-table>
 
@@ -31,17 +32,17 @@
 </template>
 
 <script>
-import { get_child_record_details } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { get_monthlyplan_unsubscribe_list } from '@/api/interactive'
 
 export default {
   name: 'DeviceBindRecords',
   beforecreate: function() {
   },
   props: {
-    childId: {
+    patriarchId: {
       type: String,
       default: ''
     }
@@ -85,17 +86,26 @@ export default {
     },
     load_data() {
       const config = this.get_config()
-      config['child_user_id'] = this.childId
+      config['patriarch_id'] = this.patriarchId
       this.loading = true
-      get_child_record_details(config).then(res => {
-        const remote_data = res.data
-        this.total = res.total_count
-        this.gridData = remote_data.map(r => {
-          return {
-            time: date_formatter(r.operate_time, DATE_TIME_FORMAT),
-            desc: r.desc
-          }
-        })
+      const data = {
+        user_id: this.$route.query.id
+      }
+      get_monthlyplan_unsubscribe_list(data).then(res => {
+        if (res.status === 0) {
+          const gridData = res.data || []
+          this.gridData = gridData.map(r => {
+            const time_label = date_formatter(r.end_date, DATE_TIME_FORMAT)
+            const desc = r.unsubscribe_op_user_id + ' 退订了 ' + r.phone + ' 的电信会员'
+            return {
+              ...r,
+              time_label,
+              desc
+            }
+          })
+        } else {
+          this.$message.error(res.message)
+        }
       }).finally(() => {
         this.loading = false
       })

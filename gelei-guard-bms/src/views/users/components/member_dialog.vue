@@ -3,6 +3,7 @@
     :before-close="close"
     :visible.sync="visible"
     title="会员记录"
+    width="70%"
   >
     <el-table
       :data="member_list"
@@ -11,6 +12,7 @@
       <el-table-column align="center" prop="nick_name" label="用户名" width="150" />
       <el-table-column align="center" prop="create_time_label" label="时间" width="200" />
       <el-table-column align="center" prop="plan_name" label="会员获得路径" />
+      <el-table-column align="center" prop="member_type_label" label="会员类型" />
       <el-table-column align="center" prop="acquisition_type" label="获得方式" />
       <el-table-column align="center" prop="actual_price" label="交易金额(元)" />
       <el-table-column align="center" prop="valid_str" label="会员有效期" />
@@ -27,9 +29,9 @@
 </template>
 
 <script>
-import { DATE_MINUTE_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_MINUTE_FORMAT, PATRIARCH_MEMBER_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_member_plan_flow_list } from '@/api/interactive'
-import { date_formatter } from '@/utils/common'
+import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -78,9 +80,11 @@ export default {
       get_member_plan_flow_list(options).then(r => {
         this.member_list = r.data.map(r => {
           const create_time_label = date_formatter(r.create_time, DATE_MINUTE_FORMAT)
+          const member_type_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES)
           return {
             ...r,
-            create_time_label
+            create_time_label,
+            member_type_label
           }
         })
         this.total = r.total_count

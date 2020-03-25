@@ -3,6 +3,7 @@
     :before-close="close"
     :visible.sync="visible"
     title="交易记录"
+    width="70%"
   >
     <el-table
       :data="recharge_list"
@@ -30,8 +31,16 @@
         prop="nick_name" />
       <el-table-column
         align="center"
-        label="交易类型"
+        label="套餐类型"
         prop="order_desc" />
+      <el-table-column
+        align="center"
+        label="会员类型"
+        prop="member_type">
+        <template slot-scope="scope">
+          <span>{{ transfer_member_type_label(scope.row.member_type) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         align="center"
         label="交易金额"
@@ -62,7 +71,7 @@
 <script>
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_order_list } from '@/api/interactive'
-import { date_formatter, formatter_transaction_amount } from '@/utils/common'
+import { date_formatter, formatter_transaction_amount, get_value_from_map_list } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -77,6 +86,12 @@ export default {
     uid: {
       type: String,
       default: ''
+    },
+    memberTypes: {
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   data: function() {
@@ -141,6 +156,9 @@ export default {
     },
     close() {
       this.$emit('callback')
+    },
+    transfer_member_type_label(member_type) {
+      return get_value_from_map_list(member_type, this.memberTypes)
     }
   }
 }

@@ -78,6 +78,27 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">会员类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.member_type"
+                    size="mini"
+                    placeholder="请选择会员类型"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in patriarch_member_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">用户名:</el-col>
                 <el-col :span="16">
                   <el-input v-model="query_sets.nick_name" size="mini" clearable @change="query_condition_change" />
@@ -95,7 +116,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="8" class="col-bg">
+          <el-col :xs="18" :sm="12" :md="12" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="4" class="order-number-list">交易时间:</el-col>
@@ -112,7 +133,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="6" :sm="4" :md="12" :lg="14" :xl="12" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -142,7 +163,7 @@
             align="center"
             label="交易单号"
             prop="pay_order_no"
-            width="130" />
+            width="136" />
           <el-table-column
             align="center"
             label="交易时间"
@@ -156,6 +177,10 @@
             align="center"
             label="订单详情"
             prop="order_desc" />
+          <el-table-column
+            align="center"
+            label="会员类型"
+            prop="member_type_label" />
           <el-table-column
             align="center"
             label="交易金额"
@@ -205,12 +230,12 @@ import {
   COMMODITY_TYPE,
   DATE_TIME_FORMAT,
   ORDER_MANAGEMENT_LIST_NAME,
-  ORDER_STATUS_LIST, TABLE_PAGE_SIEZS_LIST,
+  ORDER_STATUS_LIST, PATRIARCH_MEMBER_TYPES, TABLE_PAGE_SIEZS_LIST,
   TRANSCATION_MODE
 } from '@/utils/constant'
 // import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
-import { date_formatter, formatter_transaction_amount } from '@/utils/common'
+import { date_formatter, formatter_transaction_amount, get_value_from_map_list } from '@/utils/common'
 import { fetch_all_order_filter_list } from '@/api/merge'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
@@ -228,12 +253,14 @@ export default {
         order_desc: '',
         order_status: '',
         pay_type: '',
+        member_type: '',
         nick_name: '',
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
       order_status_list: ORDER_STATUS_LIST,
       pay_type_mode: TRANSCATION_MODE,
+      patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
       order_data: [],
       download_loading: false,
       page: 1,
@@ -315,10 +342,12 @@ export default {
       return data.map(r => {
         const order_time_label = date_formatter(r.order_time, DATE_TIME_FORMAT)
         const order_amount_label = formatter_transaction_amount(r.order_amount)
+        const member_type_label = get_value_from_map_list(r.member_type, this.patriarch_member_types)
         return {
           ...r,
           order_amount_label,
-          order_time_label
+          order_time_label,
+          member_type_label
         }
       })
     },
@@ -333,6 +362,11 @@ export default {
     fetch_order_list() {
       /* 获取订单列表 */
       const data = this.get_condition_with_pagination()
+      const member_type = data.member_type
+      if (member_type === '04') {
+        data['member_type'] = '03'
+        data['pay_type'] = '06'
+      }
       this.loading = true
       get_order_list(data).then(res => {
         if (res.status === 0) {
@@ -367,10 +401,10 @@ export default {
         const data_list = this.order_list_map(res.data)
         import('@/utils/Export2Excel').then(excel => {
           const t_header = ['订单号', '交易单号', '交易时间', '用户名',
-            '订单详情', '交易金额', '支付方式', '订单状态', '用户联系方式']
+            '订单详情', '会员类型', '交易金额', '支付方式', '订单状态', '用户联系方式']
           // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
           const filter_val = ['order_no', 'pay_order_no', 'order_time_label', 'nick_name',
-            'order_desc', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
+            'order_desc', 'member_type_label', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
           const data = this.formatJson(filter_val, data_list)
           const options = {
             header: t_header,

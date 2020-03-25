@@ -459,8 +459,32 @@ export const PATRIARCH_MEMBER_TYPES = [
     label: '体验用户'
   },
   {
+    value: '04',
+    label: '电信会员'
+  },
+  {
     value: '02',
-    label: 'VIP会员'
+    label: '高级会员'
+  },
+  {
+    value: '03',
+    label: '普通会员'
+  }
+]
+
+// 已开通会员信息
+export const ORDERED_MEMBER_STATUS_LABEL = [
+  {
+    value: '00',
+    label: '待生效'
+  },
+  {
+    value: '01',
+    label: '已生效'
+  },
+  {
+    value: '02',
+    label: '已失效'
   }
 ]
 

@@ -105,6 +105,24 @@ export function get_parent_details(data) {
   })
 }
 
+// 用户信息管理 - 电信退订接口
+export function monthlyplan_unsubscribe_ctccsp(data) {
+  return request({
+    url: '/greenguard/manager/member/monthlyplan/unsubscribe/ctccsp',
+    method: 'post',
+    data
+  })
+}
+
+// 用户信息管理 - 退订记录的接口
+export function get_monthlyplan_unsubscribe_list(data) {
+  return request({
+    url: '/greenguard/manager/member/monthlyplan/unsubscribe/list',
+    method: 'post',
+    data
+  })
+}
+
 // 设备管理 - 为孩子解绑设备
 export function unbind_user_device(data) {
   return request({

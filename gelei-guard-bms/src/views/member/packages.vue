@@ -45,6 +45,27 @@
               </el-row>
             </div>
           </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">会员类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.member_type"
+                    size="mini"
+                    placeholder="请选择会员类型"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in patriarch_member_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
@@ -82,7 +103,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="18" :lg="19" :xl="4" class="col-bg layout-right">
+          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button size="mini" type="success" @click="create_package">创建套餐</el-button>
@@ -100,12 +121,17 @@
           style="width: 100%">
           <el-table-column
             align="center"
+            width="160"
             label="套餐名称"
             prop="plan_name" />
           <el-table-column
             align="center"
             label="套餐类型"
             prop="plan_type_label" />
+          <el-table-column
+            align="center"
+            label="会员类型"
+            prop="member_type_label" />
           <el-table-column
             align="center"
             label="套餐对象"
@@ -190,9 +216,16 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import {
+  DATE_TIME_FORMAT,
+  MEMBER_TYPES,
+  PACKAGE_STATUS,
+  PACKAGE_TYPE,
+  PATRIARCH_MEMBER_TYPES,
+  TABLE_PAGE_SIEZS_LIST
+} from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
-import { date_formatter } from '@/utils/common'
+import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
@@ -215,6 +248,7 @@ export default {
       packages: PACKAGE_TYPE,
       member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
+      patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
       action: 0,
       packages_list: [],
       page: 1,
@@ -260,13 +294,15 @@ export default {
         }
         const plan_type_label = r.plan_type === '01' ? '公开' : r.plan_type === '02' ? '不公开' : '未知'
         const is_member_label = r.is_member === '1' ? 'VIP会员用户' : '非VIP会员用户'
+        const member_type_label = get_value_from_map_list(r.member_type, this.patriarch_member_types)
         return {
           ...r,
           discount_start_time_label,
           discount_end_time_label,
           plan_type_label,
           is_member_label,
-          create_time_label
+          create_time_label,
+          member_type_label
         }
       })
     },
