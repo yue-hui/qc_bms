@@ -116,23 +116,23 @@
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_user || '--' }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_user }}</span>
                   <label class="item-label">总数</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_ios_user || '--' }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
                   <label class="item-label">IOS</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_android_user || '--' }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_we_chat_user }}</span>
                   <label class="item-label">微信</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_ali_user || '--' }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_ali_user }}</span>
                   <label class="item-label">支付宝</label>
                 </span>
                 <span>
-                  <span class="total-count">{{ growth_data.increased_pay_telecom_user || '--' }}</span>
+                  <span class="total-count">{{ growth_data.increased_pay_telecom_user }}</span>
                   <label class="item-label">电信</label>
                 </span>
               </p>
