@@ -265,19 +265,25 @@ export default {
       })
     },
     fetch_child_device_use_app_recorder: function() {
+      const data = this.get_condition_with_pagination()
       if (this.query_sets.use_interval === '') {
         // 清空使用间隔时不查询数据
+        // this.$message.warning('过滤设备使用记录时，使用间隔为必选项')
         this.page = 1
         this.device_list = []
         this.total = 0
         return
       }
-      const data = this.get_condition_with_pagination()
       this.loading = true
       get_child_use_recorder(data).then(res => {
         if (res.status === 0) {
-          this.device_list = this.transfer_data(res.data)
-          this.total = res.total_count
+          if (res.data && res.data.length) {
+            this.device_list = this.transfer_data(res.data)
+            this.total = res.total_count
+          } else {
+            this.device_list = []
+            this.total = 0
+          }
         }
       }).finally(() => {
         this.loading = false
