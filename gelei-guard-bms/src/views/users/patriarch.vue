@@ -200,7 +200,7 @@
             prop="channel_name" />
           <el-table-column
             align="center"
-            label="会员类型"
+            label="当前会员类型"
             prop="vip_label"
             width="220" />
           <el-table-column
@@ -255,7 +255,7 @@ import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_
 import {
   DATE_FORMAT,
   DATE_FORMAT_WITH_POINT,
-  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, GRADE_LIST, ORDERED_MEMBER_STATUS_LABEL,
+  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, GRADE_LIST,
   PATRIARCH_MEMBER_TYPES,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
@@ -277,7 +277,6 @@ export default {
     return {
       loading: false,
       device_type_list,
-      member_status_list: ORDERED_MEMBER_STATUS_LABEL,
       user_sources: [], // 用户来源列表
       patriarch_member_types: PATRIARCH_MEMBER_TYPES,
       page: 1,

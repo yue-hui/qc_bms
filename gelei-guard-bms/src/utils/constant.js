@@ -480,7 +480,7 @@ export const ORDERED_MEMBER_STATUS_LABEL = [
   },
   {
     value: '01',
-    label: '已生效'
+    label: '生效中'
   },
   {
     value: '02',
