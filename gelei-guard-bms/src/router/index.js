@@ -135,6 +135,21 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/messagePush/index',
+    component: Layout,
+    name: '消息推送',
+    redirect: '/messagePush/',
+    meta: { title: '消息推送', icon: 'analysis' },
+    children: [
+      {
+        path: 'list',
+        name: '推送列表',
+        component: () => import('@/views/messagePush/messagePushList'),
+        meta: { title: '推送列表', icon: 'activity_list' }
+      }
+    ]
+  },
+  {
     path: '/app/recommend',
     component: Layout,
     name: '应用推荐管理',

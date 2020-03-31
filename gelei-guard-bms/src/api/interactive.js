@@ -895,4 +895,12 @@ export function get_business_cooperation_list(data) {
     data
   })
 }
+// 获取消息列表
+export function get_manager_list(data) {
+  return request({
+    url: '/manager/voice/query/record',
+    method: 'post',
+    data
+  })
+}
 
