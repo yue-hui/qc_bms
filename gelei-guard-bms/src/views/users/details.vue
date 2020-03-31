@@ -25,8 +25,8 @@
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="会员状态">
-                    <span>{{ information.vip_info }}</span>
+                  <el-form-item label="生日">
+                    <span>{{ information.birthdate | formatter_date_with_point_string }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -82,13 +82,6 @@
                 <div class="grid-content bg-purple">
                   <el-form-item label="注册时间">
                     <span>{{ information.create_time | formatter_date_string }}</span>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="grid-content bg-purple">
-                  <el-form-item label="生日">
-                    <span>{{ information.birthdate | formatter_date_with_point_string }}</span>
                   </el-form-item>
                 </div>
               </el-col>

@@ -27,12 +27,6 @@
                 </el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="套餐对象" prop="is_member">
-              <el-radio-group v-model="form.is_member" size="mini">
-                <el-radio label="1">VIP会员用户</el-radio>
-                <el-radio label="0">非VIP会员用户</el-radio>
-              </el-radio-group>
-            </el-form-item>
           </el-form>
 
           <div class="diviser" />
@@ -45,6 +39,12 @@
             :rules="public_rules"
             label-width="120px"
             label-suffix=":">
+            <el-form-item label="套餐对象" prop="is_member">
+              <el-radio-group v-model="public_form.is_member" size="mini">
+                <el-radio label="1">VIP会员用户</el-radio>
+                <el-radio label="0">非VIP会员用户</el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="套餐时长" prop="valid_days">
               <el-input v-model.number="public_form.valid_days" size="mini">
                 <template slot="append">天</template>
@@ -215,11 +215,11 @@ export default {
         plan_id: '',
         plan_name: '',
         plan_type: '01',
-        member_type: '',
-        is_member: ''
+        member_type: ''
       },
       patriarch_member_types,
       public_form: {
+        is_member: '',
         valid_days: '',
         original_price: '',
         discount_price: 0,
@@ -246,12 +246,12 @@ export default {
         ],
         member_type: [
           { required: true, message: '会员类型为必选项', trigger: 'blur' }
-        ],
-        is_member: [
-          { required: true, message: '套餐对象为必选项', trigger: 'blur' }
         ]
       },
       public_rules: {
+        is_member: [
+          { required: true, message: '套餐对象为必选项', trigger: 'blur' }
+        ],
         valid_days: [
           { required: true, message: '套餐时长不能为空', trigger: 'blur' },
           { type: 'integer', min: 1, message: '套餐时长必须大于0天', trigger: 'blur' }
@@ -344,10 +344,10 @@ export default {
         plan_id: '',
         plan_name: '',
         plan_type: '01',
-        is_member: '',
         member_type: ''
       }
       this.public_form = {
+        is_member: '',
         valid_days: '',
         original_price: '',
         discount_price: 0,
@@ -371,11 +371,11 @@ export default {
         plan_id: current.plan_id,
         plan_name: current.plan_name,
         plan_type: current.plan_type,
-        is_member: current.is_member,
         member_type: current.member_type
       }
       const date_range = [new Date(current.discount_start_time), new Date(current.discount_end_time)]
       this.public_form = {
+        is_member: current.is_member,
         valid_days: current.valid_days,
         original_price: current.original_price,
         discount_price: current.discount_price,
@@ -468,10 +468,10 @@ export default {
       const options = {
         plan_name: this.form.plan_name,
         plan_type,
-        is_member: this.form.is_member,
         member_type: this.form.member_type
       }
       if (plan_type === '01') {
+        options['is_member'] = this.public_form.is_member
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
         options['discount_price'] = this.public_form.discount_price
