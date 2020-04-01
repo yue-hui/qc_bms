@@ -107,7 +107,7 @@
               @click="show_unsubscribe_record = !show_unsubscribe_record">(退订记录)</span></span>
         </div>
         <div class="card-block-body order-list">
-          <table v-if="transfer_member_list" class="table" border="0">
+          <table v-if="transfer_member_list.length !== 0" class="table" border="0">
             <tr>
               <th>会员类型</th>
               <th>会员有效时间</th>
