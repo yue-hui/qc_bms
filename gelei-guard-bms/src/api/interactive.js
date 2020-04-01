@@ -898,7 +898,7 @@ export function get_business_cooperation_list(data) {
 // 获取语音短信
 export function get_manager_voice_list(data) {
   return request({
-    url: '/manager/voice/query/record',
+    url: '/greenguard/manager/voice/query/record',
     method: 'post',
     data
   })
@@ -906,7 +906,7 @@ export function get_manager_voice_list(data) {
 // 获取文本短信
 export function get_manager_sms_list(data) {
   return request({
-    url: '/manager/sms/query/record',
+    url: '/greenguard/manager/sms/query/record',
     method: 'post',
     data
   })
