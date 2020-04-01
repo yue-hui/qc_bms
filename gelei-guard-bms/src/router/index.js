@@ -138,7 +138,7 @@ export const constantRouterMap = [
     path: '/messagePush/index',
     component: Layout,
     name: '消息推送',
-    redirect: '/messagePush/',
+    redirect: '/messagePush/index/smsList',
     meta: { title: '短信记录', icon: 'analysis' },
     children: [
       {
