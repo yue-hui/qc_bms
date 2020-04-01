@@ -143,13 +143,13 @@ export const constantRouterMap = [
     children: [
       {
         path: 'smsList',
-        name: '文本短信',
+        name: '文本',
         component: () => import('@/views/messagePush/messageSmsList'),
         meta: { title: '文本短信', icon: 'activity_list' }
       },
       {
         path: 'voiceList',
-        name: '语音短信',
+        name: '语音',
         component: () => import('@/views/messagePush/messageVoiceList'),
         meta: { title: '语音短信', icon: 'activity_list' }
       }
