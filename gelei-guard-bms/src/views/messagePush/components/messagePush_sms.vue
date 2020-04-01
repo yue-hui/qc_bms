@@ -10,19 +10,13 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            label="短信平台ID"
-            width="200"
-            prop="voice_sms_tid" />
-          <el-table-column
-            align="center"
             label="接收者手机号"
             prop="phone"
             width="100" />
           <el-table-column
             align="center"
             label="内容"
-            prop="content"
-            width="350" />
+            prop="content" />
           <el-table-column
             align="center"
             label="发送状态"
@@ -41,11 +35,8 @@
           <el-table-column
             align="center"
             label="返回结果"
-            prop="result" />
-          <el-table-column
-            align="center"
-            label="备注"
-            prop="remark" />
+            prop="result"
+            width="300" />
         </el-table>
         <el-pagination
           :current-page="page"
