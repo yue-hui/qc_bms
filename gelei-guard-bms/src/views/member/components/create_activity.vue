@@ -11,6 +11,18 @@
             <el-form-item label="活动名称" prop="activity_name">
               <el-input v-model="form.activity_name" size="mini" />
             </el-form-item>
+            <el-form-item label="套餐选择" prop="plan_id">
+              <el-select v-model="form.plan_id" size="mini" placeholder="请选择套餐" @change="change_plan">
+                <el-option
+                  v-for="plan in plan_list"
+                  :key="plan.value"
+                  :label="plan.label"
+                  :value="plan.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="会员类型" prop="member_type_label">
+              <span class="label-text">{{ form.member_type_label }}</span>
+            </el-form-item>
             <el-form-item label="活动类型" prop="activity_type">
               <el-radio-group v-model="form.activity_type" size="mini">
                 <el-radio
@@ -20,15 +32,6 @@
                   :label="type.value">{{ type.label }}
                 </el-radio>
               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="套餐选择" prop="plan_id">
-              <el-select v-model="form.plan_id" size="mini" placeholder="请选择套餐" @change="change_plan">
-                <el-option
-                  v-for="plan in plan_list"
-                  :key="plan.value"
-                  :label="plan.label"
-                  :value="plan.value" />
-              </el-select>
             </el-form-item>
             <el-form-item label="套餐时长">
               <span v-if="current_plan.valid_days" class="label-text">{{ current_plan.valid_days }}天</span>
@@ -83,7 +86,8 @@
 
 <script>
 import { add_member_activity, get_member_plan_list } from '@/api/interactive'
-import { MEMBER_ACTIVITY_TYPES } from '@/utils/constant'
+import { MEMBER_ACTIVITY_TYPES, PATRIARCH_MEMBER_TYPES } from '@/utils/constant'
+import { get_value_from_map_list } from '@/utils/common'
 
 export default {
   name: 'CreateActivity',
@@ -108,6 +112,7 @@ export default {
         activity_name: '',
         activity_type: '01',
         plan_id: '',
+        member_type_label: '',
         phones: '',
         notify_msg: '',
         is_notify: ''
@@ -222,12 +227,15 @@ export default {
         current_plan = {
           valid_days: plan[0].valid_days
         }
+        this.form.member_type_label = get_value_from_map_list(plan[0].member_type, PATRIARCH_MEMBER_TYPES)
       } else {
         current_plan = {
           valid_days: ''
         }
+        this.form.member_type_label = ''
       }
       this.current_plan = current_plan
+      // this.form.member_type_label = ''
     },
     fetch_plan_list() {
       const options = {

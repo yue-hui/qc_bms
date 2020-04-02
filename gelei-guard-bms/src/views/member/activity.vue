@@ -37,6 +37,16 @@
           <el-table-column
             align="center"
             label="套餐名称"
+            prop="plan_name"
+            width="180" />
+          <el-table-column
+            align="center"
+            label="会员类型"
+            prop="member_type_label"
+            width="180" />
+          <el-table-column
+            align="center"
+            label="活动类型"
             prop="activity_type_label"
             width="180" />
           <el-table-column
@@ -94,9 +104,9 @@
 <script>
 import createActivity from './components/create_activity'
 import editActivity from './components/edit_activity'
-import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_TIME_FORMAT, PATRIARCH_MEMBER_TYPES, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { get_member_activity_list } from '@/api/interactive'
-import { date_formatter } from '@/utils/common'
+import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
@@ -157,9 +167,11 @@ export default {
         if (res.status === 0) {
           this.activity_list = res.data.map(r => {
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
+            const member_type_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES)
             return {
               ...r,
-              create_time_label
+              create_time_label,
+              member_type_label
             }
           })
           this.total = res.total_count
