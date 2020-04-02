@@ -278,6 +278,7 @@ export default {
         is_listing_map_list[value] = label
       })
 
+      const now_timestamp = new Date().getTime()
       return data.map(r => {
         let begin_time_label, end_time_label
         if (r.ad_position === '02') {
@@ -287,11 +288,18 @@ export default {
           begin_time_label = date_formatter(r.begin_time, DATE_TIME_FORMAT)
           end_time_label = date_formatter(r.end_time, DATE_TIME_FORMAT)
         }
-        return {
+        let is_listing_label
+        if (now_timestamp >= r.begin_time && now_timestamp <= r.end_time ) {
+          is_listing_label = is_listing_map_list[r.is_listing]
+        } else {
+          // 不在时间范围内
+          is_listing_label = is_listing_map_list['0']
+        }
+       return {
           ...r,
           begin_time_label,
           end_time_label,
-          is_listing_label: is_listing_map_list[r.is_listing],
+          is_listing_label,
           ad_type_label: ad_type_map_list[r.ad_type],
           jump_target_label: jump_target_map_list[r.jump_target],
           ad_position_label: ad_position_map_list[r.ad_position]
