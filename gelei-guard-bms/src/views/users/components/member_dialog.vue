@@ -15,7 +15,7 @@
       <el-table-column align="center" prop="member_type_label" label="会员类型" />
       <el-table-column align="center" prop="acquisition_type" label="获得方式" />
       <el-table-column align="center" prop="actual_price" label="交易金额(元)" />
-      <el-table-column align="center" prop="valid_str" label="会员有效期" />
+      <el-table-column align="center" prop="valid_days" label="会员天数" />
     </el-table>
     <el-pagination
       :current-page="page"

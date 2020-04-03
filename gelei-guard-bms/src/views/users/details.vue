@@ -101,10 +101,8 @@
 
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
-          <span>已开通会员信息
-            <span
-              class="order-unsubscribe-history"
-              @click="show_unsubscribe_record = !show_unsubscribe_record">(退订记录)</span></span>
+          <span>会员信息</span>
+          <span class="order-unsubscribe-history" @click="show_unsubscribe_record = !show_unsubscribe_record">(退订记录)</span>
         </div>
         <div class="card-block-body order-list">
           <table v-if="transfer_member_list.length !== 0" class="table" border="0">
@@ -208,13 +206,7 @@ export default {
         if (res.status === 0) {
           this.information = res.data
           this.transfer_member_list = res.data.member_list.map(r => {
-            let status_label
-            if (r.order_ctcc_sp_status) {
-              status_label = '订购中'
-            } else {
-              status_label = get_value_from_map_list(r.status, ORDERED_MEMBER_STATUS_LABEL)
-            }
-
+            const status_label = get_value_from_map_list(r.status, ORDERED_MEMBER_STATUS_LABEL)
             const valid_date_label = date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT) + ' - ' + date_formatter(r.end_time, DATE_FORMAT_WITH_POINT)
             return {
               ...r,

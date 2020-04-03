@@ -217,7 +217,7 @@
 <script>
 import packageCreateEdit from './components/package_create_edit'
 import {
-  DATE_TIME_FORMAT,
+  DATE_TIME_FORMAT, MEMBER_PACKAGE_OBJECTS,
   MEMBER_TYPES,
   PACKAGE_STATUS,
   PACKAGE_TYPE,
@@ -293,7 +293,7 @@ export default {
           discount_end_time_label = '-'
         }
         const plan_type_label = r.plan_type === '01' ? '公开' : r.plan_type === '02' ? '不公开' : '未知'
-        const is_member_label = r.is_member === '1' ? 'VIP会员用户' : '非VIP会员用户'
+        const is_member_label = get_value_from_map_list(r.is_member, MEMBER_PACKAGE_OBJECTS)
         const member_type_label = get_value_from_map_list(r.member_type, this.patriarch_member_types)
         return {
           ...r,

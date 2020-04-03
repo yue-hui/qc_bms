@@ -41,8 +41,7 @@
             label-suffix=":">
             <el-form-item label="套餐对象" prop="is_member">
               <el-radio-group v-model="public_form.is_member" size="mini">
-                <el-radio label="1">VIP会员用户</el-radio>
-                <el-radio label="0">非VIP会员用户</el-radio>
+                <el-radio v-for="(item, index) in member_package_objects" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="套餐时长" prop="valid_days">
@@ -163,7 +162,7 @@
 <script>
 import { add_member_plan, update_member_plan } from '@/api/interactive'
 import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
-import { PATRIARCH_MEMBER_TYPES } from '@/utils/constant'
+import { MEMBER_PACKAGE_OBJECTS, PATRIARCH_MEMBER_TYPES } from '@/utils/constant'
 
 export default {
   name: 'PackageCreateEdit',
@@ -208,6 +207,7 @@ export default {
     const patriarch_member_types = PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1)
     return {
       visiable_height: '',
+      member_package_objects: MEMBER_PACKAGE_OBJECTS,
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
       save_btn_label: '保存',
       is_busy: false,

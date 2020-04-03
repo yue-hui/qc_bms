@@ -8,7 +8,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">广告名称:</el-col>
                 <el-col :span="16">
-                  <el-input v-model="query_sets.ad_name" size="mini" placeholder="广告名称" clearable @change="query_condition_change" />
+                  <el-input
+                    v-model="query_sets.ad_name"
+                    size="mini"
+                    placeholder="广告名称"
+                    clearable
+                    @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
@@ -18,7 +23,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">广告类型:</el-col>
                 <el-col :span="16">
-                  <el-select v-model="query_sets.ad_type" size="mini" placeholder="广告类型" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.ad_type"
+                    size="mini"
+                    placeholder="广告类型"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in advertisement_type"
                       :key="item.value"
@@ -35,7 +45,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">广告位置:</el-col>
                 <el-col :span="16">
-                  <el-select v-model="query_sets.ad_position" size="mini" placeholder="广告位置" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.ad_position"
+                    size="mini"
+                    placeholder="广告位置"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in advertisement_locations"
                       :key="item.value"
@@ -51,7 +66,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">状态:</el-col>
                 <el-col :span="16">
-                  <el-select v-model="query_sets.is_listing" size="mini" placeholder="状态" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.is_listing"
+                    size="mini"
+                    placeholder="状态"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in advertisement_status"
                       :key="item.value"
@@ -67,7 +87,12 @@
               <el-row>
                 <el-col :span="8" class="order-number-list">跳转平台:</el-col>
                 <el-col :span="16">
-                  <el-select v-model="query_sets.jump_target" size="mini" placeholder="跳转平台" clearable @change="query_condition_change">
+                  <el-select
+                    v-model="query_sets.jump_target"
+                    size="mini"
+                    placeholder="跳转平台"
+                    clearable
+                    @change="query_condition_change">
                     <el-option
                       v-for="item in advertisement_platform"
                       :key="item.value"
@@ -289,13 +314,13 @@ export default {
           end_time_label = date_formatter(r.end_time, DATE_TIME_FORMAT)
         }
         let is_listing_label
-        if (now_timestamp >= r.begin_time && now_timestamp <= r.end_time ) {
+        if (now_timestamp >= r.begin_time && now_timestamp <= r.end_time) {
           is_listing_label = is_listing_map_list[r.is_listing]
         } else {
           // 不在时间范围内
           is_listing_label = is_listing_map_list['0']
         }
-       return {
+        return {
           ...r,
           begin_time_label,
           end_time_label,

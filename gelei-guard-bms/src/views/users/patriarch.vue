@@ -200,7 +200,7 @@
             prop="channel_name" />
           <el-table-column
             align="center"
-            label="当前会员类型"
+            label="会员类型"
             prop="vip_label"
             width="220" />
           <el-table-column
@@ -244,8 +244,17 @@
           @size-change="table_size_change" />
       </div>
     </div>
-    <recharge-dialog :visible="recharge_dialog_visible" :member-types="patriarch_member_types" :uid="current_uid" @callback="close_recharge_dialog" />
-    <member-dialog :visible="member_dialog_visible" :uid="current_uid" @callback="close_member_dialog" />
+
+    <recharge-dialog
+      :visible="recharge_dialog_visible"
+      :member-types="patriarch_member_types"
+      :uid="current_uid"
+      @callback="close_recharge_dialog" />
+
+    <member-dialog
+      :visible="member_dialog_visible"
+      :uid="current_uid"
+      @callback="close_member_dialog" />
   </div>
 </template>
 
@@ -255,8 +264,12 @@ import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_
 import {
   DATE_FORMAT,
   DATE_FORMAT_WITH_POINT,
-  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, GRADE_LIST,
+  DATE_TIME_FORMAT,
+  EXPORT_MAX_RECORD_LENGTH,
+  EXPORT_OVER_MAX_TIPS_REMINDER,
+  GRADE_LIST,
   PATRIARCH_MEMBER_TYPES,
+  SYSTEM_PATRIARCH_MEMBER_TYPES_IDS,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import rechargeDialog from './components/recharge_dialog'
@@ -439,8 +452,10 @@ export default {
         const table_data = []
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
+        const senior_member = PATRIARCH_MEMBER_TYPES.find(r => r.value === '02')
         res.data.forEach((r, i, _a) => {
-          let vip_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, '')
+          // 会员类型
+          let vip_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, senior_member.label)
           if (r.member_status === '00') {
             // vip_label += '(待生效)'
           } else if (r.member_status === '01') {
@@ -488,24 +503,24 @@ export default {
             this.$notify(options)
             return
           }
+          const senior_member = PATRIARCH_MEMBER_TYPES.find(r => r.value === '02')
           const remote_data = res.data.map(r => {
-            let member_type_label = ''
-            if (r.member_type === '01') {
-              member_type_label = '体验用户'
-            } else if (r.member_type === '02') {
-              member_type_label = 'VIP会员'
-            }
+            // 会员类型
+            const member_type_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, senior_member.label)
+            // 当前会员类型(带有效期的)
+            const system_member_types = PATRIARCH_MEMBER_TYPES.filter(r => SYSTEM_PATRIARCH_MEMBER_TYPES_IDS.indexOf(r.value) !== -1)
+            let current_member_type_label = get_value_from_map_list(r.current_member_type, system_member_types, senior_member.label)
             if (r.member_status === '00') {
-              // member_type_label += '(待生效)'
+              // current_member_type_label += '(待生效)'
             } else if (r.member_status === '01') {
               if (r.begin_time && r.end_time) {
-                member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+                current_member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
                   '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
               } else {
-                // member_type_label += '(已生效)'
+                // current_member_type_label += '(已生效)'
               }
             } else if (r.member_status === '02') {
-              // member_type_label += '(已失效)'
+              // current_member_type_label += '(已失效)'
             }
             const child_sex_label = r.child_sex === '1' ? '男' : '女'
             const child_grade = '' + r.child_grade
@@ -514,7 +529,8 @@ export default {
               ...r,
               child_sex_label,
               child_grade_label,
-              member_type_label
+              member_type_label,
+              current_member_type_label
             }
           })
           this.export_excel(remote_data)
@@ -556,12 +572,12 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-家长端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型',
+        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型', '当前会员类型',
           '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',
           '孩子性别', '孩子出生日期', '孩子年级']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
         const filter_val = ['nick_name', 'phone', 'create_time', 'reg_from_label', 'channel_name', 'member_type_label',
-          'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
+          'current_member_type_label', 'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
           'child_sex_label', 'child_birthdate', 'child_grade_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {

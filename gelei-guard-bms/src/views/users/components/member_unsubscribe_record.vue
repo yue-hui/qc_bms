@@ -104,7 +104,7 @@ export default {
             }
           })
           this.total = res.total_count
-        }else {
+        } else {
           this.total = 0
           this.$message.error(res.message)
         }

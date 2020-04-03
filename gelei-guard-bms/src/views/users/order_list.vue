@@ -230,8 +230,8 @@ import {
   COMMODITY_TYPE,
   DATE_TIME_FORMAT,
   ORDER_MANAGEMENT_LIST_NAME,
-  ORDER_STATUS_LIST, PATRIARCH_MEMBER_TYPES, TABLE_PAGE_SIEZS_LIST,
-  TRANSCATION_MODE
+  PATRIARCH_MEMBER_TYPES,
+  TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 // import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
@@ -258,8 +258,8 @@ export default {
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
-      order_status_list: ORDER_STATUS_LIST,
-      pay_type_mode: TRANSCATION_MODE,
+      order_status_list: [],  // 订单状态
+      pay_type_mode: [],  // 交易方式
       patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
       order_data: [],
       download_loading: false,
