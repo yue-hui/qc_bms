@@ -187,7 +187,7 @@
             prop="order_amount_label" />
           <el-table-column
             align="center"
-            label="支付方式"
+            label="交易方式"
             prop="pay_type" />
           <el-table-column
             align="center"
@@ -258,8 +258,8 @@ export default {
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
-      order_status_list: [],  // 订单状态
-      pay_type_mode: [],  // 交易方式
+      order_status_list: [], // 订单状态
+      pay_type_mode: [], // 交易方式
       patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
       order_data: [],
       download_loading: false,
