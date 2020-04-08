@@ -217,7 +217,7 @@
 <script>
 import packageCreateEdit from './components/package_create_edit'
 import {
-  DATE_TIME_FORMAT, MEMBER_PACKAGE_OBJECTS,
+  DATE_TIME_FORMAT,
   MEMBER_PACKAGE_OBJECTS,
   PACKAGE_STATUS,
   PACKAGE_TYPE,
