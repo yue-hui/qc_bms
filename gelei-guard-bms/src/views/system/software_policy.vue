@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import SoftwarePolicy from './components/create_and_edit_software_policy'
 
@@ -98,7 +98,6 @@ export default {
         item_name: ''
       },
       packages: PACKAGE_TYPE,
-      member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
       action: 0,
       parameter: [],

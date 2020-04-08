@@ -259,18 +259,6 @@ export const PACKAGE_TYPE = [
   }
 ]
 
-// 套餐对象
-export const MEMBER_TYPES = [
-  {
-    value: '0',
-    label: '非VIP会员用户'
-  },
-  {
-    value: '1',
-    label: 'VIP会员用户'
-  }
-]
-
 // 套餐当前状态
 export const PACKAGE_STATUS = [
   {

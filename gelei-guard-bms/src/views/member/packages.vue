@@ -36,7 +36,7 @@
                 <el-col :span="16">
                   <el-select v-model="query_sets.is_member" size="mini" clearable placeholder="套餐对象" @change="query_condition_change">
                     <el-option
-                      v-for="member in member_types"
+                      v-for="member in member_package_objects"
                       :key="member.value"
                       :label="member.label"
                       :value="member.value" />
@@ -218,7 +218,7 @@
 import packageCreateEdit from './components/package_create_edit'
 import {
   DATE_TIME_FORMAT, MEMBER_PACKAGE_OBJECTS,
-  MEMBER_TYPES,
+  MEMBER_PACKAGE_OBJECTS,
   PACKAGE_STATUS,
   PACKAGE_TYPE,
   PATRIARCH_MEMBER_TYPES,
@@ -246,7 +246,7 @@ export default {
       },
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
       packages: PACKAGE_TYPE,
-      member_types: MEMBER_TYPES,
+      member_package_objects: MEMBER_PACKAGE_OBJECTS,
       status_list: PACKAGE_STATUS,
       patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
       action: 0,

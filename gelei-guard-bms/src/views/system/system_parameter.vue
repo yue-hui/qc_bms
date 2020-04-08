@@ -89,7 +89,7 @@
 
 <script>
 import CreateAndEditParameter from './components/create_and_edit_parameter'
-import { MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { delete_sys_configuration, get_sys_configuration_list } from '@/api/interactive'
 
@@ -110,7 +110,6 @@ export default {
         p_type_name: ''
       },
       packages: PACKAGE_TYPE,
-      member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
       action: 0,
       parameter: [],
