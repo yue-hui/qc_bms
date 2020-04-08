@@ -292,7 +292,7 @@
             </div>
           </div>
           <div class="data-item">
-            <div class="item-row item-title">订单成交量及占比</div>
+            <div class="item-row item-title">订单类型及支付渠道占比</div>
             <div class="item-row item-data-section">
               <p class="item-subscribe">
                 <span>
@@ -317,7 +317,7 @@
                 <ve-pie
                   :data="order_radio_data"
                   :legend-visible="false"
-                  :extend="chart_extend"
+                  :extend="order_chart_extend"
                   :settings="chart_settings_array"
                   height="205px" />
               </div>
@@ -430,6 +430,24 @@ export default {
         color: echart_colors,
         legend: {
           orient: 'vertical',
+          icon: "circle",
+          x: '244',
+          y: 'center',
+          textStyle: {
+            color: '#A0A0A0',
+            fontSize: 12
+          }
+        },
+        series: {
+          type: 'pie',
+          center: [90, '50%']
+        }
+      },
+      order_chart_extend: {
+        color: echart_colors,
+        legend: {
+          orient: 'vertical',
+          icon: "circle",
           x: '244',
           y: 'center',
           textStyle: {
@@ -540,7 +558,7 @@ export default {
           columns: ['name', 'value'],
           rows: device_data
         }
-        // 订单成交量及占比
+        // 订单类型及支付渠道占比
         const field_filter_list = ['IOS', '微信', '支付宝', '电信']
         const order_data = [
           {
@@ -585,6 +603,22 @@ export default {
           rows: order_data
         }
         this.chart_settings_array.level[1] = field_filter_list
+        this.order_chart_extend.legend = [
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '244',
+            y: 'center',
+            data: ['普通会员', '高级会员']
+          },
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '350',
+            y: 'center',
+            data: field_filter_list
+          }
+        ]
       } else {
         this.increased_user_data = {
           columns: ['name', 'value'],
@@ -879,7 +913,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             flex-direction: column;
             vertical-align: bottom;
             align-items: flex-end;
-            margin-top: 41px;
+            margin-top: 21px;
 
             .item-subscribe {
               width: 100%;
@@ -941,7 +975,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
 
                   .item-label {
                     font-family: PingFangSC-Regular, 微软雅黑, serif;
-                    font-size: 14px;
+                    font-size: 12px;
                     color: #454545;
                     width: 46px;
                     display: inline-block;
@@ -955,7 +989,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                   .total-count {
                     padding-left: 7px;
                     font-family: PingFangSC-Regular, 微软雅黑, serif;
-                    font-size: 16px;
+                    font-size: 14px;
                     color: #454545;
                     margin-bottom: 10px;
                   }
