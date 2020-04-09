@@ -336,9 +336,10 @@
             :name="line_chart_tab.name"
             :label="line_chart_tab.label">
             <div class="line-chart-area">
-              <ve-line
+              <ve-histogram
                 :ref="'chart' + line_chart_tab.name"
                 :data="dimension_data"
+                :extend="dimension_chart_extend"
                 :settings="chart_settings"
                 class="line-chart-style" />
             </div>
@@ -430,7 +431,7 @@ export default {
         color: echart_colors,
         legend: {
           orient: 'vertical',
-          icon: "circle",
+          icon: 'circle',
           x: '244',
           y: 'center',
           textStyle: {
@@ -447,7 +448,7 @@ export default {
         color: echart_colors,
         legend: {
           orient: 'vertical',
-          icon: "circle",
+          icon: 'circle',
           x: '244',
           y: 'center',
           textStyle: {
@@ -459,6 +460,9 @@ export default {
           type: 'pie',
           center: [90, '50%']
         }
+      },
+      dimension_chart_extend: {
+        barMaxWidth: 30
       },
       increased_user_data: {},
       device_ratio_data: {},

@@ -2,10 +2,10 @@
   <div class="component-card">
     <el-tabs v-model="active_name" type="border-card" @tab-click="tab_change">
       <el-tab-pane label="新增注册用户" name="1">
-        <ve-line ref="chart1" :data="options" />
+        <ve-histogram ref="chart1" :extend="chart_extend" :data="options" />
       </el-tab-pane>
       <el-tab-pane label="新增绑定用户" name="2">
-        <ve-line ref="chart2" :data="options" />
+        <ve-histogram ref="chart2" :extend="chart_extend" :data="options" />
       </el-tab-pane>
       <!--<el-tab-pane label="新增绑定设备" name="3">
         <ve-line ref="chart3" :data="options" />
@@ -36,7 +36,10 @@ export default {
   data: function() {
     return {
       active_name: '1',
-      options: {}
+      options: {},
+      chart_extend: {
+        barMaxWidth: 30
+      }
     }
   },
   computed: {},
