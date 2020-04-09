@@ -104,6 +104,10 @@ export const bms_platform_classification = [
         {
           value: '22',
           label: 'OPPO孩子端'
+        },
+        {
+          value: '42',
+          label: '小格雷定制机'
         }
       ],
       update_models: [
@@ -142,6 +146,10 @@ export const bms_platform_classification = [
         {
           value: '23',
           label: 'OPPO中间件'
+        },
+        {
+          value: '43',
+          label: '小格雷中间件'
         }
       ],
       update_models: [
@@ -201,17 +209,25 @@ export const platforms = [
   //   label: '华为孩子端'
   // },
   {
+    value: '42',
+    label: '小格雷定制机'
+  },
+  {
     value: '13',
     label: 'vivo中间件'
   },
   {
     value: '23',
     label: 'oppo中间件'
-  }
+  },
   // {
   //   value: '33',
   //   label: '华为中间件'
   // }
+  {
+    value: '43',
+    label: '小格雷中间件'
+  }
 ]
 
 // 升级方式
@@ -245,17 +261,25 @@ export const platform_version_instructions = [
   //   label: '华为孩子端'
   // },
   {
+    value: '42',
+    label: '小格雷定制机'
+  },
+  {
     value: '13',
     label: '孩子端+vivo中间件'
   },
   {
     value: '23',
     label: '孩子端+oppo中间件'
-  }
+  },
   // {
   //   value: '33',
   //   label: '孩子端+华为中间件'
   // }
+  {
+    value: '43',
+    label: '孩子端+小格雷中间件'
+  }
 ]
 
 export const help_question_status = [
