@@ -106,28 +106,29 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
       file = files[i]
       key = file.fieldname
       filestream = fs.createReadStream(config.UPLOAD_DIR_PATH + '/' + file.originalname)
-      formData.append('file', filestream, {...file})
+      formData.append('file', filestream, { ...file })
     }
   }
 }
 
 app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
+  // Proxy Request Header
+  var reqConType = req.headers['content-type']
+  var reqUserAgent = req.headers['user-agent']
+  var reqXForwardedFor = req.headers['x-forwarded-for'] || req.ip
+  var reqHeaders = {
+    'Content-Type': reqConType,
+    'User-Agent': reqUserAgent,
+    'X-Forwarded-For': reqXForwardedFor
+  }
   try {
     var method = req.method.toLowerCase()
     var TransferReq = config.baseURL + req.originalUrl.split('api')[1]
     if (method === 'get') {
       // GET Request
       var reqParam = req.query
-      var reqUserAgent = req.headers['user-agent']
-      noderequest(TransferReq, reqParam, method, reqConType, res)
+      noderequest(TransferReq, reqParam, method, reqHeaders, res)
     } else if (method === 'post') {
-      // POST Request
-      var reqConType = req.headers['content-type']
-      var reqUserAgent = req.headers['user-agent']
-      var reqHeaders = {
-        'Content-Type': reqConType,
-        'User-Agent': reqUserAgent
-      }
       var contentTypeLower = reqConType.toLowerCase()
       if (contentTypeLower.indexOf('application/json') !== -1) {
         // json
