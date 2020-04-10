@@ -115,12 +115,15 @@ app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
   // Proxy Request Header
   var reqConType = req.headers['content-type']
   var reqUserAgent = req.headers['user-agent']
-  var reqXForwardedFor = req.headers['x-forwarded-for'] || req.ip
+  var reqXForwardedFor = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+  var reqXRealIP = req.headers['x-real-ip']
   var reqHeaders = {
     'Content-Type': reqConType,
     'User-Agent': reqUserAgent,
-    'X-Forwarded-For': reqXForwardedFor
+    'X-Forwarded-For': reqXForwardedFor,
+    'X-Real-IP': reqXRealIP
   }
+  console.log('request headers: ', reqHeaders)
   try {
     var method = req.method.toLowerCase()
     var TransferReq = config.baseURL + req.originalUrl.split('api')[1]
