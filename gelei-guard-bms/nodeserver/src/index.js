@@ -33,7 +33,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage })
 
-function noderequest(TransferReq, reqParam, method, reqConType, res) {
+function noderequest(TransferReq, reqParam, method, headers, res) {
   if (!reqParam.sign) {
     res.send({ message: 'node sign miss 1!', status: -1 })
     return
@@ -47,7 +47,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
   request({
     url: TransferReq,
     body: encryptParams,
-    headers: reqConType,
+    headers: headers,
     method: method,
     json: true
   }, function(error, response, data) { // 错误,响应对象,请求回来的数据
@@ -56,7 +56,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
   })
 }
 
-function noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res) {
+function noderequestwithformdata(TransferReq, reqParam, method, headers, files, res) {
   if (!reqParam.sign) {
     res.send({ message: 'node sign miss 2!', status: -1 })
     return
@@ -69,7 +69,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
 
   r = request({
     url: TransferReq,
-    headers: reqConType,
+    headers: headers,
     method: method,
     formData,
     json: true
@@ -112,6 +112,18 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
 }
 
 app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
+  // Proxy Request Header
+  var reqConType = req.headers['content-type']
+  var reqUserAgent = req.headers['user-agent']
+  var reqXForwardedFor = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+  var reqXRealIP = req.headers['x-real-ip']
+  var reqHeaders = {
+    'Content-Type': reqConType,
+    'User-Agent': reqUserAgent,
+    'X-Forwarded-For': reqXForwardedFor,
+    'X-Real-IP': reqXRealIP
+  }
+  console.log('request headers: ', reqHeaders)
   try {
     var method = req.method.toLowerCase()
     var TransferReq = config.baseURL + req.originalUrl.split('api')[1]
@@ -119,15 +131,8 @@ app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
       // GET Request
       var reqParam = req.query
       var reqUserAgent = req.headers['user-agent']
-      noderequest(TransferReq, reqParam, method, reqConType, res)
+      noderequest(TransferReq, reqParam, method, reqHeaders, res)
     } else if (method === 'post') {
-      // POST Request
-      var reqConType = req.headers['content-type']
-      var reqUserAgent = req.headers['user-agent']
-      var reqHeaders = {
-        'Content-Type': reqConType,
-        'User-Agent': reqUserAgent
-      }
       var contentTypeLower = reqConType.toLowerCase()
       if (contentTypeLower.indexOf('application/json') !== -1) {
         // json
