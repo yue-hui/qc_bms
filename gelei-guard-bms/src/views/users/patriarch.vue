@@ -334,11 +334,7 @@ export default {
       this.fetch_register_source_list()
     },
     blur_search(e) {
-      if (this.query_set.begin_valid_days === '' && this.query_set.end_valid_days === '') {
-        // 空数据无需查询
-      } else {
-        this.search(e)
-      }
+      this.search(e)
     },
     search() {
       if (this.query_set.begin_valid_days && this.query_set.end_valid_days) {
