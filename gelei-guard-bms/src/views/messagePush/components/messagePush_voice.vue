@@ -124,7 +124,6 @@ export default {
     },
     reload() {
       const config = this.get_pagination_config()
-      console.log(this.conditions)
       for (const query_key in this.conditions) {
         if (this.conditions[query_key]) {
           config[query_key] = this.conditions[query_key]
@@ -135,7 +134,6 @@ export default {
     load_data(config) {
       this.loading = true
       get_manager_voice_list(config).then(res => {
-        console.log(res)
         this.data_list = res.data.rows.map(r => {
           // const time_transfer = date_formatter(r.create_time)
           return {

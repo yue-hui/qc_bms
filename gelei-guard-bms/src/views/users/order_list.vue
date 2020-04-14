@@ -205,8 +205,7 @@ import {
   COMMODITY_TYPE,
   DATE_TIME_FORMAT,
   ORDER_MANAGEMENT_LIST_NAME,
-  ORDER_STATUS_LIST, TABLE_PAGE_SIEZS_LIST,
-  TRANSCATION_MODE
+  TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 // import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
@@ -232,8 +231,8 @@ export default {
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
-      order_status_list: ORDER_STATUS_LIST,
-      pay_type_mode: TRANSCATION_MODE,
+      order_status_list: [],
+      pay_type_mode: [],
       order_data: [],
       download_loading: false,
       page: 1,

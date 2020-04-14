@@ -243,50 +243,6 @@ export const COMMODITY_TYPE = [
   }
 ]
 
-// 订单状态
-export const ORDER_STATUS_LIST = [
-  {
-    value: 1,
-    label: '所有'
-  },
-  {
-    value: 2,
-    label: '待支付'
-  },
-  {
-    value: 3,
-    label: '已完成'
-  }
-]
-
-// 交易方式
-export const TRANSCATION_MODE = [
-  {
-    value: 1,
-    label: '所有'
-  },
-  {
-    value: 2,
-    label: '待支付'
-  },
-  {
-    value: 3,
-    label: 'IOS内购'
-  },
-  {
-    value: 4,
-    label: '支付宝'
-  },
-  {
-    value: 5,
-    label: '微信'
-  },
-  {
-    value: 6,
-    label: '营销抵扣'
-  }
-]
-
 // 套餐类型
 export const PACKAGE_TYPE = [
   {
@@ -300,18 +256,6 @@ export const PACKAGE_TYPE = [
   {
     value: '02',
     label: '不公开'
-  }
-]
-
-// 套餐对象
-export const MEMBER_TYPES = [
-  {
-    value: '0',
-    label: '非VIP会员用户'
-  },
-  {
-    value: '1',
-    label: 'VIP会员用户'
   }
 ]
 
@@ -452,15 +396,54 @@ export const OPERATORS_ACTIVITY_TYPES = [
   }
 ]
 
-// 会员类型
+// 业务会员类型
 export const PATRIARCH_MEMBER_TYPES = [
   {
     value: '01',
     label: '体验用户'
   },
   {
+    value: '04',
+    label: '电信会员'
+  },
+  {
     value: '02',
-    label: 'VIP会员'
+    label: '高级会员'
+  },
+  {
+    value: '03',
+    label: '普通会员'
+  }
+]
+
+// 系统会员类型ID列表
+export const SYSTEM_PATRIARCH_MEMBER_TYPES_IDS = ['02', '03']
+
+// 套餐对象（会员减免）
+export const MEMBER_PACKAGE_OBJECTS = [
+  {
+    value: '1',
+    label: '付费用户'
+  },
+  {
+    value: '0',
+    label: '非付费用户'
+  }
+]
+
+// 已开通会员信息
+export const ORDERED_MEMBER_STATUS_LABEL = [
+  {
+    value: '00',
+    label: '待生效'
+  },
+  {
+    value: '01',
+    label: '生效中'
+  },
+  {
+    value: '02',
+    label: '已失效'
   }
 ]
 
@@ -473,5 +456,33 @@ export const DEVICE_USER_INTERVALS = [
   {
     value: '02',
     label: '每天'
+  }
+]
+
+// 孩子设备类型
+export const DEVICE_TYPE_LIST = [
+  {
+    value: '01',
+    label: 'PC'
+  },
+  {
+    value: '02',
+    label: 'IOS'
+  },
+  {
+    value: '03',
+    label: 'Android'
+  }
+]
+
+// 孩子设备绑定状态
+export const CHILD_BIND_TYPE_STATUS = [
+  {
+    value: '1',
+    label: '解绑'
+  },
+  {
+    value: '0',
+    label: '绑定'
   }
 ]

@@ -190,7 +190,7 @@
 
 <script>
 import packageCreateEdit from './components/package_create_edit'
-import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_TIME_FORMAT, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { delete_member_plan, get_member_plan_list, update_member_plan } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
 import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
@@ -213,7 +213,6 @@ export default {
       },
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
       packages: PACKAGE_TYPE,
-      member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
       action: 0,
       packages_list: [],

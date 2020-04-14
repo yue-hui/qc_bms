@@ -24,12 +24,10 @@
     </div>
 
     <div class="content-body">
-
       <!--应用列表-->
       <message-push-sms
         ref="comb_list"
         :conditions="query_condition" />
-
     </div>
   </div>
 </template>
@@ -79,7 +77,6 @@ export default {
       })
     },
     change_messagePush_phone(reco_style) {
-      console.log(reco_style)
       this.messagePush_phone = reco_style
       this.change_combination_condition()
     },

@@ -79,7 +79,6 @@ export default {
       })
     },
     change_messagePush_phone(reco_style) {
-      console.log(reco_style)
       this.messagePush_phone = reco_style
       this.change_combination_condition()
     },

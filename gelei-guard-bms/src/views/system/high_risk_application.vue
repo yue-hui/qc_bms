@@ -93,7 +93,7 @@
 
 <script>
 import CreateAndEditHighRiskApplication from './components/create_and_edit_high_risk_application'
-import { DATE_TIME_FORMAT, MEMBER_TYPES, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
+import { DATE_TIME_FORMAT, PACKAGE_STATUS, PACKAGE_TYPE, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { delete_multi_high_risk_soft, get_high_risk_soft_list } from '@/api/interactive'
 import { date_formatter } from '@/utils/common'
@@ -122,7 +122,6 @@ export default {
         item_name: ''
       },
       packages: PACKAGE_TYPE,
-      member_types: MEMBER_TYPES,
       status_list: PACKAGE_STATUS,
       current_soft_id: '',
       action: 0,

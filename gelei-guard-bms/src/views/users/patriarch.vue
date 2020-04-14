@@ -83,6 +83,21 @@
               </el-row>
             </div>
           </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">来源渠道:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_set.channel_name"
+                    size="mini"
+                    clearable
+                    placeholder="请输入来源渠道"
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
           <el-col :xs="12" :sm="8" :md="7" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
@@ -111,7 +126,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="10" :lg="5" :xl="8" class="col-bg">
+          <el-col :xs="24" :sm="16" :md="10" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="4" class="order-number-list">注册时间:</el-col>
@@ -130,7 +145,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="7" :lg="19" :xl="16" class="col-bg layout-right">
+          <el-col :xs="24" :sm="8" :md="24" :lg="4" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -229,8 +244,17 @@
           @size-change="table_size_change" />
       </div>
     </div>
-    <recharge-dialog :visible="recharge_dialog_visible" :uid="current_uid" @callback="close_recharge_dialog" />
-    <member-dialog :visible="member_dialog_visible" :uid="current_uid" @callback="close_member_dialog" />
+
+    <recharge-dialog
+      :visible="recharge_dialog_visible"
+      :member-types="patriarch_member_types"
+      :uid="current_uid"
+      @callback="close_recharge_dialog" />
+
+    <member-dialog
+      :visible="member_dialog_visible"
+      :uid="current_uid"
+      @callback="close_member_dialog" />
   </div>
 </template>
 
@@ -238,15 +262,20 @@
 import { get_parent_list, get_patriarch_list_export, get_user_reg_from_list } from '@/api/interactive'
 import { date_formatter, get_grade_label_map, get_sex_label, get_value_from_map_list } from '@/utils/common'
 import {
+  CHILD_BIND_TYPE_STATUS,
   DATE_FORMAT,
   DATE_FORMAT_WITH_POINT,
-  DATE_TIME_FORMAT, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER, GRADE_LIST,
+  DATE_TIME_FORMAT, DEVICE_TYPE_LIST,
+  EXPORT_MAX_RECORD_LENGTH,
+  EXPORT_OVER_MAX_TIPS_REMINDER,
+  GRADE_LIST,
   PATRIARCH_MEMBER_TYPES,
+  SYSTEM_PATRIARCH_MEMBER_TYPES_IDS,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
-import { device_type_list, member_status_list } from '@/views/toolbox/data/promotion'
+import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 // import dayjs from 'dayjs'
 
@@ -262,7 +291,6 @@ export default {
     return {
       loading: false,
       device_type_list,
-      member_status_list,
       user_sources: [], // 用户来源列表
       patriarch_member_types: PATRIARCH_MEMBER_TYPES,
       page: 1,
@@ -275,6 +303,7 @@ export default {
         member_type: '',
         member_status: '',
         reg_from: '',
+        channel_name: '',
         begin_valid_days: '',
         end_valid_days: '',
         datetime_range: []
@@ -306,13 +335,9 @@ export default {
       this.fetch_register_source_list()
     },
     blur_search(e) {
-      if (this.query_set.begin_valid_days === '' && this.query_set.end_valid_days === '') {
-        // 空数据无需查询
-      } else {
-        this.search(e)
-      }
+      this.search(e)
     },
-    search(e) {
+    search() {
       if (this.query_set.begin_valid_days && this.query_set.end_valid_days) {
         if (parseInt(this.query_set.begin_valid_days) > this.query_set.end_valid_days) {
           this.$message.error('会员有效开始天数应小于结束有效天数')
@@ -357,6 +382,9 @@ export default {
       }
       if (this.query_set.reg_from) {
         config['reg_from'] = this.query_set.reg_from
+      }
+      if (this.query_set.channel_name) {
+        config['channel_name'] = this.query_set.channel_name
       }
       if (this.query_set.begin_valid_days) {
         config['begin_valid_days'] = this.query_set.begin_valid_days
@@ -408,13 +436,23 @@ export default {
     },
     refresh_data: function() {
       const config = this.get_params()
+
+      // 处理电信会员
+      const member_type = config['member_type']
+      if (member_type === '04') {
+        config['member_type'] = '03'
+        config['pay_type'] = '06'
+      }
+
       this.loading = true
       get_parent_list(config).then(res => {
         const table_data = []
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
+        const senior_member = PATRIARCH_MEMBER_TYPES.find(r => r.value === '02')
         res.data.forEach((r, i, _a) => {
-          let vip_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, '')
+          // 会员类型
+          let vip_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, senior_member.label)
           if (r.member_status === '00') {
             // vip_label += '(待生效)'
           } else if (r.member_status === '01') {
@@ -462,24 +500,28 @@ export default {
             this.$notify(options)
             return
           }
+          const senior_member = PATRIARCH_MEMBER_TYPES.find(r => r.value === '02')
           const remote_data = res.data.map(r => {
-            let member_type_label = ''
-            if (r.member_type === '01') {
-              member_type_label = '体验用户'
-            } else if (r.member_type === '02') {
-              member_type_label = 'VIP会员'
-            }
+            // 会员类型
+            const member_type_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES, senior_member.label)
+            const child_device_type_label = get_value_from_map_list(r.child_device_type, DEVICE_TYPE_LIST)
+            const child_bind_type_label = get_value_from_map_list(r.child_bind_type, CHILD_BIND_TYPE_STATUS)
+            const child_bind_time_label = date_formatter(r.child_bind_time, DATE_TIME_FORMAT)
+            const child_unbind_time_label = date_formatter(r.child_unbind_time, DATE_TIME_FORMAT)
+            // 当前会员类型(带有效期的)
+            const system_member_types = PATRIARCH_MEMBER_TYPES.filter(r => SYSTEM_PATRIARCH_MEMBER_TYPES_IDS.indexOf(r.value) !== -1)
+            let current_member_type_label = get_value_from_map_list(r.current_member_type, system_member_types, senior_member.label)
             if (r.member_status === '00') {
-              // member_type_label += '(待生效)'
+              // current_member_type_label += '(待生效)'
             } else if (r.member_status === '01') {
               if (r.begin_time && r.end_time) {
-                member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
+                current_member_type_label += ['(', date_formatter(r.begin_time, DATE_FORMAT_WITH_POINT),
                   '-', date_formatter(r.end_time, DATE_FORMAT_WITH_POINT), ')'].join('')
               } else {
-                // member_type_label += '(已生效)'
+                // current_member_type_label += '(已生效)'
               }
             } else if (r.member_status === '02') {
-              // member_type_label += '(已失效)'
+              // current_member_type_label += '(已失效)'
             }
             const child_sex_label = r.child_sex === '1' ? '男' : '女'
             const child_grade = '' + r.child_grade
@@ -488,7 +530,12 @@ export default {
               ...r,
               child_sex_label,
               child_grade_label,
-              member_type_label
+              member_type_label,
+              current_member_type_label,
+              child_bind_type_label,
+              child_device_type_label,
+              child_bind_time_label,
+              child_unbind_time_label
             }
           })
           this.export_excel(remote_data)
@@ -530,13 +577,14 @@ export default {
     export_excel(data_list) {
       const filename = '用户管理-家长端数据'
       import('@/utils/Export2Excel').then(excel => {
-        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型',
+        const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型', '当前会员类型',
           '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',
-          '孩子性别', '孩子出生日期', '孩子年级']
+          '孩子性别', '孩子出生日期', '孩子年级', '孩子设备名称', '孩子的设备类型', '孩子设备绑定类型', '设备绑定时间', '设备解绑时间']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
         const filter_val = ['nick_name', 'phone', 'create_time', 'reg_from_label', 'channel_name', 'member_type_label',
-          'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
-          'child_sex_label', 'child_birthdate', 'child_grade_label']
+          'current_member_type_label', 'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
+          'child_sex_label', 'child_birthdate', 'child_grade_label', 'child_device_name', 'child_device_type_label',
+          'child_bind_type_label', 'child_bind_time_label', 'child_unbind_time_label']
         const data = this.formatJson(filter_val, data_list)
         const options = {
           header: t_header,
