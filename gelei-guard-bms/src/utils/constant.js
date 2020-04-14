@@ -458,3 +458,31 @@ export const DEVICE_USER_INTERVALS = [
     label: '每天'
   }
 ]
+
+// 孩子设备类型
+export const DEVICE_TYPE_LIST = [
+  {
+    value: '01',
+    label: 'PC'
+  },
+  {
+    value: '02',
+    label: 'IOS'
+  },
+  {
+    value: '03',
+    label: 'Android'
+  }
+]
+
+// 孩子设备绑定状态
+export const CHILD_BIND_TYPE_STATUS = [
+  {
+    value: '1',
+    label: '解绑'
+  },
+  {
+    value: '0',
+    label: '绑定'
+  }
+]
