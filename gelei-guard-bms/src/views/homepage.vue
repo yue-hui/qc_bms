@@ -526,6 +526,9 @@ export default {
       get_homepage_growth_data(config).then(r => {
         if (r.status === 0) {
           this.growth_data = r.data
+          this.growth_data.order_amount = r.data.order_amount.toFixed(2)
+          this.growth_data.we_chat_order_amount = r.data.we_chat_order_amount.toFixed(2)
+          this.growth_data.ios_order_amount = r.data.ios_order_amount.toFixed(2)
           this.growth_data.ali_order_amount = r.data.ali_order_amount.toFixed(2)
           this.growth_data.telecom_order_amount = r.data.telecom_order_amount.toFixed(2)
           // this.$message.success(r.message)
