@@ -579,7 +579,7 @@ export default {
       import('@/utils/Export2Excel').then(excel => {
         const t_header = ['用户昵称', '手机号', '注册时间', '用户来源', '来源渠道', '会员类型', '当前会员类型',
           '设备类型', '会员开始时间', '会员结束时间', '孩子昵称',
-          '孩子性别', '孩子出生日期', '孩子年级', '孩子设备名称', '孩子的设备类型', '孩子设备绑定类型', '设备绑定时间', '设备解绑时间']
+          '孩子性别', '孩子出生日期', '孩子年级', '孩子设备名称', '孩子的设备类型', '孩子设备绑定状态', '设备绑定时间', '设备解绑时间']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
         const filter_val = ['nick_name', 'phone', 'create_time', 'reg_from_label', 'channel_name', 'member_type_label',
           'current_member_type_label', 'device_type_label', 'begin_time', 'end_time', 'child_nick_name',
