@@ -479,10 +479,10 @@ export const DEVICE_TYPE_LIST = [
 export const CHILD_BIND_TYPE_STATUS = [
   {
     value: '1',
-    label: '解绑'
+    label: '绑定'
   },
   {
     value: '0',
-    label: '绑定'
+    label: '解绑'
   }
 ]
