@@ -896,6 +896,15 @@ export function get_business_cooperation_list(data) {
   })
 }
 
+// 获取语音短信
+export function get_manager_list(data) {
+  return request({
+    url: '/greenguard/manager/voice/query/record',
+    method: 'post',
+    data
+  })
+}
+
 // 解绑孩子端描述文件
 export function do_unbind_desc_file(data) {
   return request({
