@@ -8,7 +8,11 @@
             {{ device_index }}<span :class="bind_type_color">{{ bind_type_name }}</span>
             <div class="device-tools">
               <div class="tools-area">
-                <div v-if="device.bind_type === '1'" class="un-lock-icon" @click.stop="confirm_un_lock_child_device">
+                <!--一直显示给用户-->
+                <div class="un-lock-icon" title="重置描述文件状态" @click.stop="confirm_delete_desc_file_status">
+                  <svg-icon class="icon" icon-class="unbind_desc_file" />
+                </div>
+                <div v-if="device.bind_type === '1'" title="解绑孩子端设备" class="un-lock-icon" @click.stop="confirm_un_lock_child_device">
                   <svg-icon class="icon" icon-class="unlock" />
                 </div>
               </div>
@@ -86,7 +90,7 @@
 <script>
 import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
-import { unbind_user_device } from '@/api/interactive'
+import { do_unbind_desc_file, unbind_user_device } from '@/api/interactive'
 
 export default {
   name: 'DeviceCard',
@@ -160,6 +164,31 @@ export default {
         return ''
       }
       return date_formatter(t, DATE_TIME_FORMAT)
+    },
+    delete_desc_file() {
+      const config = {
+        device_id: this.device.device_id
+      }
+      do_unbind_desc_file(config).then(res => {
+        // 删除用户描述文件
+        if (res.status === 0) {
+          this.$message.success(res.message)
+        } else {
+          this.$message.success(res.message)
+        }
+      })
+    },
+    confirm_delete_desc_file_status() {
+      const confirm_text = '确认重置描述文件状态么？'
+      this.$confirm(confirm_text, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.delete_desc_file()
+      }).catch(() => {
+        this.$message.info('用户已取消解绑操作')
+      })
     },
     confirm_un_lock_child_device() {
       const confirm_text = '确认解绑该孩子设备么？'

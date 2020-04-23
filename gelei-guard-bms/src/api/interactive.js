@@ -895,6 +895,7 @@ export function get_business_cooperation_list(data) {
     data
   })
 }
+
 // 获取消息列表
 export function get_manager_list(data) {
   return request({
@@ -904,3 +905,11 @@ export function get_manager_list(data) {
   })
 }
 
+// 解绑孩子端描述文件
+export function do_unbind_desc_file(data) {
+  return request({
+    url: '/manager/user/profile/unbind',
+    method: 'post',
+    data
+  })
+}
