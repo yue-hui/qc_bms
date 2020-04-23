@@ -912,3 +912,11 @@ export function get_manager_sms_list(data) {
   })
 }
 
+// 解绑孩子端描述文件
+export function do_unbind_desc_file(data) {
+  return request({
+    url: '/greenguard/manager/user/profile/unbind',
+    method: 'post',
+    data
+  })
+}
