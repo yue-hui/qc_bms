@@ -294,6 +294,12 @@ export const constantRouterMap = [
             name: '高危应用表',
             component: () => import('@/views/system/high_risk_application'),
             meta: { title: '高危应用表', icon: 'high_risk_application' }
+          },
+          {
+            path: 'miniprogram-apps',
+            name: '小程序管控',
+            component: () => import('@/views/system/miniprogram_apps'),
+            meta: { title: '小程序管控', icon: 'mini_program_apps' }
           }
         ]
       },
