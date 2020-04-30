@@ -33,7 +33,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage })
 
-function noderequest(TransferReq, reqParam, method, reqConType, res) {
+function noderequest(TransferReq, reqParam, method, headers, res) {
   if (!reqParam.sign) {
     res.send({ message: 'node sign miss 1!', status: -1 })
     return
@@ -47,7 +47,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
   request({
     url: TransferReq,
     body: encryptParams,
-    headers: reqConType,
+    headers: headers,
     method: method,
     json: true
   }, function(error, response, data) { // 错误,响应对象,请求回来的数据
@@ -56,7 +56,7 @@ function noderequest(TransferReq, reqParam, method, reqConType, res) {
   })
 }
 
-function noderequestwithformdata(TransferReq, reqParam, method, reqConType, files, res) {
+function noderequestwithformdata(TransferReq, reqParam, method, headers, files, res) {
   if (!reqParam.sign) {
     res.send({ message: 'node sign miss 2!', status: -1 })
     return
@@ -69,7 +69,7 @@ function noderequestwithformdata(TransferReq, reqParam, method, reqConType, file
 
   r = request({
     url: TransferReq,
-    headers: reqConType,
+    headers: headers,
     method: method,
     formData,
     json: true

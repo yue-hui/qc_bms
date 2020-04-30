@@ -1,6 +1,6 @@
 <template>
-  <div v-loading="loading" class="content">
-    <div class="content-body">
+  <div class="content">
+    <div v-loading="loading" class="content-body">
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
           <span>个人信息</span>
@@ -25,8 +25,8 @@
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="生日">
-                    <span>{{ information.birthdate | formatter_date_with_point_string }}</span>
+                  <el-form-item label="会员状态">
+                    <span>{{ information.vip_info }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -43,13 +43,6 @@
                 <div class="grid-content bg-purple">
                   <el-form-item label="来源渠道">
                     <span>{{ information.channel_name }}</span>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="grid-content bg-purple">
-                  <el-form-item label="收货地址">
-                    <span>{{ information.address || '-' }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -85,6 +78,22 @@
                   </el-form-item>
                 </div>
               </el-col>
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="生日">
+                    <span>{{ information.birthdate | formatter_date_with_point_string }}</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="收货地址">
+                    <span>{{ information.address || '-' }}</span>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="24">
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="最后使用时间">

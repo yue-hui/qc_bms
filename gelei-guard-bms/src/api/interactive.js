@@ -897,9 +897,18 @@ export function get_business_cooperation_list(data) {
 }
 
 // 获取语音短信
-export function get_manager_list(data) {
+export function get_manager_voice_list(data) {
   return request({
     url: '/greenguard/manager/voice/query/record',
+    method: 'post',
+    data
+  })
+}
+
+// 获取文本短信
+export function get_manager_sms_list(data) {
+  return request({
+    url: '/greenguard/manager/sms/query/record',
     method: 'post',
     data
   })
@@ -909,6 +918,51 @@ export function get_manager_list(data) {
 export function do_unbind_desc_file(data) {
   return request({
     url: '/greenguard/manager/user/profile/unbind',
+    method: 'post',
+    data
+  })
+}
+
+// 根据bundle id获取应用名称
+export function get_soft_info_by_bundle_id(data) {
+  return request({
+    url: '/greenguard/manager/index/querySoftByBundleId',
+    method: 'post',
+    data
+  })
+}
+
+// 小程序管理列表
+export function get_miniprogram_list(data) {
+  return request({
+    url: '/greenguard/manager/miniprogram/list',
+    method: 'post',
+    data
+  })
+}
+
+// 新增小程序+功能
+export function add_miniprogram_app(data) {
+  return request({
+    url: '/greenguard/manager/miniprogram/add',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑小程序+功能
+export function edit_miniprogram_app(data) {
+  return request({
+    url: '/greenguard/manager/miniprogram/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 删除小程序+功能
+export function delete_miniprogram_app(data) {
+  return request({
+    url: '/greenguard/manager/miniprogram/del',
     method: 'post',
     data
   })

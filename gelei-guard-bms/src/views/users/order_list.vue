@@ -78,27 +78,6 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员类型:</el-col>
-                <el-col :span="16">
-                  <el-select
-                    v-model="query_sets.member_type"
-                    size="mini"
-                    placeholder="请选择会员类型"
-                    clearable
-                    @change="query_condition_change">
-                    <el-option
-                      v-for="item in patriarch_member_types"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple-light">
-              <el-row>
                 <el-col :span="8" class="order-number-list">用户名:</el-col>
                 <el-col :span="16">
                   <el-input v-model="query_sets.nick_name" size="mini" clearable @change="query_condition_change" />
@@ -116,7 +95,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="18" :sm="12" :md="12" :lg="10" :xl="8" class="col-bg">
+          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="4" class="order-number-list">交易时间:</el-col>
@@ -133,7 +112,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="6" :sm="4" :md="12" :lg="14" :xl="12" class="col-bg layout-right col-right-button">
+          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="16" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-button
@@ -179,15 +158,11 @@
             prop="order_desc" />
           <el-table-column
             align="center"
-            label="会员类型"
-            prop="member_type_label" />
-          <el-table-column
-            align="center"
             label="交易金额"
             prop="order_amount_label" />
           <el-table-column
             align="center"
-            label="交易方式"
+            label="支付方式"
             prop="pay_type" />
           <el-table-column
             align="center"
@@ -230,12 +205,11 @@ import {
   COMMODITY_TYPE,
   DATE_TIME_FORMAT,
   ORDER_MANAGEMENT_LIST_NAME,
-  PATRIARCH_MEMBER_TYPES,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 // import dayjs from 'dayjs'
 import { get_order_list } from '@/api/interactive'
-import { date_formatter, formatter_transaction_amount, get_value_from_map_list } from '@/utils/common'
+import { date_formatter, formatter_transaction_amount } from '@/utils/common'
 import { fetch_all_order_filter_list } from '@/api/merge'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
@@ -253,14 +227,12 @@ export default {
         order_desc: '',
         order_status: '',
         pay_type: '',
-        member_type: '',
         nick_name: '',
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
-      order_status_list: [], // 订单状态
-      pay_type_mode: [], // 交易方式
-      patriarch_member_types: PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1),
+      order_status_list: [],
+      pay_type_mode: [],
       order_data: [],
       download_loading: false,
       page: 1,

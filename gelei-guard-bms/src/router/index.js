@@ -138,14 +138,20 @@ export const constantRouterMap = [
     path: '/messagePush/index',
     component: Layout,
     name: '消息推送',
-    redirect: '/messagePush/',
-    meta: { title: '消息推送', icon: 'analysis' },
+    redirect: '/messagePush/index/smsList',
+    meta: { title: '短信记录', icon: 'analysis' },
     children: [
       {
-        path: 'list',
-        name: '推送列表',
-        component: () => import('@/views/messagePush/messagePushList'),
-        meta: { title: '推送列表', icon: 'activity_list' }
+        path: 'smsList',
+        name: '文本',
+        component: () => import('@/views/messagePush/messageSmsList'),
+        meta: { title: '文本短信', icon: 'activity_list' }
+      },
+      {
+        path: 'voiceList',
+        name: '语音',
+        component: () => import('@/views/messagePush/messageVoiceList'),
+        meta: { title: '语音短信', icon: 'activity_list' }
       }
     ]
   },
@@ -288,6 +294,12 @@ export const constantRouterMap = [
             name: '高危应用表',
             component: () => import('@/views/system/high_risk_application'),
             meta: { title: '高危应用表', icon: 'high_risk_application' }
+          },
+          {
+            path: 'miniprogram-apps',
+            name: '小程序管控',
+            component: () => import('@/views/system/miniprogram_apps'),
+            meta: { title: '小程序管控', icon: 'mini_program_apps' }
           }
         ]
       },
