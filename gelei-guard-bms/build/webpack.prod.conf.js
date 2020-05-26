@@ -125,10 +125,17 @@ const webpackConfig = merge(baseWebpackConfig, {
         uglifyOptions: {
           mangle: {
             safari10: true
+          },
+          compress: {
+            warnings: false,
+            drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log']  // 移除console
           }
         },
         sourceMap: config.build.productionSourceMap,
         cache: true,
+        // 开启多线程
         parallel: true
       }),
       // Compress extracted CSS. We are using this plugin so that possible
@@ -140,7 +147,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
-  
+
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',
@@ -157,7 +164,7 @@ if (config.build.productionGzip) {
 if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin
-  
+
   if (config.build.bundleAnalyzerReport) {
     webpackConfig.plugins.push(
       new BundleAnalyzerPlugin({
@@ -166,7 +173,7 @@ if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
       })
     )
   }
-  
+
   if (config.build.generateAnalyzerReport) {
     webpackConfig.plugins.push(
       new BundleAnalyzerPlugin({
