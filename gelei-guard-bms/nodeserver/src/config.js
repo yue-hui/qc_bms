@@ -12,6 +12,11 @@ switch (global.env_config) {
       baseURL: 'https://mstes.dev.zhixike.net/',
     }
     break
+  case 'test2':
+    config = {
+      baseURL: 'https://mstes2.dev.zhixike.net/',
+    }
+    break
   case 'prod':
     config = {
       baseURL: 'https://ms.gwchina.cn/',
