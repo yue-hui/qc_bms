@@ -94,8 +94,6 @@ import { do_unbind_desc_file, unbind_user_device } from '@/api/interactive'
 
 export default {
   name: 'DeviceCard',
-  beforecreate: function() {
-  },
   props: {
     device: {
       type: Object,

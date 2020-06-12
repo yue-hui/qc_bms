@@ -49,20 +49,22 @@
             prop="total_user"
             width="180">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
                 :disabled="control_is_enabled(scope.row)"
+                pid="20078"
                 size="small"
                 type="text"
                 @click="control_combinaion(scope.row)"
               >{{ show_label(scope.row) }}
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
                 :disabled="edit_is_enabled(scope.row)"
+                pid="20077"
                 size="small"
                 type="text"
                 @click="edit_combinaion(scope.row)"
               >编辑
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -98,8 +100,6 @@ export default {
         return {}
       }
     }
-  },
-  beforecreate: function() {
   },
   data: function() {
     const page_size = getPagenationSize()

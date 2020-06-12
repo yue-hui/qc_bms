@@ -3,26 +3,29 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth' // 验权
+import { getToken } from '@/utils/auth'
 
-const whiteList = ['/login'] // 不重定向白名单
-router.beforeEach((to, from, next) => {
+const whiteList = ['/login', '/potential/btn/0', '/potential/btn/1'] // 不重定向白名单
+router.beforeEach(async(to, from, next) => {
   NProgress.start()
-  if (getToken()) {
+  const token = getToken()
+  if (token) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const _ = localStorage.getItem('_')
-      if (store.getters.roles.length === 0 && _ === '1') {
-        store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          next()
-        }).catch((err) => {
+      if (store.getters.btns.length === 0) {
+        try {
+          const routes = await store.dispatch('GetInfo')
+          router.addRoutes(routes)
+          await store.dispatch('GenerateAsyncRoute', routes)
+          next({ ...to, replace: true })
+        } catch (error) {
           store.dispatch('FedLogOut').then(() => {
-            Message.error(err || 'Verification failed, please login again')
+            Message.error(error || 'Verification failed, please login again')
             next({ path: '/' })
           })
-        })
+        }
       } else {
         next()
       }
@@ -40,4 +43,8 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   NProgress.done() // 结束Progress
+})
+
+router.onError((err) => {
+  console.log('onError: ', err)
 })

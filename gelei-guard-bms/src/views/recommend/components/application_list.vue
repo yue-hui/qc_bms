@@ -104,8 +104,8 @@
             prop="total_user"
             width="180">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="edit_application(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="delete_application(scope.row)">删除</el-button>
+              <gl-button pid="20075" size="small" type="text" @click="edit_application(scope.row)">编辑</gl-button>
+              <gl-button pid="20076" size="small" type="text" @click="delete_application(scope.row)">删除</gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -139,8 +139,6 @@ export default {
         }
       }
     }
-  },
-  beforecreate: function() {
   },
   data: function() {
     const page_size = getPagenationSize()

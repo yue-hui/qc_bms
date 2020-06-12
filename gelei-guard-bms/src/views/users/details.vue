@@ -108,6 +108,7 @@
 
       <div class="black-block" />
 
+      <!--会员信息 start-->
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
           <span>会员信息</span>
@@ -129,7 +130,13 @@
               <td>{{ member.status_label }}</td>
               <td>
                 <template v-if="member.order_ctcc_sp_status">
-                  <button class="order-callback" @click="order_callback">退订</button>
+                  <gl-button
+                    pid="10079"
+                    size="small"
+                    plain
+                    class="order-callback"
+                    style="text-decoration: underline;"
+                    @click="order_callback">退订</gl-button>
                 </template>
               </td>
             </tr>
@@ -137,6 +144,7 @@
           <p v-else class="table-no-data">该用户未开通任何会员</p>
         </div>
       </el-card>
+      <!--会员信息 end-->
 
       <div class="black-block" />
 
@@ -274,6 +282,7 @@ export default {
         border-bottom: 1px solid rgba(97, 168, 255, 0.79);
         color: rgba(97, 168, 255, 0.79);
         margin-left: 5px;
+        cursor: pointer;
       }
 
       .order-list {
@@ -316,11 +325,11 @@ export default {
             .order-callback {
               border: none;
               background-color: transparent;
-              border-bottom: 1px solid #303133;
+              /*border-bottom: 1px solid #303133;*/
               outline: none;
 
               &:hover {
-                border-bottom: 1px solid dodgerblue;
+                /*border-bottom: 1px solid dodgerblue;*/
                 color: dodgerblue;
               }
             }

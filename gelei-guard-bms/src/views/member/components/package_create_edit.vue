@@ -149,7 +149,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="close_dialog">取消</el-button>
-                <el-button :disabled="is_busy" size="mini" type="primary" @click="on_save">保存</el-button>
+                <gl-button :disabled="is_busy" pid="10049, 10014" size="mini" type="primary" @click="on_save">保存</gl-button>
               </div>
             </el-form-item>
           </el-form>
@@ -166,8 +166,6 @@ import { MEMBER_PACKAGE_OBJECTS, PATRIARCH_MEMBER_TYPES } from '@/utils/constant
 
 export default {
   name: 'PackageCreateEdit',
-  beforecreate: function() {
-  },
   props: {
     action: {
       type: Number,

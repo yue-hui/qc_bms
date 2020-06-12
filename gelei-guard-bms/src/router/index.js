@@ -21,164 +21,203 @@ Vue.use(Router)
     icon: 'svg-name'             the icon show in the sidebar,
   }
  **/
-export const constantRouterMap = [
+export const constantRoutes = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  // { path: '/potential/:item(\\w+)/:status(\\d+)', component: () => import('@/views/login/potential'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   {
-    path: '/homepage',
+    path: '/space',
     component: Layout,
+    name: 'Space',
+    hidden: true,
+    meta: { title: '用户空间', icon: 'information' },
     children: [
       {
-        path: '',
+        path: 'profile',
+        name: 'Profile',
+        hidden: true,
+        component: () => import('@/views/users/space/profile'),
+        meta: { title: '个人信息', showNavbar: false, hide: true, icon: 'profile' }
+      },
+      {
+        path: 'modified-password',
+        name: 'ModifiedPassword',
+        hidden: true,
+        component: () => import('@/views/users/space/modified_password'),
+        meta: { title: '修改用户密码', showNavbar: false, hide: true, icon: 'profile' }
+      },
+      {
+        path: '/nav',
+        component: () => import('@/views/login/no_nav'),
+        hidden: true,
+        meta: { title: '欢迎使用格雷盒子后台管理系统', showNavbar: false, hide: true, icon: 'profile' }
+      }
+    ]
+  },
+  // { path: '*', redirect: '/404', hidden: true },
+  { path: '*', redirect: '/nav', name: '欢迎使用格雷盒子后台管理系统', hidden: true }
+]
+
+export const asyncRoutes = [
+  {
+    path: '/dashboard',
+    component: Layout,
+    name: 'Dashboard',
+    meta: { title: '控制面板', icon: 'dashboard', noCache: true },
+    children: [
+      {
+        path: 'homepage',
         component: () => import('@/views/homepage'),
-        name: '首页',
-        meta: { title: '首页', icon: 'homepage', noCache: true }
+        name: 'Homepage',
+        meta: { title: '首页', icon: 'homepage', noCache: true, pid: '20001' }
       }
     ]
   },
   {
     path: '/users',
     component: Layout,
-    name: '用户管理',
+    name: 'UserManagement',
     redirect: '/users/information',
     alwaysShow: true,
-    meta: { title: '用户管理', icon: 'information' },
+    meta: { title: '用户管理', icon: 'information', pid: '20002' },
     children: [
       {
         path: 'information',
         name: '家长信息管理',
         component: () => import('@/views/users/patriarch'),
-        meta: { title: '家长信息管理', icon: 'parents' }
+        meta: { title: '家长信息管理', icon: 'parents', pid: '20003' }
       },
       {
         path: 'children',
         name: '孩子信息管理',
         component: () => import('@/views/users/kids'),
-        meta: { title: '孩子信息管理', icon: 'kids' }
+        meta: { title: '孩子信息管理', icon: 'kids', pid: '20004' }
       },
       {
         path: 'details',
         name: '用户详细信息',
         hidden: true,
         component: () => import('@/views/users/details'),
-        meta: { title: '用户详细信息', hide: true, icon: 'form' }
+        meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
       },
       {
         path: 'order-list',
         name: '订单管理',
         component: () => import('@/views/users/order_list'),
-        meta: { title: '订单管理', icon: 'form' }
+        meta: { title: '订单管理', icon: 'form', pid: '20006' }
       },
       {
         path: 'devices-manage',
         name: '设备信息管理',
         component: () => import('@/views/users/devices_manage'),
-        meta: { title: '设备信息管理', icon: 'devices_manage' }
+        meta: { title: '设备信息管理', icon: 'devices_manage', pid: '20092' }
       },
       {
         path: 'devices-record',
         name: '设备使用记录',
         component: () => import('@/views/users/devices_record'),
-        meta: { title: '设备使用记录', icon: 'devices_record' }
+        meta: { title: '设备使用记录', icon: 'devices_record', pid: '20094' }
       }
     ]
   },
   {
     path: '/data',
     component: Layout,
-    name: '用户数据分析',
+    name: 'UserDataAnalysis',
     redirect: '/data/analysis',
     alwaysShow: true,
-    meta: { title: '用户数据分析', icon: 'analysis' },
+    meta: { title: '用户数据分析', icon: 'analysis', pid: '20095' },
     children: [
       {
         path: 'analysis',
         name: '家长端总体数据',
         component: () => import('@/views/analysis/patriarch'),
-        meta: { title: '家长端总体数据', icon: 'analysis_patriarch' }
+        meta: { title: '家长端总体数据', icon: 'analysis_patriarch', pid: '20012' }
       },
       {
         path: 'children',
         name: '孩子端总体数据',
         component: () => import('@/views/analysis/kids'),
-        meta: { title: '孩子端总体数据', icon: 'analysis_kids' }
+        meta: { title: '孩子端总体数据', icon: 'analysis_kids', pid: '20014' }
       }
     ]
   },
   {
     path: '/member',
     component: Layout,
-    name: '会员管理',
+    name: 'MemberManager',
     redirect: '/member/packages',
     alwaysShow: true,
-    meta: { title: '会员管理', icon: 'member' },
+    meta: { title: '会员管理', icon: 'member', pid: '20016' },
     children: [
       {
         path: 'packages',
         name: '会员套餐管理',
         component: () => import('@/views/member/packages'),
-        meta: { title: '会员套餐管理', icon: 'packages' }
+        meta: { title: '会员套餐管理', icon: 'packages', pid: '20017' }
       },
       {
         path: 'activity',
         name: '会员活动管理',
         component: () => import('@/views/member/activity'),
-        meta: { title: '会员活动管理', icon: 'activity' }
+        meta: { title: '会员活动管理', icon: 'activity', pid: '20022' }
       },
       {
         path: 'details',
         name: '活动详细信息',
         hidden: true,
         component: () => import('@/views/member/details'),
-        meta: { title: '活动详细信息', icon: 'details' }
+        meta: { title: '活动详细信息', icon: 'details', pid: '20025' }
       }
     ]
   },
   {
     path: '/messagePush/index',
     component: Layout,
-    name: '消息推送',
+    name: 'MessagePush',
     redirect: '/messagePush/index/smsList',
-    meta: { title: '短信记录', icon: 'analysis' },
+    alwaysShow: true,
+    meta: { title: '短信记录', icon: 'message_push', pid: '20026' },
     children: [
       {
         path: 'smsList',
         name: '文本',
         component: () => import('@/views/messagePush/messageSmsList'),
-        meta: { title: '文本短信', icon: 'activity_list' }
+        meta: { title: '文本短信', icon: 'txt_message', pid: '20027' }
       },
       {
         path: 'voiceList',
         name: '语音',
         component: () => import('@/views/messagePush/messageVoiceList'),
-        meta: { title: '语音短信', icon: 'activity_list' }
+        meta: { title: '语音短信', icon: 'voice_message', pid: '20028' }
       }
     ]
   },
   {
     path: '/app/recommend',
     component: Layout,
-    name: '应用推荐管理',
+    name: 'ApplicationRecommend',
     redirect: '/app/recommend/index',
-    meta: { title: '应用推荐管理', icon: 'apply' },
+    alwaysShow: true,
+    meta: { title: '应用推荐管理', icon: 'apply', pid: '20029' },
     children: [
       {
         path: 'index',
         name: '推荐应用',
         component: () => import('@/views/recommend/index'),
-        meta: { title: '推荐应用', icon: 'give' }
+        meta: { title: '推荐应用', icon: 'give', pid: '20030' }
       },
       {
         path: 'combination',
         name: '推荐应用组合',
         component: () => import('@/views/recommend/combination'),
-        meta: { title: '推荐应用组合', icon: 'combine' }
+        meta: { title: '推荐应用组合', icon: 'combine', pid: '20032' }
       },
       {
         path: 'special_topic',
         name: '推荐应用专题',
         component: () => import('@/views/recommend/special_topic'),
-        meta: { title: '推荐应用专题', icon: 'special_topic' }
+        meta: { title: '推荐应用专题', icon: 'special_topic', pid: '20034' }
       }
     ]
   },
@@ -206,10 +245,10 @@ export const constantRouterMap = [
   {
     path: '/app/activity',
     component: Layout,
-    name: '活动管理',
+    name: 'ActivityManagement',
     alwaysShow: true,
     redirect: '/app/activity/invatation',
-    meta: { title: '活动管理', icon: 'activity' },
+    meta: { title: '活动管理', icon: 'activity', pid: '20036' },
     children: [
       // {
       //   path: 'list',
@@ -221,13 +260,13 @@ export const constantRouterMap = [
         path: 'invatation',
         name: '邀请好友数据',
         component: () => import('@/views/activity/invatation'),
-        meta: { title: '邀请好友数据', icon: 'invatation' }
+        meta: { title: '邀请好友数据', icon: 'invatation', pid: '20037' }
       },
       {
         path: 'invatation/details',
         name: '邀请好友配置',
         component: () => import('@/views/activity/invatation_details'),
-        meta: { title: '邀请好友配置', icon: 'invatation_user' }
+        meta: { title: '邀请好友配置', icon: 'invatation_user', pid: '20039' }
       }
       // {
       //   path: 'props',
@@ -240,34 +279,34 @@ export const constantRouterMap = [
   {
     path: '/toolbox',
     component: Layout,
-    name: '工具使用',
+    name: 'ToolboxManagement',
     redirect: '/toolbox/helper',
     alwaysShow: true,
-    meta: { title: '工具使用', icon: 'tools', hidden: false },
+    meta: { title: '工具使用', icon: 'tools', hidden: false, pid: '20042' },
     children: [
       {
         path: 'helper',
         name: '帮助中心',
         component: () => import('@/views/toolbox/helper'),
-        meta: { title: '帮助中心', icon: 'helper' }
+        meta: { title: '帮助中心', icon: 'helper', pid: '20043' }
       },
       {
         path: 'promotion',
         name: '应用升级',
         component: () => import('@/views/toolbox/promotion'),
-        meta: { title: '应用升级', icon: 'promotion' }
+        meta: { title: '应用升级', icon: 'promotion', pid: '20047' }
       },
       {
         path: 'advertisement',
         name: '广告配置',
         component: () => import('@/views/toolbox/advertisement'),
-        meta: { title: '广告配置', icon: 'advertisement' }
+        meta: { title: '广告配置', icon: 'advertisement', pid: '20052' }
       },
       {
         path: 'version-list',
         name: '版本管理',
         component: () => import('@/views/toolbox/version_manager'),
-        meta: { title: '版本管理', icon: 'version' }
+        meta: { title: '版本管理', icon: 'version', pid: '20058' }
       },
       {
         path: 'configuration',
@@ -281,7 +320,7 @@ export const constantRouterMap = [
             path: 'system_parameter',
             name: '系统参数',
             component: () => import('@/views/system/system_parameter'),
-            meta: { title: '系统参数', icon: 'system_parameter' }
+            meta: { title: '系统参数', icon: 'system_parameter', pid: '20059' }
           },
           // {
           //   path: 'software_policy',
@@ -293,13 +332,13 @@ export const constantRouterMap = [
             path: 'high_risk_application',
             name: '高危应用表',
             component: () => import('@/views/system/high_risk_application'),
-            meta: { title: '高危应用表', icon: 'high_risk_application' }
+            meta: { title: '高危应用表', icon: 'high_risk_application', pid: '20061' }
           },
           {
             path: 'miniprogram-apps',
             name: '小程序管控',
             component: () => import('@/views/system/miniprogram_apps'),
-            meta: { title: '小程序管控', icon: 'mini_program_apps' }
+            meta: { title: '小程序管控', icon: 'mini_program_apps', pid: '20086' }
           }
         ]
       },
@@ -307,31 +346,37 @@ export const constantRouterMap = [
         path: 'business-cooperation',
         name: '商务合作注册页',
         component: () => import('@/views/toolbox/business_cooperation'),
-        meta: { title: '商务合作注册页', icon: 'business_cooperation' }
+        meta: { title: '商务合作注册页', icon: 'business_cooperation', pid: '20063' }
       }
     ]
   },
   {
     path: '/system',
     component: Layout,
-    name: '权限管理',
-    redirect: '/system/role',
-    hidden: true,
-    children: [{
-      path: 'role',
-      name: 'role',
-      component: () => import('@/views/system/index'),
-      meta: { title: 'role', icon: 'system' }
-    }]
-  },
-  // { path: '/', redirect: '/homepage', name: '默认页', hidden: true },
-  { path: '/', redirect: '/homepage', name: '默认页', hidden: true },
-  { path: '*', redirect: '/404', hidden: true }
+    name: 'SystemManagement',
+    redirect: '/system/account-management',
+    alwaysShow: true,
+    meta: { title: '系统管理', icon: 'system', pid: '20065' },
+    children: [
+      {
+        path: 'account-management',
+        name: 'account-management',
+        component: () => import('@/views/system/account_management'),
+        meta: { title: '账户管理', icon: 'account_management', pid: '20066' }
+      },
+      {
+        path: 'role-management',
+        name: 'role-management',
+        component: () => import('@/views/system/role_management'),
+        meta: { title: '角色管理', icon: 'role_management', pid: '20071' }
+      }
+    ]
+  }
 ]
 
 export default new Router({
   mode: 'history', // 后端支持可开
   base: '/gelei-guard-bms',
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
+  routes: constantRoutes
 })

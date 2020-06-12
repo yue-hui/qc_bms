@@ -5,8 +5,8 @@ export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 
 /* 系统常量配置 */
 export const SYSTEM_CONSTANT = {
-  'name': '格雷守护 - 后台管理系统',
-  'title': '格雷守护'
+  'name': '格雷盒子 - 后台管理系统',
+  'title': '格雷盒子'
 }
 
 /* 表格长度 */
@@ -486,3 +486,22 @@ export const CHILD_BIND_TYPE_STATUS = [
     label: '解绑'
   }
 ]
+
+/*
+* 账户管理
+* */
+
+export const SYSTEM_ACCOUNT_ENABLE_STATE = [
+  {
+    value: '0',
+    label: '禁用'
+  },
+  {
+    value: '1',
+    label: '启用'
+  }
+]
+
+// 基数1W
+export const W_CONSTANT = 10000
+

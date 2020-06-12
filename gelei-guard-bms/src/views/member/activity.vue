@@ -16,7 +16,7 @@
           <el-col :xs="12" :sm="16" :md="18" :lg="19" :xl="21" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_activity">创建会员活动</el-button>
+                <gl-button pid="20023" size="mini" type="success" @click="create_activity">创建会员活动</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -70,18 +70,20 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20024"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="edit_activity(scope.row)">编辑
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20025"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="see_activity(scope.row)">查看
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>

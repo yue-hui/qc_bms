@@ -73,8 +73,6 @@ import { date_formatter, get_sex_label, get_value_from_map_list, transfer_to_chi
 
 export default {
   name: 'Child',
-  beforecreate: function() {
-  },
   components: {
     DeviceCard,
     DeviceBindRecords

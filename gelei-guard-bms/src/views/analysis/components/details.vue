@@ -1,14 +1,15 @@
 <template>
   <el-card class="box-card">
     <div class="action-area">
-      <el-button
+      <gl-button
         :loading="download_loading"
+        pid="20013"
         class="download details-tab"
         size="mini"
         type="success"
         @click="download">导出
         <svg-icon icon-class="download" />
-      </el-button>
+      </gl-button>
 
       <el-dropdown
         size="small"

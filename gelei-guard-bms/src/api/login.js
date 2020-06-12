@@ -33,3 +33,21 @@ export function get_verify_code(data) {
   }
   return request(options)
 }
+
+/* 修改用户密码 */
+export function modified_user_password(data) {
+  return request({
+    url: '/greenguard/manager/user/password/edit',
+    method: 'post',
+    data
+  })
+}
+
+// 修改用户头像
+export function update_system_account_avatar(data) {
+  return request({
+    url: '/greenguard/manager/user/imgUrl/update',
+    method: 'post',
+    data
+  })
+}

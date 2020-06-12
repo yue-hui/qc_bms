@@ -148,14 +148,15 @@
           <el-col :xs="24" :sm="8" :md="24" :lg="4" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
+                <gl-button
                   :loading="download_loading"
+                  pid="10088"
                   class="download details-tab"
                   size="mini"
                   type="success"
                   @click="download">导出
                   <svg-icon icon-class="download" />
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -213,24 +214,27 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20008"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="view_details(scope.row)">查看
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20010"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="view_recharge_dialog(scope.row)">交易记录
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20009"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="view_member_dialog(scope.row)">会员记录
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>

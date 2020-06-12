@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { constantRoutes } from '@/router'
 
 const app = {
   state: {
@@ -6,6 +7,7 @@ const app = {
       opened: !+Cookies.get('sidebarStatus'),
       withoutAnimation: false
     },
+    routes: [],
     device: 'desktop',
     language: 'zh'
   },
@@ -26,6 +28,9 @@ const app = {
     },
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
+    },
+    SET_ROUTES: (state, routes) => {
+      state.routes = routes
     }
   },
   actions: {
@@ -37,6 +42,10 @@ const app = {
     },
     ToggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
+    },
+    GenerateAsyncRoute({ commit }, routes) {
+      const async_routes = constantRoutes.concat(routes)
+      commit('SET_ROUTES', async_routes)
     }
   }
 }

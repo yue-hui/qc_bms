@@ -23,8 +23,6 @@ import {
 
 export default {
   name: 'Diagram',
-  beforecreate: function() {
-  },
   props: {
     condition: {
       type: Object,

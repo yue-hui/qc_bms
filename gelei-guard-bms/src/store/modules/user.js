@@ -1,12 +1,17 @@
 import { getInfo, login, logout } from '@/api/login'
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import sha256 from 'sha256'
+import { AuthoritySeparate, encrypt_password, get_user_async_routes } from '@/utils/permissions'
 
 const user = {
   state: {
     token: getToken(),
     name: '',
     avatar: '',
+    real_name: '',
+    role_id: '',
+    role_name: [],
+    btns: [],
+    auths: [],
     roles: []
   },
 
@@ -20,8 +25,23 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
+    SET_REAL_NAME: (state, real_name) => {
+      state.real_name = real_name
+    },
+    SET_ROLE_ID: (state, role_id) => {
+      state.role_id = role_id
+    },
+    SET_ROLE_NAME: (state, role_name) => {
+      state.role_name = role_name
+    },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_BTNS: (state, codes) => {
+      state.btns = codes
+    },
+    SET_AUTHS: (state, codes) => {
+      state.auths = codes
     }
   },
 
@@ -31,7 +51,7 @@ const user = {
       return new Promise((resolve, reject) => {
         const config = {}
         config.account = data.username.trim()
-        config.password = sha256(data.password)
+        config.password = encrypt_password(data.password)
         config.code = data.verify
         config.code_uid = data.verify_uid
         login(config).then(response => {
@@ -59,9 +79,19 @@ const user = {
           // } else {
           //   reject('getInfo: roles must be a non-null array !')
           // }
-          commit('SET_NAME', data.account)
-          commit('SET_AVATAR', data.avatar)
-          resolve(response)
+          // console.log('===: ', data)
+          commit('SET_NAME', data.user_id)
+          commit('SET_AVATAR', data.img_url)
+          commit('SET_REAL_NAME', data.real_name)
+          commit('SET_ROLE_ID', data.role_id)
+          commit('SET_ROLE_NAME', data.role_name)
+          const auth = new AuthoritySeparate(data.function_no_list || [])
+          commit('SET_BTNS', auth.get_perm())
+          const auths = auth.get_auths()
+          commit('SET_AUTHS', auths)
+          // 处理路由信息
+          const routes = get_user_async_routes(auths)
+          resolve(routes)
         }).catch(error => {
           reject(error)
         })

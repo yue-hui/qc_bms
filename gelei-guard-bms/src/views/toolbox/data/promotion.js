@@ -108,6 +108,14 @@ export const bms_platform_classification = [
         {
           value: '42',
           label: '小格雷定制机'
+        },
+        {
+          value: '52',
+          label: '小米企业模式'
+        },
+        {
+          value: '62',
+          label: 'VIVO政企Y3'
         }
       ],
       update_models: [
@@ -150,6 +158,14 @@ export const bms_platform_classification = [
         {
           value: '43',
           label: '小格雷中间件'
+        },
+        {
+          value: '53',
+          label: '小米企业模式中间件'
+        },
+        {
+          value: '63',
+          label: 'VIVO政企Y3中间件'
         }
       ],
       update_models: [
@@ -213,6 +229,14 @@ export const platforms = [
     label: '小格雷定制机'
   },
   {
+    value: '52',
+    label: '小米企业模式孩子端'
+  },
+  {
+    value: '62',
+    label: 'vivo Y3孩子端'
+  },
+  {
     value: '13',
     label: 'vivo中间件'
   },
@@ -227,6 +251,14 @@ export const platforms = [
   {
     value: '43',
     label: '小格雷中间件'
+  },
+  {
+    value: '53',
+    label: '小米企业模式中间件'
+  },
+  {
+    value: '63',
+    label: 'vivo Y3中间件'
   }
 ]
 
@@ -265,6 +297,14 @@ export const platform_version_instructions = [
     label: '小格雷定制机'
   },
   {
+    value: '52',
+    label: '小米企业模式孩子端'
+  },
+  {
+    value: '62',
+    label: 'vivo Y3孩子端'
+  },
+  {
     value: '13',
     label: '孩子端+vivo中间件'
   },
@@ -279,6 +319,14 @@ export const platform_version_instructions = [
   {
     value: '43',
     label: '孩子端+小格雷中间件'
+  },
+  {
+    value: '53',
+    label: '小米企业模式中间件'
+  },
+  {
+    value: '63',
+    label: 'vivo Y3中间件'
   }
 ]
 

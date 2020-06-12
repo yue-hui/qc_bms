@@ -41,8 +41,6 @@ import { sync_platform_to_all } from '@/api/interactive'
 
 export default {
   name: 'SyncInstructions',
-  beforecreate: function() {
-  },
   props: {},
   data: function() {
     return {
@@ -134,6 +132,11 @@ export default {
 
   .platform-group {
     /*padding: 10px 10px 10px 0;*/
+    .multi-radio-col {
+      &:hover {
+        color: #49A3EF;
+      }
+    }
   }
 }
 </style>

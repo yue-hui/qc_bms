@@ -38,8 +38,6 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'DeviceBindRecords',
-  beforecreate: function() {
-  },
   props: {
     childId: {
       type: String,

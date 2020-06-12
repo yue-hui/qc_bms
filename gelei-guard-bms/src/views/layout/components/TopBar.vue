@@ -1,13 +1,23 @@
 <template>
   <div class="component-card">
     <div class="left-item">
-      <img src="@/assets/imgs/logo.png" alt="" @click="go_to_home_page">
-      <div class="hover-system-subject" @click="go_to_home_page">格雷守护后台管理系统
+      <img src="@/assets/imgs/logo.png" alt="">
+      <div class="hover-system-subject" @click="go_to_home_page">格雷盒子后台管理系统
       </div>
     </div>
     <div class="user-info">
-      <div v-if="name" class="user-name-show">{{ name }},</div>
-      <div class="user-name-show">欢迎您!</div>
+      <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
+      <el-dropdown @command="user_control">
+        <div class="me">
+          <div v-if="name" class="user-name-show">{{ name || '小格子' }}</div>
+          <span v-if="greetings">,</span>
+          <div class="user-name-show">{{ greetings }}</div>
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="basic">基本资料</el-dropdown-item>
+          <el-dropdown-item command="secret">修改密码</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <div class="diviser" />
       <div class="logout-block" @click="logout">
         <div class="logout-hover-style">
@@ -21,17 +31,35 @@
 
 <script>
 import { mapGetters } from 'vuex'
+// import dayjs from 'dayjs'
 
 export default {
   name: 'TopBar',
-  beforecreate: function() {
-  },
   props: {},
   data: function() {
-    return {}
+    const default_avatar = require('@/assets/imgs/glmm.png')
+    // const current_day = dayjs().hour()
+    const greetings = '欢迎您!'
+    // if (current_day < 6) {
+    //   greetings = '晚上好!'
+    // } else if (current_day > 6 && current_day <= 8) {
+    //   greetings = '早上好!'
+    // } else if (current_day > 8 && current_day <= 11) {
+    //   greetings = '上午好!'
+    // } else if (current_day > 11 && current_day <= 13) {
+    //   greetings = '中午好!'
+    // } else if (current_day > 14 && current_day <= 17) {
+    //   greetings = '下午好!'
+    // } else if (current_day > 18) {
+    //   greetings = '夜深了!'
+    // }
+    return {
+      default_avatar,
+      greetings
+    }
   },
   computed: {
-    ...mapGetters(['name'])
+    ...mapGetters(['name', 'avatar'])
   },
   watch: {},
   mounted: function() {
@@ -46,6 +74,28 @@ export default {
       const origin = window.location.origin
       const href = origin + '/gelei-guard-bms/'
       window.location.href = href
+    },
+    avatar_click() {
+      this.basic_action()
+    },
+    user_control(command) {
+      console.log('command: ', command)
+      switch (command) {
+        case 'basic':
+          this.basic_action()
+          break
+        case 'secret':
+          this.secret_action()
+          break
+        default:
+          break
+      }
+    },
+    basic_action() {
+      this.$router.push({ name: 'Profile' })
+    },
+    secret_action() {
+      this.$router.push({ name: 'ModifiedPassword' })
     }
   }
 }
@@ -75,6 +125,7 @@ export default {
       font-size: 16px;
       color: #cecece;
       display: inline-block;
+      cursor: pointer;
 
       &:hover {
         color: rgb(64, 158, 255);
@@ -89,8 +140,31 @@ export default {
     flex-direction: row;
     font-size: 14px;
     color: #cecece;
+    cursor: pointer;
 
-    .user-name-show {
+    .avatar {
+      margin-top: 15px;
+      margin-right: 6px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      transition: .5s;
+      box-shadow: 0 0 2px 2px #888888;
+      padding: 1px;
+      background-color: #fff;
+
+      &:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 5px 5px #888888;
+      }
+    }
+
+    .me {
+      display: flex;
+      flex-direction: row;
+      color: #cecece;
+      cursor: pointer;
+
       &:hover {
         color: white;
       }
@@ -117,7 +191,8 @@ export default {
         align-items: center;
 
         &:hover {
-          background-color: darken(#727aff, 5);
+          /*background-color: darken(#727aff, 5);*/
+          color: white;
           position: relative;
         }
       }

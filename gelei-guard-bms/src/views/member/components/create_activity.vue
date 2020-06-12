@@ -74,7 +74,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="cancel">取消</el-button>
-                <el-button :disabled="is_creating" size="mini" type="primary" @click="on_create">确定</el-button>
+                <gl-button :disabled="is_creating" pid="10072" size="mini" type="primary" @click="on_create">确定</gl-button>
               </div>
             </el-form-item>
           </el-form>
@@ -85,14 +85,12 @@
 </template>
 
 <script>
-import { add_member_activity, get_member_plan_list } from '@/api/interactive'
+import { add_member_activity, get_all_member_plans } from '@/api/interactive'
 import { MEMBER_ACTIVITY_TYPES, PATRIARCH_MEMBER_TYPES } from '@/utils/constant'
 import { get_value_from_map_list } from '@/utils/common'
 
 export default {
   name: 'CreateActivity',
-  beforecreate: function() {
-  },
   props: {
     visible: {
       type: Boolean,
@@ -241,7 +239,7 @@ export default {
       const options = {
         plan_type: '02'
       }
-      get_member_plan_list(options).then(res => {
+      get_all_member_plans(options).then(res => {
         if (res.status === 0) {
           this.plan_list = res.data.map(r => {
             return {

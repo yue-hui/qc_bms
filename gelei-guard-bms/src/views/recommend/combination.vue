@@ -35,13 +35,14 @@
       </div>
       <div class="right-sider-box-style">
         <div class="control-box">
-          <el-button
+          <gl-button
+            pid="20033"
             class="new-combination-button"
             type="success"
             size="mini"
             @click="create_system_recomend">
             创建系统推荐
-          </el-button>
+          </gl-button>
         </div>
         <!--<div class="control-box">-->
         <!--<el-button type="primary" class="new-combination-button" size="mini" @click="create_manual_recomend">创建手工推荐</el-button>-->
@@ -134,9 +135,11 @@ export default {
       this.is_create = false
       this.show_app_dialog = true
     },
-    receive(status) {
-      this.show_app_dialog = status
-      this.$refs.comb_list.reload()
+    receive(refresh = true) {
+      this.show_app_dialog = false
+      if (refresh) {
+        this.$refs.comb_list.reload()
+      }
     },
     edit_combination(row) {
       this.current_row = row

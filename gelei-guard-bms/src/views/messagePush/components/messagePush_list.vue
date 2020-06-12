@@ -77,8 +77,6 @@ export default {
       }
     }
   },
-  beforecreate: function() {
-  },
   data: function() {
     const page_size = getPagenationSize()
     return {

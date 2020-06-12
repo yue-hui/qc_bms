@@ -52,8 +52,6 @@ import { DAY_MICROSECOND } from '@/utils/constant'
 
 export default {
   name: 'StatisticsPannel',
-  beforecreate: function() {
-  },
   filters: {
     abs: function(percent) {
       if (percent === undefined) {

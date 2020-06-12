@@ -50,7 +50,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button :disabled="is_busy" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <gl-button :disabled="is_busy" pid="10048,10044" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</gl-button>
       </span>
     </el-dialog>
   </div>
@@ -61,7 +61,8 @@ import { pure_object_null_value } from '@/utils/common'
 import {
   create_sys_configuration,
   edit_sys_configuration,
-  get_sys_configuration_details, get_sys_param_type_list
+  get_sys_configuration_details,
+  get_sys_param_type_list
 } from '@/api/interactive'
 import { SYSTEM_ENABLE_STATUS } from '@/views/system/data/system_parameter'
 

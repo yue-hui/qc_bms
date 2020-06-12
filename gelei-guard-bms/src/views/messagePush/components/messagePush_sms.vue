@@ -42,7 +42,7 @@
           :current-page="page"
           :page-size="page_size"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -67,8 +67,6 @@ export default {
         return {}
       }
     }
-  },
-  beforecreate: function() {
   },
   data: function() {
     const page_size = getPagenationSize()

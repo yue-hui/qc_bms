@@ -80,13 +80,14 @@
           </el-col>
           <el-col :xs="12" :sm="4" :md="4" :lg="8" :xl="10" class="col-bg layout-right">
             <el-row>
-              <el-button
+              <gl-button
+                pid="20031"
                 class="download details-tab"
                 size="mini"
                 type="success"
                 @click="create_app">创建应用
                 <svg-icon icon-class="download" />
-              </el-button>
+              </gl-button>
             </el-row>
           </el-col>
         </el-row>
@@ -195,9 +196,11 @@ export default {
         }
       })
     },
-    receive(status) {
-      this.$refs.app_list.reload()
-      this.show_app_dialog = status
+    receive(refresh = true) {
+      if (refresh) {
+        this.$refs.app_list.reload()
+      }
+      this.show_app_dialog = false
       this.is_create = !this.is_create
     },
     next_tick_query(r) {

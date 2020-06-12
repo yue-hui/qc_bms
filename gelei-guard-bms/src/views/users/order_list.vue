@@ -115,12 +115,13 @@
           <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="16" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
+                <gl-button
                   :loading="download_loading"
+                  pid="20007"
                   size="mini"
                   type="success"
                   @click="download"><i class="el-icon-download el-icon" />导出
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
