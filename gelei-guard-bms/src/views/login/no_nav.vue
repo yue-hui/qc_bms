@@ -19,7 +19,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .no-navigation-page {
   width: 100%;
-  background-image: url("../../assets/imgs/no_nav_1.jpg");
+  background-image: url("../../assets/imgs/welcome.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
