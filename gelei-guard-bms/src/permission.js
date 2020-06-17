@@ -29,7 +29,6 @@ router.beforeEach(async(to, from, next) => {
       } else {
         next()
       }
-      next()
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

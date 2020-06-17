@@ -297,13 +297,14 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        path: '/users/details',
+        name: 'user_details',
         query: {
-          id: row.patriarch_id
+          pid: row.patriarch_id
         }
       }
-      const { href } = this.$router.resolve(options)
-      window.open(href, '_blank')
+      // const { href } = this.$router.resolve(options)
+      // window.open(href, '_blank')
+      this.$router.push(options)
     },
     close_recharge_dialog: function() {
       this.recharge_dialog_visible = false

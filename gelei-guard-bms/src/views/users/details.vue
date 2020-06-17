@@ -211,12 +211,12 @@ export default {
   },
   computed: {},
   mounted: function() {
-    this.fetch_details()
+    // this.fetch_details()
   },
   methods: {
     fetch_details() {
       const config = {
-        user_id: this.$route.query.id
+        user_id: this.$route.params.pid
       }
       this.loading = true
       get_parent_details(config).then(res => {

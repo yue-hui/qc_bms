@@ -46,17 +46,30 @@ export default {
         callback(new Error(checked.message))
       }
     }
-    const reminder_user_message = '请确保输入新密码与确认密码一致'
     const validateNewPassword = (rule, value, callback) => {
-      console.log('value', value)
       const checked = validatePasswordSimple(value)
-      console.log('checked: ', checked)
+      if (checked.status) {
+        if (this.form.new_password && this.form.old_password) {
+          if (this.form.new_password === this.form.old_password) {
+            callback(new Error('新密码不能与老密码相同，请换其他密码'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      } else {
+        callback(new Error(checked.message))
+      }
+    }
+    const validateNewComfirmPassword = (rule, value, callback) => {
+      const checked = validatePasswordSimple(value)
       if (checked.status) {
         if (this.form.new_password && this.form.confirm_password) {
           if (this.form.new_password === this.form.confirm_password) {
             callback()
           } else {
-            callback(new Error(reminder_user_message))
+            callback(new Error('您输入的密码与确认密码不一致'))
           }
         } else {
           callback()
@@ -73,16 +86,16 @@ export default {
       },
       rules: {
         old_password: [
-          { type: 'string', required: true, message: '旧密码不能为空', trigger: 'blur' },
+          { type: 'string', required: true, message: '请您填写旧密码', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateOldPassword }
         ],
         new_password: [
-          { type: 'string', required: true, message: '请输入您将要设置的密码', trigger: 'blur' },
+          { type: 'string', required: true, message: '请您填写密码', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateNewPassword }
         ],
         confirm_password: [
-          { type: 'string', required: true, message: '请确认您的新密码', trigger: 'blur' },
-          { type: 'string', required: true, trigger: 'blur', validator: validateNewPassword }
+          { type: 'string', required: true, message: '请确认您的确认密码', trigger: 'blur' },
+          { type: 'string', required: true, trigger: 'blur', validator: validateNewComfirmPassword }
         ]
       }
     }

@@ -400,13 +400,14 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        path: '/users/details',
-        query: {
-          id: row.user_id
+        name: 'user_details',
+        params: {
+          pid: row.user_id
         }
       }
-      const { href } = this.$router.resolve(options)
-      window.open(href, '_blank')
+      // const { href } = this.$router.resolve(options)
+      // window.open(href, '_blank')
+      this.$router.push(options)
     },
     close_recharge_dialog: function() {
       this.recharge_dialog_visible = false

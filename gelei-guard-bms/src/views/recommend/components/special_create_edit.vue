@@ -66,7 +66,7 @@
                   class="wrapper"
                   @change="change_soft_list">
                   <transition-group>
-                    <div v-for="(item, index) in soft_list" :key="index" class="soft-record-row row-body">
+                    <div v-for="(item, index) in soft_list" :key="item" class="soft-record-row row-body">
                       <div class="column-item column-with-index">{{ index + 1 }}</div>
                       <div class="column column-item column-with-padding">{{ item.soft_name }}</div>
                       <div class="column-item column-with-control delete-action" @click="delete_soft_item(item)">删除

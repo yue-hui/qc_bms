@@ -75,6 +75,7 @@ import {
   get_all_member_plans
 } from '@/api/interactive'
 import { get_h5_domain } from '@/utils/common'
+import { BUSINESS_COOPERATION_DEFAULT_PICTURE } from '@/utils/constant'
 
 export default {
   name: 'CreateOrEditBusinessCooperation',
@@ -91,6 +92,14 @@ export default {
     }
   },
   data: function() {
+    const file_list = [
+      {
+        status: 'success',
+        uid: new Date().getTime(),
+        url: BUSINESS_COOPERATION_DEFAULT_PICTURE,
+        name: ''
+      }
+    ]
     return {
       title: '',
       loading: false,
@@ -102,7 +111,7 @@ export default {
         channel_contacts: '',
         contact_info: '',
         channel_id: '',
-        file_list: [],
+        file_list,
         rule: '',
         plan_id: '',
         channel_url: ''
@@ -146,6 +155,14 @@ export default {
     },
     reset_form() {
       const invited_plan = this.plan_list.find(r => r.label === '新用户福利-赠送7天会员')
+      const file_list = [
+        {
+          status: 'success',
+          uid: new Date().getTime(),
+          url: BUSINESS_COOPERATION_DEFAULT_PICTURE,
+          name: ''
+        }
+      ]
       this.form = {
         channel_no: '',
         channel_name: '',
@@ -153,7 +170,7 @@ export default {
         channel_contacts: '',
         contact_info: '',
         channel_id: '',
-        file_list: [],
+        file_list,
         rule: '',
         plan_id: invited_plan ? invited_plan.plan_id : '',
         channel_url: ''

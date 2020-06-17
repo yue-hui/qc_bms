@@ -18,7 +18,10 @@ export const EXPORT_MAX_RECORD_LENGTH = 10000
 export const EXPORT_OVER_MAX_TIPS_REMINDER = '最多只能导出1W条数据噢!'
 
 /* 前端首页URL */
-export const HOME_PATH = '/users/information'
+export const HOME_PATH = '/nav'
+
+/* 商务注册页默认图片 */
+export const BUSINESS_COOPERATION_DEFAULT_PICTURE = 'https://file.gwchina.cn/437EC0AC7F0000015E2BBF4849643C96/2020/3/a27604af6cfd7ee13ea8c60b7738cd738e7424068a4b971c07f101043286e04e.png'
 
 // export const SAY_TO_USER_WITH_404 = '网管说这个页面你不能进......'
 export const SAY_TO_USER_WITH_404 = '此页只因天上有，不须此行在人间......'
@@ -41,7 +44,7 @@ export const min_weight = 1
 export const max_weight = 3
 
 // 分页参数
-export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_SIZE = 100
 
 // dayjs 日期格式,中文
 export const DATE_FORMAT_WITH_CN = 'YYYY年MM月DD日'
@@ -218,7 +221,7 @@ export const RATE_STARTS_COLOR = ['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#
 export const __VERSION__ = '201902281003'
 
 // 当前版本号
-export const PagenationSizeKey = 'page_sizes'
+export const PagenationSizeKey = 'page_sizes_1'
 
 // 正浮点数
 export const POSITIVE_FLOAT = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/

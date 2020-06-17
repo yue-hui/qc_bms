@@ -86,11 +86,14 @@ const user = {
           commit('SET_ROLE_ID', data.role_id)
           commit('SET_ROLE_NAME', data.role_name)
           const auth = new AuthoritySeparate(data.function_no_list || [])
-          commit('SET_BTNS', auth.get_perm())
+          const perm = auth.get_perm()
+          commit('SET_BTNS', perm)
           const auths = auth.get_auths()
           commit('SET_AUTHS', auths)
+          console.log('auths: ', perm, auths)
           // 处理路由信息
           const routes = get_user_async_routes(auths)
+          console.log('routes: ', routes)
           resolve(routes)
         }).catch(error => {
           reject(error)

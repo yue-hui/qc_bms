@@ -54,7 +54,7 @@ export const constantRoutes = [
       }
     ]
   },
-  // { path: '*', redirect: '/404', hidden: true },
+  // { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
   { path: '*', redirect: '/nav', name: '欢迎使用格雷盒子后台管理系统', hidden: true }
 ]
 
@@ -94,8 +94,8 @@ export const asyncRoutes = [
         meta: { title: '孩子信息管理', icon: 'kids', pid: '20004' }
       },
       {
-        path: 'details',
-        name: '用户详细信息',
+        path: 'details/:pid',
+        name: 'user_details',
         hidden: true,
         component: () => import('@/views/users/details'),
         meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
