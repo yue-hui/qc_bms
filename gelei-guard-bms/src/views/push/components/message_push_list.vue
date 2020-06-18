@@ -64,8 +64,7 @@ import {
   get_manager_list
 } from '@/api/interactive'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { messagePush_terrace, messagePush_status } from '@/views/messagePush/data/data'
+import { push_platform, push_status, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 
 export default {
   name: 'ApplicationList',
@@ -147,8 +146,8 @@ export default {
           // const time_transfer = date_formatter(r.create_time)
           return {
             ...r,
-            is_send: messagePush_status(r.is_send),
-            PLATFORM: messagePush_terrace(r.PLATFORM)
+            is_send: push_status(r.is_send),
+            PLATFORM: push_platform(r.PLATFORM)
           }
         })
         this.total = res.data.total

@@ -52,11 +52,10 @@
 
 <script>
 import {
-  get_manager_sms_list
+  get_manager_voice_list
 } from '@/api/interactive'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { messagePush_terrace, messagePush_status } from '@/views/messagePush/data/data'
+import { push_platform, push_status, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 
 export default {
   name: 'ApplicationList',
@@ -131,13 +130,13 @@ export default {
     },
     load_data(config) {
       this.loading = true
-      get_manager_sms_list(config).then(res => {
+      get_manager_voice_list(config).then(res => {
         this.data_list = res.data.rows.map(r => {
           // const time_transfer = date_formatter(r.create_time)
           return {
             ...r,
-            is_send: messagePush_status(r.is_send),
-            PLATFORM: messagePush_terrace(r.PLATFORM)
+            is_send: push_status(r.is_send),
+            PLATFORM: push_platform(r.PLATFORM)
           }
         })
         this.total = res.data.total

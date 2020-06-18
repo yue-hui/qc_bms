@@ -36,7 +36,7 @@
 
 <script>
 
-import messagePushVoice from '@/views/messagePush/components/messagePush_voice'
+import messagePushVoice from '@/views/push/components/message_push_voice'
 
 export default {
   components: {

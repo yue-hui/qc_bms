@@ -22,7 +22,7 @@ Vue.use(Router)
   }
  **/
 export const constantRoutes = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/login', name: 'Login', component: () => import('@/views/login/index'), hidden: true },
   // { path: '/potential/:item(\\w+)/:status(\\d+)', component: () => import('@/views/login/potential'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   {
@@ -47,15 +47,17 @@ export const constantRoutes = [
         meta: { title: '修改用户密码', showNavbar: false, hide: true, icon: 'profile' }
       },
       {
-        path: '/nav',
+        path: '/welcome',
+        name: 'welcome',
         component: () => import('@/views/login/no_nav'),
         hidden: true,
         meta: { title: '欢迎使用格雷盒子后台管理系统', showNavbar: false, hide: true, icon: 'profile' }
       }
     ]
   },
+  { path: '/', redirect: '/welcome', name: 'Default', hidden: true }
   // { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
-  { path: '*', redirect: '/nav', name: '欢迎使用格雷盒子后台管理系统', hidden: true }
+  // { path: '*', redirect: '/welcome', name: '欢迎使用格雷盒子后台管理系统', hidden: true }
 ]
 
 export const asyncRoutes = [
@@ -172,23 +174,23 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/messagePush/index',
+    path: '/push/',
     component: Layout,
-    name: 'MessagePush',
-    redirect: '/messagePush/index/smsList',
+    name: 'Push',
+    redirect: '/push/sms',
     alwaysShow: true,
     meta: { title: '短信记录', icon: 'message_push', pid: '20026' },
     children: [
       {
-        path: 'smsList',
-        name: '文本',
-        component: () => import('@/views/messagePush/messageSmsList'),
+        path: 'sms',
+        name: 'SMSPush',
+        component: () => import('@/views/push/message_sms'),
         meta: { title: '文本短信', icon: 'txt_message', pid: '20027' }
       },
       {
-        path: 'voiceList',
-        name: '语音',
-        component: () => import('@/views/messagePush/messageVoiceList'),
+        path: 'voice',
+        name: 'VoicePush',
+        component: () => import('@/views/push/message_voice'),
         meta: { title: '语音短信', icon: 'voice_message', pid: '20028' }
       }
     ]
@@ -372,6 +374,10 @@ export const asyncRoutes = [
       }
     ]
   }
+]
+
+export const delayLoadRoutes = [
+  { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
 ]
 
 export default new Router({

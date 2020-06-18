@@ -18,7 +18,7 @@ export const EXPORT_MAX_RECORD_LENGTH = 10000
 export const EXPORT_OVER_MAX_TIPS_REMINDER = '最多只能导出1W条数据噢!'
 
 /* 前端首页URL */
-export const HOME_PATH = '/nav'
+export const HOME_PATH = '/welcome'
 
 /* 商务注册页默认图片 */
 export const BUSINESS_COOPERATION_DEFAULT_PICTURE = 'https://file.gwchina.cn/437EC0AC7F0000015E2BBF4849643C96/2020/3/a27604af6cfd7ee13ea8c60b7738cd738e7424068a4b971c07f101043286e04e.png'
@@ -508,3 +508,18 @@ export const SYSTEM_ACCOUNT_ENABLE_STATE = [
 // 基数1W
 export const W_CONSTANT = 10000
 
+/* 消息推送模块 */
+export function push_status(value) {
+  switch (value) {
+    case '1': return '已发送'
+    case '0': return '未发送'
+  }
+}
+export function push_platform(value) {
+  switch (value) {
+    case '01': return '格雷守护'
+    case '02': return '格雷盒子'
+    case '03': return '智习客'
+    case '04': return '格雷优选'
+  }
+}

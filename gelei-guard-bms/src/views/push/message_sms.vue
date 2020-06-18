@@ -24,23 +24,21 @@
     </div>
 
     <div class="content-body">
-
       <!--应用列表-->
-      <message-push-list
+      <message-push-sms
         ref="comb_list"
         :conditions="query_condition" />
-
     </div>
   </div>
 </template>
 
 <script>
 
-import messagePushList from '@/views/messagePush/components/messagePush_list'
+import messagePushSms from '@/views/push/components/message_push_sms'
 
 export default {
   components: {
-    messagePushList
+    messagePushSms
   },
   data() {
     return {
@@ -79,7 +77,6 @@ export default {
       })
     },
     change_messagePush_phone(reco_style) {
-      console.log(reco_style)
       this.messagePush_phone = reco_style
       this.change_combination_condition()
     },

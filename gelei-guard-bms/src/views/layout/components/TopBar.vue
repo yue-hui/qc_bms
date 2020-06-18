@@ -67,7 +67,14 @@ export default {
   methods: {
     logout: function() {
       this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+        // 为了重新实例化vue-router对象 避免bug
+        const options = {
+          name: 'Login',
+          query: {
+            redirect: this.$route.path
+          }
+        }
+        this.$router.push(options)
       })
     },
     go_to_home_page() {

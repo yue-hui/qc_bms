@@ -3,7 +3,7 @@
 * */
 import sha256 from 'sha256'
 import { W_CONSTANT } from '@/utils/constant'
-import { asyncRoutes } from '@/router'
+import { asyncRoutes, delayLoadRoutes } from '@/router'
 
 export class AuthoritySeparate {
   constructor(codes) {
@@ -88,6 +88,7 @@ export function get_user_async_routes(auths = []) {
     return _routes
   }
 
-  const origin_routes = __get_access_route(asyncRoutes)
+  let origin_routes = __get_access_route(asyncRoutes)
+  origin_routes = origin_routes.concat(delayLoadRoutes)
   return origin_routes
 }

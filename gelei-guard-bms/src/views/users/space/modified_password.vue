@@ -33,6 +33,7 @@
 import { validatePasswordSimple } from '@/utils/validate'
 import { modified_user_password } from '@/api/login'
 import { encrypt_password } from '@/utils/permissions'
+import { HOME_PATH } from '@/utils/constant'
 
 export default {
   name: 'ModifiedPassword',
@@ -51,7 +52,7 @@ export default {
       if (checked.status) {
         if (this.form.new_password && this.form.old_password) {
           if (this.form.new_password === this.form.old_password) {
-            callback(new Error('新密码不能与老密码相同，请换其他密码'))
+            callback(new Error('新旧密码不能一致，请重新输入！'))
           } else {
             callback()
           }
@@ -69,7 +70,7 @@ export default {
           if (this.form.new_password === this.form.confirm_password) {
             callback()
           } else {
-            callback(new Error('您输入的密码与确认密码不一致'))
+            callback(new Error('你输入的密码不一致'))
           }
         } else {
           callback()
@@ -130,7 +131,7 @@ export default {
     },
     logout: function() {
       this.$store.dispatch('LogOut').then(() => {
-        this.$router.push('/')
+        this.$router.push({ path: HOME_PATH })
       })
     }
   }

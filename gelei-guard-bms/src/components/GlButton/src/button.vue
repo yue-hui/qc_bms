@@ -111,7 +111,6 @@ export default {
       }
       const permissions = this.permission.concat(this.auths)
       return this.own_permission.some(p => {
-        console.log('compare: ', p, permissions)
         return permissions.indexOf(p) !== -1
       })
     },
