@@ -32,7 +32,7 @@
           v-loading="loading"
           :data="version_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="版本号"

@@ -80,7 +80,7 @@
           v-loading="loading"
           :data="questions"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="序号"
             prop="_id"

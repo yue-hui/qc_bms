@@ -6,8 +6,7 @@
           v-loading="loading"
           :data="data_list"
           :stripe="true"
-          size="mini"
-          style="width: 100%">
+          size="mini">
           <el-table-column
             align="center"
             label="短信平台ID"

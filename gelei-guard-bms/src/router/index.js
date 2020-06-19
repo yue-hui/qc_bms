@@ -9,6 +9,12 @@ import AppMain from '@/views/layout/components/AppMain'
 
 Vue.use(Router)
 
+// 处理重复路由报错的问题
+const VueRouterPush = Router.prototype.push
+Router.prototype.push = function push(to) {
+  return VueRouterPush.call(this, to).catch(err => err)
+}
+
 /**
  * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -30,6 +36,7 @@ export const constantRoutes = [
     component: Layout,
     name: 'Space',
     hidden: true,
+    redirect: 'profile',
     meta: { title: '用户空间', icon: 'information' },
     children: [
       {

@@ -137,6 +137,7 @@
         <el-table
           v-loading="loading"
           :data="table_data"
+          stripe
           size="mini"
           style="width: 100%">
           <el-table-column
@@ -298,13 +299,12 @@ export default {
     view_details: function(row) {
       const options = {
         name: 'user_details',
-        query: {
+        params: {
           pid: row.patriarch_id
         }
       }
-      // const { href } = this.$router.resolve(options)
-      // window.open(href, '_blank')
-      this.$router.push(options)
+      const { href } = this.$router.resolve(options)
+      window.open(href, '_blank')
     },
     close_recharge_dialog: function() {
       this.recharge_dialog_visible = false

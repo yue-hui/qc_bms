@@ -6,8 +6,7 @@
           v-loading="loading"
           :data="data_list"
           :stripe="true"
-          size="mini"
-          style="width: 100%">
+          size="mini">
           <el-table-column
             align="center"
             label="接收者手机号"
@@ -26,7 +25,7 @@
             align="center"
             label="推送时间"
             prop="send_time"
-            width="100" />
+            width="150" />
           <el-table-column
             align="center"
             label="短信平台"

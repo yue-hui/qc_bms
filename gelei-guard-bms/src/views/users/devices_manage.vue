@@ -135,7 +135,7 @@
           v-loading="loading"
           :data="device_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="孩子端设备ID"

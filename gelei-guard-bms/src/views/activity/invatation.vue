@@ -68,7 +68,7 @@
             v-loading="loading"
             :data="invatation_list"
             size="mini"
-            style="width: 100%">
+            stripe>
             <el-table-column
               align="center"
               label="序号"

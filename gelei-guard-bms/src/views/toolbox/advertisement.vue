@@ -118,7 +118,7 @@
           v-loading="loading"
           :data="adv_data"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="广告名称"

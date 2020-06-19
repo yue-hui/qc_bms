@@ -15,7 +15,7 @@
           v-loading="loading"
           :data="recommend_subject_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="应用专题名称"

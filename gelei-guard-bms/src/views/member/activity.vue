@@ -28,7 +28,7 @@
           v-loading="loading"
           :data="activity_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="活动名称"

@@ -33,7 +33,7 @@
           v-loading="loading"
           :data="parameter"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="软件ID"
             prop="soft_id" />

@@ -40,7 +40,7 @@
           v-loading="loading"
           :data="table_data"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="序号"

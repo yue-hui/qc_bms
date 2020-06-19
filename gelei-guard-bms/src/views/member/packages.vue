@@ -122,7 +122,7 @@
           v-loading="loading"
           :data="packages_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             width="160"

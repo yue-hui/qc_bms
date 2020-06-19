@@ -6,7 +6,7 @@
           v-loading="loading"
           :data="data_list"
           size="mini"
-          style="width: 100%"
+          stripe
           @sort-change="install_sort_change">
           <el-table-column
             align="center"

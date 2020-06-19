@@ -11,7 +11,6 @@ router.beforeEach(async(to, from, next) => {
   const token = getToken()
   if (token) {
     if (to.path === '/login') {
-      next({ path: '/' })
       NProgress.done()
     } else {
       if (store.getters.btns.length === 0) {

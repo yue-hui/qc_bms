@@ -17,7 +17,7 @@
             v-loading="loading"
             :data="data_child_list"
             size="mini"
-            style="width: 100%">
+            stripe>
             <el-table-column
               align="center"
               label="时间"

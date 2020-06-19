@@ -69,10 +69,7 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         // 为了重新实例化vue-router对象 避免bug
         const options = {
-          name: 'Login',
-          query: {
-            redirect: this.$route.path
-          }
+          name: 'Login'
         }
         this.$router.push(options)
       })

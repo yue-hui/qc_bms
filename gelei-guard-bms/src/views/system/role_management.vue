@@ -33,7 +33,7 @@
           v-loading="loading"
           :data="resource"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="序号"

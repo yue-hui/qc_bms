@@ -73,7 +73,7 @@
           v-loading="loading"
           :data="version_block"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="目标版本号"
             prop="version" />

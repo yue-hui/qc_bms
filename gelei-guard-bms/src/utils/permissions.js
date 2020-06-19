@@ -76,6 +76,12 @@ export function get_user_async_routes(auths = []) {
         delete route.children
         route['children'] = __get_access_route(children)
       }
+
+      // 修改redirect默认值
+      if (route['children'] && route['children'].length > 0) {
+        route['redirect'] = route['path'] + '/' + route['children'][0]['path']
+      }
+
       // console.log('sync route: ', children, route, route['children'])
       if (children && children.length > 0 && route && route['children'].length === 0) {
         // 子节点无权限，上级也需要隐藏
