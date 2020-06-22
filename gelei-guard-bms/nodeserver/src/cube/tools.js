@@ -148,15 +148,13 @@ function nodeRequestWithNewParams(TransferReq, reqParam, method, headers, res, n
       resolve({ message: 'node sign miss 1!', status: -1 })
       return
     }
-    var checkRet = checkedParams(reqParam.sign, reqParam)
+    const currentTime = +new Date()
+    var checkRet = checkedParams(reqParam.sign, reqParam, currentTime)
     if (checkRet.status === -1) {
-      resolve(checkRet)
+      res.send(checkRet)
       return
     }
-
-    var currentTime = checkRet['currentTime']
     var encryptParams = getSign(currentTime, false, newParams)
-
     request({
       url: TransferReq,
       body: encryptParams,
