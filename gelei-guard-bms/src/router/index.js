@@ -384,7 +384,7 @@ export const asyncRoutes = [
 ]
 
 export const delayLoadRoutes = [
-  { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/welcome', name: 'Default', hidden: true }
 ]
 
 export default new Router({
