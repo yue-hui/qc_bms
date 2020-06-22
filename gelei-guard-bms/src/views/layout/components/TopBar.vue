@@ -2,8 +2,7 @@
   <div class="component-card">
     <div class="left-item">
       <img src="@/assets/imgs/logo.png" alt="">
-      <div class="hover-system-subject" @click="go_to_home_page">格雷盒子后台管理系统
-      </div>
+      <div class="hover-system-subject" @click="go_to_home_page">{{ title }}</div>
     </div>
     <div class="user-info">
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
@@ -15,7 +14,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="basic">基本资料</el-dropdown-item>
-          <el-dropdown-item command="secret">修改密码</el-dropdown-item>
+          <el-dropdown-item v-if="name !== 'gladmin'" command="secret">修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="diviser" />
@@ -55,23 +54,36 @@ export default {
     // }
     return {
       default_avatar,
-      greetings
+      greetings,
+      title: ''
     }
   },
   computed: {
-    ...mapGetters(['name', 'avatar'])
+    ...mapGetters(['name', 'avatar', 'is_agent'])
   },
-  watch: {},
+  watch: {
+    is_agent: {
+      handler: function(val) {
+        if (val === true) {
+          this.title = '格雷盒子后台管理系统-代理商'
+        } else {
+          this.title = '格雷盒子后台管理系统'
+        }
+      },
+      immediate: true
+    }
+  },
   mounted: function() {
   },
   methods: {
     logout: function() {
       this.$store.dispatch('LogOut').then(() => {
         // 为了重新实例化vue-router对象 避免bug
-        const options = {
-          name: 'Login'
-        }
-        this.$router.push(options)
+        // const options = {
+        //   name: 'Login'
+        // }
+        // this.$router.push(options)
+        window.location.reload(true)
       })
     },
     go_to_home_page() {
