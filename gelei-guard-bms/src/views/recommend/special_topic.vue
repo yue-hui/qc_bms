@@ -4,7 +4,7 @@
       <div class="header-line-left" />
       <div class="header-line-right">
         <div class="control-box">
-          <el-button size="mini" type="success" @click="create_package">创建应用专题</el-button>
+          <gl-button pid="20035" size="mini" type="success" @click="create_package">创建应用专题</gl-button>
         </div>
       </div>
     </div>
@@ -15,7 +15,7 @@
           v-loading="loading"
           :data="recommend_subject_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="应用专题名称"
@@ -59,24 +59,27 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20080"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="change_shelf_status(scope.row)">{{ show_table_button_label(scope.row) }}
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20079"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="edit_shelf(scope.row)">编辑
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20100"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="delete_shelf(scope.row)">删除
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import './styles/theme/index.css'
 import ElementUI from 'element-ui'
+import GlButton from '@/components/GlButton'
 // import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
@@ -21,6 +22,7 @@ import { setVersion } from '@/utils/auth'
 setVersion()
 
 Vue.use(ElementUI, { zhLocale })
+Vue.use(GlButton)
 Vue.use(VCharts)
 
 Vue.config.productionTip = false

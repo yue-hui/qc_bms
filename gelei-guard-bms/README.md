@@ -89,4 +89,14 @@ Jenkins 发布流程
 在【部署-测试】deploy-greenguard-bms-test 【立即构建】发布测试环境
 ```
 
-
+#### 权限分离接口
+> 权限分离针对用户接口级和按钮级进行权限控制；
+> 需要在nodeserver/src/storages下做配置；
+> 权限值共5位，1打头的为后端服务接口，2打头的为页面或按钮权限，4xxxx打头的是未定义的权限值，在后台时会做过滤.
+```js
+interfaces.js // 定义所有接口权限值  
+permissions.js // 定义的页面和按钮权限值
+page_map.js // 定义了页面权限与按钮权限之间的映射，其中public关键字代码代表着公共权限
+```  
+> nodeserver/src/cube/secret.js 文件是对接口参数加解密算法使用的，采用的AES加密方法
+> 注：4xxxx权限仅做接口标记，方便后期对单个接口做权限控制和维护

@@ -47,18 +47,20 @@
         <el-col :xs="24" :sm="8" :md="12" :lg="12" :xl="16" class="col-bg layout-right col-right-button">
           <div class="grid-content bg-purple-light">
             <el-row>
-              <el-button
+              <gl-button
+                pid="20048"
                 type="success"
                 size="mini"
                 @click="sync_version"
               >发送同步版本指令
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20049"
                 type="success"
                 size="mini"
                 @click="create_app_version"
               >创建应用升级策略
-              </el-button>
+              </gl-button>
             </el-row>
           </div>
         </el-col>
@@ -71,7 +73,7 @@
           v-loading="loading"
           :data="version_block"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="目标版本号"
             prop="version" />
@@ -103,9 +105,9 @@
             prop="control"
             width="260">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="edit_app_version(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}
-              </el-button>
+              <gl-button pid="20050" size="small" type="text" @click="edit_app_version(scope.row)">编辑</gl-button>
+              <gl-button pid="20051" size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>

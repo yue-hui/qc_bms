@@ -106,7 +106,11 @@
           <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_package">创建套餐</el-button>
+                <gl-button
+                  pid="20018"
+                  size="mini"
+                  type="success"
+                  @click="create_package">创建套餐</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -118,7 +122,7 @@
           v-loading="loading"
           :data="packages_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             width="160"
@@ -178,24 +182,27 @@
             prop="control"
             width="180">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20019"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="change_shelf_status(scope.row)">{{ show_table_button_label(scope.row) }}
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20020"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="edit_shelf(scope.row)">编辑
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20021"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="delete_shelf(scope.row)">删除
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>

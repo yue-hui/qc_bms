@@ -62,7 +62,7 @@
       <div class="button-block">
         <div class="button-group">
           <el-button size="mini" @click="cancel">取 消</el-button>
-          <el-button :disabled="is_busy" type="primary" size="mini" @click="save">保 存</el-button>
+          <gl-button :disabled="is_busy" pid="10020,10086" type="primary" size="mini" @click="save">保 存</gl-button>
         </div>
       </div>
     </el-dialog>

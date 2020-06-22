@@ -3,6 +3,19 @@ import { DATE_FORMAT, GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
 import dayjs from 'dayjs'
 import CryptoJS from 'crypto-js'
 
+/*
+* 获得页面视窗高度
+* */
+export function get_client_height() {
+  let clientHeight = 0
+  if (document.body.clientHeight && document.documentElement.clientHeight) {
+    clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight
+  } else {
+    clientHeight = (document.body.clientHeight > document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight
+  }
+  return clientHeight
+}
+
 export function get_uuid() {
   const string = uuidv1()
   return string.replace(/-/g, '').toUpperCase()
@@ -220,4 +233,30 @@ export function get_h5_domain(relative = true) {
     domain = 'g8ddev.dev.zhixike.net'
   }
   return 'https://' + domain
+}
+
+/*
+* 扁平化目录结构树
+* */
+export function delayering_page_tree(data_list) {
+  const data_row = []
+
+  // 扁平化树型结构
+  function recursive(data_list, parent = {}, level = 0) {
+    const pcode = parent.code || 0
+    data_list.map(r => {
+      const { children } = r
+      delete r.children
+      const row = r
+      row['pcode'] = pcode
+      row['level'] = level
+      data_row.push(row)
+      if (children.length) {
+        recursive(children, r, level + 1)
+      }
+    })
+  }
+
+  recursive(data_list)
+  return data_row
 }

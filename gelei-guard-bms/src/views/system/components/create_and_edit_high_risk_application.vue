@@ -31,7 +31,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button :disabled="is_busy" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <gl-button :disabled="is_busy" pid="10087,10054" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</gl-button>
       </span>
     </el-dialog>
   </div>

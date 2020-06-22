@@ -45,12 +45,18 @@
         </el-form-item>
         <el-form-item label="升级平台" prop="platform">
           <el-radio-group v-model="form.platform">
-            <el-radio
-              v-for="(platform, index) in update_platforms"
-              :key="index"
-              :label="platform.value"
-              @change="change_update_platform">{{ platform.label }}
-            </el-radio>
+            <el-row>
+              <el-col>
+                <el-radio
+                  v-for="(platform, index) in update_platforms"
+                  :key="index"
+                  :label="platform.value"
+                  :title="platform.label"
+                  class="multi-radio-col"
+                  @change="change_update_platform">{{ platform.label }}
+                </el-radio>
+              </el-col>
+            </el-row>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="升级方式" prop="is_force">
@@ -126,7 +132,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel_dialog">取 消</el-button>
-        <el-button :disabled="is_busy" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</el-button>
+        <gl-button :disabled="is_busy" pid="10016,10029" type="primary" size="mini" @click="create_update_strage">{{ show_save_label }}</gl-button>
       </span>
     </el-dialog>
   </div>
@@ -466,6 +472,11 @@ export default {
     border-left: 0;
     border-right: 0;
     border-top: 1px solid #d8bdbd;
+  }
+
+  .multi-radio-col {
+    margin-left: 0;
+    margin-right: 30px;
   }
 }
 </style>

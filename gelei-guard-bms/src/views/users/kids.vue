@@ -116,14 +116,15 @@
           <el-col :xs="24" :sm="24" :md="10" :lg="12" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
+                <gl-button
                   :loading="download_loading"
+                  pid="10038"
                   class="download details-tab"
                   size="mini"
                   type="success"
                   @click="download">导出
                   <svg-icon icon-class="download" />
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -136,6 +137,7 @@
         <el-table
           v-loading="loading"
           :data="table_data"
+          stripe
           size="mini"
           style="width: 100%">
           <el-table-column
@@ -173,12 +175,13 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20099"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="view_details(scope.row)">查看
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -295,9 +298,9 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        path: '/users/details',
-        query: {
-          id: row.patriarch_id
+        name: 'user_details',
+        params: {
+          pid: row.patriarch_id
         }
       }
       const { href } = this.$router.resolve(options)

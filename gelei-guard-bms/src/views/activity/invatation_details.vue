@@ -40,8 +40,8 @@
           <el-input v-model="form.remark" size="mini" type="textarea" />
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="init_page">重置</el-button>
-          <el-button :disabled="is_busy" size="mini" type="primary" @click="save_invatation">保存</el-button>
+          <gl-button pid="20040" size="mini" type="primary" @click="init_page">重置</gl-button>
+          <gl-button :disabled="is_busy" pid="20041" size="mini" type="primary" @click="save_invatation">保存</gl-button>
         </el-form-item>
       </el-form>
     </div>

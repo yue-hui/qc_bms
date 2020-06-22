@@ -21,7 +21,7 @@
           <el-col :xs="12" :sm="8" :md="18" :lg="19" :xl="20" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_high_risk_app">新建</el-button>
+                <gl-button pid="20062" size="mini" type="success" @click="create_high_risk_app">新建</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -33,7 +33,7 @@
           v-loading="loading"
           :data="parameter"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="软件ID"
             prop="soft_id" />
@@ -66,8 +66,8 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="edit_configration(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="delete_configration(scope.row)">删除</el-button>
+              <gl-button pid="20084" size="small" type="text" @click="edit_configration(scope.row)">编辑</gl-button>
+              <gl-button pid="20085" size="small" type="text" @click="delete_configration(scope.row)">删除</gl-button>
             </template>
           </el-table-column>
         </el-table>

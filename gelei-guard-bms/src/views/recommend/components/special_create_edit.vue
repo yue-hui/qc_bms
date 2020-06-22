@@ -66,7 +66,7 @@
                   class="wrapper"
                   @change="change_soft_list">
                   <transition-group>
-                    <div v-for="(item, index) in soft_list" :key="index" class="soft-record-row row-body">
+                    <div v-for="(item, index) in soft_list" :key="item" class="soft-record-row row-body">
                       <div class="column-item column-with-index">{{ index + 1 }}</div>
                       <div class="column column-item column-with-padding">{{ item.soft_name }}</div>
                       <div class="column-item column-with-control delete-action" @click="delete_soft_item(item)">删除
@@ -79,7 +79,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="close_dialog">取消</el-button>
-                <el-button :disabled="is_busy" size="mini" type="primary" @click="on_submit">确定</el-button>
+                <gl-button :disabled="is_busy" pid="10023,10013" size="mini" type="primary" @click="on_submit">确定</gl-button>
               </div>
             </el-form-item>
           </el-form>
@@ -104,8 +104,6 @@ export default {
   name: 'SpecialCreateEdit',
   components: {
     vuedraggable
-  },
-  beforecreate: function() {
   },
   props: {
     action: {

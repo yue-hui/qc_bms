@@ -86,7 +86,10 @@ export default {
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }],
-        verify: [{ required: true, trigger: 'blur', len: 4, type: 'string', message: '请检查验证码' }]
+        verify: [
+          { required: true, trigger: 'blur', type: 'string', message: '请输入验证码' },
+          { trigger: 'blur', len: 4, type: 'string', message: '验证码长度为4位' }
+        ]
       },
       loading: false,
       pwdType: 'password',
@@ -121,12 +124,12 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+            const path = this.redirect || HOME_PATH
+            this.$router.push({ path })
           }).catch(() => {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

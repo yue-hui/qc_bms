@@ -1,13 +1,14 @@
 <template>
   <el-card class="box-card">
-    <el-button
+    <gl-button
       :loading="download_loading"
+      pid="20015"
       class="download details-tab"
       size="mini"
       type="success"
       @click="download">导出
       <svg-icon icon-class="download" />
-    </el-button>
+    </gl-button>
 
     <el-tabs v-model="active_tab" tab-position="top" @tab-click="tab_change">
       <el-tab-pane label="孩子端 - 详细数据" name="child">
@@ -16,7 +17,7 @@
             v-loading="loading"
             :data="data_child_list"
             size="mini"
-            style="width: 100%">
+            stripe>
             <el-table-column
               align="center"
               label="时间"

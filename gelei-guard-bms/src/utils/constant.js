@@ -5,8 +5,8 @@ export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 
 /* 系统常量配置 */
 export const SYSTEM_CONSTANT = {
-  'name': '格雷守护 - 后台管理系统',
-  'title': '格雷守护'
+  'name': '格雷盒子 - 后台管理系统',
+  'title': '格雷盒子'
 }
 
 /* 表格长度 */
@@ -18,7 +18,10 @@ export const EXPORT_MAX_RECORD_LENGTH = 10000
 export const EXPORT_OVER_MAX_TIPS_REMINDER = '最多只能导出1W条数据噢!'
 
 /* 前端首页URL */
-export const HOME_PATH = '/users/information'
+export const HOME_PATH = '/welcome'
+
+/* 商务注册页默认图片 */
+export const BUSINESS_COOPERATION_DEFAULT_PICTURE = 'https://file.gwchina.cn/437EC0AC7F0000015E2BBF4849643C96/2020/3/a27604af6cfd7ee13ea8c60b7738cd738e7424068a4b971c07f101043286e04e.png'
 
 // export const SAY_TO_USER_WITH_404 = '网管说这个页面你不能进......'
 export const SAY_TO_USER_WITH_404 = '此页只因天上有，不须此行在人间......'
@@ -41,7 +44,7 @@ export const min_weight = 1
 export const max_weight = 3
 
 // 分页参数
-export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_SIZE = 100
 
 // dayjs 日期格式,中文
 export const DATE_FORMAT_WITH_CN = 'YYYY年MM月DD日'
@@ -218,7 +221,7 @@ export const RATE_STARTS_COLOR = ['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#
 export const __VERSION__ = '201902281003'
 
 // 当前版本号
-export const PagenationSizeKey = 'page_sizes'
+export const PagenationSizeKey = 'page_sizes_1'
 
 // 正浮点数
 export const POSITIVE_FLOAT = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
@@ -486,3 +489,37 @@ export const CHILD_BIND_TYPE_STATUS = [
     label: '解绑'
   }
 ]
+
+/*
+* 账户管理
+* */
+
+export const SYSTEM_ACCOUNT_ENABLE_STATE = [
+  {
+    value: '0',
+    label: '禁用'
+  },
+  {
+    value: '1',
+    label: '启用'
+  }
+]
+
+// 基数1W
+export const W_CONSTANT = 10000
+
+/* 消息推送模块 */
+export function push_status(value) {
+  switch (value) {
+    case '1': return '已发送'
+    case '0': return '未发送'
+  }
+}
+export function push_platform(value) {
+  switch (value) {
+    case '01': return '格雷守护'
+    case '02': return '格雷盒子'
+    case '03': return '智习客'
+    case '04': return '格雷优选'
+  }
+}

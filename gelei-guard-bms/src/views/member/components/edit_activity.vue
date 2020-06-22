@@ -16,12 +16,12 @@
                 :show-file-list="false"
                 :on-change="readExcel"
                 action="/wm/upload/">
-                <el-button
+                <gl-button
                   slot="trigger"
+                  pid="10073"
                   icon="el-icon-upload"
                   size="mini"
-                  type="primary">Excel导入
-                </el-button>
+                  type="primary">Excel导入</gl-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="消息通知" prop="is_notify">
@@ -44,7 +44,7 @@
             <el-form-item>
               <div class="action-area">
                 <el-button size="mini" @click="cancel">取消</el-button>
-                <el-button size="mini" type="primary" @click="on_save">确定</el-button>
+                <gl-button pid="10073" size="mini" type="primary" @click="on_save">确定</gl-button>
               </div>
             </el-form-item>
           </el-form>
@@ -61,8 +61,6 @@ import { edit_member_activity } from '@/api/interactive'
 const NO_NOTIFY_MESSAGE = '请输入消息通知内容，限制在50字以内'
 export default {
   name: 'EditActivity',
-  beforecreate: function() {
-  },
   props: {
     is_edit: {
       type: Boolean,

@@ -150,7 +150,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel">取 消</el-button>
-        <el-button :disabled="is_busy" size="mini" type="primary" @click="emmit_application">确 定</el-button>
+        <gl-button :disabled="is_busy" pid="10046,10055" size="mini" type="primary" @click="emmit_application">确 定</gl-button>
       </span>
     </el-dialog>
   </div>
@@ -188,6 +188,7 @@ export default {
   },
   data: function() {
     return {
+      is_busy: false,
       app_tags: [],
       app_list: [],
       grades: GRADE_LIST,
@@ -348,7 +349,7 @@ export default {
       this.is_busy = true
       create_soft_remmend(config).then(res => {
         if (res.status === 0) {
-          this.$emit('receive', false)
+          this.$emit('receive')
           this.$message.success(res.message)
         } else {
           this.$message.error(res.message)
@@ -362,7 +363,7 @@ export default {
       this.is_busy = true
       edit_soft_remmend(config).then(res => {
         if (res.status === 0) {
-          this.$emit('receive', false)
+          this.$emit('receive')
           this.$message.success(res.message)
         } else {
           this.$message.error(res.message)

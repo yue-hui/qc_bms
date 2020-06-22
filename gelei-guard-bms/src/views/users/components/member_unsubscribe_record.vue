@@ -39,8 +39,6 @@ import { get_monthlyplan_unsubscribe_list } from '@/api/interactive'
 
 export default {
   name: 'DeviceBindRecords',
-  beforecreate: function() {
-  },
   props: {
     patriarchId: {
       type: String,

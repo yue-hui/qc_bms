@@ -106,7 +106,7 @@
           <el-col :xs="12" :sm="8" :md="18" :lg="18" :xl="4" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_advertising">创建广告</el-button>
+                <gl-button pid="20053" size="mini" type="success" @click="create_advertising">创建广告</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -118,7 +118,7 @@
           v-loading="loading"
           :data="adv_data"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="广告名称"
@@ -159,24 +159,27 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20054"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="change_advertising_status(scope.row)">{{ show_table_button_label(scope.row) }}
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20055"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="edit_advertising(scope.row)">编辑
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
+                pid="20057"
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
                 @click="destory_advertising(scope.row)">删除
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -185,7 +188,7 @@
           :page-size="page_size"
           :page-sizes="page_sizes"
           :total="total"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
       </div>
@@ -233,7 +236,7 @@ export default {
       advertisement_type: [],
       advertisement_platform: ADVERTISEMENT_PLATFORM,
       is_create: false,
-      adv_data: [{}],
+      adv_data: [],
       action: 0,
       current_row: {},
       page: 1,

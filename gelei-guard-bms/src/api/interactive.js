@@ -543,6 +543,15 @@ export function get_member_plan_list(data) {
   })
 }
 
+// 获取所有会员套餐列表
+export function get_all_member_plans(data) {
+  return request({
+    url: '/greenguard/manager/member/plan/list/all',
+    method: 'post',
+    data
+  })
+}
+
 // 删除会员套餐
 export function delete_member_plan(data) {
   return request({
@@ -963,6 +972,126 @@ export function edit_miniprogram_app(data) {
 export function delete_miniprogram_app(data) {
   return request({
     url: '/greenguard/manager/miniprogram/del',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 权限管理
+* */
+
+// 初始化权限
+export function initialize_permission_code(data) {
+  return request({
+    url: '/greenguard/manager/funCode/initialize',
+    method: 'post',
+    data
+  })
+}
+
+// 获取权限列表
+export function get_permission_codes(data) {
+  return request({
+    url: '/greenguard/manager/funCode/list',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 权限管理
+* */
+
+// 获取系统用户列表
+export function get_system_users(data) {
+  return request({
+    url: '/greenguard/manager/user/list',
+    method: 'post',
+    data
+  })
+}
+
+// 创建或者编辑用户信息
+export function create_or_update_user_information(data) {
+  return request({
+    url: '/greenguard/manager/user/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}
+
+// 启用或禁用用户账号
+export function enable_or_disable_system_account(data) {
+  return request({
+    url: '/greenguard/manager/user/updateState',
+    method: 'post',
+    data
+  })
+}
+
+// 重置密码
+export function reset_system_account(data) {
+  return request({
+    url: '/greenguard/manager/user/password/reset',
+    method: 'post',
+    data
+  })
+}
+
+/*
+* 角色管理
+* */
+
+// 获取角色列表
+export function get_sys_roles(data) {
+  return request({
+    url: '/greenguard/manager/sysRole/list',
+    method: 'post',
+    data
+  })
+}
+
+// 获取所有角色列表
+export function get_all_sys_roles(data) {
+  return request({
+    url: '/greenguard/manager/sysRole/list/all',
+    method: 'post',
+    data
+  })
+}
+
+// 查询角色信息
+export function get_sys_role_information(data) {
+  return request({
+    url: '/greenguard/manager/sysRole/info',
+    method: 'post',
+    data
+  })
+}
+
+// 查询角色信息
+export function get_sys_role_configure(data) {
+  return request({
+    url: '/ns-permission/roles/greenguard/manager/sysRole/info',
+    method: 'post',
+    data
+  })
+}
+
+// 创建或者编辑角色
+export function create_or_update_sys_role(data) {
+  return request({
+    url: '/ns-permission/roles/greenguard/manager/sysRole/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}
+
+// 删除系统角色
+export function delete_sys_role(data) {
+  return request({
+    url: '/greenguard/manager/sysRole/delete',
     method: 'post',
     data
   })

@@ -10,14 +10,12 @@
       width="50%">
 
       <div class="show-dialog-pannel">
-
         <el-form
           ref="combination"
           :model="combination_form"
           :rules="combination_rules"
           label-width="140px"
           class="demo-ruleForm">
-
           <el-form-item label="组合名称:" prop="group_name">
             <el-input
               v-model="combination_form.group_name"
@@ -70,13 +68,16 @@
             :applications="combination_form.applications"
             :condition="panel_condition"
             @rsync_app="rsync_application" />
-
         </el-form>
       </div>
-
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="$emit('receive', false)">取 消</el-button>
-        <el-button :disabled="is_busy" size="mini" type="primary" @click="emmit_application">确 定</el-button>
+        <gl-button
+          :disabled="is_busy"
+          pid="10066,10003"
+          size="mini"
+          type="primary"
+          @click="emmit_application">确 定</gl-button>
       </span>
     </el-dialog>
   </div>
@@ -93,8 +94,6 @@ import { GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
 
 export default {
   name: 'CombinationCreate',
-  beforecreate: function() {
-  },
   components: {
     combinationPanel
   },
@@ -215,7 +214,7 @@ export default {
       this.is_busy = true
       create_soft_recommend_group(config).then(res => {
         if (res.status === 0) {
-          this.$emit('receive', false)
+          this.$emit('receive')
           this.$message.success(res.message)
         } else {
           this.$message.error(res.message)
@@ -231,10 +230,11 @@ export default {
           this.$message.error(res.message)
         } else {
           this.$message.success(res.message)
+          this.$emit('receive')
         }
+      }).finally(() => {
+        this.is_busy = false
       })
-      this.is_busy = false
-      this.$emit('receive', false)
     },
     change_condition() {
       this.panel_condition = {

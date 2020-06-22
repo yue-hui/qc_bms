@@ -76,8 +76,6 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: '',
-  beforecreate: function() {
-  },
   props: {
     visible: {
       type: Boolean,

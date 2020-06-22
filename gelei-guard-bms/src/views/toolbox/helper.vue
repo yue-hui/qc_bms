@@ -68,7 +68,7 @@
           <el-col :xs="24" :sm="8" :md="6" :lg="8" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="add_questions">添加帮助问题</el-button>
+                <gl-button pid="20044" size="mini" type="success" @click="add_questions">添加帮助问题</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -80,7 +80,7 @@
           v-loading="loading"
           :data="questions"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="序号"
             prop="_id"
@@ -113,9 +113,9 @@
             prop="control"
             width="260">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="edit_questions(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}</el-button>
-              <el-button size="small" type="text" @click="del_questions(scope.row)">删除</el-button>
+              <gl-button pid="20081" size="small" type="text" @click="edit_questions(scope.row)">编辑</gl-button>
+              <gl-button pid="10062" size="small" type="text" @click="prefer_deploy(scope.row)">{{ show_deploy_name(scope.row) }}</gl-button>
+              <gl-button pid="10042" size="small" type="text" @click="del_questions(scope.row)">删除</gl-button>
             </template>
           </el-table-column>
         </el-table>

@@ -21,13 +21,14 @@
           <el-col :xs="12" :sm="16" :md="18" :lg="19" :xl="20" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
+                <gl-button
                   :loading="download_loading"
+                  pid="20064"
                   class="download details-tab"
                   size="mini"
                   type="success"
                   @click="create_business_cooperation">创建页面
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -39,7 +40,7 @@
           v-loading="loading"
           :data="table_data"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="序号"
@@ -72,6 +73,10 @@
             prop="register_count" />
           <el-table-column
             align="center"
+            label="会员套餐"
+            prop="plan_name" />
+          <el-table-column
+            align="center"
             width="160"
             label="创建时间"
             prop="create_time_label" />
@@ -81,12 +86,12 @@
             width="120"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
+                pid="20090"
                 size="mini"
                 style="text-decoration: underline;"
                 type="text"
-                @click="edit_business_cooperation(scope.row)">编辑
-              </el-button>
+                @click="edit_business_cooperation(scope.row)">编辑</gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -101,7 +106,7 @@
       </div>
     </div>
 
-    <createOrEditBusinessCooperation :dialog_visible="show_pannel" :condition="condition" @receive="pannel_callback" />
+    <createOrEditBusinessCooperation v-if="show_pannel" :dialog_visible="show_pannel" :condition="condition" @receive="pannel_callback" />
   </div>
 </template>
 
@@ -202,6 +207,7 @@ export default {
       return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
     },
     fetch_business_cooperation: function() {
+      this.loading = true
       const config = this.get_params()
       get_business_cooperation_list(config).then(res => {
         if (res.status === 0) {
@@ -220,6 +226,8 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

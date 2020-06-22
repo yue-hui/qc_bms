@@ -67,7 +67,7 @@
         <el-table
           :data="questions"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             label="参数ID"
             prop="p_id" />

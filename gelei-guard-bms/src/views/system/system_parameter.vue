@@ -21,7 +21,7 @@
           <el-col :xs="12" :sm="16" :md="18" :lg="19" :xl="20" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button size="mini" type="success" @click="create_records">创建系统参数</el-button>
+                <gl-button pid="20060" size="mini" type="success" @click="create_records">创建系统参数</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -62,8 +62,8 @@
             label="操作"
             prop="control">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="edit_configration(scope.row)">编辑</el-button>
-              <el-button size="small" type="text" @click="delete_configration(scope.row)">删除</el-button>
+              <gl-button pid="20082" size="small" type="text" @click="edit_configration(scope.row)">编辑</gl-button>
+              <gl-button pid="20083" size="small" type="text" @click="delete_configration(scope.row)">删除</gl-button>
             </template>
           </el-table-column>
         </el-table>

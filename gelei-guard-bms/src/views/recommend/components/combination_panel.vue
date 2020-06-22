@@ -65,8 +65,6 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 
 export default {
   name: 'CombinationPanel',
-  beforecreate: function() {
-  },
   props: {
     condition: {
       type: Object,

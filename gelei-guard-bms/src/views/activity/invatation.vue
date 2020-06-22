@@ -52,14 +52,15 @@
         <div class="invatation-user-title">
           <span class="title">活动参与用户</span>
           <div class="tools-area">
-            <el-button
+            <gl-button
               :loading="download_loading"
+              pid="20038"
               class="download details-tab"
               size="mini"
               type="success"
               @click="download">导出
               <svg-icon icon-class="download" />
-            </el-button>
+            </gl-button>
           </div>
         </div>
         <div class="table-content table-block">
@@ -67,7 +68,7 @@
             v-loading="loading"
             :data="invatation_list"
             size="mini"
-            style="width: 100%">
+            stripe>
             <el-table-column
               align="center"
               label="序号"

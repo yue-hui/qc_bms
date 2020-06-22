@@ -117,12 +117,13 @@
           <el-col :xs="12" :sm="16" :md="16" :lg="6" :xl="20" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
+                <gl-button
                   :loading="download_loading"
+                  pid="20093"
                   size="mini"
                   type="success"
                   @click="download"><i class="el-icon-download el-icon" />导出
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -134,7 +135,7 @@
           v-loading="loading"
           :data="device_list"
           size="mini"
-          style="width: 100%">
+          stripe>
           <el-table-column
             align="center"
             label="孩子端设备ID"

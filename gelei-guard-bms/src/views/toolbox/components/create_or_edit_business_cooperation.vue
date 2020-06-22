@@ -9,7 +9,7 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
       top="5vh"
-      width="30%">
+      width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-suffix=":" label-width="120px" class="demo-ruleForm">
         <el-form-item label="合作渠道名称" prop="channel_name">
           <el-input v-model="form.channel_name" maxlength="30" size="mini" />
@@ -43,13 +43,25 @@
         <el-form-item label="规则介绍" prop="rule">
           <el-input v-model="form.rule" type="textarea" size="mini" />
         </el-form-item>
+        <el-form-item label="会员套餐" prop="plan_id">
+          <el-select
+            v-model="form.plan_id"
+            size="mini"
+            placeholder="选择会员套餐">
+            <el-option
+              v-for="plan in plan_list"
+              :key="plan.value"
+              :label="plan.label"
+              :value="plan.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item v-if="!is_created" label="渠道链接">
           <el-input v-model="virtual_channel_url" disabled size="mini" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancel">取 消</el-button>
-        <el-button size="mini" type="primary" @click="save">保 存</el-button>
+        <gl-button pid="10043" size="mini" type="primary" @click="save">保 存</gl-button>
       </span>
     </el-dialog>
   </div>
@@ -59,9 +71,11 @@
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 import {
   edit_business_cooperation,
-  get_business_cooperation_details
+  get_business_cooperation_details,
+  get_all_member_plans
 } from '@/api/interactive'
 import { get_h5_domain } from '@/utils/common'
+import { BUSINESS_COOPERATION_DEFAULT_PICTURE } from '@/utils/constant'
 
 export default {
   name: 'CreateOrEditBusinessCooperation',
@@ -78,6 +92,14 @@ export default {
     }
   },
   data: function() {
+    const file_list = [
+      {
+        status: 'success',
+        uid: new Date().getTime(),
+        url: BUSINESS_COOPERATION_DEFAULT_PICTURE,
+        name: ''
+      }
+    ]
     return {
       title: '',
       loading: false,
@@ -89,11 +111,13 @@ export default {
         channel_contacts: '',
         contact_info: '',
         channel_id: '',
-        file_list: [],
+        file_list,
         rule: '',
+        plan_id: '',
         channel_url: ''
       },
       pic_file_list: [],
+      plan_list: [],
       rules: {
         channel_name: [
           { required: true, message: '请输入广告名称', trigger: 'blur' }
@@ -109,6 +133,9 @@ export default {
         ],
         rule: [
           { required: true, message: '规则介绍为必填项', trigger: 'blur' }
+        ],
+        plan_id: [
+          { required: true, message: '会员套餐不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -118,23 +145,24 @@ export default {
       return Object.keys(this.condition).length === 0
     }
   },
-  watch: {
-    dialog_visible: {
-      handler: function(visible) {
-        if (visible) {
-          this.init_dialog()
-        }
-      },
-      immediate: true
-    }
-  },
   mounted: function() {
+    this.fetch_plan_list()
+    this.init_dialog()
   },
   methods: {
     handle_close() {
       this.cancel()
     },
     reset_form() {
+      const invited_plan = this.plan_list.find(r => r.label === '新用户福利-赠送7天会员')
+      const file_list = [
+        {
+          status: 'success',
+          uid: new Date().getTime(),
+          url: BUSINESS_COOPERATION_DEFAULT_PICTURE,
+          name: ''
+        }
+      ]
       this.form = {
         channel_no: '',
         channel_name: '',
@@ -142,8 +170,9 @@ export default {
         channel_contacts: '',
         contact_info: '',
         channel_id: '',
-        file_list: [],
+        file_list,
         rule: '',
+        plan_id: invited_plan ? invited_plan.plan_id : '',
         channel_url: ''
       }
     },
@@ -254,7 +283,8 @@ export default {
         channel_contacts: this.form.channel_contacts,
         contact_info: this.form.contact_info,
         img_url: this.form.file_list[0].url,
-        rule: this.form.rule
+        rule: this.form.rule,
+        plan_id: this.form.plan_id
       }
       if (!this.is_created) {
         // 编辑状态
@@ -269,8 +299,28 @@ export default {
       edit_business_cooperation(config).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
-          this.reset_form()
           this.$emit('receive')
+          this.reset_form()
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    fetch_plan_list() {
+      const config = {
+        is_listing: '1',
+        plan_type: '02'
+      }
+      get_all_member_plans(config).then(res => {
+        if (res.status === 0) {
+          const remote_data = res.data
+          this.plan_list = remote_data.map(r => {
+            return {
+              plan_id: r.plan_id,
+              value: r.plan_id,
+              label: r.plan_name
+            }
+          })
         } else {
           this.$message.error(res.message)
         }

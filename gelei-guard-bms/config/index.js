@@ -10,9 +10,19 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/gelei-guard-bms/api/ns-permission/*': { // 这里是公共部分，在调用接口时后面接不相同的部分
+        // target: 'http://localhost:4004', // 本地开发
+        target: 'http://172.168.50.134:4004/', // 开发服务器
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: { // 重命名
+          '^/': '/'
+        }
+      },
       '/gelei-guard-bms/api': { // 这里是公共部分，在调用接口时后面接不相同的部分
-        target: 'https://msdev.dev.zhixike.net/', // 开发
-        // target: 'http://localhost:4002', // 开发
+        // target: 'https://msdev.dev.zhixike.net/', // 开发
+        // target: 'http://localhost:4004', // 本地开发
+        target: 'http://172.168.50.134:4004/', // 开发
         // target: 'http://172.168.50.58:12720', // 这里写的是访问接口的域名和端口号
         // target: 'https://mstes.dev.zhixike.net/', // 测试
         // target: 'https://mspres.dev.zhixike.net/', // 压测
@@ -20,13 +30,13 @@ module.exports = {
         changeOrigin: true,
         secure: false,
         pathRewrite: { // 重命名
-          '^/gelei-guard-bms/api': '/'
+          // '^/gelei-guard-bms/api': '/'
         }
       }
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: process.env.HOST || '0.0.0.0', // can be overwritten by process.env.HOST
     port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
