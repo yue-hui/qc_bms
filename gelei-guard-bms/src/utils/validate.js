@@ -53,11 +53,11 @@ export function validatePassword(str) {
 
 /* 简单验证密码 */
 export function validatePasswordSimple(str) {
-  const reg = /^([a-zA-Z0-9!@#$%^&*()_?<>{}]){6,15}$/
+  const reg = /^([a-zA-Z0-9~!@#$%^&*()_+\{\}|":?><\-=\[\];',.]){6,15}$/
   if (reg.test(str)) {
     return { status: true, message: '校验通过' }
   } else {
-    return { status: false, message: '密码长度范围为6-15位' }
+    return { status: false, message: '密码不符合规则' }
   }
 }
 

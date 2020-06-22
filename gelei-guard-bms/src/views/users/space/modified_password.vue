@@ -87,15 +87,18 @@ export default {
       },
       rules: {
         old_password: [
-          { type: 'string', required: true, message: '请您填写旧密码', trigger: 'blur' },
+          { type: 'string', required: true, message: '请输入旧密码', trigger: 'blur' },
+          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateOldPassword }
         ],
         new_password: [
-          { type: 'string', required: true, message: '请您填写密码', trigger: 'blur' },
+          { type: 'string', required: true, message: '请输入新密码', trigger: 'blur' },
+          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateNewPassword }
         ],
         confirm_password: [
-          { type: 'string', required: true, message: '请确认您的确认密码', trigger: 'blur' },
+          { type: 'string', required: true, message: '请确认密码', trigger: 'blur' },
+          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateNewComfirmPassword }
         ]
       }
