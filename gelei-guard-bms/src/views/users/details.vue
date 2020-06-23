@@ -211,7 +211,7 @@ export default {
   },
   computed: {},
   mounted: function() {
-    // this.fetch_details()
+    this.fetch_details()
   },
   methods: {
     fetch_details() {
