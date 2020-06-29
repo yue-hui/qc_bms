@@ -270,7 +270,6 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
       this.query()
     },
     query() {
