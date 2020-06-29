@@ -9,10 +9,18 @@
             <div class="device-tools">
               <div class="tools-area">
                 <!--一直显示给用户-->
-                <div v-if="device.device_type === 'IOS' || device.device_type === '02'" class="un-lock-icon" title="重置描述文件状态" @click.stop="confirm_delete_desc_file_status">
+                <div
+                  v-if="is_agent && (device.device_type === 'IOS' || device.device_type === '02')"
+                  class="un-lock-icon"
+                  title="重置描述文件状态"
+                  @click.stop="confirm_delete_desc_file_status">
                   <svg-icon class="icon" icon-class="unbind_desc_file" />
                 </div>
-                <div v-if="device.bind_type === '1'" title="解绑孩子端设备" class="un-lock-icon" @click.stop="confirm_un_lock_child_device">
+                <div
+                  v-if="is_agent && (device.bind_type === '1')"
+                  title="解绑孩子端设备"
+                  class="un-lock-icon"
+                  @click.stop="confirm_un_lock_child_device">
                   <svg-icon class="icon" icon-class="unlock" />
                 </div>
               </div>
@@ -91,6 +99,7 @@
 import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
 import { do_unbind_desc_file, unbind_user_device } from '@/api/interactive'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DeviceCard',
@@ -128,6 +137,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'is_agent'
+    ]),
     device_index: function() {
       const device_title = ['设备', get_chinese_index(this.index), '信息']
       return device_title.join('')

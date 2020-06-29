@@ -8,7 +8,7 @@
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
       <el-dropdown @command="user_control">
         <div class="me">
-          <div v-if="name" class="user-name-show">{{ name || '小格子' }}</div>
+          <div class="user-name-show">{{ real_name || name || '果果职工' }}</div>
           <span v-if="greetings">,</span>
           <div class="user-name-show">{{ greetings }}</div>
         </div>
@@ -59,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name', 'avatar', 'is_agent'])
+    ...mapGetters(['name', 'avatar', 'is_agent', 'real_name'])
   },
   watch: {
     is_agent: {
@@ -180,6 +180,8 @@ export default {
       flex-direction: row;
       color: #cecece;
       cursor: pointer;
+      max-width: 100px;
+      white-space: nowrap;
 
       &:hover {
         color: white;
@@ -197,6 +199,8 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      white-space: nowrap;
+      margin-left: 2px;
 
       .logout-hover-style {
         height: 32px;

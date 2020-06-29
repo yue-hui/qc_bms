@@ -6,6 +6,7 @@
       :before-close="before_close"
       width="40%">
       <el-form
+        v-loading="loading"
         ref="form"
         :model="form"
         :rules="rules"
@@ -13,13 +14,35 @@
         size="mini"
         label-width="120px">
         <el-form-item label="账号名称" prop="user_id">
-          <el-input v-model="form.user_id" :disabled="user.user_id" maxlength="15" placeholder="请输入账号名称" />
+          <el-input
+            v-model="form.user_id"
+            :disabled="user.user_id !== undefined"
+            maxlength="15"
+            placeholder="请输入账号名称" />
         </el-form-item>
         <el-form-item label="真实姓名" prop="real_name">
           <el-input v-model="form.real_name" autocomplete="off" placeholder="请输入真实姓名" />
         </el-form-item>
         <el-form-item v-if="!user.user_id" label="登录密码" prop="password">
           <el-input v-model="form.password" type="password" autocomplete="off" placeholder="请输入登录密码" />
+        </el-form-item>
+        <el-form-item label="账号类型" prop="account_type">
+          <el-select
+            v-model="form.account_type"
+            :disabled="!!user.user_id"
+            size="mini"
+            filterable
+            remote
+            clearable
+            class="role-select"
+            placeholder="请选择账号类型"
+            @change="account_type_change">
+            <el-option
+              v-for="item in account_name_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="账号角色" prop="role_id">
           <el-select
@@ -47,10 +70,11 @@
 </template>
 
 <script>
-import { create_or_update_user_information } from '@/api/interactive'
+import { create_or_update_user_information, get_all_sys_roles } from '@/api/interactive'
 import { pure_object_null_value } from '@/utils/common'
 import { encrypt_password } from '@/utils/permissions'
 import { validateChinese } from '@/utils/validate'
+import { ACCOUNT_NAME_LIST } from '@/utils/constant'
 
 export default {
   name: 'CreateAndEditSystemAccount',
@@ -62,12 +86,6 @@ export default {
     userId: {
       type: String,
       default: ''
-    },
-    roles: {
-      type: Array,
-      default: function() {
-        return []
-      }
     },
     user: {
       type: Object,
@@ -91,6 +109,7 @@ export default {
         user_id: '',
         real_name: '',
         role_id: '',
+        account_type: '',
         password: ''
       },
       rules: {
@@ -104,12 +123,18 @@ export default {
         role_id: [
           { required: true, message: '请选择账号角色', trigger: 'blur' }
         ],
+        account_type: [
+          { required: true, message: '请选择账号类型', trigger: 'blur' }
+        ],
         password: [
           { required: true, message: '登录密码不能为空', trigger: 'blur' },
           { trigger: 'blur', min: 6, message: '密码最少为6位' },
           { trigger: 'blur', max: 15, message: '密码最长为15位' }
         ]
-      }
+      },
+      loading: true,
+      roles: [],
+      account_name_list: ACCOUNT_NAME_LIST
     }
   },
   computed: {
@@ -118,30 +143,70 @@ export default {
     }
   },
   mounted: function() {
-    if (this.user.user_id) {
-      this.title = '编辑账号'
-      this.form = {
-        user_id: this.user.user_id,
-        real_name: this.user.real_name,
-        role_id: this.user.role_id,
-        password: ''
-      }
-    } else {
-      this.title = '创建账号'
-      this.form = {
-        user_id: '',
-        real_name: '',
-        role_id: '',
-        password: ''
-      }
-    }
+    this.init_dialog_data()
   },
   methods: {
     before_close: function() {
-      this.$emit('callback', false)
     },
     close_dialog: function() {
       this.$emit('callback', false)
+    },
+    init_dialog_data: function() {
+      this.loading = true
+      if (this.user.user_id !== undefined) {
+        this.form['account_type'] = this.user.account_type
+      } else {
+        this.form['account_type'] = ''
+      }
+      this.fetch_sys_roles().then(() => {
+        if (this.user.user_id !== undefined) {
+          this.title = '编辑账号'
+          this.form = {
+            user_id: this.user.user_id,
+            real_name: this.user.real_name,
+            role_id: this.user.role_id,
+            account_type: this.user.account_type,
+            password: ''
+          }
+        } else {
+          this.title = '创建账号'
+          this.form = {
+            user_id: '',
+            real_name: '',
+            role_id: '',
+            account_type: '',
+            password: ''
+          }
+        }
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    account_type_change: function(row) {
+      this.form.role_id = ''
+      this.fetch_sys_roles()
+    },
+    fetch_sys_roles() {
+      return new Promise((resolve, reject) => {
+        const config = {
+          account_type: this.form.account_type
+        }
+        get_all_sys_roles(config).then(res => {
+          if (res.status === 0) {
+            this.roles = res.data.map(r => {
+              return {
+                value: r.role_id,
+                label: r.role_name
+              }
+            })
+          } else {
+            this.roles = []
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
     },
     create_or_save: function(formName) {
       this.$refs[formName].validate((valid) => {
@@ -149,6 +214,7 @@ export default {
           let config = {
             user_id: this.form.user_id,
             real_name: this.form.real_name,
+            account_type: this.form.account_type,
             role_id: this.form.role_id
           }
           if (!this.user.user_id) {

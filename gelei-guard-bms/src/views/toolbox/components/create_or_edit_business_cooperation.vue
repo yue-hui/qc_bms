@@ -46,13 +46,33 @@
         <el-form-item label="会员套餐" prop="plan_id">
           <el-select
             v-model="form.plan_id"
+            :disabled="is_agent"
+            filterable
             size="mini"
+            style="width: 100%"
             placeholder="选择会员套餐">
             <el-option
               v-for="plan in plan_list"
               :key="plan.value"
               :label="plan.label"
               :value="plan.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="渠道归属人" prop="user_id_list">
+          <el-select
+            v-model="form.user_id_list"
+            filterable
+            size="mini"
+            style="width: 100%"
+            multiple
+            placeholder="选择渠道归属人"
+            @change="change_channel">
+            <el-option
+              v-for="channel in channels"
+              :key="channel.value"
+              :label="channel.label"
+              :disabled="channel.disabled"
+              :value="channel.value" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="!is_created" label="渠道链接">
@@ -72,10 +92,11 @@ import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/up
 import {
   edit_business_cooperation,
   get_business_cooperation_details,
-  get_all_member_plans
+  get_all_member_plans, get_manager_channel_associated_user_list
 } from '@/api/interactive'
 import { get_h5_domain } from '@/utils/common'
 import { BUSINESS_COOPERATION_DEFAULT_PICTURE } from '@/utils/constant'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CreateOrEditBusinessCooperation',
@@ -112,12 +133,14 @@ export default {
         contact_info: '',
         channel_id: '',
         file_list,
+        user_id_list: [],
         rule: '',
         plan_id: '',
         channel_url: ''
       },
       pic_file_list: [],
       plan_list: [],
+      channels: [],
       rules: {
         channel_name: [
           { required: true, message: '请输入广告名称', trigger: 'blur' }
@@ -131,22 +154,28 @@ export default {
         file_list: [
           { required: true, message: '渠道背影图为必传项', trigger: 'blur' }
         ],
+        user_id_list: [
+          { required: true, type: 'array', min: 1, message: '渠道归属人不能为空', trigger: 'blur' }
+        ],
         rule: [
           { required: true, message: '规则介绍为必填项', trigger: 'blur' }
         ],
         plan_id: [
           { required: true, message: '会员套餐不能为空', trigger: 'blur' }
+        ],
+        channels: [
+          { required: true, message: '请选择渠道归属人', trigger: 'blur' }
         ]
       }
     }
   },
   computed: {
+    ...mapGetters(['name', 'is_agent']),
     is_created: function() {
       return Object.keys(this.condition).length === 0
     }
   },
   mounted: function() {
-    this.fetch_plan_list()
     this.init_dialog()
   },
   methods: {
@@ -154,7 +183,7 @@ export default {
       this.cancel()
     },
     reset_form() {
-      const invited_plan = this.plan_list.find(r => r.label === '新用户福利-赠送7天会员')
+      const invited_plan = this.plan_list.find(r => r.value === '669a95cd71f74e7b9dfd0356a3c84002')
       const file_list = [
         {
           status: 'success',
@@ -170,6 +199,7 @@ export default {
         channel_contacts: '',
         contact_info: '',
         channel_id: '',
+        user_id_list: [],
         file_list,
         rule: '',
         plan_id: invited_plan ? invited_plan.plan_id : '',
@@ -204,13 +234,16 @@ export default {
       })
     },
     init_dialog() {
-      if (this.is_created) {
-        // 新建
-        this.title = '创建商务合作注册页'
-        this.reset_form()
-      } else {
-        this.load_form_data()
-      }
+      this.fetch_plan_list().then(r => {
+        if (this.is_created) {
+          // 新建
+          this.title = '创建商务合作注册页'
+          this.reset_form()
+        } else {
+          this.load_form_data()
+        }
+      })
+      this.fetch_channel_list()
     },
     build_channel_url(channel_id) {
       const h5_domain = get_h5_domain()
@@ -284,6 +317,7 @@ export default {
         contact_info: this.form.contact_info,
         img_url: this.form.file_list[0].url,
         rule: this.form.rule,
+        user_id_list: this.form.user_id_list,
         plan_id: this.form.plan_id
       }
       if (!this.is_created) {
@@ -307,22 +341,50 @@ export default {
       })
     },
     fetch_plan_list() {
-      const config = {
-        is_listing: '1',
-        plan_type: '02'
+      return new Promise(resolve => {
+        const config = {
+          is_listing: '1',
+          plan_type: '02'
+        }
+        get_all_member_plans(config).then(res => {
+          if (res.status === 0) {
+            const remote_data = res.data
+            this.plan_list = remote_data.map(r => {
+              return {
+                plan_id: r.plan_id,
+                value: r.plan_id,
+                label: r.plan_name
+              }
+            })
+          } else {
+            this.$message.error(res.message)
+          }
+          resolve(true)
+        })
+      })
+    },
+    change_channel(row) {
+      if (row.indexOf(this.name) === -1) {
+        this.form.user_id_list.unshift(this.name)
       }
-      get_all_member_plans(config).then(res => {
+    },
+    fetch_channel_list() {
+      get_manager_channel_associated_user_list().then(res => {
         if (res.status === 0) {
-          const remote_data = res.data
-          this.plan_list = remote_data.map(r => {
+          this.channels = res.data.map(r => {
+            let disabled
+            if (r.user_id === this.name) {
+              disabled = true
+              this.form.user_id_list = [r.user_id]
+            } else {
+              disabled = false
+            }
             return {
-              plan_id: r.plan_id,
-              value: r.plan_id,
-              label: r.plan_name
+              label: r.real_name,
+              value: r.user_id,
+              disabled
             }
           })
-        } else {
-          this.$message.error(res.message)
         }
       })
     }

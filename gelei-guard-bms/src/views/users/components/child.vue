@@ -109,7 +109,7 @@ export default {
       child_index: '',
       child_new: {},
       bind_records_params: {},
-      show_bind_record: false,
+      show_bind_record: false, // 绑定记录
       current_child_id: null
     }
   },

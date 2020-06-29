@@ -6,6 +6,27 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">角色类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.account_type"
+                    size="mini"
+                    placeholder="请选择角色类型"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in account_name_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">角色名称:</el-col>
                 <el-col :span="16">
                   <el-input
@@ -18,7 +39,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="16" :md="18" :lg="18" :xl="20" class="col-bg layout-right col-right-button">
+          <el-col :xs="24" :sm="8" :md="12" :lg="12" :xl="16" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button pid="20072" size="mini" type="success" @click="create_role">创建角色</gl-button>
@@ -46,6 +67,10 @@
             width="260" />
           <el-table-column
             align="center"
+            label="角色类型"
+            prop="account_type_label" />
+          <el-table-column
+            align="center"
             label="创建时间"
             prop="create_time_label"
             width="180" />
@@ -60,7 +85,8 @@
                 size="small"
                 style="padding-bottom: 2px; border-bottom: 1px solid;"
                 type="text"
-                @click="edit_account(scope.row)">编辑权限</gl-button>
+                @click="edit_account(scope.row)">编辑权限
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -87,13 +113,14 @@
 <script>
 import ExElButton from '@/components/ExElButton'
 import {
+  ACCOUNT_NAME_LIST,
   DATE_TIME_FORMAT,
   DEFAULT_PAGE_SIZE,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { get_sys_roles } from '@/api/interactive'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { date_formatter } from '@/utils/common'
+import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import CreateAndEditRole from './components/create_and_edit_role'
 
 export default {
@@ -107,9 +134,11 @@ export default {
     return {
       loading: false,
       query_sets: {
-        role_name: ''
+        role_name: '',
+        account_type: ''
       },
       current_role: {},
+      account_name_list: ACCOUNT_NAME_LIST,
       show_create_or_edit_role_pannel: false,
       resource: [],
       page: 1,
@@ -165,9 +194,11 @@ export default {
           const base_index = (this.page - 1) * this.page_size + 1
           this.resource = res.data.map((r, _i) => {
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT, false)
+            const account_type_label = get_value_from_map_list(r.account_type, ACCOUNT_NAME_LIST, ACCOUNT_NAME_LIST[0].label)
             return {
               _idx: base_index + _i,
               ...r,
+              account_type_label,
               create_time_label
             }
           })

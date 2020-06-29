@@ -905,6 +905,15 @@ export function get_business_cooperation_list(data) {
   })
 }
 
+// 获取当前登录用户相同角色用户列表
+export function get_manager_channel_associated_user_list(data) {
+  return request({
+    url: '/greenguard/manager/channel/associated/user',
+    method: 'post',
+    data
+  })
+}
+
 // 获取语音短信
 export function get_manager_voice_list(data) {
   return request({

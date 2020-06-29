@@ -98,7 +98,28 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="7" :lg="5" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">设备绑定状态:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.bind_type"
+                    size="mini"
+                    placeholder="请选择设备绑定状态"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in bind_status_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="8" class="order-number-list">会员有效天数:</el-col>
@@ -126,7 +147,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="16" :md="10" :lg="10" :xl="8" class="col-bg">
+          <el-col :xs="12" :sm="12" :md="8" :lg="9" :xl="8" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="4" class="order-number-list">注册时间:</el-col>
@@ -145,7 +166,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="24" :lg="4" :xl="16" class="col-bg layout-right">
+          <el-col :xs="24" :sm="4" :md="16" :lg="24" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -186,6 +207,7 @@
             prop="phone" />
           <el-table-column
             align="center"
+            width="132"
             label="注册时间"
             prop="create_time" />
           <el-table-column
@@ -298,6 +320,7 @@ export default {
       device_type_list,
       user_sources: [], // 用户来源列表
       patriarch_member_types: PATRIARCH_MEMBER_TYPES,
+      bind_status_list: CHILD_BIND_TYPE_STATUS,
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
@@ -309,6 +332,7 @@ export default {
         member_status: '',
         reg_from: '',
         channel_name: '',
+        bind_type: '',
         begin_valid_days: '',
         end_valid_days: '',
         datetime_range: []
@@ -390,6 +414,9 @@ export default {
       }
       if (this.query_set.channel_name) {
         config['channel_name'] = this.query_set.channel_name
+      }
+      if (this.query_set.bind_type) {
+        config['bind_type'] = this.query_set.bind_type
       }
       if (this.query_set.begin_valid_days) {
         config['begin_valid_days'] = this.query_set.begin_valid_days

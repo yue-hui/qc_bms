@@ -20,6 +20,19 @@
         <el-form-item label="角色名称" prop="role_name">
           <el-input v-model="form.role_name" maxlength="20" placeholder="请输入角色名称" />
         </el-form-item>
+        <el-form-item label="角色类型" prop="account_type">
+          <el-select
+            v-model="form.account_type"
+            size="mini"
+            placeholder="请选择角色类型"
+            clearable>
+            <el-option
+              v-for="item in account_name_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="权限分配" prop="function_list">
           <Permissions
             ref="permissions"
@@ -41,7 +54,7 @@ import Permissions from '@/components/Permissions'
 import { PERMISSION_HEADER } from '@/views/system/data/permissions'
 import { create_or_update_sys_role, get_sys_role_configure } from '@/api/interactive'
 import { delayering_page_tree } from '@/utils/common'
-import { W_CONSTANT } from '@/utils/constant'
+import { ACCOUNT_NAME_LIST, W_CONSTANT } from '@/utils/constant'
 import { Decrypt, Encrypt } from '@/utils/secret'
 
 export default {
@@ -65,14 +78,19 @@ export default {
     return {
       title: '',
       loading: true,
+      account_name_list: ACCOUNT_NAME_LIST,
       form: {
         role_name: '',
+        account_type: '',
         function_list: ''
       },
       rules: {
         role_name: [
           { required: true, trigger: 'blur', message: '角色名称不能为空' },
           { max: 20, trigger: 'blur', message: '角色名称不能超过20个字符' }
+        ],
+        account_type: [
+          { required: true, trigger: 'blur', message: '角色类型不能为空' }
         ],
         function_list: [
           { required: true, trigger: 'blur', message: '至少给用户配置一个权限' }
@@ -87,7 +105,6 @@ export default {
       return this.showDialog
     }
   },
-  watch: {},
   mounted: function() {
     if (this.role.role_id) {
       this.title = '编辑角色'
@@ -112,6 +129,7 @@ export default {
         if (res.status === 0) {
           const remote_data = JSON.parse(Decrypt(res.data))
           this.form.role_name = remote_data.role_name
+          this.form.account_type = remote_data.account_type
           this.form.function_list = remote_data.function_list.filter(r => parseInt(r / W_CONSTANT) === 2)
           this.pdata = remote_data.codes
         }
@@ -134,6 +152,7 @@ export default {
         if (valid) {
           const config = {
             role_name: this.form.role_name,
+            account_type: this.form.account_type,
             function_list: this.form.function_list
           }
           if (this.role.role_id) {
@@ -149,7 +168,6 @@ export default {
               this.$message.success(r.message)
               this.$emit('callback')
             } else {
-              //
               this.$message.error(r.message)
             }
           })

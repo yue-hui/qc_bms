@@ -18,7 +18,22 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="16" :md="18" :lg="19" :xl="20" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">渠道归属人:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_set.associated_user"
+                    size="mini"
+                    clearable
+                    placeholder="请输入渠道归属人"
+                    @change="search" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -52,7 +67,10 @@
             prop="channel_name"
             width="240">
             <template slot-scope="scope">
-              <a :href="scope.row.virtual_channel_url" class="channel-link" target="_blank">{{ scope.row.channel_name }}</a>
+              <a
+                :href="scope.row.virtual_channel_url"
+                class="channel-link"
+                target="_blank">{{ scope.row.channel_name }}</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -77,6 +95,10 @@
             prop="plan_name" />
           <el-table-column
             align="center"
+            label="渠道归属人"
+            prop="channel_owner" />
+          <el-table-column
+            align="center"
             width="160"
             label="创建时间"
             prop="create_time_label" />
@@ -91,7 +113,8 @@
                 size="mini"
                 style="text-decoration: underline;"
                 type="text"
-                @click="edit_business_cooperation(scope.row)">编辑</gl-button>
+                @click="edit_business_cooperation(scope.row)">编辑
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -106,7 +129,12 @@
       </div>
     </div>
 
-    <createOrEditBusinessCooperation v-if="show_pannel" :dialog_visible="show_pannel" :condition="condition" @receive="pannel_callback" />
+    <createOrEditBusinessCooperation
+      v-if="show_pannel"
+      :dialog_visible="show_pannel"
+      :condition="condition"
+      :channels="channel_owner_list"
+      @receive="pannel_callback" />
   </div>
 </template>
 
@@ -114,7 +142,7 @@
 import createOrEditBusinessCooperation from './components/create_or_edit_business_cooperation'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
-import { get_business_cooperation_list } from '@/api/interactive'
+import { get_business_cooperation_list, get_manager_channel_associated_user_list } from '@/api/interactive'
 import { date_formatter, get_h5_domain } from '@/utils/common'
 
 export default {
@@ -133,9 +161,11 @@ export default {
       total: 0,
       show_pannel: false,
       query_set: {
-        key_word: ''
+        key_word: '',
+        associated_user: ''
       },
       table_data: [],
+      channel_owner_list: [],
       current_uid: '',
       condition: {},
       recharge_dialog_visible: false,
@@ -144,7 +174,7 @@ export default {
     }
   },
   mounted: function() {
-    this.fetch_business_cooperation()
+    this.init()
   },
   methods: {
     input_pure_number(valid_days, is_start = true) {
@@ -159,6 +189,7 @@ export default {
     },
     init() {
       this.fetch_business_cooperation()
+      this.fetch_business_cooperation_channel_owner_list()
     },
     table_size_change: function(size) {
       this.page_size = size
@@ -179,6 +210,9 @@ export default {
       const config = this.get_config()
       if (this.query_set.key_word) {
         config['key_word'] = '' + this.query_set.key_word
+      }
+      if (this.query_set.associated_user) {
+        config['associated_user'] = this.query_set.associated_user
       }
       return config
     },
@@ -212,12 +246,14 @@ export default {
       get_business_cooperation_list(config).then(res => {
         if (res.status === 0) {
           this.table_data = res.data.map((r, index) => {
+            const channel_owner = r.sys_user_list ? r.sys_user_list.map(r => r.real_name).join('、') : ''
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
             const row_id = (this.page - 1) * this.page_size + index + 1
             const virtual_channel_url = this.build_channel_url(r.channel_id)
             return {
               ...r,
               row_id,
+              channel_owner,
               virtual_channel_url,
               create_time_label
             }
@@ -228,6 +264,20 @@ export default {
         }
       }).finally(() => {
         this.loading = false
+      })
+    },
+    fetch_business_cooperation_channel_owner_list() {
+      get_manager_channel_associated_user_list().then(res => {
+        if (res.status === 0) {
+          this.channel_owner_list = res.data.map((r, index) => {
+            return {
+              label: r.real_name,
+              value: r.user_id
+            }
+          })
+        } else {
+          this.$message.error(res.msg)
+        }
       })
     }
   }
