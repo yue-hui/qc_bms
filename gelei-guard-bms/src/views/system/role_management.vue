@@ -115,7 +115,6 @@ import ExElButton from '@/components/ExElButton'
 import {
   ACCOUNT_NAME_LIST,
   DATE_TIME_FORMAT,
-  DEFAULT_PAGE_SIZE,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { get_sys_roles } from '@/api/interactive'

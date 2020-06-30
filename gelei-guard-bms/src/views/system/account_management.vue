@@ -222,7 +222,6 @@ import CreateAndEditSystemAccount from './components/create_and_edit_system_acco
 import {
   ACCOUNT_NAME_LIST,
   DATE_TIME_FORMAT,
-  DEFAULT_PAGE_SIZE,
   SYSTEM_ACCOUNT_ENABLE_STATE, TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'

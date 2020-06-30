@@ -8,16 +8,15 @@
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
       <el-dropdown @command="user_control">
         <div class="me">
-          <div class="user-name-show">{{ real_name || name || '果果职工' }}</div>
+          <div :title="real_name || name || default_username" class="user-name-show">{{ real_name || name || default_username }}</div>
           <span v-if="greetings">,</span>
-          <div class="user-name-show">{{ greetings }}</div>
+          <div class="user-name-greetings">{{ greetings }}</div>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="basic">基本资料</el-dropdown-item>
           <el-dropdown-item v-if="name !== 'gladmin'" command="secret">修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div class="diviser" />
       <div class="logout-block" @click="logout">
         <div class="logout-hover-style">
           <svg-icon icon-class="logout" />
@@ -30,6 +29,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { ACCOUNT_NAME_LIST } from '@/utils/constant'
 // import dayjs from 'dayjs'
 
 export default {
@@ -52,8 +52,11 @@ export default {
     // } else if (current_day > 18) {
     //   greetings = '夜深了!'
     // }
+    const user = ACCOUNT_NAME_LIST.find(r => r.value === '00')
+    const default_username = user.label
     return {
       default_avatar,
+      default_username,
       greetings,
       title: ''
     }
@@ -180,8 +183,13 @@ export default {
       flex-direction: row;
       color: #cecece;
       cursor: pointer;
-      max-width: 100px;
       white-space: nowrap;
+
+      .user-name-show {
+        max-width: 70px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
 
       &:hover {
         color: white;

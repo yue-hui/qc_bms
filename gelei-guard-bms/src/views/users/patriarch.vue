@@ -101,8 +101,8 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">设备绑定状态:</el-col>
-                <el-col :span="16">
+                <el-col :span="10" class="order-number-list">设备绑定状态:</el-col>
+                <el-col :span="14">
                   <el-select
                     v-model="query_set.bind_type"
                     size="mini"
@@ -122,8 +122,8 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员有效天数:</el-col>
-                <el-col :span="16" class="valid-date-range">
+                <el-col :span="10" class="order-number-list">会员有效天数:</el-col>
+                <el-col :span="14" class="valid-date-range">
                   <div class="valid-value-area">
                     <el-input
                       v-model="query_set.begin_valid_days"

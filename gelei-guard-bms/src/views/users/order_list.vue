@@ -117,7 +117,7 @@
                 <el-col :span="16">
                   <el-date-picker
                     v-model="query_sets.order_time_range"
-                    type="datetimerange"
+                    type="daterange"
                     size="mini"
                     range-separator="至"
                     start-placeholder="开始日期"

@@ -219,7 +219,7 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
 export function get_h5_domain(relative = true) {
   let domain
   const hostname = window.location.hostname
-  if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net'].indexOf(hostname) !== -1) {
+  if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net', 'g8dtes2.dev.zhixike.net'].indexOf(hostname) !== -1) {
     // 开发与测试环境
     domain = hostname
   } else if (hostname === 'greenguard-bms-beta.gwchina.cn') {

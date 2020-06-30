@@ -64,7 +64,6 @@ export const constantRoutes = [
   },
   { path: '/', redirect: '/welcome', name: 'Default', hidden: true }
   // { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
-  // { path: '*', redirect: '/welcome', name: '欢迎使用格雷盒子后台管理系统', hidden: true }
 ]
 
 export const asyncRoutes = [
