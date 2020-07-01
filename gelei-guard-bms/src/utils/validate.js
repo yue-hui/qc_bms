@@ -71,3 +71,18 @@ export function validateChinese(str) {
   }
 }
 
+/* 复杂密码配置 */
+export function validatePasswordComplex(str) {
+  const err_msg = '密码必须是8-16位字符且包含大小写字母、数字和殊字字符'
+  const reg_1 = /[0-9]/
+  const reg_2 = /[a-zA-Z]/
+  const reg_3 = /[~!@#$%^&*()_+\{\}|":?><\-=\[\];',.]/
+  const reg = /^([a-zA-Z0-9~!@#$%^&*()_+\{\}|":?><\-=\[\];',.]){8,16}$/
+  if (!reg_1.test(str) || !reg_2.test(str) || !reg_3.test(str)) {
+    return { status: false, message: err_msg }
+  } else if (reg.test(str)) {
+    return { status: true, message: '校验通过' }
+  } else {
+    return { status: false, message: err_msg }
+  }
+}

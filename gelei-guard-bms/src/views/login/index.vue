@@ -26,6 +26,8 @@
         <el-input
           :type="pwdType"
           v-model="loginForm.password"
+          :minlength="password_min_length"
+          :maxlength="password_max_length"
           name="password"
           auto-complete="on"
           placeholder="请输入密码"
@@ -37,26 +39,31 @@
       <el-form-item prop="verify">
         <div class="verify-code-div">
           <div class="verify-left">
-            <el-input v-model="loginForm.verify" placeholder="请输入验证码" @keyup.enter.native="handleLogin" />
+            <el-input
+              v-model="loginForm.verify"
+              placeholder="请输入验证码"
+              @keyup.enter.native="handleLogin" />
           </div>
           <div class="verify-right">
-            <img :src="verify_data" alt="验证码" class="verify-code" @click="refreshVerifyCode">
+            <img
+              :src="verify_data"
+              alt="验证码"
+              class="verify-code"
+              @click="refreshVerifyCode">
           </div>
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          登录
-        </el-button>
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import { isvalidUsername, validatePasswordComplex } from '@/utils/validate'
 import { get_verify_code } from '@/api/login'
-import { HOME_PATH, SYSTEM_CONSTANT } from '@/utils/constant'
+import { HOME_PATH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, SYSTEM_CONSTANT } from '@/utils/constant'
 import { get_uuid } from '@/utils/common'
 
 export default {
@@ -70,13 +77,16 @@ export default {
       }
     }
     const validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位'))
+      const result = validatePasswordComplex(value)
+      if (!result.status) {
+        callback(new Error(result.message))
       } else {
         callback()
       }
     }
     return {
+      password_min_length: PASSWORD_MIN_LENGTH,
+      password_max_length: PASSWORD_MAX_LENGTH,
       loginForm: {
         username: '',
         password: '',
