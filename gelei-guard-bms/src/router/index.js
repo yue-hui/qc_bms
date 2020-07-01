@@ -58,7 +58,7 @@ export const constantRoutes = [
         name: 'welcome',
         component: () => import('@/views/login/no_nav'),
         hidden: true,
-        meta: { title: '欢迎使用格雷盒子后台管理系统', showNavbar: false, hide: true, icon: 'profile' }
+        meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: false, hide: true, icon: 'profile' }
       }
     ]
   },
@@ -383,7 +383,7 @@ export const asyncRoutes = [
 ]
 
 export const delayLoadRoutes = [
-  { path: '*', redirect: '/welcome', name: 'Default', hidden: true }
+  { path: '*', redirect: '/welcome', name: 'AllDefault', hidden: true }
 ]
 
 export default new Router({

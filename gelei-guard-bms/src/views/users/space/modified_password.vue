@@ -13,13 +13,21 @@
         class="demo-ruleForm"
         label-suffix=":">
         <el-form-item label="旧密码" prop="old_password">
-          <el-input v-model="form.old_password" type="password" />
+          <el-input
+            v-model="form.old_password"
+            :minlength="password_min_length"
+            :maxlength="password_max_length"
+            type="password" />
         </el-form-item>
         <el-form-item label="新密码" prop="new_password">
-          <el-input v-model="form.new_password" type="password" />
+          <el-input
+            v-model="form.new_password"
+            :minlength="password_min_length"
+            :maxlength="password_max_length"
+            type="password" />
         </el-form-item>
         <el-form-item label="密码确认" prop="confirm_password">
-          <el-input v-model="form.confirm_password" type="password" />
+          <el-input v-model="form.confirm_password" type="password" minlength="8" maxlength="16" />
         </el-form-item>
         <el-form-item class="update-action">
           <el-button size="mini" type="primary" @click="modified_password('form')">保存</el-button>
@@ -30,17 +38,17 @@
 </template>
 
 <script>
-import { validatePasswordSimple } from '@/utils/validate'
+import { validatePasswordComplex } from '@/utils/validate'
 import { modified_user_password } from '@/api/login'
 import { encrypt_password } from '@/utils/permissions'
-import { HOME_PATH } from '@/utils/constant'
+import { HOME_PATH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/utils/constant'
 
 export default {
   name: 'ModifiedPassword',
   components: {},
   data() {
     const validateOldPassword = (rule, value, callback) => {
-      const checked = validatePasswordSimple(value)
+      const checked = validatePasswordComplex(value)
       if (checked.status) {
         callback()
       } else {
@@ -48,7 +56,7 @@ export default {
       }
     }
     const validateNewPassword = (rule, value, callback) => {
-      const checked = validatePasswordSimple(value)
+      const checked = validatePasswordComplex(value)
       if (checked.status) {
         if (this.form.new_password && this.form.old_password) {
           if (this.form.new_password === this.form.old_password) {
@@ -64,7 +72,7 @@ export default {
       }
     }
     const validateNewComfirmPassword = (rule, value, callback) => {
-      const checked = validatePasswordSimple(value)
+      const checked = validatePasswordComplex(value)
       if (checked.status) {
         if (this.form.new_password && this.form.confirm_password) {
           if (this.form.new_password === this.form.confirm_password) {
@@ -80,6 +88,8 @@ export default {
       }
     }
     return {
+      password_min_length: PASSWORD_MIN_LENGTH,
+      password_max_length: PASSWORD_MAX_LENGTH,
       form: {
         old_password: '',
         new_password: '',
@@ -88,17 +98,14 @@ export default {
       rules: {
         old_password: [
           { type: 'string', required: true, message: '请输入旧密码', trigger: 'blur' },
-          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateOldPassword }
         ],
         new_password: [
           { type: 'string', required: true, message: '请输入新密码', trigger: 'blur' },
-          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateNewPassword }
         ],
         confirm_password: [
           { type: 'string', required: true, message: '请确认密码', trigger: 'blur' },
-          { type: 'string', min: 6, max: 15, message: '密码长度范围为6-15位', trigger: 'blur' },
           { type: 'string', required: true, trigger: 'blur', validator: validateNewComfirmPassword }
         ]
       }

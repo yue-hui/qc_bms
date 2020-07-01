@@ -13,10 +13,22 @@
         size="mini"
         label-width="120px">
         <el-form-item label="新密码" prop="new_password">
-          <el-input v-model="form.new_password" type="password" autocomplete="off" placeholder="请输入新密码" />
+          <el-input
+            v-model="form.new_password"
+            :minlength="password_min_length"
+            :maxlength="password_max_length"
+            type="password"
+            autocomplete="off"
+            placeholder="请输入新密码" />
         </el-form-item>
         <el-form-item label="密码确认" prop="confirm_password">
-          <el-input v-model="form.confirm_password" type="password" autocomplete="off" placeholder="请再次输入新密码" />
+          <el-input
+            v-model="form.confirm_password"
+            :minlength="password_min_length"
+            :maxlength="password_max_length"
+            type="password"
+            autocomplete="off"
+            placeholder="请再次输入新密码" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -30,6 +42,8 @@
 <script>
 import { reset_system_account } from '@/api/interactive'
 import { encrypt_password } from '@/utils/permissions'
+import { validatePasswordComplex } from '@/utils/validate'
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/utils/constant'
 
 export default {
   name: 'ResetSystemAccountPassword',
@@ -45,39 +59,40 @@ export default {
   },
   data: function() {
     const validateNewPassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
+      const result = validatePasswordComplex(value)
+      if (!result.status) {
+        callback(new Error(result.message))
       } else {
-        if (this.form.confirm_password !== '') {
-          this.$refs.form.validateField('confirm_password')
-        }
         callback()
       }
     }
     const validateConfirmPassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.form.new_password) {
-        callback(new Error('两次输入密码不一致!'))
+      const result = validatePasswordComplex(value)
+      if (!result.status) {
+        callback(new Error(result.message))
       } else {
-        callback()
+        if (value !== this.form.new_password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
       }
     }
     return {
       title: '重置密码',
+      password_min_length: PASSWORD_MIN_LENGTH,
+      password_max_length: PASSWORD_MAX_LENGTH,
       form: {
         new_password: '',
         confirm_password: ''
       },
       rules: {
         new_password: [
-          { trigger: 'blur', min: 6, message: '密码最少为6位' },
-          { trigger: 'blur', max: 15, message: '密码最长为15位' },
+          { trigger: 'blur', required: true, message: '请输入密码' },
           { validator: validateNewPassword, trigger: 'blur' }
         ],
         confirm_password: [
-          { trigger: 'blur', min: 6, message: '密码最少为6位' },
-          { trigger: 'blur', max: 15, message: '密码最长为15位' },
+          { trigger: 'blur', required: true, message: '请再次输入密码' },
           { validator: validateConfirmPassword, trigger: 'blur' }
         ]
       }

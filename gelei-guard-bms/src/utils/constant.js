@@ -46,6 +46,11 @@ export const max_weight = 3
 // 分页参数
 export const DEFAULT_PAGE_SIZE = 100
 
+// 密码最小长度
+export const PASSWORD_MIN_LENGTH = 8
+// 密码最大长度
+export const PASSWORD_MAX_LENGTH = 16
+
 // dayjs 日期格式,中文
 export const DATE_FORMAT_WITH_CN = 'YYYY年MM月DD日'
 
