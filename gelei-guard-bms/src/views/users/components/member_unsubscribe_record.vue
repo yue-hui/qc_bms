@@ -87,7 +87,7 @@ export default {
       config['patriarch_id'] = this.patriarchId
       this.loading = true
       const data = {
-        user_id: this.$route.query.id
+        user_id: this.$route.params.pid
       }
       get_monthlyplan_unsubscribe_list(data).then(res => {
         if (res.status === 0) {
