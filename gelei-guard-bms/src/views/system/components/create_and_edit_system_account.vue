@@ -24,7 +24,13 @@
           <el-input v-model="form.real_name" autocomplete="off" placeholder="请输入真实姓名" />
         </el-form-item>
         <el-form-item v-if="!user.user_id" label="登录密码" prop="password">
-          <el-input v-model="form.password" type="password" autocomplete="off" placeholder="请输入登录密码" />
+          <el-input
+            v-model="form.password"
+            :minlength="password_min_length"
+            :maxlength="password_max_length"
+            type="password"
+            autocomplete="off"
+            placeholder="请输入登录密码" />
         </el-form-item>
         <el-form-item label="账号类型" prop="account_type">
           <el-select
@@ -73,8 +79,8 @@
 import { create_or_update_user_information, get_all_sys_roles } from '@/api/interactive'
 import { pure_object_null_value } from '@/utils/common'
 import { encrypt_password } from '@/utils/permissions'
-import { validateChinese } from '@/utils/validate'
-import { ACCOUNT_NAME_LIST } from '@/utils/constant'
+import { validateChinese, validatePasswordComplex } from '@/utils/validate'
+import { ACCOUNT_NAME_LIST, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/utils/constant'
 
 export default {
   name: 'CreateAndEditSystemAccount',
@@ -98,13 +104,23 @@ export default {
     const validateUsername = (rule, value, callback) => {
       const validate = validateChinese(value)
       if (validate.status) {
-        callback(new Error('用户的账户名称不符合规范'))
+        callback(new Error('用户账户名称不符合规范'))
+      } else {
+        callback()
+      }
+    }
+    const validateNewPassword = (rule, value, callback) => {
+      const result = validatePasswordComplex(value)
+      if (!result.status) {
+        callback(new Error(result.message))
       } else {
         callback()
       }
     }
     return {
       title: '',
+      password_min_length: PASSWORD_MIN_LENGTH,
+      password_max_length: PASSWORD_MAX_LENGTH,
       form: {
         user_id: '',
         real_name: '',
@@ -128,8 +144,7 @@ export default {
         ],
         password: [
           { required: true, message: '登录密码不能为空', trigger: 'blur' },
-          { trigger: 'blur', min: 6, message: '密码最少为6位' },
-          { trigger: 'blur', max: 15, message: '密码最长为15位' }
+          { validator: validateNewPassword, trigger: 'blur' }
         ]
       },
       loading: true,
