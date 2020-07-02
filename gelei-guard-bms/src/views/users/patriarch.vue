@@ -69,6 +69,7 @@
                 <el-col :span="16">
                   <el-select
                     v-model="query_set.reg_from"
+                    :disabled="is_agent"
                     size="mini"
                     placeholder="用户来源"
                     clearable
@@ -304,6 +305,7 @@ import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { mapGetters } from 'vuex'
 // import dayjs from 'dayjs'
 
 export default {
@@ -344,7 +346,9 @@ export default {
       download_loading: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['is_agent'])
+  },
   mounted: function() {
     this.init()
   },
@@ -454,12 +458,17 @@ export default {
       get_user_reg_from_list().then(res => {
         // 获取用户注册来源
         if (res.status === 0) {
-          this.user_sources = res.data.map(r => {
+          let user_sources = res.data.map(r => {
             return {
               label: r.reg_from_label,
               value: r.reg_from
             }
           })
+          if (this.is_agent) {
+            user_sources = user_sources.filter(r => r.value === '07')
+            this.query_set.reg_from = '07'
+          }
+          this.user_sources = user_sources
         } else {
           this.user_sources = []
           this.$message.error(res.message)

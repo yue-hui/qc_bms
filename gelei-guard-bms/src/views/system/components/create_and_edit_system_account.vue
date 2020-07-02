@@ -53,6 +53,7 @@
         <el-form-item label="账号角色" prop="role_id">
           <el-select
             v-model="form.role_id"
+            :disabled="form.account_type === '01' && !!user.user_id"
             size="mini"
             filterable
             remote
@@ -81,6 +82,7 @@ import { pure_object_null_value } from '@/utils/common'
 import { encrypt_password } from '@/utils/permissions'
 import { validateChinese, validatePasswordComplex } from '@/utils/validate'
 import { ACCOUNT_NAME_LIST, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/utils/constant'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CreateAndEditSystemAccount',
@@ -153,6 +155,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['is_agent']),
     show: function() {
       return this.showDialog
     }

@@ -99,6 +99,10 @@
             prop="channel_owner" />
           <el-table-column
             align="center"
+            label="渠道创建人"
+            prop="founder_real_name" />
+          <el-table-column
+            align="center"
             width="160"
             label="创建时间"
             prop="create_time_label" />

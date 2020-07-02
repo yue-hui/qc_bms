@@ -247,7 +247,7 @@ export default {
       this.$confirm('确认退订会员么？')
         .then(_ => {
           const data = {
-            user_id: this.$route.query.id
+            user_id: this.$route.params.pid
           }
           monthlyplan_unsubscribe_ctccsp(data).then(res => {
             res.status === 0 ? this.$message.success('退订成功') : this.$message.error(res.message)

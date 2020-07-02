@@ -804,6 +804,7 @@ const PERMISSION_DATA = [
           {
             name: '新建',
             checked: false,
+            width: 120,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20087,
@@ -812,6 +813,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
+            width: 120,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20088,
@@ -820,6 +822,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
+            width: 120,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20089,

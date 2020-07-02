@@ -23,6 +23,7 @@
         <el-form-item label="角色类型" prop="account_type">
           <el-select
             v-model="form.account_type"
+            :disabled="!!role.role_id"
             size="mini"
             placeholder="请选择角色类型"
             clearable>
@@ -56,6 +57,7 @@ import { create_or_update_sys_role, get_sys_role_configure } from '@/api/interac
 import { delayering_page_tree } from '@/utils/common'
 import { ACCOUNT_NAME_LIST, W_CONSTANT } from '@/utils/constant'
 import { Decrypt, Encrypt } from '@/utils/secret'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CreateAndEditRole',
@@ -81,7 +83,7 @@ export default {
       account_name_list: ACCOUNT_NAME_LIST,
       form: {
         role_name: '',
-        account_type: '',
+        account_type: '00',
         function_list: ''
       },
       rules: {
@@ -90,7 +92,7 @@ export default {
           { max: 20, trigger: 'blur', message: '角色名称不能超过20个字符' }
         ],
         account_type: [
-          { required: true, trigger: 'blur', message: '角色类型不能为空' }
+          { required: true, trigger: 'blur', message: '请选择角色类型' }
         ],
         function_list: [
           { required: true, trigger: 'blur', message: '至少给用户配置一个权限' }
@@ -101,6 +103,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['is_agent']),
     show: function() {
       return this.showDialog
     }
