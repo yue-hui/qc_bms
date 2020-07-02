@@ -516,15 +516,34 @@ export const W_CONSTANT = 10000
 /* 消息推送模块 */
 export function push_status(value) {
   switch (value) {
-    case '1': return '已发送'
-    case '0': return '未发送'
+    case '1':
+      return '已发送'
+    case '0':
+      return '未发送'
   }
 }
+
 export function push_platform(value) {
   switch (value) {
-    case '01': return '格雷守护'
-    case '02': return '格雷盒子'
-    case '03': return '智习客'
-    case '04': return '格雷优选'
+    case '01':
+      return '格雷守护'
+    case '02':
+      return '格雷盒子'
+    case '03':
+      return '智习客'
+    case '04':
+      return '格雷优选'
   }
 }
+
+// 用户账号类型
+export const ACCOUNT_NAME_LIST = [
+  {
+    value: '00',
+    label: '果果职工'
+  },
+  {
+    value: '01',
+    label: '代理商'
+  }
+]
