@@ -129,7 +129,7 @@
               <td>{{ member.valid_days }}天</td>
               <td>{{ member.status_label }}</td>
               <td>
-                <template v-if="member.order_ctcc_sp_status && is_agent">
+                <template v-if="member.order_ctcc_sp_status && !is_agent">
                   <gl-button
                     pid="10079"
                     size="small"
