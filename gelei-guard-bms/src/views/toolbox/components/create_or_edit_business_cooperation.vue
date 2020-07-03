@@ -367,7 +367,7 @@ export default {
       })
     },
     change_channel(row) {
-      if (row.indexOf(this.name) === -1) {
+      if (this.is_agent && row.indexOf(this.name) === -1) {
         this.form.user_id_list.unshift(this.name)
       }
     }

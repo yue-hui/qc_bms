@@ -1,5 +1,6 @@
 var page_map = require('../storages/page_map')
 var permissions = require('../storages/permissions')
+var getPermissionStructure = require('../cube/auth').getPermissionStructure
 
 /*
 * 构建HTTP Header
@@ -58,7 +59,7 @@ function pagePermissionMapToGlobal(codes) {
 *
 * @param {Array} page_code 页面权限ID列表
 * */
-function patchRolesPermission(page_code) {
+function patchRolesPermission(ptype, page_code) {
   function __analysis_page_structure(auth_list) {
     auth_list.map(r => {
       const { name, code, children } = r
@@ -74,7 +75,8 @@ function patchRolesPermission(page_code) {
     })
   }
 
-  var permission_data = JSON.parse(JSON.stringify(permissions.PERMISSION_DATA))
+  var permission_template = getPermissionStructure(ptype)
+  var permission_data = JSON.parse(JSON.stringify(permission_template))
   __analysis_page_structure(permission_data)
   return permission_data
 }

@@ -29,7 +29,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { ACCOUNT_NAME_LIST } from '@/utils/constant'
+import { ACCOUNT_NAME_LIST, HOME_PATH, WelcomeRouteWhiteList } from '@/utils/constant'
 // import dayjs from 'dayjs'
 
 export default {
@@ -82,11 +82,15 @@ export default {
     logout: function() {
       this.$store.dispatch('LogOut').then(() => {
         // 为了重新实例化vue-router对象 避免bug
-        // const options = {
-        //   name: 'Login'
-        // }
-        // this.$router.push(options)
-        window.location.reload(true)
+        const current_name = this.$route.name
+        if (WelcomeRouteWhiteList.indexOf(current_name) !== -1) {
+          const options = {
+            path: HOME_PATH
+          }
+          this.$router.push(options)
+        } else {
+          window.location.reload(true)
+        }
       })
     },
     go_to_home_page() {

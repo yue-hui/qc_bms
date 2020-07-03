@@ -4,7 +4,7 @@
       :title="title"
       :visible.sync="show"
       :before-close="before_close"
-      top="1vh"
+      :top="top"
       width="72%">
       <el-form
         v-loading="loading"
@@ -26,7 +26,8 @@
             :disabled="!!role.role_id"
             size="mini"
             placeholder="请选择角色类型"
-            clearable>
+            clearable
+            @change="change_role_type">
             <el-option
               v-for="item in account_name_list"
               :key="item.value"
@@ -83,7 +84,7 @@ export default {
       account_name_list: ACCOUNT_NAME_LIST,
       form: {
         role_name: '',
-        account_type: '00',
+        account_type: '',
         function_list: ''
       },
       rules: {
@@ -98,6 +99,7 @@ export default {
           { required: true, trigger: 'blur', message: '至少给用户配置一个权限' }
         ]
       },
+      ptype: '', // 00 果果员工 01 代理商
       pdata: [],
       pheader: PERMISSION_HEADER
     }
@@ -106,13 +108,24 @@ export default {
     ...mapGetters(['is_agent']),
     show: function() {
       return this.showDialog
+    },
+    top: function() {
+      if (this.ptype === '00') {
+        return '2vh'
+      } else if (this.ptype === '01') {
+        return '15vh'
+      } else {
+        return '5vh'
+      }
     }
   },
   mounted: function() {
     if (this.role.role_id) {
       this.title = '编辑角色'
+      this.ptype = this.role.account_type
     } else {
       this.title = '创建角色'
+      this.ptype = '00'
     }
     this.init_page_data()
   },
@@ -123,16 +136,24 @@ export default {
     close_dialog: function() {
       this.$emit('callback', false)
     },
+    change_role_type(role_type) {
+      this.ptype = role_type
+      this.init_page_data()
+    },
     init_page_data: function() {
       this.loading = true
       const config = {
-        role_id: this.role.role_id
+        role_id: this.role.role_id,
+        ptype: this.ptype
       }
       get_sys_role_configure(config).then(res => {
         if (res.status === 0) {
           const remote_data = JSON.parse(Decrypt(res.data))
-          this.form.role_name = remote_data.role_name
-          this.form.account_type = remote_data.account_type
+          console.log('remote_data: ', remote_data)
+          if (this.role.role_id) {
+            this.form.role_name = remote_data.role_name
+            this.form.account_type = remote_data.account_type
+          }
           this.form.function_list = remote_data.function_list.filter(r => parseInt(r / W_CONSTANT) === 2)
           this.pdata = remote_data.codes
         }

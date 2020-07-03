@@ -544,3 +544,9 @@ export const ACCOUNT_NAME_LIST = [
     label: '代理商'
   }
 ]
+
+// 退出到欢迎页router白名单
+export const WelcomeRouteWhiteList = [
+  'Profile',
+  'ModifiedPassword'
+]

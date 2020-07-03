@@ -55,7 +55,7 @@ export const constantRoutes = [
       },
       {
         path: '/welcome',
-        name: 'welcome',
+        name: 'Welcome',
         component: () => import('@/views/login/no_nav'),
         hidden: true,
         meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: false, hide: true, icon: 'profile' }
@@ -91,38 +91,38 @@ export const asyncRoutes = [
     children: [
       {
         path: 'information',
-        name: '家长信息管理',
+        name: 'PatriarchInformationManagement',
         component: () => import('@/views/users/patriarch'),
         meta: { title: '家长信息管理', icon: 'parents', pid: '20003' }
       },
       {
         path: 'children',
-        name: '孩子信息管理',
+        name: 'ChildrenInformationManagement',
         component: () => import('@/views/users/kids'),
         meta: { title: '孩子信息管理', icon: 'kids', pid: '20004' }
       },
       {
         path: 'details/:pid',
-        name: 'user_details',
+        name: 'UserDetails',
         hidden: true,
         component: () => import('@/views/users/details'),
         meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
       },
       {
         path: 'order-list',
-        name: '订单管理',
+        name: 'OrderManagement',
         component: () => import('@/views/users/order_list'),
         meta: { title: '订单管理', icon: 'form', pid: '20006' }
       },
       {
         path: 'devices-manage',
-        name: '设备信息管理',
+        name: 'DeviceManagement',
         component: () => import('@/views/users/devices_manage'),
         meta: { title: '设备信息管理', icon: 'devices_manage', pid: '20092' }
       },
       {
         path: 'devices-record',
-        name: '设备使用记录',
+        name: 'DeviceRecord',
         component: () => import('@/views/users/devices_record'),
         meta: { title: '设备使用记录', icon: 'devices_record', pid: '20094' }
       }
@@ -138,13 +138,13 @@ export const asyncRoutes = [
     children: [
       {
         path: 'analysis',
-        name: '家长端总体数据',
+        name: 'PatriarchSummaryDataAnalysis',
         component: () => import('@/views/analysis/patriarch'),
         meta: { title: '家长端总体数据', icon: 'analysis_patriarch', pid: '20012' }
       },
       {
         path: 'children',
-        name: '孩子端总体数据',
+        name: 'ChildrenSummaryDataAnalysis',
         component: () => import('@/views/analysis/kids'),
         meta: { title: '孩子端总体数据', icon: 'analysis_kids', pid: '20014' }
       }
@@ -153,26 +153,26 @@ export const asyncRoutes = [
   {
     path: '/member',
     component: Layout,
-    name: 'MemberManager',
+    name: 'MemberManagement',
     redirect: '/member/packages',
     alwaysShow: true,
     meta: { title: '会员管理', icon: 'member', pid: '20016' },
     children: [
       {
         path: 'packages',
-        name: '会员套餐管理',
+        name: 'MemberPlanManagement',
         component: () => import('@/views/member/packages'),
         meta: { title: '会员套餐管理', icon: 'packages', pid: '20017' }
       },
       {
         path: 'activity',
-        name: '会员活动管理',
+        name: 'MemberActivityManagement',
         component: () => import('@/views/member/activity'),
         meta: { title: '会员活动管理', icon: 'activity', pid: '20022' }
       },
       {
         path: 'details',
-        name: '活动详细信息',
+        name: 'ActivityDetailInformation',
         hidden: true,
         component: () => import('@/views/member/details'),
         meta: { title: '活动详细信息', icon: 'details', pid: '20025' }
@@ -182,7 +182,7 @@ export const asyncRoutes = [
   {
     path: '/push/',
     component: Layout,
-    name: 'Push',
+    name: 'ShortMessagePush',
     redirect: '/push/sms',
     alwaysShow: true,
     meta: { title: '短信记录', icon: 'message_push', pid: '20026' },
@@ -211,19 +211,19 @@ export const asyncRoutes = [
     children: [
       {
         path: 'index',
-        name: '推荐应用',
+        name: 'RecommendedApplications',
         component: () => import('@/views/recommend/index'),
         meta: { title: '推荐应用', icon: 'give', pid: '20030' }
       },
       {
         path: 'combination',
-        name: '推荐应用组合',
+        name: 'RecommendedApplicationPortfolio',
         component: () => import('@/views/recommend/combination'),
         meta: { title: '推荐应用组合', icon: 'combine', pid: '20032' }
       },
       {
         path: 'special_topic',
-        name: '推荐应用专题',
+        name: 'RecommendedApplicationTopics',
         component: () => import('@/views/recommend/special_topic'),
         meta: { title: '推荐应用专题', icon: 'special_topic', pid: '20034' }
       }
@@ -232,19 +232,19 @@ export const asyncRoutes = [
   // {
   //   path: '/app/sales',
   //   component: Layout,
-  //   name: '销售管理',
+  //   name: 'SalesManagement',
   //   redirect: '/app/sales/seller',
   //   meta: { title: '销售管理', icon: 'sales' },
   //   children: [
   //     {
   //       path: 'seller',
-  //       name: '销售员管理',
+  //       name: 'SalesmanManagement',
   //       component: () => import('@/views/sales/seller'),
   //       meta: { title: '销售员管理', icon: 'seller' }
   //     },
   //     {
   //       path: 'sales_order',
-  //       name: '销售订单管理',
+  //       name: 'SalesOrderManagement',
   //       component: () => import('@/views/sales/sales_order'),
   //       meta: { title: '销售订单管理', icon: 'sales_order' }
   //     }
@@ -260,25 +260,25 @@ export const asyncRoutes = [
     children: [
       // {
       //   path: 'list',
-      //   name: '活动项管理',
+      //   name: 'EventsManagement',
       //   component: () => import('@/views/activity/index'),
       //   meta: { title: '活动项管理', icon: 'activity_list' }
       // },
       {
         path: 'invatation',
-        name: '邀请好友数据',
+        name: 'InvatationFriends',
         component: () => import('@/views/activity/invatation'),
         meta: { title: '邀请好友数据', icon: 'invatation', pid: '20037' }
       },
       {
         path: 'invatation/details',
-        name: '邀请好友配置',
+        name: 'InvatationFriendsConfiguration',
         component: () => import('@/views/activity/invatation_details'),
         meta: { title: '邀请好友配置', icon: 'invatation_user', pid: '20039' }
       }
       // {
       //   path: 'props',
-      //   name: '活动道具管理',
+      //   name: 'ActivityPropManagement',
       //   component: () => import('@/views/activity/props'),
       //   meta: { title: '活动道具管理', icon: 'activity_props' }
       // }
@@ -294,31 +294,31 @@ export const asyncRoutes = [
     children: [
       {
         path: 'helper',
-        name: '帮助中心',
+        name: 'HelperCenter',
         component: () => import('@/views/toolbox/helper'),
         meta: { title: '帮助中心', icon: 'helper', pid: '20043' }
       },
       {
         path: 'promotion',
-        name: '应用升级',
+        name: 'ApplicationUpgrade',
         component: () => import('@/views/toolbox/promotion'),
         meta: { title: '应用升级', icon: 'promotion', pid: '20047' }
       },
       {
         path: 'advertisement',
-        name: '广告配置',
+        name: 'AdvertisingConfiguration',
         component: () => import('@/views/toolbox/advertisement'),
         meta: { title: '广告配置', icon: 'advertisement', pid: '20052' }
       },
       {
         path: 'version-list',
-        name: '版本管理',
+        name: 'VersionManagement',
         component: () => import('@/views/toolbox/version_manager'),
         meta: { title: '版本管理', icon: 'version', pid: '20058' }
       },
       {
         path: 'configuration',
-        name: '数据字典',
+        name: 'DataDictionary',
         alwaysShow: true,
         component: AppMain,
         redirect: '/toolbox/configuration/system_parameter',
@@ -326,25 +326,25 @@ export const asyncRoutes = [
         children: [
           {
             path: 'system_parameter',
-            name: '系统参数',
+            name: 'SystemParameters',
             component: () => import('@/views/system/system_parameter'),
             meta: { title: '系统参数', icon: 'system_parameter', pid: '20059' }
           },
           // {
           //   path: 'software_policy',
-          //   name: '软件策略表',
+          //   name: 'SoftwareStrategyTable',
           //   component: () => import('@/views/system/software_policy'),
           //   meta: { title: '软件策略表', icon: 'software_policy' }
           // },
           {
             path: 'high_risk_application',
-            name: '高危应用表',
+            name: 'HighRiskApplicationTable',
             component: () => import('@/views/system/high_risk_application'),
             meta: { title: '高危应用表', icon: 'high_risk_application', pid: '20061' }
           },
           {
             path: 'miniprogram-apps',
-            name: '小程序管控',
+            name: 'AppletControl',
             component: () => import('@/views/system/miniprogram_apps'),
             meta: { title: '小程序管控', icon: 'mini_program_apps', pid: '20086' }
           }
@@ -352,7 +352,7 @@ export const asyncRoutes = [
       },
       {
         path: 'business-cooperation',
-        name: '商务合作注册页',
+        name: 'BusinessCooperationRegistrationPage',
         component: () => import('@/views/toolbox/business_cooperation'),
         meta: { title: '商务合作注册页', icon: 'business_cooperation', pid: '20063' }
       }
@@ -368,13 +368,13 @@ export const asyncRoutes = [
     children: [
       {
         path: 'account-management',
-        name: 'account-management',
+        name: 'AccountManagement',
         component: () => import('@/views/system/account_management'),
         meta: { title: '账户管理', icon: 'account_management', pid: '20066' }
       },
       {
         path: 'role-management',
-        name: 'role-management',
+        name: 'RoleManagement',
         component: () => import('@/views/system/role_management'),
         meta: { title: '角色管理', icon: 'role_management', pid: '20071' }
       }
