@@ -62,7 +62,7 @@ export const constantRoutes = [
       }
     ]
   },
-  { path: '/', redirect: '/welcome', name: 'Default', hidden: true }
+  { path: '/', redirect: '/welcome', name: 'HomePage', hidden: true }
   // { path: '*', name: '页面找不到了...', redirect: '/404', hidden: true }
 ]
 

@@ -29,7 +29,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { ACCOUNT_NAME_LIST, HOME_PATH, WelcomeRouteWhiteList } from '@/utils/constant'
+import { ACCOUNT_NAME_LIST, WelcomeRouteWhiteList } from '@/utils/constant'
 // import dayjs from 'dayjs'
 
 export default {
@@ -85,7 +85,7 @@ export default {
         const current_name = this.$route.name
         if (WelcomeRouteWhiteList.indexOf(current_name) !== -1) {
           const options = {
-            path: HOME_PATH
+            name: 'HomePage'
           }
           this.$router.push(options)
         } else {
