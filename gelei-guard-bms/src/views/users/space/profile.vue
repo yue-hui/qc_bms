@@ -79,7 +79,7 @@ export default {
     } else {
       file_list = []
     }
-    const account_name = get_value_from_map_list(this.$store.getters.account_name, ACCOUNT_NAME_LIST, ACCOUNT_NAME_LIST[0].label)
+    const account_name = get_value_from_map_list(this.$store.getters.account_type, ACCOUNT_NAME_LIST, ACCOUNT_NAME_LIST[0].label)
     return {
       form: {
         user_id: this.$store.getters.name,

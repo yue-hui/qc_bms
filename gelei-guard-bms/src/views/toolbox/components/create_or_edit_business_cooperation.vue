@@ -256,7 +256,7 @@ export default {
         this.channels = associated_user_list.map(r => {
           const disabled = this.is_agent && r.user_id === this.name
           return {
-            label: r.real_name,
+            label: r.real_name + '(' + r.role_name + ')',
             value: r.user_id,
             disabled
           }

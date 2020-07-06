@@ -250,7 +250,7 @@ export default {
       get_business_cooperation_list(config).then(res => {
         if (res.status === 0) {
           this.table_data = res.data.map((r, index) => {
-            const channel_owner = r.sys_user_list ? r.sys_user_list.map(r => r.real_name).join('、') : ''
+            const channel_owner = r.sys_user_list ? r.sys_user_list.map(r => r.real_name + '(' + r.role_name + ')').join('、') : ''
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
             const row_id = (this.page - 1) * this.page_size + index + 1
             const virtual_channel_url = this.build_channel_url(r.channel_id)

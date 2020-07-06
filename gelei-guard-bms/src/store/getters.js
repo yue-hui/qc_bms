@@ -13,6 +13,6 @@ const getters = {
   auths: state => state.user.auths,
   roles: state => state.user.roles,
   is_agent: state => state.user.is_agent,
-  account_name: state => state.user.account_name
+  account_type: state => state.user.account_type
 }
 export default getters
