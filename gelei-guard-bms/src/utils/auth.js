@@ -1,20 +1,20 @@
 /* 本地存储 */
-
+import Cookies from 'js-cookie'
 import { __VERSION__, DEFAULT_PAGE_SIZE, PagenationSizeKey } from '@/utils/constant'
 
 const TokenKey = 'APP-Token'
-const ButtonPermissionKey = '_btn'
 
 export function getToken() {
-  return sessionStorage.getItem(TokenKey)
+  return Cookies.get(TokenKey)
 }
 
 export function setToken(token) {
-  return sessionStorage.setItem(TokenKey, token)
+  localStorage.removeItem(TokenKey)   // 迭代若干版本后移除此行
+  return Cookies.set(TokenKey, token)
 }
 
 export function removeToken() {
-  return sessionStorage.removeItem(TokenKey)
+  return Cookies.remove(TokenKey)
 }
 
 const VersionKey = 'ver'
