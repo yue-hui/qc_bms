@@ -223,7 +223,7 @@ export const RATE_STARTS_COLOR = ['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#
   '#444444', '#404040', '#303030', '#121212', '#000000']
 
 // 当前版本号
-export const __VERSION__ = '201902281003'
+export const __VERSION__ = 'v2.0.0'
 
 // 当前版本号
 export const PagenationSizeKey = 'page_sizes_1'

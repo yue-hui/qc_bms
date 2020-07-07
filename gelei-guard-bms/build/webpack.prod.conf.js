@@ -11,6 +11,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const dayjs = require('dayjs')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -21,6 +22,8 @@ const env = require('../config/' + process.env.NODE_BUILD + '.env')
 // For NamedChunksPlugin
 const seen = new Set()
 const nameLength = 4
+// 文件版本号
+const buildTimestamp = dayjs().format('HHmmssMMDD')
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -34,8 +37,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash:8].js'),
-    chunkFilename: utils.assetsPath('js/[name].[chunkhash:8].js')
+    filename: utils.assetsPath(['js/[name].[chunkhash:8].', buildTimestamp, '.js'].join('')),
+    chunkFilename: utils.assetsPath(['js/[name].[chunkhash:8].', buildTimestamp, '.js'].join(''))
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
