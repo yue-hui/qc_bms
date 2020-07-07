@@ -24,9 +24,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { W_CONSTANT } from '@/utils/constant'
-import { getButtonPermission } from '@/utils/auth'
-
-const open_btn_permission = getButtonPermission()
 
 export default {
   name: 'GlButton',
@@ -106,9 +103,6 @@ export default {
       return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size
     },
     buttonPermission() {
-      if (['true', true].indexOf(open_btn_permission) !== -1) {
-        return true
-      }
       const permissions = this.permission.concat(this.auths)
       return this.own_permission.some(p => {
         return permissions.indexOf(p) !== -1

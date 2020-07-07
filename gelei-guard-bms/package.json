@@ -21,7 +21,7 @@
     "axios": "^0.19.2",
     "crypto": "^1.0.1",
     "crypto-js": "^3.3.0",
-    "dayjs": "^1.8.28",
+    "dayjs": "^1.8.29",
     "echarts": "^4.8.0",
     "element-ui": "2.4.6",
     "file-saver": "^2.0.2",
