@@ -31,8 +31,6 @@ Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 
 Vue.config.productionTip = false
 
-console.log('filters: ', filters)
-
 new Vue({
   el: '#app',
   router,

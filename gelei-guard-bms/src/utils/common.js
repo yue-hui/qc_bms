@@ -236,6 +236,27 @@ export function get_h5_domain(relative = true) {
 }
 
 /*
+* 判断当前环境是否为开发环境、测试、线上环境
+* */
+export function get_current_env() {
+  let env
+  const hostname = window.location.hostname
+  if (['g8ddev.dev.zhixike.net'].indexOf(hostname) !== -1) {
+    // 开发环境
+    env = 'dev'
+  } else if (['g8dtes.dev.zhixike.net', 'g8dtes2.dev.zhixike.net'].indexOf(hostname) !== -1) {
+    // 测试环境
+    env = 'test'
+  } else if (['greenguard-bms.gwchina.cn', 'greenguard-bms-beta.gwchina.cn'].indexOf(hostname) !== -1) {
+    // 线上环境
+    env = 'prod'
+  } else {
+    env = 'prod'
+  }
+  return env
+}
+
+/*
 * 扁平化目录结构树
 * */
 export function delayering_page_tree(data_list) {
