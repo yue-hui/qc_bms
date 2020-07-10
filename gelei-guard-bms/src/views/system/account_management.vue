@@ -11,7 +11,7 @@
                   <el-input
                     v-model="query_sets.user_id"
                     size="mini"
-                    placeholder="用户名"
+                    placeholder="请输入用户名"
                     clearable
                     @change="query_condition_change" />
                 </el-col>
@@ -26,7 +26,7 @@
                   <el-input
                     v-model="query_sets.real_name"
                     size="mini"
-                    placeholder="真实姓名"
+                    placeholder="请输入真实姓名"
                     clearable
                     @change="query_condition_change" />
                 </el-col>
@@ -64,7 +64,7 @@
                   <el-select
                     v-model="query_sets.state"
                     size="mini"
-                    placeholder="状态"
+                    placeholder="请选择用户当前状态"
                     clearable
                     @change="query_condition_change">
                     <el-option
@@ -77,7 +77,28 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="16" :md="24" :lg="24" :xl="8" class="col-bg layout-right col-right-button">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">账号类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.account_type"
+                    size="mini"
+                    placeholder="请选择账号类型"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in account_name_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="18" :lg="18" :xl="4" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button pid="20067" size="mini" type="success" @click="create_account">创建账号</gl-button>
@@ -112,6 +133,11 @@
             align="center"
             label="角色名称"
             prop="role_name"
+            width="180" />
+          <el-table-column
+            align="center"
+            label="账号类型"
+            prop="account_name"
             width="180" />
           <el-table-column
             align="center"
@@ -194,8 +220,8 @@
 import ResetSystemAccountPassword from './components/reset_system_account_password'
 import CreateAndEditSystemAccount from './components/create_and_edit_system_account'
 import {
+  ACCOUNT_NAME_LIST,
   DATE_TIME_FORMAT,
-  DEFAULT_PAGE_SIZE,
   SYSTEM_ACCOUNT_ENABLE_STATE, TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
@@ -216,12 +242,14 @@ export default {
         user_id: '',
         real_name: '',
         role_id: '',
+        account_type: '',
         state: ''
       },
       current_user: {},
       current_user_id: '',
       show_reset_pannel: false,
       show_create_or_edit_pannel: false,
+      account_name_list: ACCOUNT_NAME_LIST,
       roles: [],
       resource: [],
       system_account_enable_state: SYSTEM_ACCOUNT_ENABLE_STATE,
@@ -231,7 +259,6 @@ export default {
       total: 0
     }
   },
-  computed: {},
   mounted: function() {
     get_all_sys_roles().then(res => {
       if (res.status === 0) {
@@ -273,7 +300,6 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
       this.query()
     },
     query() {
@@ -288,6 +314,7 @@ export default {
           this.total = res.total_count
           const base_index = (this.page - 1) * this.page_size + 1
           this.resource = res.data.map((r, _i) => {
+            const account_name = get_value_from_map_list(r.account_type, ACCOUNT_NAME_LIST, ACCOUNT_NAME_LIST[0].label)
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT, false)
             const first_login_time_label = date_formatter(r.first_login_time, DATE_TIME_FORMAT, false)
             const state_label = get_value_from_map_list(r.state, SYSTEM_ACCOUNT_ENABLE_STATE)
@@ -295,6 +322,7 @@ export default {
               _idx: base_index + _i,
               ...r,
               state_label,
+              account_name,
               first_login_time_label,
               create_time_label
             }

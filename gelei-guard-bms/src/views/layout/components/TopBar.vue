@@ -8,16 +8,15 @@
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
       <el-dropdown @command="user_control">
         <div class="me">
-          <div v-if="name" class="user-name-show">{{ name || '小格子' }}</div>
+          <div :title="real_name || name || default_username" class="user-name-show">{{ real_name || name || default_username }}</div>
           <span v-if="greetings">,</span>
-          <div class="user-name-show">{{ greetings }}</div>
+          <div class="user-name-greetings">{{ greetings }}</div>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="basic">基本资料</el-dropdown-item>
           <el-dropdown-item v-if="name !== 'gladmin'" command="secret">修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div class="diviser" />
       <div class="logout-block" @click="logout">
         <div class="logout-hover-style">
           <svg-icon icon-class="logout" />
@@ -30,6 +29,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { ACCOUNT_NAME_LIST, WelcomeRouteWhiteList } from '@/utils/constant'
 // import dayjs from 'dayjs'
 
 export default {
@@ -52,14 +52,17 @@ export default {
     // } else if (current_day > 18) {
     //   greetings = '夜深了!'
     // }
+    const user = ACCOUNT_NAME_LIST.find(r => r.value === '00')
+    const default_username = user.label
     return {
       default_avatar,
+      default_username,
       greetings,
       title: ''
     }
   },
   computed: {
-    ...mapGetters(['name', 'avatar', 'is_agent'])
+    ...mapGetters(['name', 'avatar', 'is_agent', 'real_name'])
   },
   watch: {
     is_agent: {
@@ -79,11 +82,15 @@ export default {
     logout: function() {
       this.$store.dispatch('LogOut').then(() => {
         // 为了重新实例化vue-router对象 避免bug
-        // const options = {
-        //   name: 'Login'
-        // }
-        // this.$router.push(options)
-        window.location.reload(true)
+        const current_name = this.$route.name
+        if (WelcomeRouteWhiteList.indexOf(current_name) !== -1) {
+          const options = {
+            name: 'HomePage'
+          }
+          this.$router.push(options)
+        } else {
+          window.location.reload(true)
+        }
       })
     },
     go_to_home_page() {
@@ -180,6 +187,13 @@ export default {
       flex-direction: row;
       color: #cecece;
       cursor: pointer;
+      white-space: nowrap;
+
+      .user-name-show {
+        max-width: 70px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
 
       &:hover {
         color: white;
@@ -197,6 +211,8 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      white-space: nowrap;
+      margin-left: 2px;
 
       .logout-hover-style {
         height: 32px;

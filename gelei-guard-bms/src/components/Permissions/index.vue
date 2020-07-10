@@ -9,7 +9,7 @@
     </div>
     <Permission
       v-for="(perm, index) in pdata"
-      :key="index"
+      :key="perm.code + index"
       :resource="perm"
       @callback="permission_callback"/>
   </div>
@@ -18,7 +18,7 @@
 <script>
 import Permission from '@/components/Permissions/permission'
 export default {
-  name: 'PermissionIndex',
+  name: 'PermissionEntries',
   components: {
     Permission
   },

@@ -95,6 +95,21 @@
               </el-row>
             </div>
           </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">用户来源渠道:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_sets.channel_name"
+                    size="mini"
+                    clearable
+                    placeholder="请输入来源渠道"
+                    @change="query_condition_change" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
           <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
@@ -102,7 +117,7 @@
                 <el-col :span="16">
                   <el-date-picker
                     v-model="query_sets.order_time_range"
-                    type="datetimerange"
+                    type="daterange"
                     size="mini"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -112,7 +127,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="6" :sm="8" :md="24" :lg="2" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="18" :sm="24" :md="18" :lg="21" :xl="12" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -178,6 +193,10 @@
             align="center"
             label="用户联系方式"
             prop="contact_phone" />
+          <el-table-column
+            align="center"
+            label="用户来源渠道"
+            prop="channel_name" />
         </el-table>
         <el-pagination
           :current-page="page"
@@ -229,6 +248,7 @@ export default {
         order_status: '',
         pay_type: '',
         nick_name: '',
+        channel_name: '',
         contact_phone: ''
       },
       order_source: COMMODITY_TYPE,
@@ -374,10 +394,11 @@ export default {
         const data_list = this.order_list_map(res.data)
         import('@/utils/Export2Excel').then(excel => {
           const t_header = ['订单号', '交易单号', '交易时间', '用户名',
-            '订单详情', '会员类型', '交易金额', '支付方式', '订单状态', '用户联系方式']
+            '订单详情', '会员类型', '交易金额', '支付方式', '订单状态', '用户联系方式', '用户来源渠道']
           // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
           const filter_val = ['order_no', 'pay_order_no', 'order_time_label', 'nick_name',
-            'order_desc', 'member_type_label', 'order_amount_label', 'pay_type', 'order_status', 'contact_phone']
+            'order_desc', 'member_type_label', 'order_amount_label', 'pay_type', 'order_status',
+            'contact_phone', 'channel_name']
           const data = this.formatJson(filter_val, data_list)
           const options = {
             header: t_header,

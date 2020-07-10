@@ -8,7 +8,9 @@ const user = {
     name: '',
     avatar: '',
     real_name: '',
+    account_type: '',
     role_id: '',
+    is_agent: '',
     role_name: [],
     btns: [],
     auths: [],
@@ -33,6 +35,10 @@ const user = {
     },
     SET_ROLE_NAME: (state, role_name) => {
       state.role_name = role_name
+    },
+    SET_ACCOUNT_TYPE: (state, account_type) => {
+      state.is_agent = account_type === '01'
+      state.account_type = account_type
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
@@ -74,17 +80,12 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           const data = response.data
-          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-          //   commit('SET_ROLES', data.roles)
-          // } else {
-          //   reject('getInfo: roles must be a non-null array !')
-          // }
-          // console.log('===: ', data)
           commit('SET_NAME', data.user_id)
           commit('SET_AVATAR', data.img_url)
           commit('SET_REAL_NAME', data.real_name)
           commit('SET_ROLE_ID', data.role_id)
           commit('SET_ROLE_NAME', data.role_name)
+          commit('SET_ACCOUNT_TYPE', data.account_type)
           const auth = new AuthoritySeparate(data.function_no_list || [])
           const perm = auth.get_perm()
           commit('SET_BTNS', perm)

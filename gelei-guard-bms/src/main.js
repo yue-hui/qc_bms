@@ -12,6 +12,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import router from './router'
 import store from './store'
+import * as filters from './filters'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -24,6 +25,9 @@ setVersion()
 Vue.use(ElementUI, { zhLocale })
 Vue.use(GlButton)
 Vue.use(VCharts)
+
+// 全局注册过滤器
+Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 
 Vue.config.productionTip = false
 

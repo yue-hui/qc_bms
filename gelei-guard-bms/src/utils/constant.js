@@ -486,12 +486,16 @@ export const DEVICE_TYPE_LIST = [
 // 孩子设备绑定状态
 export const CHILD_BIND_TYPE_STATUS = [
   {
+    value: '2',
+    label: '未绑定'
+  },
+  {
     value: '1',
-    label: '绑定'
+    label: '绑定中'
   },
   {
     value: '0',
-    label: '解绑'
+    label: '已解绑'
   }
 ]
 
@@ -546,4 +550,10 @@ export const ACCOUNT_NAME_LIST = [
     value: '01',
     label: '代理商'
   }
+]
+
+// 退出到欢迎页router白名单
+export const WelcomeRouteWhiteList = [
+  'Profile',
+  'ModifiedPassword'
 ]

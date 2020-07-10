@@ -206,7 +206,7 @@ export default {
     see_activity: function(row) {
       const activity_id = row.activity_id
       const router = {
-        path: '/member/details',
+        name: 'ActivityDetailInformation',
         query: {
           id: activity_id
         }

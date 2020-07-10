@@ -219,7 +219,7 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
 export function get_h5_domain(relative = true) {
   let domain
   const hostname = window.location.hostname
-  if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net'].indexOf(hostname) !== -1) {
+  if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net', 'g8dtes2.dev.zhixike.net'].indexOf(hostname) !== -1) {
     // 开发与测试环境
     domain = hostname
   } else if (hostname === 'greenguard-bms-beta.gwchina.cn') {
@@ -233,6 +233,27 @@ export function get_h5_domain(relative = true) {
     domain = 'g8ddev.dev.zhixike.net'
   }
   return 'https://' + domain
+}
+
+/*
+* 判断当前环境是否为开发环境、测试、线上环境
+* */
+export function get_current_env() {
+  let env
+  const hostname = window.location.hostname
+  if (['g8ddev.dev.zhixike.net'].indexOf(hostname) !== -1) {
+    // 开发环境
+    env = 'dev'
+  } else if (['g8dtes.dev.zhixike.net', 'g8dtes2.dev.zhixike.net'].indexOf(hostname) !== -1) {
+    // 测试环境
+    env = 'test'
+  } else if (['greenguard-bms.gwchina.cn', 'greenguard-bms-beta.gwchina.cn'].indexOf(hostname) !== -1) {
+    // 线上环境
+    env = 'prod'
+  } else {
+    env = 'prod'
+  }
+  return env
 }
 
 /*

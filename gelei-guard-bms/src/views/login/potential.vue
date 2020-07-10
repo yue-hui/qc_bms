@@ -15,6 +15,7 @@ export default {
   },
   methods: {
     init_page: function() {
+      // 测试页面
     }
   }
 }

@@ -86,3 +86,4 @@ export function validatePasswordComplex(str) {
     return { status: false, message: err_msg }
   }
 }
+

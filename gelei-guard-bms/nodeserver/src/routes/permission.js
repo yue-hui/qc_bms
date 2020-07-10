@@ -40,7 +40,7 @@ router.post('/roles/greenguard/manager/sysRole/info', function(req, res, next) {
 })
 
 /*
-* 用户角色创建页面接口
+* 用户角色创建与编辑接口
 *  */
 router.post('/roles/greenguard/manager/sysRole/saveOrUpdate', function(req, res, next) {
   var reqConType = req.headers['content-type']

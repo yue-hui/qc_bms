@@ -76,7 +76,7 @@ export default {
         brother_checked_set.add(m.resource.checked)
         // console.log(m.resource.code, m.resource.checked)
       })
-      if (checked || (brother_checked_set.size === 1)) {
+      if (checked || (brother_checked_set.size === 1 && brother_checked_set.has(checked))) {
         checked ? (this.$parent.set_current_permission && this.$parent.set_current_permission(checked)) : ''
         if (brother_checked_set.size === 1) {
           if (this.$parent.resource && this.$parent.resource.page === false && this.$parent.set_current_permission) {

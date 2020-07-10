@@ -659,6 +659,11 @@ export const PAGE_PERMISSION = [
     code: '10080'
   },
   {
+    name: '获取当前登录用户相同角色用户',
+    path: 'manager/channel/associated/user',
+    code: '10226'
+  },
+  {
     name: '获取指定注册来源详情',
     path: 'manager/channel/info',
     code: '10097'
