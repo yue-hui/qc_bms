@@ -28,7 +28,7 @@ export function is_array(obj) {
 /*
 * 格式化时间
 * */
-export function date_formatter(date, fomatter = DATE_FORMAT, is_filled = true) {
+export function date_formatter(date, fomatter = DATE_FORMAT, is_filled = false) {
   if (date) {
     return dayjs(date).format(fomatter)
   } else {
