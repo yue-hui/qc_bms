@@ -1105,3 +1105,21 @@ export function delete_sys_role(data) {
     data
   })
 }
+
+// 发送设备运行指令
+export function device_send_ins(data) {
+  return request({
+    url: '/greenguard/manager/device/addMobileLog',
+    method: 'post',
+    data
+  })
+}
+
+// 查询设备日志列表
+export function get_device_upload_logs_list(data) {
+  return request({
+    url: '/greenguard/manager/device/findMobileLog',
+    method: 'post',
+    data
+  })
+}

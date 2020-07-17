@@ -10,6 +10,13 @@
               <div class="tools-area">
                 <!--一直显示给用户-->
                 <div
+                  v-if="!is_agent && device.bind_type === '1' && device.device_type !== 'IOS'"
+                  class="un-lock-icon"
+                  title="日志上传"
+                  @click.stop="device_upload_logs">
+                  <svg-icon class="icon" icon-class="upload" />
+                </div>
+                <div
                   v-if="!is_agent && (device.device_type === 'IOS' || device.device_type === '02')"
                   class="un-lock-icon"
                   title="重置描述文件状态"
@@ -92,6 +99,9 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <!--日志上传-->
+    <device-upload-logs v-if="device_upload_logs_show" :device_info="device" @device_upload_logs_close="device_upload_logs_close" />
+    <!--日志上传 end-->
   </div>
 </template>
 
@@ -100,9 +110,14 @@ import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
 import { do_unbind_desc_file, unbind_user_device } from '@/api/interactive'
 import { mapGetters } from 'vuex'
+// 日志上传
+const DeviceUploadLogs = () => import('./device_upload_logs')
 
 export default {
   name: 'DeviceCard',
+  components: {
+    DeviceUploadLogs
+  },
   props: {
     device: {
       type: Object,
@@ -133,7 +148,8 @@ export default {
         bind_time: true,
         last_use_time: true,
         device_type: true
-      }
+      },
+      device_upload_logs_show: false
     }
   },
   computed: {
@@ -227,6 +243,14 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    // 日志上传
+    device_upload_logs() {
+      this.device_upload_logs_show = true
+    },
+    // 日志上传弹出框关闭
+    device_upload_logs_close() {
+      this.device_upload_logs_show = false
     }
   }
 }
