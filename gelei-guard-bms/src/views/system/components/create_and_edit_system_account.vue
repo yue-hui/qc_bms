@@ -70,7 +70,6 @@
         <el-form-item label="账号邮箱" prop="email">
           <el-input
             v-model="form.email"
-            maxlength="15"
             placeholder="请输入账号邮箱" />
         </el-form-item>
       </el-form>
