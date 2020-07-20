@@ -119,6 +119,22 @@ a:hover {
   padding: 5px 0;
 }
 
+.gl-global-blue {
+  color: #368EE0;
+}
+
+.gl-global-green {
+  color: #5EC821;
+}
+
+.gl-global-red {
+  color: #F14F4F;
+}
+
+.gl-global-violet {
+  color: #5c50e6;
+}
+
 //html {
 //  font-size: 16px;
 //}
@@ -154,3 +170,29 @@ a:hover {
 //    font-size: calc(22px + 6 * (100vw - 1000px) / 1000);
 //  }
 //}
+
+.scroller-bar {
+  position: relative;
+  overflow-y: scroll;
+
+  &:hover::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: #f8f6e7;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: red;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, .1);
+  }
+}

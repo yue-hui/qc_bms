@@ -1,5 +1,9 @@
 import { v1 as uuidv1 } from 'node-uuid'
-import { DATE_FORMAT, GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
+import {
+  DATE_FORMAT,
+  GRADE_LIST,
+  SUBJECT_LIST
+} from '@/utils/constant'
 import dayjs from 'dayjs'
 import CryptoJS from 'crypto-js'
 
@@ -280,4 +284,17 @@ export function delayering_page_tree(data_list) {
 
   recursive(data_list)
   return data_row
+}
+
+/*
+* 生成指定范围内的随机值
+* @param {Number} _min 随机值的最小值
+* @param {Number} _max 随机值的最大值
+* */
+export function sync_message_interval_seconds(_min, _max) {
+  if (_min === _max) {
+    return _min
+  } else {
+    return Math.floor(Math.random() * (_max - _min)) + _min
+  }
 }
