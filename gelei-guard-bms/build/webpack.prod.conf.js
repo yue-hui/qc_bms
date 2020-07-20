@@ -105,7 +105,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         }
       ],
       options: {
-        concurrency: 100,
+        concurrency: 100
       }
     })
   ],
