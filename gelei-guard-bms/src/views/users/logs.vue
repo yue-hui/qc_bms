@@ -91,8 +91,12 @@
             prop="type" />
           <el-table-column
             align="center"
-            label="massage"
-            prop="message" />
+            label="message"
+            prop="message">
+            <template slot-scope="scope">
+              <div v-html="scope.row.message"/>
+            </template>
+          </el-table-column>
         </el-table>
         <!--去除分页、等后端返回 total 打开就可以-->
         <el-pagination
@@ -251,7 +255,13 @@ export default {
         if (res.status === 0) {
           // eslint-disable-next-line no-empty
           if (res.data && res.data.length) {
-            this.table_list = res.data
+            this.table_list = res.data.map(item => {
+              if (item.message) {
+                item.message = item.message.replace(new RegExp(this.query_sets.context, 'g'), '<span class="active-context-text">' + this.query_sets.context + '</span>')
+              }
+              !item.traceId && (item.traceId = '-')
+              return item
+            })
             this.total = res.total
           } else {
             this.table_list = []
@@ -345,6 +355,10 @@ export default {
   .users-logs-page{
     .el-range__close-icon{
       display: none;
+    }
+    .active-context-text{
+     background-color: #ffff00;
+      padding: 0 2px;
     }
   }
 </style>
