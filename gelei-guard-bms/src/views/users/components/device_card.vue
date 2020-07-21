@@ -11,24 +11,27 @@
                 <!--一直显示给用户-->
                 <div
                   v-if="!is_agent && device.bind_type === '1' && device.device_type !== 'IOS'"
-                  class="un-lock-icon"
-                  title="日志上传"
+                  class="tools-area-item"
+                  title="开发日志上传"
                   @click.stop="device_upload_logs">
                   <svg-icon class="icon" icon-class="upload" />
+                  <span>开发日志上传</span>
                 </div>
                 <div
                   v-if="!is_agent && (device.device_type === 'IOS' || device.device_type === '02')"
-                  class="un-lock-icon"
-                  title="重置描述文件状态"
+                  class="tools-area-item"
+                  title="证书重置"
                   @click.stop="confirm_delete_desc_file_status">
                   <svg-icon class="icon" icon-class="unbind_desc_file" />
+                  <span>证书重置</span>
                 </div>
                 <div
                   v-if="!is_agent && (device.bind_type === '1')"
                   title="解绑孩子端设备"
-                  class="un-lock-icon"
+                  class="tools-area-item"
                   @click.stop="confirm_un_lock_child_device">
                   <svg-icon class="icon" icon-class="unlock" />
+                  <span>解绑孩子端设备</span>
                 </div>
               </div>
             </div>
@@ -298,6 +301,23 @@ export default {
           color: #4aff24;
         }
       }
+    }
+  }
+  .tools-area-item{
+    height: 80%;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 4px;
+    svg{
+      margin-right: 6px;
+    }
+    span{
+      color: #fff;
+    }
+    &:hover{
+      background-color: #304156;
     }
   }
 }

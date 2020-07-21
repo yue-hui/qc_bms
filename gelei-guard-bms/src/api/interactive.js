@@ -1123,3 +1123,12 @@ export function get_device_upload_logs_list(data) {
     data
   })
 }
+
+// 查询用户日志
+export function get_device_ali_log(data) {
+  return request({
+    url: '/greenguard/manager/device/findAliLog',
+    method: 'post',
+    data
+  })
+}

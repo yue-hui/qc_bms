@@ -125,6 +125,12 @@ export const asyncRoutes = [
         name: 'DeviceRecord',
         component: () => import('@/views/users/devices_record'),
         meta: { title: '设备使用记录', icon: 'devices_record', pid: '20094' }
+      },
+      {
+        path: 'logs',
+        name: 'Logs',
+        component: () => import('@/views/users/logs'),
+        meta: { title: '用户日志查询', icon: 'logs', pid: '' }
       }
     ]
   },
