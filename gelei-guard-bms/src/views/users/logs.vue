@@ -137,7 +137,7 @@ export default {
       },
       total: 0,
       page: 1,
-      page_size: 200,
+      page_size: 100,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       table_list: [],
       pickerOptions: {
