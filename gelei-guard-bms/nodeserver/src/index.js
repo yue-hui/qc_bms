@@ -62,7 +62,7 @@ app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
   console.log('request headers: ', reqHeaders)
   try {
     var method = req.method.toLowerCase()
-    var TransferReq = config.baseURL + req.originalUrl.split('api')[1]
+    var TransferReq = config.baseURL + req.originalUrl.split('api/')[1]
     // var TransferReq = config.baseURL + req.originalUrl.split('greenguard')[1]
     if (method === 'get') {
       // GET Request
