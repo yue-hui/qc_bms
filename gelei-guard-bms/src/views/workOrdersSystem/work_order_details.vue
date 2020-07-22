@@ -373,7 +373,7 @@
               <div class="grid-content bg-purple">
                 <el-form-item label="会员类型">
                   <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_member_type }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_member_type }}</span>
+                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_member_type_label }}</span>
                 </el-form-item>
               </div>
             </el-col>
@@ -1293,7 +1293,7 @@ export default {
       } else if (bind_type === '0') {
         return '已解绑'
       } else {
-        return '绑定中'
+        return ''
       }
     },
     change_child: function(child_id) {

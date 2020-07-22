@@ -8,7 +8,7 @@
       <div v-loading="loading" class="message-pannel">
         <li v-for="(msg, index) in messages" :key="index" class="infinite-list-item">
           <p class="msg-row">{{ index + 1 }}. {{ msg.timestamp }} {{ msg.msg }}
-            【<a href="#">{{ msg.ticket_id }}</a>】</p>
+            【<a href="#">{{ msg.ticket_no }}</a>】</p>
         </li>
       </div>
     </ul>
