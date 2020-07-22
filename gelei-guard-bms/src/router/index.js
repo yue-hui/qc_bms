@@ -130,7 +130,7 @@ export const asyncRoutes = [
         path: 'logs',
         name: 'Logs',
         component: () => import('@/views/users/logs'),
-        meta: { title: '用户日志查询', icon: 'logs', pid: '' }
+        meta: { title: '用户日志查询', icon: 'logs', pid: '20112' }
       }
     ]
   },
