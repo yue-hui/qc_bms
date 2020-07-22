@@ -223,7 +223,7 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <gl-button pid="20044" size="mini" type="success">创建工单</gl-button>
+                <gl-button pid="20044" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -246,7 +246,8 @@
             <template slot-scope="scope">
               <p
                 :title="scope.row.ticket_title"
-                class="ticket-title gl-global-violet">{{ scope.row.ticket_title }}</p>
+                class="ticket-title gl-global-violet"
+                @click="edit_work_order(scope.row)">{{ scope.row.ticket_title }}</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -414,11 +415,17 @@ export default {
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     },
     edit_work_order: function(row) {
-      const name = 'WorkOrdersSystemDetails'
+      let action
+      if (row.applicant_id === this.name && row.state === '3') {
+        action = 2
+      } else {
+        action = 3
+      }
       const query = {
-        action: 2,
+        action,
         ticket_id: row.ticket_id
       }
+      const name = 'WorkOrdersSystemDetails'
       const router_data = this.$router.resolve({ name, query })
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     },

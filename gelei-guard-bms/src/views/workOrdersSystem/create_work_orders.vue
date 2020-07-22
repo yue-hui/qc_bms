@@ -223,7 +223,7 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <gl-button pid="20044" size="mini" type="success">创建工单</gl-button>
+                <gl-button pid="20044" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -246,7 +246,8 @@
             <template slot-scope="scope">
               <p
                 :title="scope.row.ticket_title"
-                class="ticket-title gl-global-violet">{{ scope.row.ticket_title }}</p>
+                class="ticket-title gl-global-violet"
+                @click="edit_work_order(scope.row)">{{ scope.row.ticket_title }}</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -317,7 +318,8 @@
                 pid="20008"
                 size="small"
                 style="text-decoration: underline;"
-                type="text">编辑</gl-button>
+                type="text"
+                @click="edit_work_order(scope.row)">编辑</gl-button>
             </template>
           </el-table-column>
         </el-table>

@@ -20,7 +20,7 @@ import { AppMain, Navbar, Sidebar, TopBar, RecentMessage } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapMutations, mapState } from 'vuex'
 import { SYNC_USER_VARIABLE_INFOMATION } from '@/utils/constant'
-import { get_user_recently_status } from '@/api/login'
+import { get_user_recently_status } from '@/api/work_order_system'
 
 export default {
   name: 'Layout',
@@ -81,11 +81,7 @@ export default {
       }, SYNC_USER_VARIABLE_INFOMATION * 1000)
     },
     fetchUserVariableInfomation() {
-      // TODO: 去掉 ticket_id
-      const config = {
-        ticket_id: 'xx'
-      }
-      get_user_recently_status(config).then(res => {
+      get_user_recently_status().then(res => {
         if (res.status === 0) {
           const status = res.data.unread_count !== 0
           this.$store.commit('TOGGLE_GL_MESSAGE_REMINDER_STATUS', status)

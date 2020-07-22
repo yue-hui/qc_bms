@@ -239,7 +239,8 @@
             <template slot-scope="scope">
               <p
                 :title="scope.row.ticket_title"
-                class="ticket-title gl-global-violet">{{ scope.row.ticket_title }}</p>
+                class="ticket-title gl-global-violet"
+                @click="accept_work_order(scope.row)">{{ scope.row.ticket_title }}</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -440,11 +441,18 @@ export default {
       })
     },
     accept_work_order(row) {
-      const name = 'WorkOrdersSystemDetails'
+      // let action
+      // if (row.applicant_id === this.name && row.state === '3') {
+      //   action = 2
+      // } else {
+      //   action = 3
+      // }
+      const action = 3
       const query = {
-        action: 3,
+        action,
         ticket_id: row.ticket_id
       }
+      const name = 'WorkOrdersSystemDetails'
       const router_data = this.$router.resolve({ name, query })
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     }

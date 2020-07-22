@@ -51,12 +51,3 @@ export function update_system_account_avatar(data) {
     data
   })
 }
-
-// 统计最新未读消息总数
-export function get_user_recently_status(data) {
-  return request({
-    url: '/greenguard/manager/ticket/message/unreadCount',
-    method: 'post',
-    data
-  })
-}
