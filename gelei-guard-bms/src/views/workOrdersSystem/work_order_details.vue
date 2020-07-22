@@ -1,115 +1,312 @@
 <template>
-  <div class="work-order-details">
-    <!--    <div class="page-header">-->
-    <!--      <el-page-header :content="page_header_content" @back="goBack" />-->
-    <!--    </div>-->
-    <div class="form-diviser">
-      <span v-if="action === '1'">创建工单</span>
-      <span v-if="['3', '2'].indexOf(action) !== -1">【{{ forms.ticket_no }}】 - {{ forms.ticket_title }}</span>
-      <span>
-        <el-button
-          v-if="action === '1'"
-          :loading="submit_loading"
-          type="info"
-          size="mini"
-          data-alias="create"
-          @click="submit">提交</el-button>
-        <el-button
-          v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
-          :loading="reminder_work_order_loading"
-          type="info"
-          size="mini"
-          @click="reminder_work_order">催单</el-button>
-        <el-button
-          v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
-          :loading="save_work_order_loading"
-          type="info"
-          size="mini"
-          data-alias="create"
-          @click="save_work_order">保存</el-button>
-        <el-button
-          v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-          :loading="assigned_work_order_loading"
-          type="info"
-          size="mini"
-          data-alias="assigned"
-          @click="assigned_work_order">提交</el-button>
-        <el-button
-          v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-          :loading="show_transfer_work_order_loading"
-          type="info"
-          size="mini"
-          @click="show_transfer_work_order">转交</el-button>
-        <el-button
-          v-if="identity === '01' && ['3', '1'].indexOf(work_order_state) !== -1"
-          :loading="close_work_order_loading"
-          type="info"
-          size="mini"
-          @click="close_work_order">关闭工单</el-button>
-        <el-button
-          v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
-          :loading="reuse_work_order_loading"
-          type="info"
-          size="mini"
-          @click="reuse_work_order">重新打开</el-button>
-      </span>
+  <div class="work-order-details" v-loading="page_loading">
+    <div class="form-diviser mb-20">
+      <div class="form-top-layout">
+        <span v-if="action === '1'">创建工单</span>
+        <span v-if="['3', '2'].indexOf(action) !== -1">【{{ forms.ticket_no }}】 - {{ forms.ticket_title }}</span>
+        <span>
+          <el-button
+            v-if="action === '1'"
+            :loading="submit_loading"
+            type="info"
+            size="mini"
+            data-alias="create"
+            @click="submit">提交</el-button>
+          <el-button
+            v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+            :loading="reminder_work_order_loading"
+            type="info"
+            size="mini"
+            @click="reminder_work_order">催单</el-button>
+          <el-button
+            v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+            :loading="save_work_order_loading"
+            type="info"
+            size="mini"
+            data-alias="create"
+            @click="save_work_order">保存</el-button>
+          <el-button
+            v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+            :loading="assigned_work_order_loading"
+            type="info"
+            size="mini"
+            data-alias="assigned"
+            @click="assigned_work_order">提交</el-button>
+          <el-button
+            v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+            :loading="show_transfer_work_order_loading"
+            type="info"
+            size="mini"
+            @click="show_transfer_work_order">转交</el-button>
+          <el-button
+            v-if="identity === '01' && ['3', '1'].indexOf(work_order_state) !== -1"
+            :loading="close_work_order_loading"
+            type="info"
+            size="mini"
+            @click="close_work_order">关闭工单</el-button>
+          <el-button
+            v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
+            :loading="reuse_work_order_loading"
+            type="info"
+            size="mini"
+            @click="reuse_work_order">重新打开</el-button>
+        </span>
+      </div>
     </div>
+    <!--创建人及工单基本信息-->
+    <el-form size="mini" label-suffix=":" label-width="120px" label-position="left" @submit.native.prevent>
+      <el-row :gutter="24" class="form-row">
+        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="创建人">
+              <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ real_name }}</span>
+              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_name }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="申请人角色">
+              <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ role_name }}</span>
+              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_id }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="紧急程度">
+              <span class="label-text">{{ forms.degree_label }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="处理人">
+              <span class="label-text">{{ forms.assigned_ao_name }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="工单状态">
+              <span class="label-text">{{ forms.state_label }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+          <div class="grid-content bg-purple">
+            <el-form-item label="录入时间">
+              <span class="label-text">{{ forms.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+    </el-form>
 
-    <div>
-      <!--创建人及工单基本信息-->
-      <el-form size="mini" label-suffix=":" label-width="120px" label-position="left" @submit.native.prevent>
-        <el-row :gutter="24" class="form-row">
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="创建人">
-                <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ real_name }}</span>
-                <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_name }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="申请人角色">
-                <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ role_name }}</span>
-                <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_id }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="紧急程度">
+    <!--工单信息-->
+    <div class="form-diviser mb-20">工单信息</div>
+    <el-form
+      ref="work_order_info"
+      :model="forms"
+      :rules="forms_rules"
+      size="mini"
+      label-suffix=":"
+      label-width="120px"
+      label-position="left"
+      @submit.native.prevent>
+      <el-row :gutter="24" class="form-row">
+        <el-col :xs="22" :sm="16" :md="14" :lg="12" :xl="8" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="工单标题" prop="ticket_title">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-autocomplete
+                  v-model="forms.ticket_title"
+                  :fetch-suggestions="fetch_work_order_titles"
+                  style="width: 100%;"
+                  clearable
+                  placeholder="请选择工单标题" />
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.ticket_title }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" class="form-row">
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="6" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="终端类型" prop="device_type">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.device_type"
+                  size="mini"
+                  style="width: 100%;"
+                  placeholder="请选择终端类型"
+                  @change="change_terminal_type">
+                  <el-option
+                    v-for="item in terminal_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.device_type_name }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" class="form-row">
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="工单类别" prop="ticket_type_id">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.ticket_type_id"
+                  :disabled="ticket_type_disabled"
+                  size="mini"
+                  placeholder="请选择工单类别"
+                  @change="change_ticket_type">
+                  <el-option
+                    v-for="item in ticket_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.ticket_type_name }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="问题分类" prop="question_type_id">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.question_type_id"
+                  :disabled="question_type_disabled"
+                  size="mini"
+                  placeholder="请选择问题分类"
+                  @change="change_question_types">
+                  <el-option
+                    v-for="item in question_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.question_type_name }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="问题细分" prop="question_detail_id">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.question_detail_id"
+                  :disabled="question_detail_disabled"
+                  size="mini"
+                  placeholder="请选择问题细分"
+                  @change="search">
+                  <el-option
+                    v-for="item in question_detail_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.question_detail_name }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" class="form-row">
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="紧急程度" prop="degree">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.degree"
+                  size="mini"
+                  placeholder="请选择紧急程度"
+                  @change="search">
+                  <el-option
+                    v-for="item in urgency_degrees"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
                 <span class="label-text">{{ forms.degree_label }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="处理人">
-                <span class="label-text">{{ forms.assigned_ao_name }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="工单状态">
-                <span class="label-text">{{ forms.state_label }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col v-if="action === '3'" :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-            <div class="grid-content bg-purple">
-              <el-form-item label="录入时间">
-                <span class="label-text">{{ forms.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-              </el-form-item>
-            </div>
-          </el-col>
-        </el-row>
-      </el-form>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="工单来源" prop="ticket_source">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-select
+                  v-model="forms.ticket_source"
+                  size="mini"
+                  placeholder="请选择工单来源"
+                  clearable
+                  @change="select_work_order_source">
+                  <el-option
+                    v-for="item in communication_methods"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.ticket_source_label }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item :label="communication_method" prop="ticket_source_details">
+              <template
+                v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
+                <el-input
+                  v-model="forms.ticket_source_details"
+                  :maxlength="11"
+                  :placeholder="'请输入' + communication_method"
+                  size="mini"
+                  clearable />
+              </template>
+              <template v-else>
+                <span class="label-text">{{ forms.ticket_source_details }}</span>
+              </template>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+    </el-form>
 
-      <!--工单信息-->
-      <div class="form-diviser">工单信息</div>
+    <div class="form-diviser mt-10 mb-20">家长信息</div>
+    <div class="form-row">
       <el-form
-        ref="work_order_info"
+        ref="work_order_patriarch"
         :model="forms"
         :rules="forms_rules"
         size="mini"
@@ -117,688 +314,487 @@
         label-width="120px"
         label-position="left"
         @submit.native.prevent>
-        <el-row :gutter="24" class="form-row">
-          <el-col :xs="22" :sm="16" :md="14" :lg="12" :xl="8" class="col-bg">
-            <div class="grid-content bg-purple">
-              <el-form-item label="工单标题" prop="ticket_title">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-autocomplete
-                    v-model="forms.ticket_title"
-                    :fetch-suggestions="fetch_work_order_titles"
-                    style="width: 100%;"
-                    clearable
-                    placeholder="请选择工单标题" />
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.ticket_title }}</span>
-                </template>
-              </el-form-item>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24" class="form-row">
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="6" class="col-bg">
-            <div class="grid-content bg-purple">
-              <el-form-item label="终端类型" prop="device_type">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.device_type"
-                    size="mini"
-                    style="width: 100%;"
-                    placeholder="请选择终端类型"
-                    @change="change_terminal_type">
-                    <el-option
-                      v-for="item in terminal_types"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.device_type_name }}</span>
-                </template>
-              </el-form-item>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24" class="form-row">
+        <el-row :gutter="24">
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item label="工单类别" prop="ticket_type_id">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.ticket_type_id"
-                    :disabled="ticket_type_disabled"
-                    size="mini"
-                    placeholder="请选择工单类别"
-                    @change="change_ticket_type">
-                    <el-option
-                      v-for="item in ticket_types"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.ticket_type_name }}</span>
-                </template>
+              <el-form-item label="手机号">
+                <el-input
+                  v-if="['1'].indexOf(action) !== -1"
+                  v-model="forms.p_phone"
+                  maxlength="11"
+                  size="mini"
+                  clearable
+                  placeholder="请输入手机号"
+                  @change="patriarch_phone_change" />
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_phone }}</span>
               </el-form-item>
             </div>
           </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item label="问题分类" prop="question_type_id">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.question_type_id"
-                    :disabled="question_type_disabled"
-                    size="mini"
-                    placeholder="请选择问题分类"
-                    @change="change_question_types">
-                    <el-option
-                      v-for="item in question_types"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.question_type_name }}</span>
-                </template>
+              <el-form-item label="家长昵称">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_nick_name }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_nick_name }}</span>
               </el-form-item>
             </div>
           </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item label="问题细分" prop="question_detail_id">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.question_detail_id"
-                    :disabled="question_detail_disabled"
-                    size="mini"
-                    placeholder="请选择问题细分"
-                    @change="search">
-                    <el-option
-                      v-for="item in question_detail_types"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.question_detail_name }}</span>
-                </template>
-              </el-form-item>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24" class="form-row">
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple">
-              <el-form-item label="紧急程度" prop="degree">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.degree"
-                    size="mini"
-                    placeholder="请选择紧急程度"
-                    @change="search">
-                    <el-option
-                      v-for="item in urgency_degrees"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.degree_label }}</span>
-                </template>
+              <el-form-item label="终端类型">
+                <span
+                  v-if="['1'].indexOf(action) !== -1"
+                  class="label-text">{{ patriarch_info.p_device_type_label }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.p_device_type_label }}</span>
               </el-form-item>
             </div>
           </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item label="工单来源" prop="ticket_source">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-select
-                    v-model="forms.ticket_source"
-                    size="mini"
-                    placeholder="请选择工单来源"
-                    clearable
-                    @change="select_work_order_source">
-                    <el-option
-                      v-for="item in communication_methods"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value" />
-                  </el-select>
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.ticket_source_label }}</span>
-                </template>
+              <el-form-item label="系统版本号">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_os_version }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_os_version }}</span>
               </el-form-item>
             </div>
           </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item :label="communication_method" prop="ticket_source_details">
-                <template
-                  v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
-                  <el-input
-                    v-model="forms.ticket_source_details"
-                    :maxlength="11"
-                    :placeholder="'请输入' + communication_method"
-                    size="mini"
-                    clearable />
-                </template>
-                <template v-else>
-                  <span class="label-text">{{ forms.ticket_source_details }}</span>
-                </template>
+              <el-form-item label="家长端版本号">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_version }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_version }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="注册时间">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_create_time }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="会员类型">
+                <span
+                  v-if="['1'].indexOf(action) !== -1"
+                  class="label-text">{{ patriarch_info.p_member_type_label }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.p_member_type_label }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="会员有效天数">
+                <span
+                  v-if="['1'].indexOf(action) !== -1"
+                  class="label-text">{{ patriarch_info.p_valid_days }} 天</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.p_valid_days }} 天</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="用户来源">
+                <span
+                  v-if="['1'].indexOf(action) !== -1"
+                  class="label-text">{{ patriarch_info.p_reg_from_label }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.p_reg_from_label }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="最近使用时间">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.last_use_time }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.last_use_time }}</span>
               </el-form-item>
             </div>
           </el-col>
         </el-row>
       </el-form>
+    </div>
 
-      <div class="form-diviser mt-10">家长信息</div>
-      <div class="form-row">
-        <el-form
-          ref="work_order_patriarch"
-          :model="forms"
-          :rules="forms_rules"
-          size="mini"
-          label-suffix=":"
-          label-width="120px"
-          label-position="left"
-          @submit.native.prevent>
-          <el-row :gutter="24">
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="手机号">
-                  <el-input
-                    v-if="['1'].indexOf(action) !== -1"
-                    v-model="forms.p_phone"
-                    maxlength="11"
-                    size="mini"
-                    clearable
-                    placeholder="请输入手机号"
-                    @change="patriarch_phone_change" />
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_phone }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="家长昵称">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_nick_name }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_nick_name }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="终端类型">
-                  <span
-                    v-if="['1'].indexOf(action) !== -1"
-                    class="label-text">{{ patriarch_info.p_device_type_label }}</span>
-                  <span
-                    v-if="['2', '3'].indexOf(action) !== -1"
-                    class="label-text">{{ forms.p_device_type_label }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="系统版本号">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_os_version }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_os_version }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="家长端版本号">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_version }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_version }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="注册时间">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_create_time }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="会员类型">
-                  <span
-                    v-if="['1'].indexOf(action) !== -1"
-                    class="label-text">{{ patriarch_info.p_member_type_label }}</span>
-                  <span
-                    v-if="['2', '3'].indexOf(action) !== -1"
-                    class="label-text">{{ forms.p_member_type_label }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="会员有效天数">
-                  <span
-                    v-if="['1'].indexOf(action) !== -1"
-                    class="label-text">{{ patriarch_info.p_valid_days }} 天</span>
-                  <span
-                    v-if="['2', '3'].indexOf(action) !== -1"
-                    class="label-text">{{ forms.p_valid_days }} 天</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="用户来源">
-                  <span
-                    v-if="['1'].indexOf(action) !== -1"
-                    class="label-text">{{ patriarch_info.p_reg_from_label }}</span>
-                  <span
-                    v-if="['2', '3'].indexOf(action) !== -1"
-                    class="label-text">{{ forms.p_reg_from_label }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="最近使用时间">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.last_use_time }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.last_use_time }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-
-      <div class="form-diviser mt-10">
-        <el-dropdown v-if="['1'].indexOf(action) !== -1" @command="change_child">
-          <span class="el-dropdown-link">孩子 {{ current_child.c_nick_name }}
-            <i class="el-icon-arrow-down el-icon--right" /> 信息
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="(chlid, index) in patriarch_info.chlid_list"
-              :command="chlid.c_user_id"
-              :key="index">
-              {{ chlid.c_nick_name }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <div v-if="['2', '3'].indexOf(action) !== -1" class="child-nick-name">孩子 {{ forms.c_nick_name }} 信息</div>
-      </div>
-      <div class="form-row">
-        <el-form
-          ref="child_forms"
-          :model="forms"
-          size="mini"
-          label-suffix=":"
-          label-width="120px"
-          label-position="left"
-          @submit.native.prevent>
-          <el-row :gutter="24">
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="手机号">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_phone }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_phone }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="孩子年级">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_grade_name }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_grade_name }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="注册时间">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_create_time }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row :gutter="24">
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple">
-                <el-form-item label="绑定设备">
-                  <el-select
-                    v-if="['1'].indexOf(action) !== -1"
-                    v-model="forms.device"
-                    size="mini"
-                    placeholder="请选择绑定设备"
-                    @change="change_child_device">
-                    <el-option
-                      v-for="item in child_device_list"
-                      :key="item.c_device_id"
-                      :label="item.c_device_name"
-                      :value="item.c_device_id" />
-                  </el-select>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_device_name }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="终端类型">
-                  <span
-                    v-if="['1'].indexOf(action) !== -1"
-                    class="label-text">{{ current_device.c_device_type_label }}</span>
-                  <span
-                    v-if="['2', '3'].indexOf(action) !== -1"
-                    class="label-text">{{ forms.c_device_type_label }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="系统版本号">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_os_version }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_os_version }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="孩子端版本号">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_version }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_version }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="绑定状态">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_bind_type }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_bind_type }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="绑定时间">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_bind_time }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_bind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-              <div class="grid-content bg-purple" style="width: 400px;">
-                <el-form-item label="解绑时间">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_unbind_time }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_unbind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-
-      <div class="form-diviser mt-10">工单详情</div>
+    <div class="form-diviser mt-10 mb-20">
+      <el-dropdown v-if="['1'].indexOf(action) !== -1" @command="change_child">
+        <span
+          class="el-dropdown-link">
+          孩子 {{ current_child.c_nick_name }} <i class="el-icon-arrow-down el-icon--right" /> 信息</span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="(chlid, index) in patriarch_info.chlid_list"
+            :command="chlid.c_user_id"
+            :key="index">
+            {{ chlid.c_nick_name }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <div v-if="['2', '3'].indexOf(action) !== -1" class="child-nick-name">孩子 {{ forms.c_nick_name }} 信息</div>
+    </div>
+    <div class="form-row">
       <el-form
-        ref="work_order_detail"
+        ref="child_forms"
         :model="forms"
-        :rules="work_order_detail_rules"
         size="mini"
         label-suffix=":"
         label-width="120px"
         label-position="left"
         @submit.native.prevent>
-        <el-row v-if="['1', '2'].indexOf(action) !== -1" :gutter="24" class="form-row">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
+        <el-row :gutter="24">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple">
-              <el-form-item label="问题描述" prop="problem_description">
-                <tinymce
-                  v-model="forms.problem_description"
-                  :height="200"
-                  class="question-details" />
-                <div
-                  v-if="['3'].indexOf(action) !== -1"
-                  class="problem-description"
-                  v-html="forms.problem_description" />
+              <el-form-item label="手机号">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_phone }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_phone }}</span>
               </el-form-item>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
-            <div class="grid-content bg-purple">
-              <el-form-item label="处理人" prop="assigned_ao_id">
-                <el-select
-                  v-model="forms.assigned_ao_id"
-                  size="mini"
-                  placeholder="请选择处理人">
-                  <el-option
-                    v-for="item in handler_users"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value" />
-                </el-select>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="孩子年级">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_grade_name }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_grade_name }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="注册时间">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_create_time }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
               </el-form-item>
             </div>
           </el-col>
         </el-row>
-        <div v-else-if="['3'].indexOf(action) !== -1" class="work-order-detail-block">
-          <p class="detail-desc-title">
-            <span :class="{active: detail_active === '1'}" class="desc" @click="detail_active = '1'">问题描述</span>
-            <span class="between-desc-history">|</span>
-            <span :class="{active: detail_active === '2'}" class="history" @click="detail_active = '2'">变更历史</span>
-          </p>
-          <div v-if="detail_active === '1'" class="detail-content">
-            <template
-              v-if="identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1">
-              <el-row :gutter="24" class="form-row">
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
-                  <div class="grid-content bg-purple">
-                    <el-form-item label="问题描述" prop="problem_description">
-                      <tinymce
-                        v-model="forms.problem_description"
-                        :height="200"
-                        class="question-details" />
-                    </el-form-item>
-                  </div>
-                </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
-                  <div class="grid-content bg-purple">
-                    <el-form-item label="处理人" prop="assigned_ao_id">
-                      <el-select
-                        v-model="forms.assigned_ao_id"
-                        size="mini"
-                        placeholder="请选择处理人"
-                        clearable>
-                        <el-option
-                          v-for="item in handler_users"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value" />
-                      </el-select>
-                    </el-form-item>
-                  </div>
-                </el-col>
-              </el-row>
-            </template>
-            <template v-else>
-              <div v-if="['3'].indexOf(action) !== -1" v-html="forms.problem_description" />
-            </template>
-          </div>
-          <div v-if="detail_active === '2'" class="detail-content detail-change-content">
-            <p class="row title">
-              <span class="col col-1">变更时间</span>
-              <span class="col col-2">变更人</span>
-              <span class="col col-3">变更类型</span>
-              <span class="col col-4">变更前</span>
-              <span class="col col-5">变更后</span>
-              <span class="col col-6">备注</span>
-            </p>
-            <template v-if="ticket_change_records.length !== 0">
-              <p
-                v-for="(change_record, index) in ticket_change_records"
-                :key="index"
-                class="row">
-                <span class="col col-1">{{ change_record.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                <span class="col col-2">{{ change_record.user_id }}</span>
-                <span class="col col-3">{{ change_record.user_real_name }}</span>
-                <span class="col col-4">{{ change_record.before_change }}</span>
-                <span class="col col-5">{{ change_record.after_change }}</span>
-                <span class="col col-6">{{ change_record.remark }}</span>
-              </p>
-            </template>
-            <template v-else>
-              <p class="row no-change-record">暂无历史变更记录</p>
-            </template>
-          </div>
-        </div>
-      </el-form>
-
-      <!--评论-->
-      <div v-if="['1'].indexOf(action) === -1" class="comment-block">
-        <hr class="comment">
-        <p class="comment-title">评论 <span class="add-comment" @click="add_comment">+ 评论</span></p>
-        <div class="comment-items">
-          <template v-if="ticket_comments.length !== 0">
-            <div
-              v-for="(comment, index) in ticket_comments"
-              :key="index"
-              class="comment-item">
-              <div class="left">
-                <img :src="comment.img_url || '../../assets/imgs/logo.png'" alt="">
-              </div>
-              <div class="right">
-                <div class="comment-info">
-                  <p class="comment-time-point">
-                    <span class="real-name">{{ comment.real_name }}</span>
-                    <span class="role-name">{{ comment.role_name }}</span>
-                    <span class="create-date">{{ comment.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                    <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
-                  </p>
-                </div>
-                <div class="comment-content">
-                  <div v-html="comment.comment" />
-                </div>
-              </div>
+        <el-row :gutter="24">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple">
+              <el-form-item label="绑定设备">
+                <el-select
+                  v-if="['1'].indexOf(action) !== -1"
+                  v-model="forms.device"
+                  size="mini"
+                  placeholder="请选择绑定设备"
+                  @change="change_child_device">
+                  <el-option
+                    v-for="item in child_device_list"
+                    :key="item.c_device_id"
+                    :label="item.c_device_name"
+                    :value="item.c_device_id" />
+                </el-select>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_device_name }}</span>
+              </el-form-item>
             </div>
-          </template>
-          <template v-else>
-            <p class="no-comments-work-order">暂时没有评论内容</p>
-          </template>
-        </div>
-      </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="终端类型">
+                <span
+                  v-if="['1'].indexOf(action) !== -1"
+                  class="label-text">{{ current_device.c_device_type_label }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.c_device_type_label }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="系统版本号">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_os_version }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_os_version }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="孩子端版本号">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_version }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_version }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="绑定状态">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_bind_type }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_bind_type }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="绑定时间">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_bind_time }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_bind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple" style="width: 400px;">
+              <el-form-item label="解绑时间">
+                <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_unbind_time }}</span>
+                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_unbind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
 
-      <!--工单处理-->
-      <div v-if="['3'].indexOf(action) !== -1" class="work-order-next">
-        <p class="work-order-title">工单处理</p>
-        <div class="work-order-next-content">
-          <el-form
-            ref="assigned_forms"
-            :model="assigned_forms"
-            :rules="assigned_rules"
-            size="mini"
-            label-suffix=":"
-            label-width="120px"
-            label-position="left"
-            @submit.native.prevent>
+    <div class="form-diviser mt-10 mb-10">工单详情</div>
+    <el-form
+      ref="work_order_detail"
+      :model="forms"
+      :rules="work_order_detail_rules"
+      size="mini"
+      label-suffix=":"
+      label-width="120px"
+      label-position="left"
+      @submit.native.prevent>
+      <el-row v-if="['1', '2'].indexOf(action) !== -1" :gutter="24" class="form-row">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="问题描述" prop="problem_description">
+              <tinymce
+                v-model="forms.problem_description"
+                :height="200"
+                class="question-details" />
+              <div
+                v-if="['3'].indexOf(action) !== -1"
+                class="problem-description"
+                v-html="forms.problem_description" />
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
+          <div class="grid-content bg-purple">
+            <el-form-item label="处理人" prop="assigned_ao_id">
+              <el-select
+                v-model="forms.assigned_ao_id"
+                size="mini"
+                placeholder="请选择处理人">
+                <el-option
+                  v-for="item in handler_users"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+      <div v-else-if="['3'].indexOf(action) !== -1" class="work-order-detail-block">
+        <p class="detail-desc-title">
+          <span :class="{active: detail_active === '1'}" class="desc" @click="detail_active = '1'">问题描述</span>
+          <span class="between-desc-history">|</span>
+          <span :class="{active: detail_active === '2'}" class="history" @click="detail_active = '2'">变更历史</span>
+        </p>
+        <div v-if="detail_active === '1'" class="detail-content">
+          <template
+            v-if="identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1">
             <el-row :gutter="24" class="form-row">
-              <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
+              <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="处理人">
-                    <span class="label-text">{{ forms.assigned_ao_name }}</span>
+                  <el-form-item label="问题描述" prop="problem_description">
+                    <tinymce
+                      v-model="forms.problem_description"
+                      :height="200"
+                      class="question-details" />
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
+              <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="当前状态" prop="state">
-                    <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
-                      <el-select
-                        v-model="assigned_forms.state"
-                        size="mini"
-                        placeholder="请选择当前状态">
-                        <el-option
-                          v-for="status in work_orders_status.filter(r => ['1', '3'].indexOf(r.value) !== -1)"
-                          :key="status.value"
-                          :label="status.label"
-                          :value="status.value" />
-                      </el-select>
-                    </template>
-                    <template v-else>
-                      <span class="label-text">{{ forms.assigned_ao_name }}</span>
-                    </template>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
-                <div class="grid-content bg-purple">
-                  <el-form-item label="问题归类" prop="state">
-                    <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
-                      <el-select
-                        v-model="assigned_forms.problem_type"
-                        size="mini"
-                        placeholder="请选择问题归类">
-                        <el-option
-                          v-for="status in work_orders_question_classifies"
-                          :key="status.value"
-                          :label="status.label"
-                          :value="status.value" />
-                      </el-select>
-                    </template>
-                    <template v-else>
-                      <span class="label-text">{{ forms.problem_type_label }}</span>
-                    </template>
+                  <el-form-item label="处理人" prop="assigned_ao_id">
+                    <el-select
+                      v-model="forms.assigned_ao_id"
+                      size="mini"
+                      placeholder="请选择处理人"
+                      clearable>
+                      <el-option
+                        v-for="item in handler_users"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value" />
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
             </el-row>
-            <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
-              <el-row :gutter="24" class="form-row">
-                <el-col :span="24">
-                  <div class="grid-content bg-purple">
-                    <el-form-item label="评论" prop="comment">
-                      <tinymce
-                        v-model="assigned_forms.comment"
-                        :height="200"
-                        class="question-details" />
-                    </el-form-item>
-                  </div>
-                </el-col>
-              </el-row>
-            </template>
-          </el-form>
+          </template>
+          <template v-else>
+            <div v-if="['3'].indexOf(action) !== -1" v-html="forms.problem_description" />
+          </template>
+        </div>
+        <div v-if="detail_active === '2'" class="detail-content detail-change-content">
+          <p class="row title">
+            <span class="col col-1">变更时间</span>
+            <span class="col col-2">变更人</span>
+            <span class="col col-3">变更类型</span>
+            <span class="col col-4">变更前</span>
+            <span class="col col-5">变更后</span>
+            <span class="col col-6">备注</span>
+          </p>
+          <template v-if="ticket_change_records.length !== 0">
+            <p
+              v-for="(change_record, index) in ticket_change_records"
+              :key="index"
+              class="row">
+              <span class="col col-1">{{ change_record.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+              <span class="col col-2">{{ change_record.user_id }}</span>
+              <span class="col col-3">{{ change_record.user_real_name }}</span>
+              <span class="col col-4">{{ change_record.before_change }}</span>
+              <span class="col col-5">{{ change_record.after_change }}</span>
+              <span class="col col-6">{{ change_record.remark }}</span>
+            </p>
+          </template>
+          <template v-else>
+            <p class="row no-change-record">暂无历史变更记录</p>
+          </template>
         </div>
       </div>
+    </el-form>
 
-      <!--历史关联工单-->
-      <div class="form-diviser mt-10">历史关联工单</div>
-      <div class="history-work-order-items">
-        <template v-if="histories.length !== 0">
-          <p
-            v-for="(history, index) in histories"
+    <!--评论-->
+    <div v-if="['1'].indexOf(action) === -1" class="comment-block">
+      <hr class="comment">
+      <p class="comment-title">评论 <span class="add-comment" @click="add_comment">+ 评论</span></p>
+      <div class="comment-items">
+        <template v-if="ticket_comments.length !== 0">
+          <div
+            v-for="(comment, index) in ticket_comments"
             :key="index"
-            class="history-work-order-item">
-            <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
-              {{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}
-            </a>
-          </p>
+            class="comment-item">
+            <div class="left">
+              <img :src="comment.img_url || '../../assets/imgs/logo.png'" alt="">
+            </div>
+            <div class="right">
+              <div class="comment-info">
+                <p class="comment-time-point">
+                  <span class="real-name">{{ comment.real_name }}</span>
+                  <span class="role-name">{{ comment.role_name }}</span>
+                  <span class="create-date">{{ comment.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                  <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
+                </p>
+              </div>
+              <div class="comment-content">
+                <div v-html="comment.comment" />
+              </div>
+            </div>
+          </div>
         </template>
         <template v-else>
-          <p class="no-history-work-order">该用户暂无历史关联工单</p>
+          <p class="no-comments-work-order">暂时没有评论内容</p>
         </template>
       </div>
+    </div>
+
+    <!--工单处理-->
+    <div v-if="['3'].indexOf(action) !== -1" class="work-order-next">
+      <p class="work-order-title">工单处理</p>
+      <div class="work-order-next-content">
+        <el-form
+          ref="assigned_forms"
+          :model="assigned_forms"
+          :rules="assigned_rules"
+          size="mini"
+          label-suffix=":"
+          label-width="120px"
+          label-position="left"
+          @submit.native.prevent>
+          <el-row :gutter="24" class="form-row">
+            <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
+              <div class="grid-content bg-purple">
+                <el-form-item label="处理人">
+                  <span class="label-text">{{ forms.assigned_ao_name }}</span>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
+              <div class="grid-content bg-purple">
+                <el-form-item label="当前状态" prop="state">
+                  <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
+                    <el-select
+                      v-model="assigned_forms.state"
+                      size="mini"
+                      placeholder="请选择当前状态">
+                      <el-option
+                        v-for="status in work_orders_status.filter(r => ['1', '3'].indexOf(r.value) !== -1)"
+                        :key="status.value"
+                        :label="status.label"
+                        :value="status.value" />
+                    </el-select>
+                  </template>
+                  <template v-else>
+                    <span class="label-text">{{ forms.state_label }}</span>
+                  </template>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
+              <div class="grid-content bg-purple">
+                <el-form-item label="问题归类" prop="state">
+                  <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
+                    <el-select
+                      v-model="assigned_forms.problem_type"
+                      size="mini"
+                      placeholder="请选择问题归类">
+                      <el-option
+                        v-for="status in work_orders_question_classifies"
+                        :key="status.value"
+                        :label="status.label"
+                        :value="status.value" />
+                    </el-select>
+                  </template>
+                  <template v-else>
+                    <span class="label-text">{{ forms.problem_type_label }}</span>
+                  </template>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+          <template v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1">
+            <el-row :gutter="24" class="form-row">
+              <el-col :span="24">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="评论" prop="comment">
+                    <tinymce
+                      v-model="assigned_forms.comment"
+                      :height="200"
+                      class="question-details" />
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+          </template>
+        </el-form>
+      </div>
+    </div>
+
+    <!--历史关联工单-->
+    <div class="form-diviser mt-10">历史关联工单</div>
+    <div class="history-work-order-items">
+      <template v-if="histories.length !== 0">
+        <p
+          v-for="(history, index) in histories"
+          :key="index"
+          class="history-work-order-item">
+          <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
+            {{ index + 1 }}. {{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}
+          </a>
+        </p>
+      </template>
+      <template v-else>
+        <p class="no-history-work-order">该用户暂无历史关联工单</p>
+      </template>
     </div>
 
     <el-dialog
@@ -854,13 +850,13 @@
         ref="comment_form"
         :model="comment_form"
         :rules="comment_rules"
+        label-suffix=":"
         label-width="120px"
         @submit.native.prevent>
         <el-form-item label="评论" prop="comment">
           <tinymce
             v-model="comment_form.comment"
             :height="200"
-            menubar=""
             class="comment-details" />
         </el-form-item>
         <el-form-item label="抄送谁看" prop="cc_user_id">
@@ -931,7 +927,7 @@ export default {
       }
     }
     return {
-      page_loading: false,
+      page_loading: true,
       page_header_content: '创建工单',
       action: this.$route.query.action, // 1 创建 2 编辑 3 正常处理流程
       ticket_id: this.$route.query.ticket_id,
@@ -1091,7 +1087,6 @@ export default {
     }
   },
   mounted: async function() {
-    this.page_loading = true
     if (this.action === '1') {
       // 搜索工单标题接口
       // 终端类型
@@ -1662,22 +1657,11 @@ $text_color: #365638;
 
 .work-order-details {
   width: 100%;
-  height: 100%;
   /*min-height: 480px;*/
   display: flex;
   flex-direction: column;
-
-  .page-header {
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    padding-left: 24px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #dcdfe6;
-    margin-bottom: 20px;
-    background-color: #a1a1a1;
-  }
+  background-color: #f5f5f5;
+  overflow: hidden;
 
   .form-row {
     padding-left: 24px;
@@ -1696,16 +1680,26 @@ $text_color: #365638;
     margin-top: 10px;
   }
 
+  .mb-10 {
+    margin-bottom: 10px;
+  }
+
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+
   .form-diviser {
     height: 40px;
     line-height: 40px;
     padding: 0 20px;
     color: #2c2c2c;
     background-color: #d1d1d1;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+
+    .form-top-layout {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   .question-details {
@@ -1723,10 +1717,11 @@ $text_color: #365638;
     margin-bottom: 30px;
 
     .history-work-order-item {
-      color: rgba(0, 17, 255, 0.69);
+      color: #5c50e6;
 
       a {
         text-decoration: underline;
+        vertical-align: center;
       }
     }
 
@@ -1792,6 +1787,7 @@ $text_color: #365638;
           flex: 1;
           display: flex;
           flex-direction: column;
+          padding-left: 5px;
 
           .comment-info {
             padding: 8px 0;
@@ -1944,6 +1940,9 @@ $text_color: #365638;
           font-size: 14px;
           color: #365638;
           margin: 0 8px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
         }
 
         .title {
@@ -1987,7 +1986,6 @@ $text_color: #365638;
         color: #ececec;
         font-size: 12px;
         white-space: nowrap;
-        display: block;
         text-align: center;
       }
     }
