@@ -276,6 +276,7 @@
           <el-table-column
             align="center"
             label="家长手机号"
+            width="100"
             prop="p_phone" />
           <el-table-column
             align="center"
@@ -348,6 +349,7 @@ import {
 import { get_work_orders } from '@/api/work_order_system'
 import { beautifyWordsFormatter } from '@/filters'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CreateWorkOrders',
@@ -387,6 +389,9 @@ export default {
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
+  },
+  computed: {
+    ...mapGetters(['name'])
   },
   mounted: function() {
     this.search()
@@ -433,11 +438,11 @@ export default {
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     },
     edit_work_order: function(row) {
-      const name = 'WorkOrdersSystemDetails'
       const query = {
-        action: 2,
+        action: '3',
         ticket_id: row.ticket_id
       }
+      const name = 'WorkOrdersSystemDetails'
       const router_data = this.$router.resolve({ name, query })
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     },

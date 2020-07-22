@@ -276,6 +276,7 @@
           <el-table-column
             align="center"
             label="家长手机号"
+            width="100"
             prop="p_phone" />
           <el-table-column
             align="center"
@@ -334,6 +335,7 @@ import {
 import { get_work_orders } from '@/api/work_order_system'
 import { beautifyWordsFormatter } from '@/filters'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 // page_type 00 工单首页 01 我创建页面 02 抄送我的工单 03 我受理的工单
 
@@ -371,6 +373,9 @@ export default {
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0
     }
+  },
+  computed: {
+    ...mapGetters(['name'])
   },
   mounted: function() {
     this.search()
@@ -416,14 +421,8 @@ export default {
       window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
     },
     edit_work_order: function(row) {
-      let action
-      if (row.applicant_id === this.name && row.state === '3') {
-        action = 2
-      } else {
-        action = 3
-      }
       const query = {
-        action,
+        action: '3',
         ticket_id: row.ticket_id
       }
       const name = 'WorkOrdersSystemDetails'

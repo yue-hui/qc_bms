@@ -323,7 +323,7 @@
                 <el-form-item label="手机号">
                   <el-input
                     v-if="['1'].indexOf(action) !== -1"
-                    v-model="forms.patriarch_phone"
+                    v-model="forms.p_phone"
                     maxlength="11"
                     size="mini"
                     clearable
@@ -681,12 +681,12 @@
               </div>
               <div class="right">
                 <div class="comment-info">
-                  <span class="comment-time-point">
+                  <p class="comment-time-point">
                     <span class="real-name">{{ comment.real_name }}</span>
                     <span class="role-name">{{ comment.role_name }}</span>
                     <span class="create-date">{{ comment.create_date | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                  </span>
-                  <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
+                    <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
+                  </p>
                 </div>
                 <div class="comment-content">
                   <div v-html="comment.comment" />
@@ -758,7 +758,7 @@
                       </el-select>
                     </template>
                     <template v-else>
-                      <span class="label-text">{{ forms.p_member_type_label }}</span>
+                      <span class="label-text">{{ forms.problem_type_label }}</span>
                     </template>
                   </el-form-item>
                 </div>
@@ -976,7 +976,7 @@ export default {
         degree: '',
         ticket_source: '',
         ticket_source_details: '',
-        patriarch_phone: '',
+        p_phone: '',
         p_user_id: '',
         c_user_id: '',
         c_device_id: '',
@@ -1370,7 +1370,7 @@ export default {
     patriarch_phone_change: function() {
       // 改变家长端手机号
       // 13266534451
-      const phone = this.forms.patriarch_phone
+      const phone = this.forms.p_phone
       if (phone && phone.length === 11) {
         const config = { phone }
         // 家长的详情信息
@@ -1553,11 +1553,13 @@ export default {
         const config = {
           ticket_id: this.ticket_id
         }
+        // p_member_type_label
         query_ticket_info(config).then(res => {
           if (res.status === 0) {
             const remote_data = res.data
             remote_data['c_bind_type'] = this.get_bind_type_name(remote_data.c_bind_type)
             remote_data['p_member_type_label'] = get_value_from_map_list(remote_data.p_member_type, PATRIARCH_MEMBER_TYPES)
+            remote_data['problem_type_label'] = get_value_from_map_list(remote_data.problem_type, this.work_orders_question_classifies, '')
             remote_data['degree_label'] = get_value_from_map_list(remote_data.degree, WORK_ORDERS_URGENCY_DEGREE)
             remote_data['ticket_source_label'] = get_value_from_map_list(remote_data.ticket_source, this.communication_methods, '微信/QQ/邮箱')
             this.communication_method = remote_data['ticket_source_label'] || this.communication_methods[0].label
@@ -1569,7 +1571,7 @@ export default {
             resolve({})
             this.$message.error(res.message)
           }
-        }).then((err) => {
+        }).catch((err) => {
           reject(err)
         })
       })
@@ -1606,7 +1608,7 @@ export default {
     },
     fetch_ticket_associated_histories: function() {
       const config = {
-        phone: this.forms.patriarch_phone
+        phone: this.forms.p_phone
       }
       manager_ticket_associated_list(config).then(res => {
         if (res.status === 0) {
@@ -1776,7 +1778,7 @@ $text_color: #365638;
         margin-bottom: 8px;
 
         .left {
-          padding: 8px 15px 0 0;
+          padding: 8px 4px;
 
           img {
             width: 48px;
@@ -1793,10 +1795,11 @@ $text_color: #365638;
           .comment-info {
             padding: 8px 0;
             font-size: 12px;
+            font-weight: 500;
             color: #3f4a56;
 
             .comment-time-point {
-              margin-bottom: 5px;
+              margin: 0 0 5px 0;
               display: inline-block;
 
               .real-name {
@@ -1818,7 +1821,7 @@ $text_color: #365638;
           }
 
           .comment-content {
-            font-size: 14px;
+            font-size: 12px;
             color: #3f4a56;
 
             /deep/ p {

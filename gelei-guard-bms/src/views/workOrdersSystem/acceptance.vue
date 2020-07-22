@@ -269,6 +269,7 @@
           <el-table-column
             align="center"
             label="家长手机号"
+            width="100"
             prop="p_phone" />
           <el-table-column
             align="center"
@@ -327,6 +328,7 @@ import {
 import { get_work_orders } from '@/api/work_order_system'
 import { beautifyWordsFormatter } from '@/filters'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'WorkOrdersAcceptance',
@@ -367,6 +369,9 @@ export default {
       total: 0
     }
   },
+  computed: {
+    ...mapGetters(['name'])
+  },
   mounted: function() {
     this.search()
   },
@@ -402,14 +407,8 @@ export default {
       this.search()
     },
     edit_work_order: function(row) {
-      let action
-      if (row.applicant_id === this.name && row.state === '3') {
-        action = 2
-      } else {
-        action = 3
-      }
       const query = {
-        action,
+        action: '3',
         ticket_id: row.ticket_id
       }
       const name = 'WorkOrdersSystemDetails'
