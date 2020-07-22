@@ -5,7 +5,7 @@
     <!--    </div>-->
     <div class="form-diviser">
       <span v-if="action === '1'">创建工单</span>
-      <span v-if="['3', '2'].indexOf(action) !== -1">【{{ forms.ticket_no }}】 - {{ forms.ticket_title }} -- {{ identity }} -- {{ work_order_state }}</span>
+      <span v-if="['3', '2'].indexOf(action) !== -1">【{{ forms.ticket_no }}】 - {{ forms.ticket_title }}</span>
       <span>
         <el-button
           v-if="action === '1'"

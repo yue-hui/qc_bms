@@ -58,17 +58,17 @@ export const PAGE_PERMISSION = [
   {
     name: '查询用户日志',
     path: 'manager/device/findAliLog',
-    code: '40029'
+    code: '10246'
   },
   {
     name: '发送设备运行指令',
     path: 'manager/device/addMobileLog',
-    code: '40030'
+    code: '10248'
   },
   {
     name: '查询设备日志列表',
     path: 'manager/device/findMobileLog',
-    code: '40031'
+    code: '10247'
   },
   // 系统用户
   {

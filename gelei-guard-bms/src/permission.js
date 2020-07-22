@@ -34,7 +34,8 @@ router.beforeEach(async(to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
+      const fullpath = encodeURIComponent(to.fullPath)
+      next(`/login?redirect=${fullpath}`) // 否则全部重定向到登录页
       NProgress.done()
     }
   }

@@ -183,6 +183,12 @@ export default {
   },
   methods: {
     before_close: function() {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          this.close_dialog()
+        })
+        .catch(_ => {
+        })
     },
     close_dialog: function() {
       this.$emit('callback', false)

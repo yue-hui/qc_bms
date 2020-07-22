@@ -111,7 +111,8 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+        const redirect = route.query && route.query.redirect || HOME_PATH
+        this.redirect = decodeURIComponent(redirect)
       },
       immediate: true
     }
@@ -134,7 +135,7 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-            const path = this.redirect || HOME_PATH
+            const path = this.redirect
             this.$router.push({ path })
           }).catch(() => {
             this.loading = false
