@@ -9,19 +9,27 @@
         <div class="body-area">
           <div class="filter">
             <div class="date-time">
-              <span style="font-size: 14px;">时间：</span>
+              <span class="filter-label" style="font-size: 14px;">时间：</span>
               <el-date-picker
                 v-model="date_range"
                 :picker-options="pickerOptions"
                 size="mini"
                 type="daterange"
                 align="right"
+                style="width: 330px;"
                 unlink-panels
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期" />
-              &nbsp;
-              <span style="font-size: 14px;">查询全部：</span>
+
+              <span class="filter-label" style="font-size: 14px;margin-left: 10px">设备号：</span>
+              <el-input v-model="device_id" clearable style="width: 332px" size="mini" placeholder="请输入设备号"/>
+            </div>
+
+          </div>
+          <div class="device-id-input">
+            <div>
+              <span class="filter-label" style="font-size: 14px;margin-right: 6px">查询全部：</span>
               <el-checkbox v-model="query_all"/>
               <span class="error-msg">{{ send_ins_msg }}</span>
             </div>
@@ -114,12 +122,13 @@ export default {
       query_loading: false,
       send_ins_msg: '',
       timer: null,
-      visiable_height: 0
+      visiable_height: 0,
+      device_id: ''
     }
   },
   mounted() {
     this.visiable_height = document.documentElement.clientHeight + 'px'
-
+    this.device_id = this.device_info.device_id
     this.query()
   },
   methods: {
@@ -142,9 +151,17 @@ export default {
           this.send_ins_msg = ''
         }, 2000)
       }
+      if (!this.device_id) {
+        this.send_ins_msg = '必须填写设备号'
+        clearTimeout(this.timer)
+        // eslint-disable-next-line no-return-assign
+        return this.timer = setTimeout(() => {
+          this.send_ins_msg = ''
+        }, 2000)
+      }
       this.send_ins_loading = true
       device_send_ins({
-        device_id: this.device_info.device_id,
+        device_id: this.device_id,
         start_date,
         end_date,
         query_event: this.query_all
@@ -162,9 +179,17 @@ export default {
     },
     // 获取日志列表
     query() {
+      if (!this.device_id) {
+        this.send_ins_msg = '必须填写设备号'
+        clearTimeout(this.timer)
+        // eslint-disable-next-line no-return-assign
+        return this.timer = setTimeout(() => {
+          this.send_ins_msg = ''
+        }, 2000)
+      }
       this.query_loading = true
       get_device_upload_logs_list({
-        device_id: this.device_info.device_id
+        device_id: this.device_id
       })
         .then(res => {
           console.log(res)
@@ -290,6 +315,11 @@ export default {
   .filter{
     display: flex;
     justify-content: space-between;
+    font-size: 0;
+    .filter-label{
+      width: 80px;
+      display: inline-block;
+    }
   }
   .table-content{
     margin-top: 20px;
@@ -298,6 +328,16 @@ export default {
     color: red;
     padding-left: 10px;
     font-size: 12px;
+  }
+  .device-id-input{
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    justify-content: space-between;
+    .filter-label{
+      width: 80px;
+      font-size: 14px;
+    }
   }
 </style>
 
