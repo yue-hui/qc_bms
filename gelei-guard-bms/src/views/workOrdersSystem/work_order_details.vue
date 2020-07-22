@@ -380,9 +380,12 @@
             <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
               <div class="grid-content bg-purple">
                 <el-form-item label="会员类型">
-                  <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_member_type }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1"
-                        class="label-text">{{ forms.p_member_type_label }}</span>
+                  <span
+                    v-if="['1'].indexOf(action) !== -1"
+                    class="label-text">{{ patriarch_info.p_member_type_label }}</span>
+                  <span
+                    v-if="['2', '3'].indexOf(action) !== -1"
+                    class="label-text">{{ forms.p_member_type_label }}</span>
                 </el-form-item>
               </div>
             </el-col>
@@ -580,8 +583,7 @@
                 <el-select
                   v-model="forms.assigned_ao_id"
                   size="mini"
-                  placeholder="请选择处理人"
-                  clearable>
+                  placeholder="请选择处理人">
                   <el-option
                     v-for="item in handler_users"
                     :key="item.value"
@@ -845,7 +847,7 @@
     <el-dialog
       :before-close="close_comment_dialog"
       :visible.sync="comment_visible"
-      top="25vh"
+      top="10vh"
       title="评论"
       width="800px">
       <el-form
@@ -867,6 +869,7 @@
             size="mini"
             style="width: 100%"
             multiple
+            filterable
             placeholder="抄送谁看">
             <el-option
               v-for="user in comment_and_copy_users"
@@ -1376,7 +1379,7 @@ export default {
             this.patriarch_info = res.data
             if (res.data.p_user_id) {
               this.patriarch_info.p_create_time = date_formatter(this.patriarch_info.p_create_time, DATE_TIME_FORMAT)
-              this.patriarch_info.p_member_type = get_value_from_map_list(this.patriarch_info.member_type, PATRIARCH_MEMBER_TYPES)
+              this.patriarch_info.p_member_type_label = get_value_from_map_list(this.patriarch_info.p_member_type, PATRIARCH_MEMBER_TYPES)
               const chlid_list = this.patriarch_info.c_user_list.map(r => {
                 const c_create_time = date_formatter(r.c_create_time, DATE_TIME_FORMAT)
                 return {

@@ -794,6 +794,11 @@ export const PAGE_PERMISSION = [
     code: '10227'
   },
   {
+    name: '评论列表',
+    path: 'manager/ticket/comment/list',
+    code: '10228'
+  },
+  {
     name: '更新我受理工单的评论',
     path: 'manager/ticket/update/assigned',
     code: '10240'

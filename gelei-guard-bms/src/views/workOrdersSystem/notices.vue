@@ -401,6 +401,21 @@ export default {
       this.page = page
       this.search()
     },
+    edit_work_order: function(row) {
+      let action
+      if (row.applicant_id === this.name && row.state === '3') {
+        action = 2
+      } else {
+        action = 3
+      }
+      const query = {
+        action,
+        ticket_id: row.ticket_id
+      }
+      const name = 'WorkOrdersSystemDetails'
+      const router_data = this.$router.resolve({ name, query })
+      window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
+    },
     refresh() {
       this.this.page = 1
       this.fetch_notices_create_work_orders()

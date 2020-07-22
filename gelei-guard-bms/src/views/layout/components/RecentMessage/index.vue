@@ -8,7 +8,7 @@
       <div v-loading="loading" class="message-pannel">
         <li v-for="(msg, index) in messages" :key="index" class="infinite-list-item">
           <p class="msg-row">{{ index + 1 }}. {{ msg.timestamp }} {{ msg.msg }}
-            【<a href="#">{{ msg.ticket_no }}</a>】</p>
+            【<a href="javascript:;" @click="open_work_order(msg)">{{ msg.ticket_no }}</a>】</p>
         </li>
       </div>
     </ul>
@@ -64,6 +64,15 @@ export default {
     }
   },
   methods: {
+    open_work_order(work_order) {
+      const query = {
+        action: '3',
+        ticket_id: work_order.ticket_id
+      }
+      const name = 'WorkOrdersSystemDetails'
+      const router_data = this.$router.resolve({ name, query })
+      window.open(router_data.href, '_blank', 'scrollbars=yes,resizable=1,modal=false,alwaysRaised=yes')
+    },
     change: function(show) {
       this.$store.commit('TOGGLE_GL_DRAWER', show)
     },
