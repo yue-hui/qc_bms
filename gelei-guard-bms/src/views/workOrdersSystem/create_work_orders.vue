@@ -223,7 +223,7 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <gl-button pid="20044" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
+                <gl-button pid="20105" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
               </el-row>
             </div>
           </el-col>
@@ -315,7 +315,7 @@
             prop="control">
             <template slot-scope="scope">
               <gl-button
-                pid="20008"
+                pid="20106"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
