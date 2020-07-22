@@ -41,7 +41,7 @@ export function getDefaultContent(h, data, node) {
       }
     }, '编辑')
     button_group.push(edit_element)
-    if (data.level !== 6) {
+    if (data.level < 4) {
       // 添加元素
       const add_element = h('el-button', {
         attrs: {

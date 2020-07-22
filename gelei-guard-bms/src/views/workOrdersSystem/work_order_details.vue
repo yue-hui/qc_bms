@@ -684,7 +684,7 @@
                   <p class="comment-time-point">
                     <span class="real-name">{{ comment.real_name }}</span>
                     <span class="role-name">{{ comment.role_name }}</span>
-                    <span class="create-date">{{ comment.create_date | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                    <span class="create-date">{{ comment.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
                     <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
                   </p>
                 </div>
@@ -1101,7 +1101,8 @@ export default {
       // 工单信息
       await this.fetch_ticket_info()
     }
-    if (['2'].indexOf(this.action) !== -1) {
+    if (['2'].indexOf(this.action) !== -1 ||
+      (this.identity === '01' && ['3', '4'].indexOf(this.work_order_state) !== -1)) {
       // 终端类型
       await this.fetch_terminal_types(false)
       await this.change_terminal_type(false)

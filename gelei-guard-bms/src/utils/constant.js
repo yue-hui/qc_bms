@@ -697,7 +697,7 @@ export const TERMINAL_TYPES = [
 // 紧急程度
 export const URGENCY_DEGREES = [
   {
-    value: '1',
+    value: '3',
     label: '正常'
   },
   {
@@ -705,7 +705,7 @@ export const URGENCY_DEGREES = [
     label: '重要'
   },
   {
-    value: '3',
+    value: '1',
     label: '紧急'
   }
 ]
