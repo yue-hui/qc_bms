@@ -235,12 +235,13 @@
             prop="ticket_no" />
           <el-table-column
             label="工单标题"
+            width="300"
             align="center">
             <template slot-scope="scope">
               <p
                 :title="scope.row.ticket_title"
                 class="ticket-title gl-global-violet"
-                @click="notices_work_order(scope.row)">{{ scope.row.ticket_title }}</p>
+                @click="edit_work_order(scope.row)">{{ scope.row.ticket_title | beautifyWordsFormatter(30) }}</p>
             </template>
           </el-table-column>
           <el-table-column

@@ -9,39 +9,46 @@
       <span>
         <el-button
           v-if="action === '1'"
+          :loading="submit_loading"
           type="info"
           size="mini"
           data-alias="create"
           @click="submit">提交</el-button>
         <el-button
           v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+          :loading="reminder_work_order_loading"
           type="info"
           size="mini"
           @click="reminder_work_order">催单</el-button>
         <el-button
           v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+          :loading="save_work_order_loading"
           type="info"
           size="mini"
           data-alias="create"
           @click="save_work_order">保存</el-button>
         <el-button
           v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+          :loading="assigned_work_order_loading"
           type="info"
           size="mini"
           data-alias="assigned"
           @click="assigned_work_order">提交</el-button>
         <el-button
           v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+          :loading="show_transfer_work_order_loading"
           type="info"
           size="mini"
           @click="show_transfer_work_order">转交</el-button>
         <el-button
           v-if="identity === '01' && ['3', '1'].indexOf(work_order_state) !== -1"
+          :loading="close_work_order_loading"
           type="info"
           size="mini"
           @click="close_work_order">关闭工单</el-button>
         <el-button
           v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
+          :loading="reuse_work_order_loading"
           type="info"
           size="mini"
           @click="reuse_work_order">重新打开</el-button>
@@ -50,7 +57,7 @@
 
     <div>
       <!--创建人及工单基本信息-->
-      <el-form size="mini" label-suffix=":" label-width="120px" label-position="left">
+      <el-form size="mini" label-suffix=":" label-width="120px" label-position="left" @submit.native.prevent>
         <el-row :gutter="24" class="form-row">
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
             <div class="grid-content bg-purple">
@@ -108,7 +115,8 @@
         size="mini"
         label-suffix=":"
         label-width="120px"
-        label-position="left">
+        label-position="left"
+        @submit.native.prevent>
         <el-row :gutter="24" class="form-row">
           <el-col :xs="22" :sm="16" :md="14" :lg="12" :xl="8" class="col-bg">
             <div class="grid-content bg-purple">
@@ -117,7 +125,6 @@
                   v-if="['1', '2'].indexOf(action) !== -1 || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)">
                   <el-autocomplete
                     v-model="forms.ticket_title"
-                    :maxlength="30"
                     :fetch-suggestions="fetch_work_order_titles"
                     style="width: 100%;"
                     clearable
@@ -308,7 +315,8 @@
           size="mini"
           label-suffix=":"
           label-width="120px"
-          label-position="left">
+          label-position="left"
+          @submit.native.prevent>
           <el-row :gutter="24">
             <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
               <div class="grid-content bg-purple">
@@ -373,7 +381,8 @@
               <div class="grid-content bg-purple">
                 <el-form-item label="会员类型">
                   <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_member_type }}</span>
-                  <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_member_type_label }}</span>
+                  <span v-if="['2', '3'].indexOf(action) !== -1"
+                        class="label-text">{{ forms.p_member_type_label }}</span>
                 </el-form-item>
               </div>
             </el-col>
@@ -436,7 +445,8 @@
           size="mini"
           label-suffix=":"
           label-width="120px"
-          label-position="left">
+          label-position="left"
+          @submit.native.prevent>
           <el-row :gutter="24">
             <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
               <div class="grid-content bg-purple">
@@ -547,7 +557,8 @@
         size="mini"
         label-suffix=":"
         label-width="120px"
-        label-position="left">
+        label-position="left"
+        @submit.native.prevent>
         <el-row v-if="['1', '2'].indexOf(action) !== -1" :gutter="24" class="form-row">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
             <div class="grid-content bg-purple">
@@ -698,7 +709,8 @@
             size="mini"
             label-suffix=":"
             label-width="120px"
-            label-position="left">
+            label-position="left"
+            @submit.native.prevent>
             <el-row :gutter="24" class="form-row">
               <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
                 <div class="grid-content bg-purple">
@@ -798,7 +810,8 @@
         ref="transfer_form"
         :model="transfer_form"
         :rules="transfer_rules"
-        label-width="120px">
+        label-width="120px"
+        @submit.native.prevent>
         <el-form-item label="转交给" prop="after_user_id">
           <el-select
             v-model="transfer_form.after_user_id"
@@ -839,7 +852,8 @@
         ref="comment_form"
         :model="comment_form"
         :rules="comment_rules"
-        label-width="120px">
+        label-width="120px"
+        @submit.native.prevent>
         <el-form-item label="评论" prop="comment">
           <tinymce
             v-model="comment_form.comment"
@@ -918,6 +932,13 @@ export default {
       page_header_content: '创建工单',
       action: this.$route.query.action, // 1 创建 2 编辑 3 正常处理流程
       ticket_id: this.$route.query.ticket_id,
+      submit_loading: false,
+      reminder_work_order_loading: false,
+      save_work_order_loading: false,
+      assigned_work_order_loading: false,
+      show_transfer_work_order_loading: false,
+      close_work_order_loading: false,
+      reuse_work_order_loading: false,
       work_order_titles: [],
       device_type_list: [],
       terminal_types: TERMINAL_TYPES,
@@ -1136,6 +1157,7 @@ export default {
       const work_order_info_valid = await this.validate_element_sets('work_order_info')
       const work_order_detail_valid = await this.validate_element_sets('work_order_detail')
       if (work_order_info_valid && work_order_detail_valid) {
+        this.submit_loading = true
         const config = this.get_form_data()
         create_work_order(config).then(res => {
           if (res.status === 0) {
@@ -1143,6 +1165,8 @@ export default {
           } else {
             this.$message.error(res.message)
           }
+        }).finally(() => {
+          this.submit_loading = false
         })
       }
     },
@@ -1168,6 +1192,7 @@ export default {
       const work_order_info_valid = await this.validate_element_sets('work_order_info')
       const work_order_detail_valid = await this.validate_element_sets('work_order_detail')
       if (work_order_info_valid && work_order_detail_valid) {
+        this.save_work_order_loading = true
         const config = this.get_edit_form_data()
         update_work_order(config).then(res => {
           if (res.status === 0) {
@@ -1175,32 +1200,37 @@ export default {
           } else {
             this.$message.error(res.message)
           }
+        }).finally(() => {
+          this.save_work_order_loading = false
         })
       }
     },
     assigned_work_order: function() {
       this.$refs['assigned_forms'].validate(valid => {
         if (valid) {
-          // 受理者更新评论及处理意见
+          // 受理者更新评论及处理意见 提交
+          this.assigned_work_order_loading = true
           const config = {
             ticket_id: this.forms.ticket_id,
             state: this.assigned_forms.state,
             problem_type: this.assigned_forms.problem_type,
             comment: this.assigned_forms.comment
           }
-          console.log('config: ', config)
           update_assigned_work_order_comment(config).then(res => {
             if (res.status === 0) {
               window.close()
             } else {
               this.$message.error(res.message)
             }
+          }).finally(() => {
+            this.assigned_work_order_loading = false
           })
         }
       })
     },
     reminder_work_order: function() {
       // 催单
+      this.reminder_work_order_loading = true
       const config = this.get_edit_form_data()
       config['msg_type'] = '06'
       update_work_order(config).then(res => {
@@ -1209,24 +1239,30 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.reminder_work_order_loading = false
       })
     },
     close_work_order: function() {
       // 关闭工单
       const config = this.get_edit_form_data()
       config['state'] = '2'
+      this.close_work_order_loading = true
       update_work_order(config).then(res => {
         if (res.status === 0) {
           window.close()
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.close_work_order_loading = false
       })
     },
     reuse_work_order: function() {
       // 重新打开工单
       const config = this.get_edit_form_data()
       config['state'] = '4'
+      this.reuse_work_order_loading = true
       update_work_order(config).then(res => {
         if (res.status === 0) {
           // window.close()
@@ -1234,6 +1270,8 @@ export default {
         } else {
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.reuse_work_order_loading = false
       })
     },
     submit_transfer_form: function() {
@@ -1244,6 +1282,7 @@ export default {
             after_user_id: this.transfer_form.after_user_id,
             remark: this.transfer_form.remark
           }
+          this.show_transfer_work_order_loading = true
           transfer_work_order(config).then(res => {
             if (res.status === 0) {
               this.close_transfer_dialog()
@@ -1251,6 +1290,8 @@ export default {
             } else {
               this.$message.error(res.message)
             }
+          }).finally(() => {
+            this.show_transfer_work_order_loading = false
           })
         }
       })
@@ -1296,12 +1337,8 @@ export default {
         return ''
       }
     },
-    change_child: function(child_id) {
-      const child = this.patriarch_info.chlid_list.find(r => r.c_user_id === child_id)
-      this.current_child = child || {}
-      this.forms.c_user_id = this.current_child.c_user_id
-      const child_device_list = child.c_device_list || []
-      this.child_device_list = child_device_list.map(r => {
+    get_child_device_list(devices) {
+      return devices.map(r => {
         const c_bind_time = date_formatter(r.c_bind_time, DATE_TIME_FORMAT)
         const c_unbind_time = date_formatter(r.c_unbind_time, DATE_TIME_FORMAT)
         const c_bind_type = this.get_bind_type_name(r.c_bind_type)
@@ -1312,6 +1349,13 @@ export default {
           c_bind_type
         }
       })
+    },
+    change_child: function(child_id) {
+      const child = this.patriarch_info.chlid_list.find(r => r.c_user_id === child_id)
+      this.current_child = child || {}
+      this.forms.c_user_id = this.current_child.c_user_id
+      const child_device_list = child.c_device_list || []
+      this.child_device_list = this.get_child_device_list(child_device_list)
       console.log('child_device_list: ', child, child_device_list, this.child_device_list)
     },
     change_child_device: function(device_id) {
@@ -1332,9 +1376,8 @@ export default {
             this.patriarch_info = res.data
             if (res.data.p_user_id) {
               this.patriarch_info.p_create_time = date_formatter(this.patriarch_info.p_create_time, DATE_TIME_FORMAT)
-              console.log('p_member_type: ', this.patriarch_info.p_member_type)
               this.patriarch_info.p_member_type = get_value_from_map_list(this.patriarch_info.member_type, PATRIARCH_MEMBER_TYPES)
-              this.patriarch_info.chlid_list = this.patriarch_info.c_user_list.map(r => {
+              const chlid_list = this.patriarch_info.c_user_list.map(r => {
                 const c_create_time = date_formatter(r.c_create_time, DATE_TIME_FORMAT)
                 return {
                   ...r,
@@ -1342,6 +1385,22 @@ export default {
                 }
               })
               this.forms.p_user_id = this.patriarch_info.p_user_id
+              // 孩子设备选择列表
+              this.patriarch_info.chlid_list = chlid_list || []
+              if (chlid_list && chlid_list.length !== 0) {
+                // 默认取第一个孩子
+                const current_child = chlid_list[0]
+                this.current_child = current_child
+                // 默认取第一个设备
+                this.child_device_list = this.get_child_device_list(current_child.c_device_list)
+                if (this.child_device_list && this.child_device_list.length) {
+                  this.forms.device = this.child_device_list[0].c_device_id
+                } else {
+                  this.forms.device = ''
+                }
+              } else {
+                this.current_child = {}
+              }
             } else {
               this.forms.p_user_id = ''
             }
@@ -1497,7 +1556,7 @@ export default {
             remote_data['c_bind_type'] = this.get_bind_type_name(remote_data.c_bind_type)
             remote_data['p_member_type_label'] = get_value_from_map_list(remote_data.p_member_type, PATRIARCH_MEMBER_TYPES)
             remote_data['degree_label'] = get_value_from_map_list(remote_data.degree, WORK_ORDERS_URGENCY_DEGREE)
-            remote_data['ticket_source_label'] = get_value_from_map_list(remote_data.ticket_source, this.communication_methods)
+            remote_data['ticket_source_label'] = get_value_from_map_list(remote_data.ticket_source, this.communication_methods, '微信/QQ/邮箱')
             this.communication_method = remote_data['ticket_source_label'] || this.communication_methods[0].label
             const daichuli = this.work_orders_status.find(r => r.value === '3')
             remote_data['state_label'] = get_value_from_map_list(remote_data.state, this.work_orders_status, daichuli.label)
