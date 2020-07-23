@@ -125,7 +125,7 @@ export default {
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })
-        }
+        },
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
@@ -141,24 +141,24 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+        images_upload_handler(blobInfo, success, failure, progress) {
+          // progress(0);
+          // const token = _this.$store.getters.token;
+          // getToken(token).then(response => {
+          //   const url = response.data.qiniu_url;
+          //   const formData = new FormData();
+          //   formData.append('token', response.data.qiniu_token);
+          //   formData.append('key', response.data.qiniu_key);
+          //   formData.append('file', blobInfo.blob(), url);
+          //   upload(formData).then(() => {
+          //     success(url);
+          //     progress(100);
+          //   })
+          // }).catch(err => {
+          //   failure('出现未知问题，刷新页面，或者联系程序员')
+          //   console.log(err);
+          // });
+        }
       })
     },
     destroyTinymce() {
@@ -179,7 +179,28 @@ export default {
     imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        if (v.file_type === 'image') {
+          let width, height
+          if (v.width > 400) {
+            width = 400
+            height = v.height * (width / v.width)
+          }
+          window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" width="${width}" height="${height}" >`)
+        } else {
+          let inner_html
+          console.log('imageSuccessCBK: ', v)
+          if (v.type === 'video/mp4') {
+            inner_html = `<video width="320" height="240" controls="controls">
+                          <source src="${v.url}" type="video/ogg">浏览器不支持</video>`
+          } else if (v.type === 'video/ogg') {
+            inner_html = `<video width="320" height="240" controls="controls">
+                          <source src="${v.url}" type="video/ogg">浏览器不支持</video>`
+          } else if (v.type === 'video/webm') {
+            inner_html = `<video width="320" height="240" controls="controls">
+                          <source src="${v.url}" type="video/webm">浏览器不支持</video>`
+          }
+          window.tinymce.get(_this.tinymceId).insertContent(`${inner_html}`)
+        }
       })
     }
   }
@@ -188,32 +209,32 @@ export default {
 
 <style scoped>
 .tinymce-container {
-	position: relative;
-	line-height: normal;
+  position: relative;
+  line-height: normal;
 }
 
 .tinymce-container >>> .mce-fullscreen {
-	z-index: 10000;
+  z-index: 10000;
 }
 
 .tinymce-textarea {
-	visibility: hidden;
-	z-index: -1;
+  visibility: hidden;
+  z-index: -1;
 }
 
 .editor-custom-btn-container {
-	position: absolute;
-	right: 4px;
-	top: 4px;
-	/*z-index: 2005;*/
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  /*z-index: 2005;*/
 }
 
 .fullscreen .editor-custom-btn-container {
-	z-index: 10000;
-	position: fixed;
+  z-index: 10000;
+  position: fixed;
 }
 
 .editor-upload-btn {
-	display: inline-block;
+  display: inline-block;
 }
 </style>

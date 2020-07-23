@@ -580,6 +580,7 @@
               <el-select
                 v-model="forms.assigned_ao_id"
                 size="mini"
+                filterable
                 placeholder="请选择处理人">
                 <el-option
                   v-for="item in handler_users"
@@ -615,6 +616,7 @@
                 <div class="grid-content bg-purple">
                   <el-form-item label="处理人" prop="assigned_ao_id">
                     <el-select
+                      v-if="action === '1'"
                       v-model="forms.assigned_ao_id"
                       size="mini"
                       placeholder="请选择处理人"
@@ -625,6 +627,7 @@
                         :label="item.label"
                         :value="item.value" />
                     </el-select>
+                    <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.assigned_ao_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -788,7 +791,8 @@
           :key="index"
           class="history-work-order-item">
           <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
-            {{ index + 1 }}. {{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}
+            {{ index + 1 }}. {{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')
+            }}
           </a>
         </p>
       </template>
@@ -1193,6 +1197,7 @@ export default {
       if (work_order_info_valid && work_order_detail_valid) {
         this.save_work_order_loading = true
         const config = this.get_edit_form_data()
+        console.log('=====: ', config)
         update_work_order(config).then(res => {
           if (res.status === 0) {
             window.close()
@@ -1285,7 +1290,7 @@ export default {
           transfer_work_order(config).then(res => {
             if (res.status === 0) {
               this.close_transfer_dialog()
-              // window.close()
+              window.close()
             } else {
               this.$message.error(res.message)
             }
@@ -1641,7 +1646,7 @@ export default {
         cc_users: [],
         comment: ''
       }
-      this.$refs.tinymce_comment.setContent("")
+      this.$refs.tinymce_comment.setContent('')
     },
     submit_comment: function() {
       // 添加评论

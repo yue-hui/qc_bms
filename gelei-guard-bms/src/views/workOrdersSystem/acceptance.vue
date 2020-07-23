@@ -232,6 +232,7 @@
           <el-table-column
             align="center"
             label="工单编号"
+            width="108"
             prop="ticket_no" />
           <el-table-column
             label="工单标题"

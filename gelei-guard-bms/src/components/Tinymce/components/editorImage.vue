@@ -5,20 +5,24 @@
       type="primary"
       icon="el-icon-upload"
       size="mini"
-      @click=" dialogVisible=true">上传图片
+      @click=" dialogVisible=true">上传图片/视频
     </el-button>
-    <el-dialog :visible.sync="dialogVisible">
+    <el-dialog
+      :before-close="beforeClose"
+      :visible.sync="dialogVisible">
       <el-upload
-        :before-upload="beforeUpload"
+        :http-request="pushPictureToAliOss"
         :file-list="fileList"
         :multiple="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :show-file-list="true"
-        action="https://httpbin.org/post"
+        action=""
         class="editor-slide-upload"
-        list-type="picture-card">
+        list-type="picture-card"
+        @exceed="handleExceed">
         <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传图片和视频文件，且图片大小限制在10MB以内，视频大小限制在50MB以内</div>
       </el-upload>
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="handleSubmit">确 定</el-button>
@@ -27,7 +31,10 @@
 </template>
 
 <script>
-// import { getToken } from 'api/qiniu'
+import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
+
+const IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
+const VEDIO_TYPES = ['video/ogg', 'video/mp4', 'video/webm']
 
 export default {
   name: 'EditorSlideUpload',
@@ -45,6 +52,8 @@ export default {
     }
   },
   methods: {
+    beforeClose() {
+    },
     checkAllSuccess() {
       return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
     },
@@ -59,16 +68,19 @@ export default {
       this.fileList = []
       this.dialogVisible = false
     },
-    handleSuccess(response, file) {
+    handleSuccess(url, file) {
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = url
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
       }
+    },
+    handleExceed(files, fileList) {
+      console.log('handleExceed: ', files, fileList)
     },
     handleRemove(file) {
       const uid = file.uid
@@ -84,14 +96,92 @@ export default {
       const _self = this
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
+      const type = file.type
       this.listObj[fileName] = {}
-      return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.src = _URL.createObjectURL(file)
-        img.onload = function() {
-          _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
+      if (IMAGE_TYPES.indexOf(type) !== -1) {
+        const file_type = 'image'
+        return new Promise((resolve, reject) => {
+          const img = new Image()
+          img.src = _URL.createObjectURL(file)
+          img.onload = function() {
+            _self.listObj[fileName] = {
+              hasSuccess: false,
+              uid: file.uid,
+              file_type,
+              type,
+              width: this.width,
+              height: this.height
+            }
+          }
+          resolve(true)
+        })
+      } else if (VEDIO_TYPES.indexOf(type) !== -1) {
+        const file_type = 'vedio'
+        this.listObj[fileName] = { hasSuccess: false, uid: file.uid, file_type, type, width: 400, height: 400 }
+        return true
+      } else {
+        return false
+      }
+    },
+    pushPictureToAliOss(params) {
+      const file = params.file
+      // handle exceed 失效限制后续再添加
+      // // 图片与视频大小限制
+      // const type = file.type
+      // const size = file.size
+      // if (IMAGE_TYPES.indexOf(type) !== -1) {
+      //   if (size > 10) {
+      //     this.$message.error('图片大小限制在10MB内')
+      //     this.handleRemove(file)
+      //     return
+      //   }
+      // } else if (VEDIO_TYPES.indexOf(type) !== -1) {
+      //   if (size > 50 * 1024 * 1024) {
+      //     this.$message.error('视频文件限制在50MB内')
+      //     this.handleRemove(file)
+      //     return
+      //   }
+      // }
+      this.beforeUpload(file)
+      const file_attr = {
+        name: file.name,
+        uid: file.uid,
+        type: file.type,
+        url: ''
+      }
+      uploadFormDataSecondPassServer(file).then(res => {
+        const remote_data = res.data
+        if ([1, -2, '-2'].indexOf(remote_data.status) !== -1) {
+          // 未上传, 使用 文件接口上传
+          uploadFormDataServer(file).then((res) => {
+            const upload_data = res.data
+            if (upload_data.status === 0) {
+              const url = upload_data.data.url
+              file_attr['url'] = url
+              this.fileList.push(file_attr)
+              this.handleSuccess(url, file_attr)
+            } else {
+              this.handleRemove(file)
+              this.$message.error(upload_data.message)
+            }
+          }).catch(() => {
+            this.handleRemove(file)
+          })
+        } else if (remote_data.status === -1) {
+          // 秒传失败
+          this.handleRemove(file)
+          this.$message.error(remote_data.message)
+        } else if (remote_data.status === 0) {
+          // 秒传成功
+          const url = remote_data.data.url
+          file_attr['url'] = url
+          this.fileList.push(file_attr)
+          this.handleSuccess(url, file_attr)
+        } else {
+          // 未知异常
+          this.handleRemove(file)
+          this.$message.error(remote_data.message)
         }
-        resolve(true)
       })
     }
   }
