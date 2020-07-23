@@ -68,7 +68,7 @@
           <div class="grid-content bg-purple">
             <el-form-item label="申请人角色">
               <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ role_name }}</span>
-              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_id }}</span>
+              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_name }}</span>
             </el-form-item>
           </div>
         </el-col>
