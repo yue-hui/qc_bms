@@ -58,10 +58,10 @@ export function update_work_order(data) {
   })
 }
 
-// 转交工单 与 变更历史接口名一致
+// 转交工单
 export function transfer_work_order(data) {
   return request({
-    url: '/greenguard/manager/ticket/change/record',
+    url: '/greenguard/manager/ticket/change/record/save',
     method: 'post',
     data
   })
@@ -94,7 +94,7 @@ export function update_assigned_work_order_comment(data) {
   })
 }
 
-// 变更历史 与 转交工单接口名一致
+// 变更历史
 export function manager_ticket_change_records(data) {
   return request({
     url: '/greenguard/manager/ticket/change/record',

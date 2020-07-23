@@ -22,7 +22,6 @@
 </template>
 
 <script>
-
 import { getDefaultContent, getEditContent } from '@/utils/render_tree'
 import { add_work_order_tag, edit_work_order_tag, get_work_order_tags_by_cascade } from '@/api/work_order_system'
 
@@ -46,6 +45,9 @@ export default {
   },
   computed: {},
   mounted: function() {
+    setTimeout(() => {
+      console.log('tags: ', this.tags)
+    }, 4000)
   },
   methods: {
     change_current: function(page) {
@@ -197,6 +199,32 @@ export default {
         })
       }
     },
+    append_peer(node, data, e) {
+      e = event || window.event
+      e.stopPropagation()
+      if (!this.is_edit) {
+        this.select_id = data.id
+        this.edit_name = ''
+        const peerChild = {
+          name: '',
+          level: data.level,
+          is_edit: true
+        }
+        this.is_edit = true
+        console.log('====: ', node, data, e, peerChild)
+        // if (!data.child) {
+        //   this.$set(data, 'child', [])
+        // }
+        // data.child.unshift(peerChild)
+      } else {
+        this.$notify({
+          type: 'error',
+          title: '操作提示',
+          message: '有正在编辑或添加的选项未完成！',
+          duration: 2000
+        })
+      }
+    },
     remove(node, data, e) {
       e = event || window.event
       e.stopPropagation()
@@ -223,6 +251,7 @@ export default {
             name: this.edit_name,
             id: virtualNode.data.id
           }
+          const virtual_node_level = virtualNode.data.level
           this.add_item(this.tags, params).then((result) => {
             if (result.status) {
               this.$notify({
@@ -232,6 +261,7 @@ export default {
                 duration: 2000
               })
               result.remote_data['name'] = result.remote_data.type_name || '刷新节点'
+              result.remote_data['level'] = virtual_node_level + 1
               node.data = result.remote_data
             }
           })

@@ -41,6 +41,7 @@ export function getDefaultContent(h, data, node) {
       }
     }, '编辑')
     button_group.push(edit_element)
+    console.log('==add_element==:', data.level, data.name, data.is_edit)
     if (data.level < 4) {
       // 添加元素
       const add_element = h('el-button', {

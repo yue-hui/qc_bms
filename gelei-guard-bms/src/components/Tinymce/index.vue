@@ -1,5 +1,7 @@
 <template>
-  <div :class="{fullscreen:fullscreen}" class="tinymce-container editor-container">
+  <div
+    :class="{fullscreen:fullscreen}"
+    class="tinymce-container editor-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
       <editorImage class="editor-upload-btn" color="#1890ff" @successCBK="imageSuccessCBK" />
@@ -164,7 +166,6 @@ export default {
       if (this.fullscreen) {
         tinymce.execCommand('mceFullScreen')
       }
-
       if (tinymce) {
         tinymce.destroy()
       }
@@ -187,32 +188,32 @@ export default {
 
 <style scoped>
 .tinymce-container {
-  position: relative;
-  line-height: normal;
+	position: relative;
+	line-height: normal;
 }
 
 .tinymce-container >>> .mce-fullscreen {
-  z-index: 10000;
+	z-index: 10000;
 }
 
 .tinymce-textarea {
-  visibility: hidden;
-  z-index: -1;
+	visibility: hidden;
+	z-index: -1;
 }
 
 .editor-custom-btn-container {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  /*z-index: 2005;*/
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	/*z-index: 2005;*/
 }
 
 .fullscreen .editor-custom-btn-container {
-  z-index: 10000;
-  position: fixed;
+	z-index: 10000;
+	position: fixed;
 }
 
 .editor-upload-btn {
-  display: inline-block;
+	display: inline-block;
 }
 </style>

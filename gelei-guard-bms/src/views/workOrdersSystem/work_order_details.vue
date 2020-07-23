@@ -37,9 +37,9 @@
             :loading="show_transfer_work_order_loading"
             type="info"
             size="mini"
-            @click="show_transfer_work_order">转交</el-button>
+            @click="transfer_work_order_action">转交</el-button>
           <el-button
-            v-if="identity === '01' && ['3', '1'].indexOf(work_order_state) !== -1"
+            v-if="identity === '01' && ['1'].indexOf(work_order_state) !== -1"
             :loading="close_work_order_loading"
             type="info"
             size="mini"
@@ -798,7 +798,7 @@
     </div>
 
     <el-dialog
-      :before-close="close_transfer_dialog"
+      :before-close="before_close_transfer"
       :visible.sync="transfer_visible"
       top="10vh"
       title="工单转交"
@@ -816,6 +816,7 @@
             size="mini"
             style="width: 100%;"
             placeholder="请选择转交人"
+            filterable
             @change="change_terminal_type">
             <el-option
               v-for="item in tranfer_users"
@@ -825,13 +826,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input
+          <tinymce
+            ref="tinymce_transfer"
             v-model="transfer_form.remark"
-            :rows="3"
-            type="textarea"
-            resize="none"
-            size="mini"
-            placeholder="请输入备注" />
+            :height="200"
+            class="comment-details" />
         </el-form-item>
         <el-form-item style="text-align: right">
           <el-button size="mini" @click="close_transfer_dialog">取消</el-button>
@@ -855,6 +854,7 @@
         @submit.native.prevent>
         <el-form-item label="评论" prop="comment">
           <tinymce
+            ref="tinymce_comment"
             v-model="comment_form.comment"
             :height="200"
             class="comment-details" />
@@ -1295,15 +1295,25 @@ export default {
         }
       })
     },
-    show_transfer_work_order: function() {
+    transfer_work_order_action: function() {
       // 转发
       this.transfer_visible = true
       this.fetch_tranfer_user()
+    },
+    before_close_transfer: function() {
+      this.$confirm('确认是否转交窗口？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.close_transfer_dialog()
+      })
     },
     close_transfer_dialog: function() {
       this.transfer_visible = false
       this.transfer_form.after_user_id = ''
       this.transfer_form.remark = ''
+      this.$refs.tinymce_transfer.setContent(this.transfer_form.remark)
     },
     cancel: function() {
     },
@@ -1615,6 +1625,15 @@ export default {
       // 添加评论
       this.comment_visible = true
     },
+    before_close_comment: function() {
+      this.$confirm('确认是否评论窗口？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.close_comment_dialog()
+      })
+    },
     close_comment_dialog: function() {
       // 关闭评论
       this.comment_visible = false
@@ -1622,6 +1641,7 @@ export default {
         cc_users: [],
         comment: ''
       }
+      this.$refs.tinymce_comment.setContent("")
     },
     submit_comment: function() {
       // 添加评论

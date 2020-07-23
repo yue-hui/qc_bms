@@ -786,7 +786,7 @@ export const PAGE_PERMISSION = [
   {
     name: '转交工单',
     path: 'manager/ticket/change/record',
-    code: '10241'
+    code: '10239'
   },
   {
     name: '添加评论',
