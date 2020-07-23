@@ -1,5 +1,5 @@
 <template>
-  <div class="work-order-details" v-loading="page_loading">
+  <div v-loading="page_loading" class="work-order-details">
     <div class="form-diviser mb-20">
       <div class="form-top-layout">
         <span v-if="action === '1'">创建工单</span>
@@ -674,7 +674,7 @@
             :key="index"
             class="comment-item">
             <div class="left">
-              <img :src="comment.img_url || '../../assets/imgs/logo.png'" alt="">
+              <img :src="comment.img_url || require('../../assets/imgs/glmm.png')" alt="">
             </div>
             <div class="right">
               <div class="comment-info">
@@ -1070,7 +1070,7 @@ export default {
       // 用户身份
       if (this.name === this.forms.applicant_id) {
         return '01' // 创建者
-      } else if (this.name === this.forms.assigned_ao_name) {
+      } else if (this.name === this.forms.assigned_ao_id) {
         return '02' // 受理人
       } else {
         const comment_users = this.comment_and_copy_users.map(r => r.value)
@@ -1355,12 +1355,10 @@ export default {
       this.forms.c_user_id = this.current_child.c_user_id
       const child_device_list = child.c_device_list || []
       this.child_device_list = this.get_child_device_list(child_device_list)
-      console.log('child_device_list: ', child, child_device_list, this.child_device_list)
     },
     change_child_device: function(device_id) {
       const device = this.child_device_list.find(r => r.c_device_id === device_id)
       this.current_device = device || {}
-      console.log('change_child_device: ', this.current_device)
       this.forms.c_device_id = this.current_device.c_device_id
     },
     patriarch_phone_change: function() {
@@ -1430,7 +1428,6 @@ export default {
     change_ticket_type: async function(clear_data = true) {
       // 改变 工单类别
       const ticket_type_id = this.forms.ticket_type_id
-      console.log('ticket_type_id: ', ticket_type_id, this.forms)
       this.question_types = await this.fetch_ticket_label_types(ticket_type_id)
       this.question_type_disabled = false
       this.question_detail_disabled = true
@@ -1443,7 +1440,6 @@ export default {
     change_terminal_type: async function(clear_data = true) {
       // 改变 终端类型
       const device_type = this.forms.device_type
-      console.log('change_terminal_type: ', this.forms.device_type)
       this.ticket_types = await this.fetch_ticket_label_types(device_type)
       this.ticket_type_disabled = false
       this.question_type_disabled = true
