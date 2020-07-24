@@ -189,18 +189,7 @@ export default {
           }
           window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" width="${width}" height="${height}" >`)
         } else {
-          let inner_html
-          console.log('imageSuccessCBK: ', v)
-          if (v.type === 'video/mp4') {
-            inner_html = `<video width="320" height="240" controls="controls">
-                          <source src="${v.url}" type="video/ogg">浏览器不支持</video>`
-          } else if (v.type === 'video/ogg') {
-            inner_html = `<video width="320" height="240" controls="controls">
-                          <source src="${v.url}" type="video/ogg">浏览器不支持</video>`
-          } else if (v.type === 'video/webm') {
-            inner_html = `<video width="320" height="240" controls="controls">
-                          <source src="${v.url}" type="video/webm">浏览器不支持</video>`
-          }
+          const inner_html = `<iframe src="${v.url}" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>`
           window.tinymce.get(_this.tinymceId).insertContent(`${inner_html}`)
         }
       })

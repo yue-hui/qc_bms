@@ -41,7 +41,7 @@ export function getDefaultContent(h, data, node) {
       }
     }, '编辑')
     button_group.push(edit_element)
-    console.log('==add_element==:', data.level, data.name, data.is_edit)
+    // console.log('==add_element==:', data.level, data.name, data.is_edit)
     if (data.level < 4) {
       // 添加元素
       const add_element = h('el-button', {
@@ -51,6 +51,7 @@ export function getDefaultContent(h, data, node) {
         },
         on: {
           click: async(e) => {
+            self.add_peer_flag = 1
             console.log('add_element: ', node)
             if (node.expanded) {
               self.append(node, data)
@@ -62,6 +63,22 @@ export function getDefaultContent(h, data, node) {
       }, '添加下一级')
       button_group.push(add_element)
     }
+
+    // 添加同级元素
+    const add_peer_element = h('el-button', {
+      attrs: {
+        size: 'mini',
+        type: 'text'
+      },
+      on: {
+        click: async(e) => {
+          self.add_peer_flag = 2
+          self.append_peer(node, data)
+        }
+      }
+    }, '添加同级')
+    button_group.push(add_peer_element)
+
     if (data.level === -1) {
       // 删除元素 - 暂时不开放
       const remove_element = h('el-button', {

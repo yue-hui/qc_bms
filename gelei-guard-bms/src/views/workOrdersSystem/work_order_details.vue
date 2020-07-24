@@ -8,47 +8,47 @@
           <el-button
             v-if="action === '1'"
             :loading="submit_loading"
-            type="info"
+            type="primary"
             size="mini"
             data-alias="create"
-            @click="submit">提交</el-button>
+            @click="submit_with_comfirm">提交</el-button>
           <el-button
             v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
             :loading="reminder_work_order_loading"
-            type="info"
+            type="primary"
             size="mini"
             @click="reminder_work_order">催单</el-button>
           <el-button
             v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
             :loading="save_work_order_loading"
-            type="info"
+            type="primary"
             size="mini"
             data-alias="create"
             @click="save_work_order">保存</el-button>
           <el-button
             v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
             :loading="assigned_work_order_loading"
-            type="info"
+            type="primary"
             size="mini"
             data-alias="assigned"
             @click="assigned_work_order">提交</el-button>
           <el-button
             v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-            type="info"
+            type="primary"
             size="mini"
             @click="transfer_work_order_action">转交</el-button>
           <el-button
             v-if="identity === '01' && ['1'].indexOf(work_order_state) !== -1"
             :loading="close_work_order_loading"
-            type="info"
+            type="primary"
             size="mini"
             @click="close_work_order">关闭工单</el-button>
           <el-button
             v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
             :loading="reuse_work_order_loading"
-            type="info"
+            type="primary"
             size="mini"
-            @click="reuse_work_order">重新打开</el-button>
+            @click="reuse_work_order_comfirm">重新打开</el-button>
         </span>
       </div>
     </div>
@@ -626,7 +626,8 @@
                         :label="item.label"
                         :value="item.value" />
                     </el-select>
-                    <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.assigned_ao_name }}</span>
+                    <span v-if="['2', '3'].indexOf(action) !== -1"
+                          class="label-text">{{ forms.assigned_ao_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -790,8 +791,7 @@
           :key="index"
           class="history-work-order-item">
           <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
-            {{ index + 1 }}. {{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')
-            }}
+            <span>{{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')  }}</span>
           </a>
         </p>
       </template>
@@ -841,7 +841,8 @@
             :loading="submit_transfer_work_order_loading"
             size="mini"
             type="primary"
-            @click="submit_transfer_form">确定</el-button>
+            @click="submit_transfer_form">确定
+          </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -887,7 +888,8 @@
             :loading="submit_comment_order_loading"
             size="mini"
             type="primary"
-            @click="submit_comment">提交</el-button>
+            @click="submit_comment">提交
+          </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -1163,31 +1165,31 @@ export default {
         })
       })
     },
-    submit_with_comfirm() {
-      this.$confirm('确认是否提交工单？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.submit()
+    submit() {
+      this.submit_loading = true
+      const config = this.get_form_data()
+      create_work_order(config).then(res => {
+        if (res.status === 0) {
+          this.$message.success('工单添加成功')
+          window.close()
+        } else {
+          this.$message.error(res.message)
+        }
+      }).finally(() => {
+        this.submit_loading = false
       })
     },
-    submit: async function() {
+    submit_with_comfirm: async function() {
       // 创建工单
       const work_order_info_valid = await this.validate_element_sets('work_order_info')
       const work_order_detail_valid = await this.validate_element_sets('work_order_detail')
       if (work_order_info_valid && work_order_detail_valid) {
-        this.submit_loading = true
-        const config = this.get_form_data()
-        create_work_order(config).then(res => {
-          if (res.status === 0) {
-            this.$message.success('工单添加成功')
-            window.close()
-          } else {
-            this.$message.error(res.message)
-          }
-        }).finally(() => {
-          this.submit_loading = false
+        this.$confirm('确认提交工单么？请确保提供工单信息准确', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submit()
         })
       }
     },
@@ -1265,6 +1267,15 @@ export default {
         this.reminder_work_order_loading = false
       })
     },
+    reminder_work_order_comfirm() {
+      this.$confirm('确认关闭此工单么？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.close_work_order()
+      })
+    },
     close_work_order: function() {
       // 关闭工单
       const config = this.get_edit_form_data()
@@ -1278,6 +1289,15 @@ export default {
         }
       }).finally(() => {
         this.close_work_order_loading = false
+      })
+    },
+    reuse_work_order_comfirm() {
+      this.$confirm('确认需求重新打开工单么？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.reuse_work_order()
       })
     },
     reuse_work_order: function() {

@@ -7,6 +7,7 @@
             <div class="tag-title">工单标签管理</div>
             <el-tree
               v-loading="loading"
+              ref="work_order_tree"
               :props="default_props"
               :data="tags"
               :load="load_node"
@@ -30,6 +31,7 @@ export default {
   components: {},
   data() {
     return {
+      add_peer_flag: 0, // 1 增加下级 2 增加同级
       is_edit: false,
       edit_name: '',
       select_id: null,
@@ -211,11 +213,15 @@ export default {
           is_edit: true
         }
         this.is_edit = true
-        console.log('====: ', node, data, e, peerChild)
-        // if (!data.child) {
-        //   this.$set(data, 'child', [])
-        // }
+        this.$refs.work_order_tree.insertAfter(peerChild, this.select_id)
         // data.child.unshift(peerChild)
+        // const parent_data = node.parent.data
+        // if (!parent_data.child) {
+        //   this.$set(parent_data, 'child', [])
+        // }
+        // console.log('------------: ', node.parent)
+        // console.log('====: ', node, data, parent_data, e, peerChild)
+        // parent_data.child.unshift(peerChild)
       } else {
         this.$notify({
           type: 'error',
@@ -249,9 +255,10 @@ export default {
           const virtualNode = node.parent
           const params = {
             name: this.edit_name,
-            id: virtualNode.data.id
+            id: virtualNode.data.id || 0
           }
-          const virtual_node_level = virtualNode.data.level
+          console.log('edit_msg: ', params, data, virtualNode)
+          const virtual_node_level = virtualNode.data.level || virtualNode.level
           this.add_item(this.tags, params).then((result) => {
             if (result.status) {
               this.$notify({
@@ -263,16 +270,34 @@ export default {
               result.remote_data['name'] = result.remote_data.type_name || '刷新节点'
               result.remote_data['level'] = virtual_node_level + 1
               node.data = result.remote_data
+              node.level = virtual_node_level + 1
+              if (!node.data.child) {
+                this.$set(node.data, 'child', [])
+              }
+              virtualNode.data.child.forEach((item, i) => {
+                if (!item.id) {
+                  virtualNode.data.child.splice(i, 1)
+                }
+              })
+              this.is_edit = false
+              this.select_id = null
+              this.select_level = null
             }
           })
-          virtualNode.data.child.forEach((item, i) => {
-            if (!item.id) {
-              virtualNode.data.child.splice(i, 1)
-            }
-          })
-          this.is_edit = false
-          this.select_id = null
-          this.select_level = null
+          // if (virtualNode.data && virtualNode.data.length > 0) {
+          //   virtualNode.data.forEach((item, i) => {
+          //     if (!item.id) {
+          //       virtualNode.data.splice(i, 1)
+          //     }
+          //   })
+          // }
+          // if (virtualNode.data.child) {
+          //   virtualNode.data.child.forEach((item, i) => {
+          //     if (!item.id) {
+          //       virtualNode.data.child.splice(i, 1)
+          //     }
+          //   })
+          // }
           return
         }
 
@@ -432,7 +457,6 @@ $label_height: 40px;
           flex: 1;
           display: flex;
           align-items: center;
-          // justify-content: space-between;
           justify-content: flex-start;
           font-size: 14px;
           padding-right: 8px;
@@ -440,13 +464,13 @@ $label_height: 40px;
 
         .ly-tree-node > div > span:last-child {
           display: inline-block;
-          width: 110px;
+          /*width: 110px;*/
           text-align: left;
         }
 
         .ly-tree-node > span:last-child {
           display: inline-block;
-          width: 110px;
+          /*width: 110px;*/
           text-align: left;
         }
 

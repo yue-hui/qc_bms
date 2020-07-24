@@ -34,7 +34,7 @@
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 
 const IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
-const VEDIO_TYPES = ['video/ogg', 'video/mp4', 'video/webm']
+const VEDIO_TYPES = ['video/ogg', 'video/mp4', 'video/webm', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb']
 
 export default {
   name: 'EditorSlideUpload',
