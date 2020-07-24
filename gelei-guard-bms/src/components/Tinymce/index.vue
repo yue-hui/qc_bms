@@ -94,6 +94,8 @@ export default {
         selector: `#${this.tinymceId}`,
         relative_urls: false, // 新加
         remove_script_host: false, // 新加
+        autosave_ask_before_unload: false, // 新加
+        media_live_embeds: true, // 媒体实时预览
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,

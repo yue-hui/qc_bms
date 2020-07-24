@@ -34,7 +34,6 @@
             @click="assigned_work_order">提交</el-button>
           <el-button
             v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-            :loading="show_transfer_work_order_loading"
             type="info"
             size="mini"
             @click="transfer_work_order_action">转交</el-button>
@@ -68,7 +67,7 @@
           <div class="grid-content bg-purple">
             <el-form-item label="申请人角色">
               <span v-if="['1', '2'].indexOf(action) !== -1" class="label-text">{{ role_name }}</span>
-              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_name }}</span>
+              <span v-else-if="['3'].indexOf(action) !== -1" class="label-text">{{ forms.applicant_role_name }}</span>
             </el-form-item>
           </div>
         </el-col>
@@ -838,7 +837,11 @@
         </el-form-item>
         <el-form-item style="text-align: right">
           <el-button size="mini" @click="close_transfer_dialog">取消</el-button>
-          <el-button size="mini" type="primary" @click="submit_transfer_form">确定</el-button>
+          <el-button
+            :loading="submit_transfer_work_order_loading"
+            size="mini"
+            type="primary"
+            @click="submit_transfer_form">确定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -880,7 +883,11 @@
         </el-form-item>
         <el-form-item style="text-align: right">
           <el-button size="mini" @click="close_comment_dialog">取消</el-button>
-          <el-button size="mini" type="primary" @click="submit_comment">提交</el-button>
+          <el-button
+            :loading="submit_comment_order_loading"
+            size="mini"
+            type="primary"
+            @click="submit_comment">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -939,9 +946,10 @@ export default {
       reminder_work_order_loading: false,
       save_work_order_loading: false,
       assigned_work_order_loading: false,
-      show_transfer_work_order_loading: false,
       close_work_order_loading: false,
       reuse_work_order_loading: false,
+      submit_transfer_work_order_loading: false,
+      submit_comment_order_loading: false,
       work_order_titles: [],
       device_type_list: [],
       terminal_types: TERMINAL_TYPES,
@@ -1155,6 +1163,15 @@ export default {
         })
       })
     },
+    submit_with_comfirm() {
+      this.$confirm('确认是否提交工单？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.submit()
+      })
+    },
     submit: async function() {
       // 创建工单
       const work_order_info_valid = await this.validate_element_sets('work_order_info')
@@ -1164,6 +1181,7 @@ export default {
         const config = this.get_form_data()
         create_work_order(config).then(res => {
           if (res.status === 0) {
+            this.$message.success('工单添加成功')
             window.close()
           } else {
             this.$message.error(res.message)
@@ -1286,7 +1304,7 @@ export default {
             after_user_id: this.transfer_form.after_user_id,
             remark: this.transfer_form.remark
           }
-          this.show_transfer_work_order_loading = true
+          this.submit_transfer_work_order_loading = true
           transfer_work_order(config).then(res => {
             if (res.status === 0) {
               this.close_transfer_dialog()
@@ -1295,7 +1313,7 @@ export default {
               this.$message.error(res.message)
             }
           }).finally(() => {
-            this.show_transfer_work_order_loading = false
+            this.submit_transfer_work_order_loading = false
           })
         }
       })
@@ -1407,13 +1425,18 @@ export default {
                 this.child_device_list = this.get_child_device_list(current_child.c_device_list)
                 if (this.child_device_list && this.child_device_list.length) {
                   this.forms.device = this.child_device_list[0].c_device_id
+                  this.current_device = this.child_device_list[0]
                 } else {
                   this.forms.device = ''
+                  this.current_device = {}
                 }
               } else {
                 this.current_child = {}
+                this.forms.device = ''
+                this.current_device = {}
               }
             } else {
+              this.patriarch_info = {}
               this.forms.p_user_id = ''
             }
           } else {
@@ -1658,6 +1681,7 @@ export default {
             cc_user_id: this.comment_form.cc_users.join(','),
             comment: this.comment_form.comment
           }
+          this.submit_comment_order_loading = true
           add_work_order_comment(config).then(res => {
             if (res.status === 0) {
               this.fetch_work_order_comments()
@@ -1665,6 +1689,8 @@ export default {
             } else {
               this.$message.error(res.message)
             }
+          }).finally(() => {
+            this.submit_comment_order_loading = false
           })
         }
       })

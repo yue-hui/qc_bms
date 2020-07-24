@@ -204,14 +204,14 @@ export function pure_object_null_value(data) {
 export function get_value_from_map_list(key, map_list = [], default_value = '-', map_list_type = '1') {
   // map_list_type map_list的格式
   if (map_list_type === '1') {
-    const filter_item = map_list.filter(r => r.value === key)
-    if (filter_item.length) {
-      return filter_item[0].label
+    const filter_item = map_list.find(r => r.value === key)
+    if (filter_item) {
+      return filter_item.label
     }
   } else if (map_list_type === '2') {
-    const filter_item = map_list.filter(r => r.val === key)
-    if (filter_item.length) {
-      return filter_item[0].name
+    const filter_item = map_list.find(r => r.val === key)
+    if (filter_item) {
+      return filter_item.name
     }
   }
   return default_value

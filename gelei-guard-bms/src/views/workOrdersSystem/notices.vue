@@ -174,6 +174,7 @@
                     v-model="query_sets.problem_type"
                     size="mini"
                     clearable
+                    filterable
                     placeholder="请选择问题归类"
                     @change="search">
                     <el-option
@@ -448,7 +449,7 @@ export default {
             const short_ticket_title = beautifyWordsFormatter(r.ticket_title, 10)
             const degree_label = get_value_from_map_list(r.degree, WORK_ORDERS_URGENCY_DEGREE)
             const state_label = get_value_from_map_list(r.state, WORK_ORDERS_STATUS)
-            const problem_type_label = get_value_from_map_list(r.state, WORK_ORDERS_QUESTION_CLASSIFIES)
+            const problem_type_label = get_value_from_map_list(r.problem_type, WORK_ORDERS_QUESTION_CLASSIFIES, '')
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
             const update_time_label = date_formatter(r.update_time, DATE_TIME_FORMAT)
             return {
