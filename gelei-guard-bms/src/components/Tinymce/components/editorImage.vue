@@ -53,6 +53,13 @@ export default {
   },
   methods: {
     beforeClose() {
+      this.$confirm('确认关闭上传图片/视频接口么?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.dialogVisible = false
+      })
     },
     checkAllSuccess() {
       return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)

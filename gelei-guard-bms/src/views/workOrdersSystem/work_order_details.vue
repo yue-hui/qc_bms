@@ -328,6 +328,7 @@
                   size="mini"
                   clearable
                   placeholder="请输入手机号"
+                  @keyup.native="forms.p_phone=forms.p_phone.replace(/[^\d]/g,'')"
                   @change="patriarch_phone_change" />
                 <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_phone }}</span>
               </el-form-item>
@@ -642,30 +643,56 @@
           </template>
         </div>
         <div v-if="detail_active === '2'" class="detail-content detail-change-content">
-          <p class="row title">
-            <span class="col col-1">变更时间</span>
-            <span class="col col-2">变更人</span>
-            <span class="col col-3">变更类型</span>
-            <span class="col col-4">变更前</span>
-            <span class="col col-5">变更后</span>
-            <span class="col col-6">备注</span>
-          </p>
-          <template v-if="ticket_change_records.length !== 0">
-            <p
-              v-for="(change_record, index) in ticket_change_records"
-              :key="index"
-              class="row">
-              <span class="col col-1">{{ change_record.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-              <span class="col col-2">{{ change_record.user_real_name }}</span>
-              <span class="col col-3">{{ change_record.change_type_name }}</span>
-              <span class="col col-4">{{ change_record.before_change }}</span>
-              <span class="col col-5">{{ change_record.after_change }}</span>
-              <span class="col col-6">{{ change_record.remark }}</span>
-            </p>
-          </template>
-          <template v-else>
-            <p class="row no-change-record">暂无历史变更记录</p>
-          </template>
+          <el-table
+            v-loading="history_record_loading"
+            :data="ticket_change_records"
+            class="history-table"
+            size="mini"
+            stripe>
+            <el-table-column
+              label="变更时间"
+              width="140"
+              empty-text="暂无历史变更记录"
+              align="center">
+              <template slot-scope="scope">
+                <p>{{ scope.row.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="变更人"
+              width="108"
+              prop="user_real_name" />
+            <el-table-column
+              align="center"
+              label="变更类型"
+              width="108"
+              prop="change_type_name" />
+            <el-table-column
+              align="center"
+              label="变更前"
+              prop="before_change">
+              <template slot-scope="scope">
+                <p :title="scope.row.before_change">{{ scope.row.before_change | beautifyWordsFormatter(50) }}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="变更后"
+              prop="after_change">
+              <template slot-scope="scope">
+                <p :title="scope.row.after_change">{{ scope.row.after_change | beautifyWordsFormatter(50) }}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="备注"
+              prop="remark">
+              <template slot-scope="scope">
+                <p :title="scope.row.remark">{{ scope.row.remark | beautifyWordsFormatter(50) }}</p>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </div>
     </el-form>
@@ -836,11 +863,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <tinymce
-            ref="tinymce_transfer"
-            v-model="transfer_form.remark"
-            :height="200"
-            class="comment-details" />
+          <el-input v-model="transfer_form.remark" type="textarea" rows="4" resize="none" />
         </el-form-item>
         <el-form-item style="text-align: right">
           <el-button size="mini" @click="close_transfer_dialog">取消</el-button>
@@ -959,6 +982,7 @@ export default {
       reuse_work_order_loading: false,
       submit_transfer_work_order_loading: false,
       submit_comment_order_loading: false,
+      history_record_loading: false, // 变更历史记录
       work_order_titles: [],
       device_type_list: [],
       terminal_types: TERMINAL_TYPES,
@@ -1464,9 +1488,11 @@ export default {
               }
             } else {
               this.patriarch_info = {}
+              this.current_child = {}
               this.forms.p_user_id = ''
             }
           } else {
+            this.current_child = {}
             this.patriarch_info = {}
             this.$message.error(res.message)
           }
@@ -1659,6 +1685,7 @@ export default {
       const config = {
         ticket_id: this.ticket_id
       }
+      this.history_record_loading = true
       manager_ticket_change_records(config).then(res => {
         // 查询评论数
         if (res.status === 0) {
@@ -1667,6 +1694,8 @@ export default {
           this.ticket_change_records = []
           this.$message.error(res.message)
         }
+      }).finally(() => {
+        this.history_record_loading = false
       })
     },
     fetch_ticket_associated_histories: function() {
@@ -2035,6 +2064,14 @@ $text_color: #365638;
         display: flex;
         flex-direction: column;
         width: 100%;
+
+        /deep/ .el-table {
+
+          th {
+            background-color: #e4e5b2;
+            color: #4c4c4c;
+          }
+        }
 
         .row {
           font-size: 14px;
