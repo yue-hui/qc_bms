@@ -656,8 +656,8 @@
               :key="index"
               class="row">
               <span class="col col-1">{{ change_record.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-              <span class="col col-2">{{ change_record.user_id }}</span>
-              <span class="col col-3">{{ change_record.user_real_name }}</span>
+              <span class="col col-2">{{ change_record.user_real_name }}</span>
+              <span class="col col-3">{{ change_record.change_type_name }}</span>
               <span class="col col-4">{{ change_record.before_change }}</span>
               <span class="col col-5">{{ change_record.after_change }}</span>
               <span class="col col-6">{{ change_record.remark }}</span>
@@ -1552,20 +1552,25 @@ export default {
         })
       })
     },
-    fetch_work_order_titles: function(title_name, cb) {
-      if (!title_name) {
+    fetch_work_order_titles: function(ticket_title, cb) {
+      if (!ticket_title) {
         return
       }
       // 搜索工单标题
       const config = {
-        title_name
+        ticket_title
       }
       query_manager_ticket_title(config).then(res => {
         // 搜索类似工单标题
         if (res.status === 0) {
           const remote_data = res.data
           this.work_order_titles = remote_data
-          cb(remote_data)
+          const ticket_titles = remote_data.map(r => {
+            return {
+              value: r
+            }
+          })
+          cb(ticket_titles)
         }
       })
     },
