@@ -131,7 +131,7 @@
                   placeholder="请选择工单标题" />
               </template>
               <template v-else>
-                <span :title="forms.ticket_title" class="label-text">{{ forms.ticket_title | beautifyWordsFormatter(30)  }}</span>
+                <span :title="forms.ticket_title" class="label-text">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
               </template>
             </el-form-item>
           </div>
@@ -483,7 +483,7 @@
               <el-form-item label="绑定设备">
                 <el-select
                   v-if="['1'].indexOf(action) !== -1"
-                  v-model="forms.device"
+                  v-model="forms.c_device_id"
                   size="mini"
                   placeholder="请选择绑定设备"
                   @change="change_child_device">
@@ -631,8 +631,9 @@
                         :label="item.label"
                         :value="item.value" />
                     </el-select>
-                    <span v-if="['2', '3'].indexOf(action) !== -1"
-                          class="label-text">{{ forms.assigned_ao_name }}</span>
+                    <span
+                      v-if="['2', '3'].indexOf(action) !== -1"
+                      class="label-text">{{ forms.assigned_ao_name }}</span>
                   </el-form-item>
                 </div>
               </el-col>
@@ -825,7 +826,7 @@
           <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
             <span :title="history.ticket_title">{{ history.ticket_title | beautifyWordsFormatter(30) }}</span>
             <span> - </span>
-            <span>{{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')  }}</span>
+            <span>{{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
           </a>
         </p>
       </template>
@@ -1199,6 +1200,7 @@ export default {
     submit() {
       this.submit_loading = true
       const config = this.get_form_data()
+      debugger
       create_work_order(config).then(res => {
         if (res.status === 0) {
           this.$message.success('工单添加成功')
@@ -1435,10 +1437,24 @@ export default {
     },
     change_child: function(child_id) {
       const child = this.patriarch_info.chlid_list.find(r => r.c_user_id === child_id)
+      debugger
       this.current_child = child || {}
-      this.forms.c_user_id = this.current_child.c_user_id
-      const child_device_list = child.c_device_list || []
-      this.child_device_list = this.get_child_device_list(child_device_list)
+      if (this.current_child.c_user_id) {
+        this.forms.c_user_id = this.current_child.c_user_id
+        const child_device_list = child.c_device_list || []
+        this.child_device_list = this.get_child_device_list(child_device_list)
+        if (this.child_device_list.length) {
+          this.current_device = this.child_device_list[0]
+          this.forms.c_device_id = this.child_device_list[0].c_device_id
+        } else {
+          this.current_device = {}
+          this.forms.c_device_id = ''
+        }
+      } else {
+        this.forms.c_user_id = ''
+        this.forms.c_device_id = ''
+        this.child_device_list = []
+      }
     },
     change_child_device: function(device_id) {
       const device = this.child_device_list.find(r => r.c_device_id === device_id)
@@ -1472,23 +1488,28 @@ export default {
                 // 默认取第一个孩子
                 const current_child = chlid_list[0]
                 this.current_child = current_child
+                this.forms.c_user_id = current_child.c_user_id
                 // 默认取第一个设备
                 this.child_device_list = this.get_child_device_list(current_child.c_device_list)
                 if (this.child_device_list && this.child_device_list.length) {
-                  this.forms.device = this.child_device_list[0].c_device_id
+                  debugger
+                  this.forms.c_device_id = this.child_device_list[0].c_device_id
                   this.current_device = this.child_device_list[0]
                 } else {
-                  this.forms.device = ''
+                  this.forms.c_device_id = ''
                   this.current_device = {}
                 }
               } else {
                 this.current_child = {}
-                this.forms.device = ''
+                this.forms.c_user_id = ''
+                this.forms.c_device_id = ''
                 this.current_device = {}
               }
             } else {
               this.patriarch_info = {}
               this.current_child = {}
+              this.forms.c_user_id = ''
+              this.forms.c_device_id = ''
               this.forms.p_user_id = ''
             }
           } else {
