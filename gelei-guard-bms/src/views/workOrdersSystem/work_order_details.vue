@@ -3,7 +3,11 @@
     <div class="form-diviser mb-20">
       <div class="form-top-layout">
         <span v-if="action === '1'">创建工单</span>
-        <span v-if="['3', '2'].indexOf(action) !== -1">【{{ forms.ticket_no }}】 - {{ forms.ticket_title }}</span>
+        <span v-if="['3', '2'].indexOf(action) !== -1" class="work-order-title">
+          <span :title="forms.ticket_no">【 {{ forms.ticket_no }} 】</span>
+          <span> - </span>
+          <span :title="forms.ticket_title">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
+        </span>
         <span>
           <el-button
             v-if="action === '1'"
@@ -127,7 +131,7 @@
                   placeholder="请选择工单标题" />
               </template>
               <template v-else>
-                <span class="label-text">{{ forms.ticket_title }}</span>
+                <span :title="forms.ticket_title" class="label-text">{{ forms.ticket_title | beautifyWordsFormatter(30)  }}</span>
               </template>
             </el-form-item>
           </div>
@@ -790,8 +794,11 @@
           v-for="(history, index) in histories"
           :key="index"
           class="history-work-order-item">
+          <span class="history-index">1{{ index + 1 }}. </span>
           <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
-            <span>{{ history.ticket_title }} - {{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')  }}</span>
+            <span :title="history.ticket_title">{{ history.ticket_title | beautifyWordsFormatter(30) }}</span>
+            <span> - </span>
+            <span>{{ history.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss')  }}</span>
           </a>
         </p>
       </template>
@@ -1577,7 +1584,8 @@ export default {
       // associated_type: 01处理人 02@我的人 03转交过的用户
       return new Promise(resolve => {
         const config = {
-          associated_type
+          associated_type,
+          ticket_id: this.ticket_id
         }
         query_users_by_associated_type(config).then(res => {
           if (res.status === 0) {
@@ -1766,6 +1774,10 @@ $text_color: #365638;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+
+      .work-order-title {
+        font-weight: bold;
+      }
     }
   }
 
@@ -1783,12 +1795,28 @@ $text_color: #365638;
     padding-left: 20px;
     margin-bottom: 30px;
 
-    .history-work-order-item {
+    &:hover {
       color: #5c50e6;
+    }
+
+    .history-work-order-item {
+      color: #8a82e6;
+      font-size: 14px;
+
+      .history-index {
+        display: inline-block;
+        min-width: 24px;
+        text-align: right;
+      }
 
       a {
-        text-decoration: underline;
         vertical-align: center;
+        line-height: 18px;
+        border-bottom: 1px solid #5c50e6;
+
+        &:hover {
+          color: #5c50e6;
+        }
       }
     }
 

@@ -149,6 +149,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+$recent_message_color: #51da51;
+$recent_message_icon_color: #51da51;
+
 .component-card {
   width: 100%;
   height: 100%;
@@ -156,11 +159,11 @@ export default {
   flex-direction: row;
 
   .alert {
-    animation: flashAnimation 3s infinite;
+    animation: flashAnimation 2s infinite;
   }
 
   .alert-font {
-    animation: flashAnimationFont 3s infinite;
+    animation: flashAnimationFont 2s infinite;
   }
 
   .left-item {
@@ -262,6 +265,7 @@ export default {
 
         p {
           margin: 0;
+          color: $recent_message_color;
 
           .reminder-area-box-icon {
             margin-left: 8px;
@@ -304,7 +308,7 @@ export default {
   }
   50% {
     opacity: 1;
-    background-color: red;
+    background-color: $recent_message_icon_color;
   }
   100% {
     opacity: 0.5;
@@ -319,7 +323,7 @@ export default {
   }
   50% {
     opacity: 1;
-    color: red;
+    color: $recent_message_icon_color;
   }
   100% {
     opacity: 0.5;
