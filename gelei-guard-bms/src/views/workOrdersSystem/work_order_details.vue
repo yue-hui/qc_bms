@@ -1200,7 +1200,6 @@ export default {
     submit() {
       this.submit_loading = true
       const config = this.get_form_data()
-      debugger
       create_work_order(config).then(res => {
         if (res.status === 0) {
           this.$message.success('工单添加成功')
@@ -1437,7 +1436,6 @@ export default {
     },
     change_child: function(child_id) {
       const child = this.patriarch_info.chlid_list.find(r => r.c_user_id === child_id)
-      debugger
       this.current_child = child || {}
       if (this.current_child.c_user_id) {
         this.forms.c_user_id = this.current_child.c_user_id
@@ -1492,7 +1490,6 @@ export default {
                 // 默认取第一个设备
                 this.child_device_list = this.get_child_device_list(current_child.c_device_list)
                 if (this.child_device_list && this.child_device_list.length) {
-                  debugger
                   this.forms.c_device_id = this.child_device_list[0].c_device_id
                   this.current_device = this.child_device_list[0]
                 } else {
