@@ -92,6 +92,7 @@ export default {
     handleRemove(file) {
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
+      this.fileList = this.fileList.filter(r => r.uid !== uid)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
           delete this.listObj[objKeyArr[i]]
