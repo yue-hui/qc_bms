@@ -1,10 +1,13 @@
 <template>
   <div class="work-orders-tags">
-    <div class="content-body scroller-bar">
+    <div class="content-body scroller-bar noscroller">
       <div class="table-content">
         <el-card>
           <div class="ly-tree-container">
-            <div class="tag-title">工单标签管理</div>
+            <div class="tag-title">
+              <span>标签名称</span>
+              <span class="control-area">操作</span>
+            </div>
             <el-tree
               v-loading="loading"
               ref="work_order_tree"
@@ -23,7 +26,7 @@
 </template>
 
 <script>
-import { getDefaultContent, getEditContent } from '@/utils/render_tree'
+import { get_operation_content, get_editing_content } from '@/utils/render_tree'
 import { add_work_order_tag, edit_work_order_tag, get_work_order_tags_by_cascade } from '@/api/work_order_system'
 
 export default {
@@ -31,11 +34,10 @@ export default {
   components: {},
   data() {
     return {
-      add_peer_flag: 0, // 1 增加下级 2 增加同级
       is_edit: false,
       edit_name: '',
       select_id: null,
-      is_superuser: 'False',
+      is_superuser: true,
       loading: false,
       tags: [],
       tag_levels: [],
@@ -45,25 +47,60 @@ export default {
       }
     }
   },
-  computed: {},
-  mounted: function() {
-    setTimeout(() => {
-      console.log('tags: ', this.tags)
-    }, 4000)
+  computed: {
+    tree_root: function() {
+      return this.$refs.work_order_tree
+    }
   },
   methods: {
-    change_current: function(page) {
-      this.page = page
-      this.search()
-    },
-    search: function() {
-      //
-    },
-    create_tag: function() {
-      // 创建标签
-    },
-    edit_tag: function() {
+    edit_tag: async function(data, node, e) {
       // 编辑标签
+      e = event || window.event
+      e.stopPropagation()
+      if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
+        if (!data.id) {
+          const other_node = node
+          const params = {
+            name: this.edit_name,
+            id: data.p_id
+          }
+          const result = await this.add_item(this.tags, params)
+          if (result.status) {
+            this.$notify({
+              type: 'success',
+              title: '操作提示',
+              message: '添加成功！',
+              duration: 2000
+            })
+            result.remote_data['is_edit'] = false
+            result.remote_data['name'] = result.remote_data['type_name']
+            other_node.data = result.remote_data
+          }
+          this.is_edit = false
+          this.select_id = null
+          this.select_level = null
+          return
+        }
+
+        const params = {
+          name: this.edit_name,
+          id: data.id
+        }
+        this.update_node(this.tags, params).then(result => {
+          if (result) {
+            data.name = this.edit_name
+            this.$notify({
+              type: 'success',
+              title: '操作提示',
+              message: '编辑成功！',
+              duration: 2000
+            })
+          }
+        })
+        this.is_edit = false
+        this.select_id = null
+        this.select_level = null
+      }
     },
 
     delete_node: function() {
@@ -71,9 +108,8 @@ export default {
     },
 
     load_node: function(node, resolve) {
-      // 懒加载
-      if (node.level === 0) {
-        node.id = 0
+      if (node.level >= 3 && node.data.is_new) {
+        return resolve([])
       }
       this.loading = true
       this.fetch_tree_nodes(node.data.id, node.level).then(data => {
@@ -148,9 +184,9 @@ export default {
       e = event || window.event
       e.stopPropagation()
       if (!data.id) {
-        node.parent.data.child.forEach((item, i) => {
-          if (!item.id) {
-            node.parent.data.child.splice(i, 1)
+        node.parent.childNodes.forEach((node, i) => {
+          if (!node.data.id) {
+            node.parent.childNodes.splice(i, 1)
           }
         })
       }
@@ -159,6 +195,7 @@ export default {
       this.edit_name = data.name
       this.is_edit = false
     },
+
     update(node, data, e) {
       e = event || window.event
       e.stopPropagation()
@@ -176,22 +213,21 @@ export default {
       this.edit_name = data.name
       this.is_edit = true
     },
+
     append(node, data, e) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (!this.is_edit) {
         this.select_id = data.id
         this.edit_name = ''
         const newChild = {
           name: '',
           level: data.level + 1,
-          is_edit: true
+          is_edit: true,
+          p_id: data.id
         }
         this.is_edit = true
-        if (!data.child) {
-          this.$set(data, 'child', [])
-        }
-        data.child.unshift(newChild)
+        this.tree_root.append(newChild, node)
       } else {
         this.$notify({
           type: 'error',
@@ -201,6 +237,7 @@ export default {
         })
       }
     },
+
     append_peer(node, data, e) {
       e = event || window.event
       e.stopPropagation()
@@ -209,19 +246,12 @@ export default {
         this.edit_name = ''
         const peerChild = {
           name: '',
+          p_id: data.p_id,
           level: data.level,
           is_edit: true
         }
         this.is_edit = true
-        this.$refs.work_order_tree.insertAfter(peerChild, this.select_id)
-        // data.child.unshift(peerChild)
-        // const parent_data = node.parent.data
-        // if (!parent_data.child) {
-        //   this.$set(parent_data, 'child', [])
-        // }
-        // console.log('------------: ', node.parent)
-        // console.log('====: ', node, data, parent_data, e, peerChild)
-        // parent_data.child.unshift(peerChild)
+        this.tree_root.insertAfter(peerChild, node)
       } else {
         this.$notify({
           type: 'error',
@@ -231,6 +261,7 @@ export default {
         })
       }
     },
+
     remove(node, data, e) {
       e = event || window.event
       e.stopPropagation()
@@ -247,117 +278,55 @@ export default {
       this.delDialogVisible = true
     },
 
-    edit_msg(data, node, e) {
-      e = event || window.event
-      e.stopPropagation()
-      if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
-        if (!data.id) {
-          const virtualNode = node.parent
-          const params = {
-            name: this.edit_name,
-            id: virtualNode.data.id || 0
-          }
-          console.log('edit_msg: ', params, data, virtualNode)
-          const virtual_node_level = virtualNode.data.level || virtualNode.level
-          this.add_item(this.tags, params).then((result) => {
-            if (result.status) {
-              this.$notify({
-                type: 'success',
-                title: '操作提示',
-                message: '添加成功！',
-                duration: 2000
-              })
-              result.remote_data['name'] = result.remote_data.type_name || '刷新节点'
-              result.remote_data['level'] = virtual_node_level + 1
-              node.data = result.remote_data
-              node.level = virtual_node_level + 1
-              if (!node.data.child) {
-                this.$set(node.data, 'child', [])
-              }
-              virtualNode.data.child.forEach((item, i) => {
-                if (!item.id) {
-                  virtualNode.data.child.splice(i, 1)
-                }
-              })
-              this.is_edit = false
-              this.select_id = null
-              this.select_level = null
-            }
-          })
-          // if (virtualNode.data && virtualNode.data.length > 0) {
-          //   virtualNode.data.forEach((item, i) => {
-          //     if (!item.id) {
-          //       virtualNode.data.splice(i, 1)
-          //     }
-          //   })
-          // }
-          // if (virtualNode.data.child) {
-          //   virtualNode.data.child.forEach((item, i) => {
-          //     if (!item.id) {
-          //       virtualNode.data.child.splice(i, 1)
-          //     }
-          //   })
-          // }
-          return
-        }
-
-        const params = {
-          name: this.edit_name,
-          id: data.id
-        }
-        this.update_node(this.tags, params).then(result => {
-          if (result) {
-            data.name = this.edit_name
-            this.$notify({
-              type: 'success',
-              title: '操作提示',
-              message: '编辑成功！',
-              duration: 2000
-            })
-          }
-        })
-        this.is_edit = false
-        this.select_id = null
-        this.select_level = null
-      }
-    },
-    name_change(e) {
+    name_change(e, node, data) {
       e = event || window.event
       e.stopPropagation()
       this.edit_name = e.target.value
+      const key = e.which || e.keyCode || e.charCode
+      if (key === 13) {
+        this.edit_tag(data, node)
+      }
     },
+
     is_select(data) {
       return data.id === this.select_id &&
         data.level === this.select_level
     },
+
     render_content: function(h, { node, data, store }) {
-      let node_1
+      let tag_node
       if ((this.is_edit === true && this.is_select(data)) || data.is_edit) {
-        node_1 = h('input', {
+        tag_node = h('input', {
           attrs: {
             placeholder: '标签名称不能为空',
             class: 'ly-edit__text',
             value: this.edit_name
           },
           on: {
-            keyup: () => this.name_change(),
+            keyup: (e) => this.name_change(e, node, data),
             click: (e) => {
               e.stopPropagation()
+            },
+            blur: () => {
+              // 点击外部时保存数据
+              // if (this.is_edit) {
+              //   this.edit_tag(data, node)
+              // }
             }
           }
         })
       } else {
-        node_1 = h('span', data.name)
+        tag_node = h('span', data.name)
       }
-      let node_2
+      let operation_node
       if ((this.is_edit === true && this.is_select(data)) || data.is_edit) {
-        node_2 = getEditContent.call(this, h, data, node)
+        operation_node = get_editing_content.call(this, h, data, node)
       } else {
-        node_2 = getDefaultContent.call(this, h, data, node)
+        operation_node = get_operation_content.call(this, h, data, node)
       }
       return h('span', {
         class: 'ly-tree-node'
-      }, [node_1, node_2])
+      }, [tag_node, operation_node])
     }
   }
 }
@@ -374,11 +343,12 @@ $label_height: 40px;
   padding: 20px 10px 25px 10px;
   display: flex;
   flex-direction: column;
+  background-color: #fafafa;
 
   .content-body {
-    border: 1px solid #EAEAEA;
+    /*border: 1px solid #EAEAEA;*/
     /*height: 100%;*/
-    height: 800px;
+    /*height: 800px;*/
     min-height: 120px;
     overflow-y: scroll;
 
@@ -407,20 +377,31 @@ $label_height: 40px;
 
     .table-content {
       margin: 20px;
-      width: 800px;
+      /*width: 800px;*/
 
       /deep/ .ly-tree-container {
-        margin: 20px 0 20px 20px;
+        margin: 20px 20px 20px 20px;
+        /*border: 1px solid #0a0505;*/
         /*width: 60%;*/
         /*padding: 20px;*/
 
         .tag-title {
-          height: 28px;
-          line-height: 28px;
+          height: 34px;
+          line-height: 34px;
           font-size: 14px;
           font-weight: bold;
-          color: #4d4d4d;
+          color: white;
           white-space: nowrap;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          background-color: #304156;
+          padding-left: 20px;
+          margin-bottom: 2px;
+
+          .control-area {
+            padding-right: 116px;
+          }
         }
 
         span {
@@ -436,7 +417,7 @@ $label_height: 40px;
 
         .ly-visible {
           margin-left: 50px;
-          visibility: hidden;
+          /*visibility: hidden;*/
         }
 
         .ly-edit__text {
@@ -457,7 +438,7 @@ $label_height: 40px;
           flex: 1;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: space-between;
           font-size: 14px;
           padding-right: 8px;
         }

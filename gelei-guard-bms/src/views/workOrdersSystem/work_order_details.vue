@@ -1457,7 +1457,6 @@ export default {
     },
     patriarch_phone_change: function() {
       // 改变家长端手机号
-      // 13266534451
       const phone = this.forms.p_phone
       if (phone && phone.length === 11) {
         const config = { phone }
@@ -1482,32 +1481,45 @@ export default {
                 // 默认取第一个孩子
                 const current_child = chlid_list[0]
                 this.current_child = current_child
-                this.forms.c_user_id = current_child.c_user_id
+                this.forms.c_user_id = this.current_child.c_user_id
                 // 默认取第一个设备
-                this.child_device_list = this.get_child_device_list(current_child.c_device_list)
+                this.child_device_list = this.get_child_device_list(current_child.c_device_list || [])
                 if (this.child_device_list && this.child_device_list.length) {
-                  this.forms.c_device_id = this.child_device_list[0].c_device_id
                   this.current_device = this.child_device_list[0]
+                  this.$nextTick(() => {
+                    // 选择框初始化过快时，导致选择列表首次渲染失效，界面会显示对应ID值，故在下一个tick赋值
+                    this.forms.c_device_id = this.child_device_list[0].c_device_id
+                  })
+                  // debugger
                 } else {
                   this.forms.c_device_id = ''
                   this.current_device = {}
+                  this.child_device_list = []
                 }
               } else {
                 this.current_child = {}
                 this.forms.c_user_id = ''
-                this.forms.c_device_id = ''
                 this.current_device = {}
+                this.child_device_list = []
+                this.forms.c_device_id = ''
               }
             } else {
               this.patriarch_info = {}
+              this.forms.p_user_id = ''
               this.current_child = {}
               this.forms.c_user_id = ''
+              this.current_device = {}
+              this.child_device_list = []
               this.forms.c_device_id = ''
-              this.forms.p_user_id = ''
             }
           } else {
-            this.current_child = {}
             this.patriarch_info = {}
+            this.forms.p_user_id = ''
+            this.current_child = {}
+            this.forms.c_user_id = ''
+            this.current_device = {}
+            this.child_device_list = []
+            this.forms.c_device_id = ''
             this.$message.error(res.message)
           }
         })
@@ -1515,10 +1527,12 @@ export default {
         this.fetch_ticket_associated_histories()
       } else {
         this.patriarch_info = {}
+        this.forms.p_user_id = ''
         this.current_child = {}
-        this.child_device_list = []
-        this.forms.device = ''
+        this.forms.c_user_id = ''
         this.current_device = {}
+        this.child_device_list = []
+        this.forms.c_device_id = ''
       }
     },
     change_question_types: async function(clear_data = true) {

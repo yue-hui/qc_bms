@@ -5,11 +5,16 @@
       type="primary"
       icon="el-icon-upload"
       size="mini"
-      @click=" dialogVisible=true">上传图片/视频
+      @click=" dialogVisible=true">
+      <span>上传图片/视频</span>
     </el-button>
     <el-dialog
       :before-close="beforeClose"
-      :visible.sync="dialogVisible">
+      :visible.sync="dialogVisible"
+      top="25vh"
+      title="上传图片/视频"
+      width="760px"
+      append-to-body>
       <el-upload
         :http-request="pushPictureToAliOss"
         :file-list="fileList"
@@ -17,15 +22,18 @@
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :show-file-list="true"
+        :before-upload="beforeUpload"
         action=""
         class="editor-slide-upload"
         list-type="picture-card"
         @exceed="handleExceed">
-        <el-button size="small" type="primary">点击上传</el-button>
+        <el-button size="mini" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">只能上传图片和视频文件，且图片大小限制在10MB以内，视频大小限制在50MB以内</div>
       </el-upload>
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="handleSubmit">确 定</el-button>
+      <div style="text-align: right;">
+        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="handleSubmit">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -100,7 +108,30 @@ export default {
         }
       }
     },
+    checkFileStatus(file) {
+      // 图片与视频大小限制
+      const type = file.type
+      const size = file.size
+      if (IMAGE_TYPES.indexOf(type) !== -1) {
+        if (size > 10 * 1024 * 1024) {
+          this.$message.error('上传图片大小限制在10MB内')
+          this.handleRemove(file)
+          return false
+        }
+      } else if (VEDIO_TYPES.indexOf(type) !== -1) {
+        if (size > 50 * 1024 * 1024) {
+          this.$message.error('上传视频文件限制在50MB内')
+          this.handleRemove(file)
+          return false
+        }
+      }
+      return true
+    },
     beforeUpload(file) {
+      const isPass = this.checkFileStatus(file)
+      if (!isPass) {
+        return isPass
+      }
       const _self = this
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
@@ -108,6 +139,7 @@ export default {
       this.listObj[fileName] = {}
       if (IMAGE_TYPES.indexOf(type) !== -1) {
         const file_type = 'image'
+        // 判断文件图片大小
         return new Promise((resolve, reject) => {
           const img = new Image()
           img.src = _URL.createObjectURL(file)
@@ -133,23 +165,6 @@ export default {
     },
     pushPictureToAliOss(params) {
       const file = params.file
-      // handle exceed 失效限制后续再添加
-      // // 图片与视频大小限制
-      // const type = file.type
-      // const size = file.size
-      // if (IMAGE_TYPES.indexOf(type) !== -1) {
-      //   if (size > 10) {
-      //     this.$message.error('图片大小限制在10MB内')
-      //     this.handleRemove(file)
-      //     return
-      //   }
-      // } else if (VEDIO_TYPES.indexOf(type) !== -1) {
-      //   if (size > 50 * 1024 * 1024) {
-      //     this.$message.error('视频文件限制在50MB内')
-      //     this.handleRemove(file)
-      //     return
-      //   }
-      // }
       this.beforeUpload(file)
       const file_attr = {
         name: file.name,

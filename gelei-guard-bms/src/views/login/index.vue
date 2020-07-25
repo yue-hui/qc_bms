@@ -44,17 +44,20 @@
               placeholder="请输入验证码"
               @keyup.enter.native="handleLogin" />
           </div>
-          <div class="verify-right">
-            <img
-              :src="verify_data"
-              alt="验证码"
-              class="verify-code"
-              @click="refreshVerifyCode">
+          <div v-loading="verify_code_loading" class="verify-right">
+            <template v-if="verify_data">
+              <img
+                :src="verify_data"
+                alt="验证码"
+                class="verify-code"
+                @click="refreshVerifyCode">
+            </template>
           </div>
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">登录</el-button>
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">登录
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -87,6 +90,7 @@ export default {
     return {
       password_min_length: PASSWORD_MIN_LENGTH,
       password_max_length: PASSWORD_MAX_LENGTH,
+      verify_code_loading: true,
       loginForm: {
         username: '',
         password: '',
@@ -150,12 +154,15 @@ export default {
         type: '3',
         val: this.loginForm.verify_uid
       }
+      this.verify_code_loading = true
       get_verify_code(data).then((res) => {
         if (res.status === 0) {
           this.verify_data = res.data
         } else {
           this.$message.info(res.message)
         }
+      }).finally(() => {
+        this.verify_code_loading = false
       })
     }
   }
@@ -255,6 +262,8 @@ $light_gray: #eee;
     }
 
     .verify-right {
+      width: 105px;
+
       .verify-code {
         height: 45px;
       }
