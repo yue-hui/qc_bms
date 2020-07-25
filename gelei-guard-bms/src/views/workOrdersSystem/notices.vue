@@ -322,7 +322,7 @@
 <script>
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import {
-  ADVERTISE_PLATFORM_TYPES, DATE_TIME_FORMAT,
+  ADVERTISE_PLATFORM_TYPES, DATE_TIME_FORMAT, SIGN_DELTA_TIME,
   TABLE_PAGE_SIEZS_LIST, WORK_ORDERS_QUESTION_CLASSIFIES,
   WORK_ORDERS_STATUS,
   WORK_ORDERS_URGENCY_DEGREE
@@ -394,8 +394,8 @@ export default {
       condition['page_no'] = this.page
       condition['page_num'] = this.page_size
       if (this.datetime_range && this.datetime_range.length === 2) {
-        condition['begin_time'] = '' + this.query_set.datetime_range[0].getTime()
-        condition['end_time'] = '' + this.query_set.datetime_range[1].getTime()
+        condition['begin_time'] = '' + this.datetime_range[0].getTime()
+        condition['end_time'] = '' + (this.datetime_range[1].getTime() + (SIGN_DELTA_TIME - 1))
       }
       return condition
     },

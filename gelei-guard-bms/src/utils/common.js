@@ -191,7 +191,8 @@ export function pure_object_null_value(data, options = ['null', 'trim']) {
   const is_trim = options.indexOf('trim') !== -1
   for (const key in data) {
     // 去除空对象
-    if (!data[key] && is_remove_null) {
+    const value = data[key]
+    if (is_remove_null && [null, '', undefined].indexOf(value) !== -1) {
       delete data[key]
       continue
     }
