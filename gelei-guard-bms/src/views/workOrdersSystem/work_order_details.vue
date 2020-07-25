@@ -221,8 +221,7 @@
                   v-model="forms.question_detail_id"
                   :disabled="question_detail_disabled"
                   size="mini"
-                  placeholder="请选择问题细分"
-                  @change="search">
+                  placeholder="请选择问题细分">
                   <el-option
                     v-for="item in question_detail_types"
                     :key="item.value"
@@ -246,8 +245,7 @@
                 <el-select
                   v-model="forms.degree"
                   size="mini"
-                  placeholder="请选择紧急程度"
-                  @change="search">
+                  placeholder="请选择紧急程度">
                   <el-option
                     v-for="item in urgency_degrees"
                     :key="item.value"
@@ -1395,19 +1393,10 @@ export default {
       this.transfer_visible = false
       this.transfer_form.after_user_id = ''
       this.transfer_form.remark = ''
-      this.$refs.tinymce_transfer.setContent(this.transfer_form.remark)
-    },
-    cancel: function() {
-    },
-    search_work_order_title: function() {
-      //
     },
     select_work_order_source: function() {
       const communication = COMMUNICATION_METHODS.find(r => r.value === this.forms.ticket_source)
       this.communication_method = communication.label
-    },
-    search: function() {
-      //
     },
     jump_to_history_page(ticket_id) {
       // 历史工单界面
