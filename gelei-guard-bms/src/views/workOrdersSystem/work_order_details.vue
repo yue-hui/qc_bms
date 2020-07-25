@@ -822,7 +822,7 @@
           v-for="(history, index) in histories"
           :key="index"
           class="history-work-order-item">
-          <span class="history-index">1{{ index + 1 }}. </span>
+          <span class="history-index">{{ index + 1 }}. </span>
           <a href="javascript:;" @click="jump_to_history_page(history.ticket_id)">
             <span :title="history.ticket_title">{{ history.ticket_title | beautifyWordsFormatter(30) }}</span>
             <span> - </span>
@@ -955,7 +955,7 @@ import {
   WORK_ORDERS_STATUS,
   WORK_ORDERS_URGENCY_DEGREE
 } from '@/utils/constant'
-import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { date_formatter, get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 
 export default {
   name: 'WorkOrdersDetails',
@@ -1200,7 +1200,7 @@ export default {
     submit() {
       this.submit_loading = true
       const config = this.get_form_data()
-      create_work_order(config).then(res => {
+      create_work_order(pure_object_null_value(config)).then(res => {
         if (res.status === 0) {
           this.$message.success('工单添加成功')
           window.close()
@@ -1249,8 +1249,7 @@ export default {
       if (work_order_info_valid && work_order_detail_valid) {
         this.save_work_order_loading = true
         const config = this.get_edit_form_data()
-        console.log('=====: ', config)
-        update_work_order(config).then(res => {
+        this.update_work_order_info_or_action(config).then(res => {
           if (res.status === 0) {
             window.close()
           } else {
@@ -1272,7 +1271,7 @@ export default {
             problem_type: this.assigned_forms.problem_type,
             comment: this.assigned_forms.comment
           }
-          update_assigned_work_order_comment(config).then(res => {
+          update_assigned_work_order_comment(pure_object_null_value(config)).then(res => {
             if (res.status === 0) {
               window.close()
             } else {
@@ -1289,7 +1288,7 @@ export default {
       this.reminder_work_order_loading = true
       const config = this.get_edit_form_data()
       config['msg_type'] = '06'
-      update_work_order(config).then(res => {
+      this.update_work_order_info_or_action(config).then(res => {
         if (res.status === 0) {
           window.close()
         } else {
@@ -1313,7 +1312,7 @@ export default {
       const config = this.get_edit_form_data()
       config['state'] = '2'
       this.close_work_order_loading = true
-      update_work_order(config).then(res => {
+      this.update_work_order_info_or_action(config).then(res => {
         if (res.status === 0) {
           window.close()
         } else {
@@ -1337,15 +1336,23 @@ export default {
       const config = this.get_edit_form_data()
       config['state'] = '4'
       this.reuse_work_order_loading = true
-      update_work_order(config).then(res => {
+      this.update_work_order_info_or_action(config).then(res => {
         if (res.status === 0) {
-          // window.close()
           window.location.reload()
         } else {
           this.$message.error(res.message)
         }
       }).finally(() => {
         this.reuse_work_order_loading = false
+      })
+    },
+    update_work_order_info_or_action: function(config = {}) {
+      return new Promise((resolve, reject) => {
+        update_work_order(pure_object_null_value(config)).then(res => {
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     submit_transfer_form: function() {
@@ -1357,7 +1364,7 @@ export default {
             remark: this.transfer_form.remark
           }
           this.submit_transfer_work_order_loading = true
-          transfer_work_order(config).then(res => {
+          transfer_work_order(pure_object_null_value(config)).then(res => {
             if (res.status === 0) {
               this.close_transfer_dialog()
               window.close()
@@ -1582,7 +1589,7 @@ export default {
         const config = {
           type_id
         }
-        get_work_order_tags_by_cascade(config).then(res => {
+        get_work_order_tags_by_cascade(pure_object_null_value(config)).then(res => {
           if (res.status === 0) {
             const remote_data = res.data.map(r => {
               return {
@@ -1604,7 +1611,7 @@ export default {
       const config = {
         ticket_title
       }
-      query_manager_ticket_title(config).then(res => {
+      query_manager_ticket_title(pure_object_null_value(config)).then(res => {
         // 搜索类似工单标题
         if (res.status === 0) {
           const remote_data = res.data
@@ -1636,7 +1643,7 @@ export default {
           associated_type,
           ticket_id: this.ticket_id
         }
-        query_users_by_associated_type(config).then(res => {
+        query_users_by_associated_type(pure_object_null_value(config)).then(res => {
           if (res.status === 0) {
             const remote_data = res.data.map(r => {
               return {
@@ -1661,7 +1668,7 @@ export default {
           ticket_id: this.ticket_id
         }
         // p_member_type_label
-        query_ticket_info(config).then(res => {
+        query_ticket_info(pure_object_null_value(config)).then(res => {
           if (res.status === 0) {
             const remote_data = res.data
             remote_data['c_bind_type'] = this.get_bind_type_name(remote_data.c_bind_type)
@@ -1688,7 +1695,7 @@ export default {
       const config = {
         ticket_id: this.ticket_id
       }
-      query_work_order_comments(config).then(res => {
+      query_work_order_comments(pure_object_null_value(config)).then(res => {
         // 查询评论数
         if (res.status === 0) {
           this.ticket_comments = res.data
@@ -1704,7 +1711,7 @@ export default {
         ticket_id: this.ticket_id
       }
       this.history_record_loading = true
-      manager_ticket_change_records(config).then(res => {
+      manager_ticket_change_records(pure_object_null_value(config)).then(res => {
         // 查询评论数
         if (res.status === 0) {
           this.ticket_change_records = res.data
@@ -1720,7 +1727,7 @@ export default {
       const config = {
         phone: this.forms.p_phone
       }
-      manager_ticket_associated_list(config).then(res => {
+      manager_ticket_associated_list(pure_object_null_value(config)).then(res => {
         if (res.status === 0) {
           this.histories = res.data
         } else {
@@ -1762,7 +1769,7 @@ export default {
             comment: this.comment_form.comment
           }
           this.submit_comment_order_loading = true
-          add_work_order_comment(config).then(res => {
+          add_work_order_comment(pure_object_null_value(config)).then(res => {
             if (res.status === 0) {
               this.fetch_work_order_comments()
               this.close_comment_dialog()

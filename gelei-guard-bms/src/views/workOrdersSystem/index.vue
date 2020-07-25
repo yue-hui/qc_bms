@@ -336,7 +336,7 @@ import {
 } from '@/utils/constant'
 import { get_work_orders } from '@/api/work_order_system'
 import { beautifyWordsFormatter } from '@/filters'
-import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { date_formatter, get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 // page_type 00 工单首页 01 我创建页面 02 抄送我的工单 03 我受理的工单
@@ -441,7 +441,7 @@ export default {
     fetch_work_orders() {
       this.loading = true
       const config = this.get_condition_with_pagination()
-      get_work_orders(config).then(res => {
+      get_work_orders(pure_object_null_value(config)).then(res => {
         if (res.status === 0) {
           // 工单列表接口
           this.work_orders = res.data.map(r => {

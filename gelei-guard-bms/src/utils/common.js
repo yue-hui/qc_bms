@@ -186,10 +186,18 @@ export function calculate_file_sha256(file) {
 /*
 * 去除对象内空值
 * */
-export function pure_object_null_value(data) {
+export function pure_object_null_value(data, options = ['null', 'trim']) {
+  const is_remove_null = options.indexOf('null') !== -1
+  const is_trim = options.indexOf('trim') !== -1
   for (const key in data) {
-    if (!data[key]) {
+    // 去除空对象
+    if (!data[key] && is_remove_null) {
       delete data[key]
+      continue
+    }
+    // 去除前后空白字符
+    if (is_trim) {
+      data[key] = String(data[key]).trim()
     }
   }
   return data
