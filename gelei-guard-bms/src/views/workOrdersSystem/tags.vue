@@ -17,7 +17,8 @@
               :expand-on-click-node="true"
               :render-content="render_content"
               node-key="id"
-              lazy />
+              lazy
+              @node-collapse="node_collapse"/>
           </div>
         </el-card>
       </div>
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { get_operation_content, get_editing_content } from '@/utils/render_tree'
+import { get_operation_content, get_editing_content, setElTreeExpandStatus } from '@/utils/render_tree'
 import { add_work_order_tag, edit_work_order_tag, get_work_order_tags_by_cascade } from '@/api/work_order_system'
 
 export default {
@@ -54,6 +55,10 @@ export default {
     }
   },
   methods: {
+    node_collapse: function(data, node, e) {
+      console.log(data, node, e)
+      setElTreeExpandStatus(node)
+    },
     edit_tag: async function(data, node, e) {
       if (node.loading) {
         return
@@ -330,8 +335,8 @@ export default {
             },
             blur: (e) => {
               // 点击外部时保存数据
-              if (this.is_edit) {
-                this.edit_tag(data, node)
+              if (self.is_edit) {
+                self.edit_tag(data, node)
               }
             }
           }

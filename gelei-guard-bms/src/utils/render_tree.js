@@ -121,3 +121,12 @@ export function get_operation_content(h, data, node) {
   }
   return default_content
 }
+
+/* 收起/展开所有子节点 */
+export const setElTreeExpandStatus = (node, expand = false) => {
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const child_node = node.childNodes[i]
+    child_node.expanded = expand
+    setElTreeExpandStatus(child_node, expand)
+  }
+}
