@@ -55,10 +55,13 @@ export default {
   },
   methods: {
     edit_tag: async function(data, node, e) {
+      if (node.loading) {
+        return
+      }
+      node.loading = true
       // 编辑标签
       e = event || window.event
       e.stopPropagation()
-      debugger
       if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
         if (!data.id) {
           const other_node = node
@@ -81,6 +84,7 @@ export default {
           this.is_edit = false
           this.select_id = null
           this.select_level = null
+          node.loading = false
           return
         }
 
@@ -99,12 +103,15 @@ export default {
                 duration: 2000
               })
             }
+          }).finally(() => {
+            node.loading = false
           })
         }
         this.origin_edit_name = ''
         this.is_edit = false
         this.select_id = null
         this.select_level = null
+        node.loading = false
       }
     },
 
@@ -320,9 +327,8 @@ export default {
           on: {
             keyup: (e) => this.name_change(e, node, data),
             click: (e) => {
-              e.stopPropagation()
             },
-            blur: () => {
+            blur: (e) => {
               // 点击外部时保存数据
               if (this.is_edit) {
                 this.edit_tag(data, node)
