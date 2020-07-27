@@ -14,11 +14,11 @@
               :props="default_props"
               :data="tags"
               :load="load_node"
-              :expand-on-click-node="true"
+              :expand-on-click-node="false"
               :render-content="render_content"
               node-key="id"
               lazy
-              @node-collapse="node_collapse"/>
+              @node-collapse="node_collapse" />
           </div>
         </el-card>
       </div>
@@ -38,6 +38,9 @@ export default {
       is_edit: false,
       origin_edit_name: '', // 重命名不发起请求
       edit_name: '',
+      is_bluring: false,
+      modified_type: 0, // 1 添加子元素 2 重命名 3 添加同层级 4 回车键(可去除，用blur替代) 5 删除
+      over_cancel_or_submit_symbol: 0, // 0 其它区域 1 取消 2 保存
       select_id: null,
       is_superuser: true,
       loading: false,
@@ -45,7 +48,8 @@ export default {
       tag_levels: [],
       default_props: {
         label: 'name',
-        children: 'child'
+        children: 'child',
+        isLeaf: 'is_leaf'
       }
     }
   },
@@ -56,7 +60,6 @@ export default {
   },
   methods: {
     node_collapse: function(data, node, e) {
-      console.log(data, node, e)
       setElTreeExpandStatus(node)
     },
     edit_tag: async function(data, node, e) {
@@ -66,7 +69,7 @@ export default {
       node.loading = true
       // 编辑标签
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
         if (!data.id) {
           const other_node = node
@@ -125,7 +128,14 @@ export default {
     },
 
     load_node: function(node, resolve) {
-      if ((node.level >= 3 && node.data.is_new) || this.is_edit) {
+      if (this.is_edit) {
+        // 编辑状态时延时加载
+        const self = this
+        setTimeout(() => {
+          this.load_node.call(self, node, resolve)
+        }, 100)
+      }
+      if (node.level >= 3 && node.data.is_new) {
         return resolve([])
       }
       this.loading = true
@@ -144,11 +154,13 @@ export default {
         const current_level = plevel + 1
         get_work_order_tags_by_cascade(config).then(res => {
           if (res.status === 0) {
+            const is_leaf = current_level === 4
             const remote_data = res.data.map(r => {
               return {
                 ...r,
                 name: r.type_name,
-                level: current_level
+                level: current_level,
+                is_leaf
               }
             })
             resolve(remote_data)
@@ -199,7 +211,7 @@ export default {
 
     close(data, node, e) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (!data.id) {
         node.parent.childNodes.forEach((node, i) => {
           if (!node.data.id) {
@@ -215,7 +227,7 @@ export default {
 
     update(node, data, e) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (this.is_edit) {
         this.$notify({
           type: 'error',
@@ -231,12 +243,16 @@ export default {
       this.origin_edit_name = data.name
       this.is_edit = true
       this.$nextTick(() => {
-        // 光标定位到最后
-        const edit_element = document.querySelector('#edit_input')
-        edit_element.focus()
-        edit_element.value = ''
-        edit_element.value = this.edit_name
+        this.cursor_positioning()
       })
+    },
+
+    cursor_positioning() {
+      // 光标定位到最后
+      const edit_element = document.querySelector('#edit_input')
+      edit_element.focus()
+      edit_element.value = ''
+      edit_element.value = this.edit_name
     },
 
     append(node, data, e) {
@@ -253,6 +269,9 @@ export default {
         }
         this.is_edit = true
         this.tree_root.append(newChild, node)
+        this.$nextTick(() => {
+          this.cursor_positioning()
+        })
       } else {
         this.$notify({
           type: 'error',
@@ -265,7 +284,7 @@ export default {
 
     append_peer(node, data, e) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (!this.is_edit) {
         this.select_id = data.id
         this.edit_name = ''
@@ -277,6 +296,9 @@ export default {
         }
         this.is_edit = true
         this.tree_root.insertAfter(peerChild, node)
+        this.$nextTick(() => {
+          this.cursor_positioning()
+        })
       } else {
         this.$notify({
           type: 'error',
@@ -289,7 +311,7 @@ export default {
 
     remove(node, data, e) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       if (this.is_edit) {
         this.$notify({
           type: 'error',
@@ -300,16 +322,29 @@ export default {
         return
       }
       this.select_node = node
-      this.delDialogVisible = true
+      // 删除接口
     },
 
     name_change(e, node, data) {
       e = event || window.event
-      e.stopPropagation()
+      e && e.stopPropagation()
       this.edit_name = e.target.value
       const key = e.which || e.keyCode || e.charCode
       if (key === 13) {
         this.edit_tag(data, node)
+      }
+    },
+
+    keyup_name_change(e, node, data) {
+      e = event || window.event
+      e && e.stopPropagation()
+      this.edit_name = e.target.value
+      const key = e.which || e.keyCode || e.charCode
+      if (key === 13) {
+        // 触发失去焦点事件，以免多次提交更新
+        e.target.blur()
+        // this.modified_type = 4
+        // this.edit_tag(data, node)
       }
     },
 
@@ -330,13 +365,46 @@ export default {
             'max-length': 10
           },
           on: {
-            keyup: (e) => this.name_change(e, node, data),
+            keyup: (e) => {
+              this.keyup_name_change(e, node, data)
+            },
             click: (e) => {
             },
             blur: (e) => {
-              // 点击外部时保存数据
-              if (self.is_edit) {
-                self.edit_tag(data, node)
+              // blur状态
+              this.is_bluring = true
+              setTimeout(() => {
+                this.is_bluring = false
+              }, 500)
+
+              const self = this
+              if ([1, 3].indexOf(this.modified_type) !== -1) {
+                if (!this.edit_name) {
+                  this.close(data, node)
+                } else {
+                  setTimeout(() => {
+                    // 无事件处理
+                    if ([1, 2].indexOf(self.over_cancel_or_submit_symbol) === -1) {
+                      if (self.edit_name) {
+                        this.edit_tag.call(self, data, node)
+                      } else {
+                        this.close.call(self, data, node)
+                      }
+                    }
+                  }, 300)
+                }
+              }
+              if (this.modified_type === 2) {
+                if (this.edit_name === this.origin_edit_name) {
+                  this.close(data, node)
+                } else {
+                  setTimeout(() => {
+                    // 无事件处理
+                    if ([1, 2].indexOf(self.over_cancel_or_submit_symbol) === -1) {
+                      this.close.call(self, data, node)
+                    }
+                  }, 300)
+                }
               }
             }
           }

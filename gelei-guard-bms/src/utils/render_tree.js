@@ -10,7 +10,13 @@ export function get_editing_content(h, data, node) {
         type: 'text'
       },
       on: {
-        click: () => self.close(data, node)
+        click: () => {
+          this.over_cancel_or_submit_symbol = 1
+          setTimeout(() => {
+            this.over_cancel_or_submit_symbol = 0
+          }, 500)
+          self.close(data, node)
+        }
       }
     }, '取消'),
     h('el-button', {
@@ -19,7 +25,13 @@ export function get_editing_content(h, data, node) {
         type: 'text'
       },
       on: {
-        click: () => self.edit_tag(data, node)
+        click: () => {
+          this.over_cancel_or_submit_symbol = 2
+          setTimeout(() => {
+            this.over_cancel_or_submit_symbol = 0
+          }, 500)
+          self.edit_tag(data, node)
+        }
       }
     }, '保存')
   ])
@@ -45,10 +57,17 @@ export function get_operation_content(h, data, node) {
     const edit_element = h('el-button', {
       attrs: {
         size: 'mini',
-        type: 'text'
+        type: 'text',
+        disabled: self.is_edit
       },
       on: {
-        click: () => self.update(node, data)
+        click: () => {
+          if (self.is_bluring) {
+            return
+          }
+          self.modified_type = 2
+          self.update(node, data)
+        }
       }
     }, '重命名')
     button_group.push(edit_element)
@@ -57,12 +76,17 @@ export function get_operation_content(h, data, node) {
       const add_element = h('el-button', {
         attrs: {
           size: 'mini',
-          type: 'text'
+          type: 'text',
+          disabled: self.is_edit
         },
         on: {
           click: async(e) => {
+            if (self.is_bluring) {
+              return
+            }
+            this.modified_type = 1
             if (node.level === 4) {
-              this.$notify({
+              self.$notify({
                 type: 'error',
                 title: '操作提示',
                 message: '无法添加更低层标签',
@@ -87,10 +111,15 @@ export function get_operation_content(h, data, node) {
     const add_peer_element = h('el-button', {
       attrs: {
         size: 'mini',
-        type: 'text'
+        type: 'text',
+        disabled: self.is_edit
       },
       on: {
         click: async(e) => {
+          if (self.is_bluring) {
+            return
+          }
+          self.modified_type = 3
           self.append_peer(node, data)
         }
       }
@@ -105,7 +134,13 @@ export function get_operation_content(h, data, node) {
           type: 'text'
         },
         on: {
-          click: () => self.remove(node, data)
+          click: () => {
+            if (self.is_bluring) {
+              return
+            }
+            self.modified_type = 5
+            self.remove(node, data)
+          }
         }
       }, '删除')
       button_group.push(remove_element)
