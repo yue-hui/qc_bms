@@ -41,7 +41,7 @@
 <script>
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 
-const IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
+const IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/bmp']
 const VEDIO_TYPES = ['video/ogg', 'video/mp4', 'video/webm', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb']
 
 export default {
@@ -112,20 +112,26 @@ export default {
       // 图片与视频大小限制
       const type = file.type
       const size = file.size
-      if (IMAGE_TYPES.indexOf(type) !== -1) {
-        if (size > 10 * 1024 * 1024) {
-          this.$message.error('上传图片大小限制在10MB内')
-          this.handleRemove(file)
-          return false
+      console.log(type)
+      if (IMAGE_TYPES.indexOf(type) !== -1 || VEDIO_TYPES.indexOf(type) !== -1) {
+        if (IMAGE_TYPES.indexOf(type) !== -1) {
+          if (size > 10 * 1024 * 1024) {
+            this.$message.error('上传图片大小限制在10MB内')
+            this.handleRemove(file)
+            return false
+          }
+        } else if (VEDIO_TYPES.indexOf(type) !== -1) {
+          if (size > 50 * 1024 * 1024) {
+            this.$message.error('上传视频文件限制在50MB内')
+            this.handleRemove(file)
+            return false
+          }
         }
-      } else if (VEDIO_TYPES.indexOf(type) !== -1) {
-        if (size > 50 * 1024 * 1024) {
-          this.$message.error('上传视频文件限制在50MB内')
-          this.handleRemove(file)
-          return false
-        }
+        return true
+      } else {
+        this.$message.error('文件格式不为图片或视频格式')
+        return false
       }
-      return true
     },
     beforeUpload(file) {
       const isPass = this.checkFileStatus(file)
