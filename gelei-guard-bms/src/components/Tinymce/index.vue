@@ -97,6 +97,7 @@ export default {
         autosave_ask_before_unload: false, // 新加
         media_live_embeds: true, // 媒体实时预览
         height: this.height,
+        statusbar: false,
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
