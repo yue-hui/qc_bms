@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       is_edit: false,
+      origin_edit_name: '', // 重命名不发起请求
       edit_name: '',
       select_id: null,
       is_superuser: true,
@@ -57,6 +58,7 @@ export default {
       // 编辑标签
       e = event || window.event
       e.stopPropagation()
+      debugger
       if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
         if (!data.id) {
           const other_node = node
@@ -69,7 +71,7 @@ export default {
             this.$notify({
               type: 'success',
               title: '操作提示',
-              message: '添加成功！',
+              message: '添加标签成功！',
               duration: 2000
             })
             result.remote_data['is_edit'] = false
@@ -82,21 +84,24 @@ export default {
           return
         }
 
-        const params = {
-          name: this.edit_name,
-          id: data.id
-        }
-        this.update_node(this.tags, params).then(result => {
-          if (result) {
-            data.name = this.edit_name
-            this.$notify({
-              type: 'success',
-              title: '操作提示',
-              message: '编辑成功！',
-              duration: 2000
-            })
+        if (this.edit_name !== this.origin_edit_name.trim()) {
+          const params = {
+            name: this.edit_name,
+            id: data.id
           }
-        })
+          this.update_node(this.tags, params).then(result => {
+            if (result) {
+              data.name = this.edit_name
+              this.$notify({
+                type: 'success',
+                title: '操作提示',
+                message: '重命名标签成功！',
+                duration: 2000
+              })
+            }
+          })
+        }
+        this.origin_edit_name = ''
         this.is_edit = false
         this.select_id = null
         this.select_level = null
@@ -203,7 +208,7 @@ export default {
         this.$notify({
           type: 'error',
           title: '操作提示',
-          message: '有正在编辑或添加的选项未完成！',
+          message: '有正在重命名或添加的选项未完成！',
           duration: 2000
         })
         return
@@ -211,7 +216,15 @@ export default {
       this.select_id = data.id
       this.select_level = data.level
       this.edit_name = data.name
+      this.origin_edit_name = data.name
       this.is_edit = true
+      this.$nextTick(() => {
+        // 光标定位到最后
+        const edit_element = document.querySelector('#edit_input')
+        edit_element.focus()
+        edit_element.value = ''
+        edit_element.value = this.edit_name
+      })
     },
 
     append(node, data, e) {
@@ -232,7 +245,7 @@ export default {
         this.$notify({
           type: 'error',
           title: '操作提示',
-          message: '有正在编辑或添加的选项未完成！',
+          message: '有正在重命名或添加的选项未完成！',
           duration: 2000
         })
       }
@@ -256,7 +269,7 @@ export default {
         this.$notify({
           type: 'error',
           title: '操作提示',
-          message: '有正在编辑或添加的选项未完成！',
+          message: '有正在重命名或添加的选项未完成！',
           duration: 2000
         })
       }
@@ -269,7 +282,7 @@ export default {
         this.$notify({
           type: 'error',
           title: '操作提示',
-          message: '有正在编辑或添加的选项未完成！',
+          message: '有正在重命名或添加的选项未完成！',
           duration: 2000
         })
         return
@@ -298,9 +311,11 @@ export default {
       if ((this.is_edit === true && this.is_select(data)) || data.is_edit) {
         tag_node = h('input', {
           attrs: {
+            id: 'edit_input',
             placeholder: '标签名称不能为空',
             class: 'ly-edit__text',
-            value: this.edit_name
+            value: this.edit_name,
+            'max-length': 10
           },
           on: {
             keyup: (e) => this.name_change(e, node, data),
@@ -309,23 +324,26 @@ export default {
             },
             blur: () => {
               // 点击外部时保存数据
-              // if (this.is_edit) {
-              //   this.edit_tag(data, node)
-              // }
+              if (this.is_edit) {
+                this.edit_tag(data, node)
+              }
             }
           }
         })
       } else {
         tag_node = h('span', data.name)
       }
+      let operation_nearby
       let operation_node
       if ((this.is_edit === true && this.is_select(data)) || data.is_edit) {
         operation_node = get_editing_content.call(this, h, data, node)
+        operation_nearby = 'btn-nearby'
       } else {
         operation_node = get_operation_content.call(this, h, data, node)
+        operation_nearby = ''
       }
       return h('span', {
-        class: 'ly-tree-node'
+        class: 'ly-tree-node ' + operation_nearby
       }, [tag_node, operation_node])
     }
   }
@@ -441,6 +459,10 @@ $label_height: 40px;
           justify-content: space-between;
           font-size: 14px;
           padding-right: 8px;
+
+          &.btn-nearby {
+            justify-content: flex-start;
+          }
         }
 
         .ly-tree-node > div > span:last-child {
