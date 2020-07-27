@@ -342,9 +342,15 @@ export default {
       const key = e.which || e.keyCode || e.charCode
       if (key === 13) {
         // 触发失去焦点事件，以免多次提交更新
-        e.target.blur()
-        // this.modified_type = 4
-        // this.edit_tag(data, node)
+        if ([1, 3].indexOf(this.modified_type) !== -1) {
+          // 新增节点按默认处理
+          e.target.blur()
+        }
+        if (this.modified_type === 2) {
+          // 重命名节点按确认保存处理
+          this.modified_type = 4
+          this.edit_tag(data, node)
+        }
       }
     },
 
