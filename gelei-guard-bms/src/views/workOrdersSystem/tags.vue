@@ -113,7 +113,7 @@ export default {
     },
 
     load_node: function(node, resolve) {
-      if (node.level >= 3 && node.data.is_new) {
+      if ((node.level >= 3 && node.data.is_new) || this.is_edit) {
         return resolve([])
       }
       this.loading = true
