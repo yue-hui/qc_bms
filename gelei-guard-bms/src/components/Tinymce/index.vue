@@ -1,5 +1,7 @@
 <template>
-  <div :class="{fullscreen:fullscreen}" class="tinymce-container editor-container">
+  <div
+    :class="{fullscreen:fullscreen}"
+    class="tinymce-container editor-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
       <editorImage class="editor-upload-btn" color="#1890ff" @successCBK="imageSuccessCBK" />
@@ -92,7 +94,10 @@ export default {
         selector: `#${this.tinymceId}`,
         relative_urls: false, // 新加
         remove_script_host: false, // 新加
+        autosave_ask_before_unload: false, // 新加
+        media_live_embeds: true, // 媒体实时预览
         height: this.height,
+        statusbar: false,
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
@@ -123,7 +128,7 @@ export default {
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })
-        }
+        },
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
@@ -139,24 +144,24 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+        images_upload_handler(blobInfo, success, failure, progress) {
+          // progress(0);
+          // const token = _this.$store.getters.token;
+          // getToken(token).then(response => {
+          //   const url = response.data.qiniu_url;
+          //   const formData = new FormData();
+          //   formData.append('token', response.data.qiniu_token);
+          //   formData.append('key', response.data.qiniu_key);
+          //   formData.append('file', blobInfo.blob(), url);
+          //   upload(formData).then(() => {
+          //     success(url);
+          //     progress(100);
+          //   })
+          // }).catch(err => {
+          //   failure('出现未知问题，刷新页面，或者联系程序员')
+          //   console.log(err);
+          // });
+        }
       })
     },
     destroyTinymce() {
@@ -164,7 +169,6 @@ export default {
       if (this.fullscreen) {
         tinymce.execCommand('mceFullScreen')
       }
-
       if (tinymce) {
         tinymce.destroy()
       }
@@ -178,7 +182,17 @@ export default {
     imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        if (v.file_type === 'image') {
+          let width, height
+          if (v.width > 400) {
+            width = 400
+            height = v.height * (width / v.width)
+          }
+          window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" width="${width}" height="${height}" >`)
+        } else {
+          const inner_html = `<iframe src="${v.url}" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>`
+          window.tinymce.get(_this.tinymceId).insertContent(`${inner_html}`)
+        }
       })
     }
   }

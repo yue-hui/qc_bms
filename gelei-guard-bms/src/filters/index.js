@@ -6,6 +6,9 @@
 * @param number 带小数点值
 * @param digits 默认小数点长度
 * */
+import { DATE_FORMAT } from '@/utils/constant'
+import dayjs from 'dayjs'
+
 export function percentageFormat(number, digits) {
   let result
   if (digits === null || digits === undefined) {
@@ -71,11 +74,15 @@ export function byteFormatter(size) {
 * @param words 文字
 * @param length 截取文字长度
 * */
-export function beautifyWordsFormatter(words, length) {
+export function beautifyWordsFormatter(words, length, filled = true) {
   let result
   if (words) {
     if (words.length > length) {
-      result = words.slice(0, length) + '...'
+      if (filled) {
+        result = words.slice(0, length) + '...'
+      } else {
+        result = words.slice(0, length)
+      }
     } else {
       result = words
     }
@@ -83,4 +90,20 @@ export function beautifyWordsFormatter(words, length) {
     result = ''
   }
   return result
+}
+
+/*
+* 时间值数格式化
+* 与common.js中date_formatter一致
+* */
+export function dateFormatter(date, fomatter = DATE_FORMAT, is_filled = false) {
+  if (date) {
+    return dayjs(date).format(fomatter)
+  } else {
+    if (is_filled) {
+      return dayjs().format(fomatter)
+    } else {
+      return date
+    }
+  }
 }

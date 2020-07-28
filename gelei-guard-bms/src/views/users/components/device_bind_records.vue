@@ -72,8 +72,13 @@ export default {
       this.load_data()
     },
     before_close: function() {
-      this.is_show = false
-      this.$emit('refresh')
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          this.is_show = false
+          this.$emit('refresh')
+        })
+        .catch(_ => {
+        })
     },
     get_config: function() {
       return {

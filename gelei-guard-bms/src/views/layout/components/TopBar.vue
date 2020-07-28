@@ -8,7 +8,7 @@
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">
       <el-dropdown @command="user_control">
         <div class="me">
-          <div :title="real_name || name || default_username" class="user-name-show">{{ real_name || name || default_username }}</div>
+          <div :title="real_name || name || default_username" class="user-name-show">{{ display_name }}</div>
           <span v-if="greetings">,</span>
           <div class="user-name-greetings">{{ greetings }}</div>
         </div>
@@ -17,6 +17,15 @@
           <el-dropdown-item v-if="name !== 'gladmin'" command="secret">修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <div v-if="msg_reminder_show" class="reminder-area">
+        <div class="reminder-area-box" @click="show_drawer">
+          <div :class="{alert: alert}" class="reminder-area-box-dot" />
+          <p>
+            <svg-icon :class="{'alert-font': alert}" icon-class="reminder" class="reminder-area-box-icon" />
+            <span>最新消息</span>
+          </p>
+        </div>
+      </div>
       <div class="logout-block" @click="logout">
         <div class="logout-hover-style">
           <svg-icon icon-class="logout" />
@@ -28,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { ACCOUNT_NAME_LIST, WelcomeRouteWhiteList } from '@/utils/constant'
 // import dayjs from 'dayjs'
 
@@ -55,6 +64,7 @@ export default {
     const user = ACCOUNT_NAME_LIST.find(r => r.value === '00')
     const default_username = user.label
     return {
+      alert: true,
       default_avatar,
       default_username,
       greetings,
@@ -62,7 +72,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name', 'avatar', 'is_agent', 'real_name'])
+    ...mapGetters(['name', 'avatar', 'is_agent', 'real_name']),
+    ...mapMutations([
+      'TOGGLE_GL_DRAWER'
+    ]),
+    ...mapState({
+      drawer_show: state => state.app.drawer,
+      msg_reminder_show: state => state.app.msg_reminder_status
+    }),
+    display_name: function() {
+      return this.real_name || this.name || this.default_username
+    }
   },
   watch: {
     is_agent: {
@@ -102,7 +122,6 @@ export default {
       this.basic_action()
     },
     user_control(command) {
-      console.log('command: ', command)
       switch (command) {
         case 'basic':
           this.basic_action()
@@ -119,17 +138,33 @@ export default {
     },
     secret_action() {
       this.$router.push({ name: 'ModifiedPassword' })
+    },
+    show_drawer() {
+      if (!this.drawer_show) {
+        this.$store.commit('TOGGLE_GL_DRAWER', true)
+      }
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+$recent_message_color: #51da51;
+$recent_message_icon_color: #51da51;
+
 .component-card {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
+
+  .alert {
+    animation: flashAnimation 2s infinite;
+  }
+
+  .alert-font {
+    animation: flashAnimationFont 2s infinite;
+  }
 
   .left-item {
     padding-left: 10px;
@@ -158,7 +193,7 @@ export default {
 
   .user-info {
     padding: 0 10px;
-    width: 240px;
+    /*width: 380px;*/
     display: flex;
     flex-direction: row;
     font-size: 14px;
@@ -207,6 +242,40 @@ export default {
       min-height: 100%;
     }
 
+    .reminder-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: white;
+      }
+
+      &-box {
+        position: relative;
+
+        &-dot {
+          position: absolute;
+          height: 8px;
+          width: 8px;
+          top: 14px;
+          left: 24px;
+          border-radius: 50%;
+        }
+
+        p {
+          margin: 0;
+          color: $recent_message_color;
+
+          .reminder-area-box-icon {
+            margin-left: 8px;
+            margin-right: 2px;
+            font-size: 24px;
+          }
+        }
+      }
+    }
+
     .logout-block {
       display: flex;
       justify-content: center;
@@ -229,6 +298,36 @@ export default {
         }
       }
     }
+  }
+}
+
+@keyframes flashAnimation {
+  0% {
+    opacity: 0.5;
+    background-color: #cecece;
+  }
+  50% {
+    opacity: 1;
+    background-color: $recent_message_icon_color;
+  }
+  100% {
+    opacity: 0.5;
+    background-color: #cecece;
+  }
+}
+
+@keyframes flashAnimationFont {
+  0% {
+    opacity: 0.5;
+    color: #cecece;
+  }
+  50% {
+    opacity: 1;
+    color: $recent_message_icon_color;
+  }
+  100% {
+    opacity: 0.5;
+    color: #cecece;
   }
 }
 </style>

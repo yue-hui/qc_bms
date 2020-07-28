@@ -8,6 +8,7 @@ const user = {
     name: '',
     avatar: '',
     real_name: '',
+    email: '',
     account_type: '',
     role_id: '',
     is_agent: '',
@@ -26,6 +27,9 @@ const user = {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
+    },
+    SET_EMAIL: (state, email) => {
+      state.email = email
     },
     SET_REAL_NAME: (state, real_name) => {
       state.real_name = real_name
@@ -83,6 +87,7 @@ const user = {
           commit('SET_NAME', data.user_id)
           commit('SET_AVATAR', data.img_url)
           commit('SET_REAL_NAME', data.real_name)
+          commit('SET_EMAIL', data.email)
           commit('SET_ROLE_ID', data.role_id)
           commit('SET_ROLE_NAME', data.role_name)
           commit('SET_ACCOUNT_TYPE', data.account_type)

@@ -65,7 +65,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="6" :lg="8" :xl="12" class="col-bg layout-right">
+          <el-col :xs="12" :sm="24" :md="6" :lg="8" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button pid="20044" size="mini" type="success" @click="add_questions">添加帮助问题</gl-button>

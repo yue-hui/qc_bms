@@ -1,5 +1,9 @@
 import { v1 as uuidv1 } from 'node-uuid'
-import { DATE_FORMAT, GRADE_LIST, SUBJECT_LIST } from '@/utils/constant'
+import {
+  DATE_FORMAT,
+  GRADE_LIST,
+  SUBJECT_LIST
+} from '@/utils/constant'
 import dayjs from 'dayjs'
 import CryptoJS from 'crypto-js'
 
@@ -182,10 +186,19 @@ export function calculate_file_sha256(file) {
 /*
 * 去除对象内空值
 * */
-export function pure_object_null_value(data) {
+export function pure_object_null_value(data, options = ['null', 'trim']) {
+  const is_remove_null = options.indexOf('null') !== -1
+  const is_trim = options.indexOf('trim') !== -1
   for (const key in data) {
-    if (!data[key]) {
+    // 去除空对象
+    const value = data[key]
+    if (is_remove_null && [null, '', undefined].indexOf(value) !== -1) {
       delete data[key]
+      continue
+    }
+    // 去除前后空白字符
+    if (is_trim) {
+      data[key] = String(data[key]).trim()
     }
   }
   return data
@@ -200,14 +213,14 @@ export function pure_object_null_value(data) {
 export function get_value_from_map_list(key, map_list = [], default_value = '-', map_list_type = '1') {
   // map_list_type map_list的格式
   if (map_list_type === '1') {
-    const filter_item = map_list.filter(r => r.value === key)
-    if (filter_item.length) {
-      return filter_item[0].label
+    const filter_item = map_list.find(r => r.value === key)
+    if (filter_item) {
+      return filter_item.label
     }
   } else if (map_list_type === '2') {
-    const filter_item = map_list.filter(r => r.val === key)
-    if (filter_item.length) {
-      return filter_item[0].name
+    const filter_item = map_list.find(r => r.val === key)
+    if (filter_item) {
+      return filter_item.name
     }
   }
   return default_value
@@ -280,4 +293,17 @@ export function delayering_page_tree(data_list) {
 
   recursive(data_list)
   return data_row
+}
+
+/*
+* 生成指定范围内的随机值
+* @param {Number} _min 随机值的最小值
+* @param {Number} _max 随机值的最大值
+* */
+export function sync_message_interval_seconds(_min, _max) {
+  if (_min === _max) {
+    return _min
+  } else {
+    return Math.floor(Math.random() * (_max - _min)) + _min
+  }
 }

@@ -67,6 +67,11 @@
               :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="账号邮箱" prop="email">
+          <el-input
+            v-model="form.email"
+            placeholder="请输入账号邮箱" />
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="close_dialog">取 消</el-button>
@@ -80,7 +85,7 @@
 import { create_or_update_user_information, get_all_sys_roles } from '@/api/interactive'
 import { pure_object_null_value } from '@/utils/common'
 import { encrypt_password } from '@/utils/permissions'
-import { validateChinese, validatePasswordComplex } from '@/utils/validate'
+import { validateChinese, validateEmailAddr, validatePasswordComplex } from '@/utils/validate'
 import { ACCOUNT_NAME_LIST, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/utils/constant'
 import { mapGetters } from 'vuex'
 
@@ -119,6 +124,14 @@ export default {
         callback()
       }
     }
+    const validateEmail = (rule, value, callback) => {
+      const result = validateEmailAddr(value)
+      if (!result.status) {
+        callback(new Error(result.message))
+      } else {
+        callback()
+      }
+    }
     return {
       title: '',
       password_min_length: PASSWORD_MIN_LENGTH,
@@ -128,7 +141,8 @@ export default {
         real_name: '',
         role_id: '',
         account_type: '',
-        password: ''
+        password: '',
+        email: ''
       },
       rules: {
         user_id: [
@@ -147,6 +161,10 @@ export default {
         password: [
           { required: true, message: '登录密码不能为空', trigger: 'blur' },
           { validator: validateNewPassword, trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '账户邮箱不能为空', trigger: 'blur' },
+          { validator: validateEmail, trigger: 'blur' }
         ]
       },
       loading: true,
@@ -165,6 +183,12 @@ export default {
   },
   methods: {
     before_close: function() {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          this.close_dialog()
+        })
+        .catch(_ => {
+        })
     },
     close_dialog: function() {
       this.$emit('callback', false)
@@ -184,6 +208,7 @@ export default {
             real_name: this.user.real_name,
             role_id: this.user.role_id,
             account_type: this.user.account_type,
+            email: this.user.email,
             password: ''
           }
         } else {
@@ -193,6 +218,7 @@ export default {
             real_name: '',
             role_id: '',
             account_type: '',
+            email: '',
             password: ''
           }
         }
@@ -233,7 +259,8 @@ export default {
             user_id: this.form.user_id,
             real_name: this.form.real_name,
             account_type: this.form.account_type,
-            role_id: this.form.role_id
+            role_id: this.form.role_id,
+            email: this.form.email
           }
           if (!this.user.user_id) {
             config['password'] = encrypt_password(this.form.password)

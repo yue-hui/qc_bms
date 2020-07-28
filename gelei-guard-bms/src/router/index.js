@@ -30,7 +30,7 @@ Router.prototype.push = function push(to) {
 export const constantRoutes = [
   { path: '/login', name: 'Login', component: () => import('@/views/login/index'), hidden: true },
   // { path: '/potential/:item(\\w+)/:status(\\d+)', component: () => import('@/views/login/potential'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
+  { path: '/404', name: 404, component: () => import('@/views/404'), hidden: true },
   {
     path: '/space',
     component: Layout,
@@ -223,7 +223,7 @@ export const asyncRoutes = [
       },
       {
         path: 'combination',
-        name: 'RecommendedApplicationPortfolio',
+        name: 'ApplicationCombination',
         component: () => import('@/views/recommend/combination'),
         meta: { title: '推荐应用组合', icon: 'combine', pid: '20032' }
       },
@@ -232,6 +232,46 @@ export const asyncRoutes = [
         name: 'RecommendedApplicationTopics',
         component: () => import('@/views/recommend/special_topic'),
         meta: { title: '推荐应用专题', icon: 'special_topic', pid: '20034' }
+      }
+    ]
+  },
+  {
+    path: '/work-orders-system',
+    component: Layout,
+    name: 'workOrdersSystem',
+    redirect: '/work-orders-system/summaries',
+    alwaysShow: true,
+    meta: { title: '客服工单系统', icon: 'work_orders_system' },
+    children: [
+      {
+        path: 'summaries',
+        name: 'workOrdersSystemSummaries',
+        component: () => import('@/views/workOrdersSystem/index'),
+        meta: { title: '工单首页', icon: 'customer_service' }
+      },
+      {
+        path: 'my',
+        name: 'MyWorkOrdersSystem',
+        component: () => import('@/views/workOrdersSystem/create_work_orders'),
+        meta: { title: '我创建的工单', icon: 'create_work_orders' }
+      },
+      {
+        path: 'notices',
+        name: 'RecommendedApplicationPortfolio',
+        component: () => import('@/views/workOrdersSystem/notices'),
+        meta: { title: '抄送我的工单', icon: 'notice_work_orders' }
+      },
+      {
+        path: 'acceptance',
+        name: 'AcceptanceWorkOrdersSystem',
+        component: () => import('@/views/workOrdersSystem/acceptance'),
+        meta: { title: '我受理的工单', icon: 'acceptance_work_orders' }
+      },
+      {
+        path: 'tags',
+        name: 'WorkOrdersSystemTagsManagement',
+        component: () => import('@/views/workOrdersSystem/tags'),
+        meta: { title: '工单标签管理', icon: 'work_orders_tags' }
       }
     ]
   },
@@ -391,6 +431,13 @@ export const asyncRoutes = [
         meta: { title: '角色管理', icon: 'role_management', pid: '20071' }
       }
     ]
+  },
+  {
+    path: '/work-order-details',
+    name: 'WorkOrdersSystemDetails',
+    // hidden: true,
+    component: () => import('@/views/workOrdersSystem/work_order_details'),
+    meta: { title: '工单详情页', icon: 'work_order_details' }
   }
 ]
 

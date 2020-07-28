@@ -12,7 +12,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-suffix=":">
-        <el-form-item label="账号" prop="user_id">
+        <el-form-item label="账号名称" prop="user_id">
           <el-input v-model="form.user_id" disabled />
         </el-form-item>
         <el-form-item label="真实姓名" prop="real_name">
@@ -23,6 +23,9 @@
         </el-form-item>
         <el-form-item label="账号角色" prop="role_name">
           <el-input v-model="form.role_name" disabled />
+        </el-form-item>
+        <el-form-item label="账号邮箱" prop="email">
+          <el-input v-model="form.email" disabled />
         </el-form-item>
         <el-form-item label="个人头像" prop="img_url">
           <el-upload
@@ -85,6 +88,7 @@ export default {
         user_id: this.$store.getters.name,
         real_name: this.$store.getters.real_name,
         role_name: this.$store.getters.role_name,
+        email: this.$store.getters.email,
         account_name,
         img_url: this.$store.getters.avatar
       },

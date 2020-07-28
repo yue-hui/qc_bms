@@ -87,3 +87,11 @@ export function validatePasswordComplex(str) {
   }
 }
 
+export function validateEmailAddr(str) {
+  var myreg = /^[a-z,A-Z,0-9]+@[a-z,A-Z]+\.[a-z,A-Z]+$/
+  if (!myreg.test(str)) {
+    return { status: false, message: '邮箱地址有误，请输入有效的邮箱地址' }
+  } else {
+    return { status: true, message: '邮箱地址正确' }
+  }
+}
