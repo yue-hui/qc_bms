@@ -142,11 +142,16 @@ export default {
 
     load_node: function(node, resolve) {
       if (this.is_edit) {
-        // 编辑状态时延时加载
-        const self = this
-        setTimeout(() => {
-          this.load_node.call(self, node, resolve)
-        }, 100)
+        if ([1, 3, 5].indexOf(this.modified_type) !== -1) {
+          // 新建和编辑状态时不需要延时加载下级
+          return resolve([])
+        } else {
+          // 编辑状态时延时加载
+          const self = this
+          setTimeout(() => {
+            this.load_node.call(self, node, resolve)
+          }, 100)
+        }
       }
       if (node.level >= 3 && node.data.is_new) {
         return resolve([])
