@@ -75,7 +75,7 @@ export default {
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
       if (!this.checkAllSuccess()) {
-        this.$message('请等待所有图片上传成功 或 出现了网络问题，请刷新页面重新上传！')
+        this.$message('请等待所有图片或视频上传成功 或 出现了网络问题，请刷新页面重新上传！')
         return
       }
       this.$emit('successCBK', arr)
@@ -85,13 +85,9 @@ export default {
     },
     handleSuccess(url, file) {
       const uid = file.uid
-      const objKeyArr = Object.keys(this.listObj)
-      for (let i = 0, len = objKeyArr.length; i < len; i++) {
-        if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = url
-          this.listObj[objKeyArr[i]].hasSuccess = true
-          return
-        }
+      if (this.listObj[uid]) {
+        this.listObj[uid]['url'] = url
+        this.listObj[uid]['hasSuccess'] = true
       }
     },
     handleExceed(files, fileList) {
@@ -112,7 +108,6 @@ export default {
       // 图片与视频大小限制
       const type = file.type
       const size = file.size
-      console.log(type)
       if (IMAGE_TYPES.indexOf(type) !== -1 || VEDIO_TYPES.indexOf(type) !== -1) {
         if (IMAGE_TYPES.indexOf(type) !== -1) {
           if (size > 10 * 1024 * 1024) {
@@ -142,6 +137,7 @@ export default {
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
       const type = file.type
+      const name = file.name
       this.listObj[fileName] = {}
       if (IMAGE_TYPES.indexOf(type) !== -1) {
         const file_type = 'image'
@@ -149,12 +145,13 @@ export default {
         return new Promise((resolve, reject) => {
           const img = new Image()
           img.src = _URL.createObjectURL(file)
-          img.onload = function() {
+          img.onload = () => {
             _self.listObj[fileName] = {
               hasSuccess: false,
               uid: file.uid,
               file_type,
               type,
+              name,
               width: this.width,
               height: this.height
             }
@@ -163,7 +160,7 @@ export default {
         })
       } else if (VEDIO_TYPES.indexOf(type) !== -1) {
         const file_type = 'vedio'
-        this.listObj[fileName] = { hasSuccess: false, uid: file.uid, file_type, type, width: 400, height: 400 }
+        this.listObj[fileName] = { hasSuccess: false, uid: file.uid, name, file_type, type, width: 400, height: 400 }
         return true
       } else {
         return false
@@ -188,7 +185,9 @@ export default {
               const url = upload_data.data.url
               file_attr['url'] = url
               this.fileList.push(file_attr)
-              this.handleSuccess(url, file_attr)
+              setTimeout(() => {
+                this.handleSuccess(url, file_attr)
+              }, 300)
             } else {
               this.handleRemove(file)
               this.$message.error(upload_data.message)
@@ -205,7 +204,9 @@ export default {
           const url = remote_data.data.url
           file_attr['url'] = url
           this.fileList.push(file_attr)
-          this.handleSuccess(url, file_attr)
+          setTimeout(() => {
+            this.handleSuccess(url, file_attr)
+          }, 300)
         } else {
           // 未知异常
           this.handleRemove(file)
