@@ -1,61 +1,64 @@
 <template>
   <div v-loading="page_loading" class="work-order-details">
-    <div class="form-diviser mb-20">
-      <div class="form-top-layout">
-        <span v-if="action === '1'">创建工单</span>
-        <span v-if="['3', '2'].indexOf(action) !== -1" class="work-order-title">
-          <span :title="forms.ticket_no">【 {{ forms.ticket_no }} 】</span>
-          <span> - </span>
-          <span :title="forms.ticket_title">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
-        </span>
-        <span>
-          <el-button
-            v-if="action === '1'"
-            :loading="submit_loading"
-            type="primary"
-            size="mini"
-            data-alias="create"
-            @click="submit_with_comfirm">提交</el-button>
-          <el-button
-            v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
-            :loading="reminder_work_order_loading"
-            type="primary"
-            size="mini"
-            @click="reminder_work_order">催单</el-button>
-          <el-button
-            v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
-            :loading="save_work_order_loading"
-            type="primary"
-            size="mini"
-            data-alias="create"
-            @click="save_work_order">保存</el-button>
-          <el-button
-            v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-            :loading="assigned_work_order_loading"
-            type="primary"
-            size="mini"
-            data-alias="assigned"
-            @click="assigned_work_order">提交</el-button>
-          <el-button
-            v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
-            type="primary"
-            size="mini"
-            @click="transfer_work_order_action">转交</el-button>
-          <el-button
-            v-if="identity === '01' && ['1'].indexOf(work_order_state) !== -1"
-            :loading="close_work_order_loading"
-            type="primary"
-            size="mini"
-            @click="close_work_order">关闭工单</el-button>
-          <el-button
-            v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
-            :loading="reuse_work_order_loading"
-            type="primary"
-            size="mini"
-            @click="reuse_work_order_comfirm">重新打开</el-button>
-        </span>
+    <div ref="work_order_freeze" class="work-order-freeze">
+      <div class="form-diviser mb-20">
+        <div class="form-top-layout">
+          <span v-if="action === '1'">创建工单</span>
+          <span v-if="['3', '2'].indexOf(action) !== -1" class="work-order-title">
+            <span :title="forms.ticket_no">【 {{ forms.ticket_no }} 】</span>
+            <span> - </span>
+            <span :title="forms.ticket_title">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
+          </span>
+          <span>
+            <el-button
+              v-if="action === '1'"
+              :loading="submit_loading"
+              type="primary"
+              size="mini"
+              data-alias="create"
+              @click="submit_with_comfirm">提交</el-button>
+            <el-button
+              v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+              :loading="reminder_work_order_loading"
+              type="primary"
+              size="mini"
+              @click="reminder_work_order">催单</el-button>
+            <el-button
+              v-if="action === '2' || (identity === '01' && ['3', '4'].indexOf(work_order_state) !== -1)"
+              :loading="save_work_order_loading"
+              type="primary"
+              size="mini"
+              data-alias="create"
+              @click="save_work_order">保存</el-button>
+            <el-button
+              v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+              :loading="assigned_work_order_loading"
+              type="primary"
+              size="mini"
+              data-alias="assigned"
+              @click="assigned_work_order">提交</el-button>
+            <el-button
+              v-if="identity === '02' && ['3', '4'].indexOf(work_order_state) !== -1"
+              type="primary"
+              size="mini"
+              @click="transfer_work_order_action">转交</el-button>
+            <el-button
+              v-if="identity === '01' && ['1'].indexOf(work_order_state) !== -1"
+              :loading="close_work_order_loading"
+              type="primary"
+              size="mini"
+              @click="close_work_order">关闭工单</el-button>
+            <el-button
+              v-if="identity === '01' && ['2'].indexOf(work_order_state) !== -1"
+              :loading="reuse_work_order_loading"
+              type="primary"
+              size="mini"
+              @click="reuse_work_order_comfirm">重新打开</el-button>
+          </span>
+        </div>
       </div>
     </div>
+    <div :style="{height: work_order_freeze_height + 'px'}" class="work-order-freeze-shadow" />
     <!--创建人及工单基本信息-->
     <el-form size="mini" label-suffix=":" label-width="120px" label-position="left" @submit.native.prevent>
       <el-row :gutter="24" class="form-row">
@@ -131,7 +134,9 @@
                   placeholder="请选择工单标题" />
               </template>
               <template v-else>
-                <span :title="forms.ticket_title" class="label-text">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
+                <span
+                  :title="forms.ticket_title"
+                  class="label-text">{{ forms.ticket_title | beautifyWordsFormatter(30) }}</span>
               </template>
             </el-form-item>
           </div>
@@ -372,7 +377,9 @@
             <div class="grid-content bg-purple">
               <el-form-item label="注册时间">
                 <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ patriarch_info.p_create_time }}</span>
-                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.p_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.p_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -470,7 +477,9 @@
             <div class="grid-content bg-purple" style="width: 400px;">
               <el-form-item label="注册时间">
                 <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_child.c_create_time }}</span>
-                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.c_create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -535,7 +544,9 @@
             <div class="grid-content bg-purple" style="width: 400px;">
               <el-form-item label="绑定时间">
                 <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_bind_time }}</span>
-                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_bind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.c_bind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -543,7 +554,9 @@
             <div class="grid-content bg-purple" style="width: 400px;">
               <el-form-item label="解绑时间">
                 <span v-if="['1'].indexOf(action) !== -1" class="label-text">{{ current_device.c_unbind_time }}</span>
-                <span v-if="['2', '3'].indexOf(action) !== -1" class="label-text">{{ forms.c_unbind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
+                <span
+                  v-if="['2', '3'].indexOf(action) !== -1"
+                  class="label-text">{{ forms.c_unbind_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -715,7 +728,9 @@
                   <span class="real-name">{{ comment.real_name }}</span>
                   <span class="role-name">{{ comment.role_name }}</span>
                   <span class="create-date">{{ comment.create_time | dateFormatter('YYYY-MM-DD HH:mm:ss') }}</span>
-                  <span v-if="comment.cc_user && comment.cc_user.length !== 0" class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
+                  <span
+                    v-if="comment.cc_user && comment.cc_user.length !== 0"
+                    class="comment-copy-to">抄送：{{ comment.cc_user.join('、') }}</span>
                 </p>
               </div>
               <div class="comment-content">
@@ -971,6 +986,7 @@ export default {
     return {
       page_loading: true,
       page_header_content: '创建工单',
+      work_order_freeze_height: 0, // 冻结表头的高度
       action: this.$route.query.action, // 1 创建 2 编辑 3 正常处理流程
       ticket_id: this.$route.query.ticket_id,
       submit_loading: false,
@@ -1131,6 +1147,9 @@ export default {
     }
   },
   mounted: async function() {
+    // 冻结窗口标题
+    this.work_order_freeze_height = this.$refs.work_order_freeze.offsetHeight
+
     if (this.action === '1') {
       // 搜索工单标题接口
       // 终端类型
@@ -1799,6 +1818,18 @@ $text_color: #365638;
   flex-direction: column;
   background-color: #f5f5f5;
   overflow: hidden;
+
+  .work-order-freeze {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 20000;
+  }
+
+  .work-order-freeze-shadow {
+    width: 100%;
+  }
 
   .form-row {
     padding-left: 24px;
