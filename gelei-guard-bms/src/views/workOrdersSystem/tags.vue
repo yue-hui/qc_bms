@@ -64,6 +64,10 @@ export default {
     },
     edit_tag: async function(data, node, e) {
       if (node.loading) {
+        debugger
+        if (!this.edit_name) {
+          self.close(data, node)
+        }
         return
       }
       node.loading = true
@@ -72,54 +76,63 @@ export default {
       e && e.stopPropagation()
       if (this.edit_name.replace(/^\s+|\s+$/g, '')) {
         if (!data.id) {
+          // 新增
           const other_node = node
           const params = {
             name: this.edit_name,
             id: data.p_id
           }
-          const result = await this.add_item(this.tags, params)
-          if (result.status) {
-            this.$notify({
-              type: 'success',
-              title: '操作提示',
-              message: '添加标签成功！',
-              duration: 2000
-            })
-            result.remote_data['is_edit'] = false
-            result.remote_data['name'] = result.remote_data['type_name']
-            other_node.data = result.remote_data
-          }
-          this.is_edit = false
-          this.select_id = null
-          this.select_level = null
-          node.loading = false
-          return
-        }
-
-        if (this.edit_name !== this.origin_edit_name.trim()) {
-          const params = {
-            name: this.edit_name,
-            id: data.id
-          }
-          this.update_node(this.tags, params).then(result => {
-            if (result) {
-              data.name = this.edit_name
+          this.add_item(this.tags, params).then(result => {
+            if (result.status) {
               this.$notify({
                 type: 'success',
                 title: '操作提示',
-                message: '重命名标签成功！',
+                message: '添加标签成功！',
                 duration: 2000
               })
+              result.remote_data['is_edit'] = false
+              result.remote_data['name'] = result.remote_data['type_name']
+              other_node.data = result.remote_data
+              this.is_edit = false
+              this.select_id = null
+              this.select_level = null
             }
           }).finally(() => {
             node.loading = false
           })
+          return
+        } else {
+          // 重命名
+          if (this.edit_name !== this.origin_edit_name.trim()) {
+            const params = {
+              name: this.edit_name,
+              id: data.id
+            }
+            this.update_node(this.tags, params).then(result => {
+              if (result) {
+                data.name = this.edit_name
+                this.$notify({
+                  type: 'success',
+                  title: '操作提示',
+                  message: '重命名标签成功！',
+                  duration: 2000
+                })
+                this.origin_edit_name = ''
+                this.is_edit = false
+                this.select_id = null
+                this.select_level = null
+                node.loading = false
+              } else {
+                node.loading = false
+              }
+            })
+          } else {
+            node.loading = false
+          }
+          return
         }
-        this.origin_edit_name = ''
-        this.is_edit = false
-        this.select_id = null
-        this.select_level = null
-        node.loading = false
+      } else {
+        this.close(data, node)
       }
     },
 
@@ -179,7 +192,7 @@ export default {
         }
         edit_work_order_tag(config).then(res => {
           if (res.status !== 0) {
-            this.$message.error(res.message)
+            // this.$message.error(res.message)
             resolve(false)
           } else {
             resolve(true)
@@ -223,6 +236,7 @@ export default {
       this.select_level = null
       this.edit_name = data.name
       this.is_edit = false
+      node.loading = false
     },
 
     update(node, data, e) {
@@ -368,7 +382,7 @@ export default {
             placeholder: '标签名称不能为空',
             class: 'ly-edit__text',
             value: this.edit_name,
-            'max-length': 10
+            maxlength: 50
           },
           on: {
             keyup: (e) => {
