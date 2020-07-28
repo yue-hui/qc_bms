@@ -96,6 +96,10 @@ export default {
               this.is_edit = false
               this.select_id = null
               this.select_level = null
+            } else {
+              this.$nextTick(() => {
+                this.cursor_positioning()
+              })
             }
           }).finally(() => {
             node.loading = false
@@ -121,10 +125,13 @@ export default {
                 this.is_edit = false
                 this.select_id = null
                 this.select_level = null
-                node.loading = false
               } else {
-                node.loading = false
+                this.$nextTick(() => {
+                  this.cursor_positioning()
+                })
               }
+            }).finally(() => {
+              node.loading = false
             })
           } else {
             node.loading = false
