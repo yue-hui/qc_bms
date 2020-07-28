@@ -1824,7 +1824,7 @@ $text_color: #365638;
     left: 0;
     right: 0;
     top: 0;
-    z-index: 20000;
+    z-index: 2000;
   }
 
   .work-order-freeze-shadow {
