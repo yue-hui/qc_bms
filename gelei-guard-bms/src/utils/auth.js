@@ -1,20 +1,23 @@
 /* 本地存储 */
-
+import Cookies from 'js-cookie'
 import { __VERSION__, DEFAULT_PAGE_SIZE, PagenationSizeKey } from '@/utils/constant'
+// import { get_current_env } from '@/utils/common'
 
 const TokenKey = 'APP-Token'
-const ButtonPermissionKey = '_btn'
+
+// export const current_env_type = get_current_env()
 
 export function getToken() {
-  return localStorage.getItem(TokenKey)
+  return Cookies.get(TokenKey)
 }
 
 export function setToken(token) {
-  return localStorage.setItem(TokenKey, token)
+  localStorage.removeItem(TokenKey) // 迭代若干版本后移除此行
+  return Cookies.set(TokenKey, token)
 }
 
 export function removeToken() {
-  return localStorage.removeItem(TokenKey)
+  return Cookies.remove(TokenKey)
 }
 
 const VersionKey = 'ver'
@@ -31,17 +34,4 @@ export function getPagenationSize() {
   const local_size = localStorage.getItem(PagenationSizeKey)
   const pagenation_page_size = local_size || DEFAULT_PAGE_SIZE
   return +pagenation_page_size
-}
-
-export function setButtonPermission(status) {
-  localStorage.removeItem('page_sizes') // 20200617
-  if (status === '1') {
-    return localStorage.setItem(ButtonPermissionKey, true)
-  } else {
-    localStorage.removeItem(ButtonPermissionKey)
-  }
-}
-
-export function getButtonPermission() {
-  return localStorage.getItem(ButtonPermissionKey)
 }

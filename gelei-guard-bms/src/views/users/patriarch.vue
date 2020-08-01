@@ -69,6 +69,7 @@
                 <el-col :span="16">
                   <el-select
                     v-model="query_set.reg_from"
+                    :disabled="is_agent"
                     size="mini"
                     placeholder="用户来源"
                     clearable
@@ -98,11 +99,32 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="7" :lg="5" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员有效天数:</el-col>
-                <el-col :span="16" class="valid-date-range">
+                <el-col :span="10" class="order-number-list">设备绑定状态:</el-col>
+                <el-col :span="14">
+                  <el-select
+                    v-model="query_set.bind_type"
+                    size="mini"
+                    placeholder="请选择设备绑定状态"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in bind_status_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="10" class="order-number-list">会员有效天数:</el-col>
+                <el-col :span="14" class="valid-date-range">
                   <div class="valid-value-area">
                     <el-input
                       v-model="query_set.begin_valid_days"
@@ -126,7 +148,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="16" :md="10" :lg="10" :xl="8" class="col-bg">
+          <el-col :xs="12" :sm="12" :md="8" :lg="9" :xl="8" class="col-bg">
             <div class="grid-content bg-purple">
               <el-row>
                 <el-col :span="4" class="order-number-list">注册时间:</el-col>
@@ -145,7 +167,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="24" :lg="4" :xl="16" class="col-bg layout-right">
+          <el-col :xs="24" :sm="4" :md="16" :lg="24" :xl="12" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -186,6 +208,7 @@
             prop="phone" />
           <el-table-column
             align="center"
+            width="132"
             label="注册时间"
             prop="create_time" />
           <el-table-column
@@ -282,6 +305,7 @@ import rechargeDialog from './components/recharge_dialog'
 import memberDialog from './components/member_dialog'
 import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { mapGetters } from 'vuex'
 // import dayjs from 'dayjs'
 
 export default {
@@ -298,6 +322,7 @@ export default {
       device_type_list,
       user_sources: [], // 用户来源列表
       patriarch_member_types: PATRIARCH_MEMBER_TYPES,
+      bind_status_list: CHILD_BIND_TYPE_STATUS,
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
@@ -309,6 +334,7 @@ export default {
         member_status: '',
         reg_from: '',
         channel_name: '',
+        bind_type: '',
         begin_valid_days: '',
         end_valid_days: '',
         datetime_range: []
@@ -320,7 +346,9 @@ export default {
       download_loading: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['is_agent'])
+  },
   mounted: function() {
     this.init()
   },
@@ -391,6 +419,9 @@ export default {
       if (this.query_set.channel_name) {
         config['channel_name'] = this.query_set.channel_name
       }
+      if (this.query_set.bind_type) {
+        config['bind_type'] = this.query_set.bind_type
+      }
       if (this.query_set.begin_valid_days) {
         config['begin_valid_days'] = this.query_set.begin_valid_days
       }
@@ -401,7 +432,7 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        name: 'user_details',
+        name: 'UserDetails',
         params: {
           pid: row.user_id
         }
@@ -427,12 +458,17 @@ export default {
       get_user_reg_from_list().then(res => {
         // 获取用户注册来源
         if (res.status === 0) {
-          this.user_sources = res.data.map(r => {
+          let user_sources = res.data.map(r => {
             return {
               label: r.reg_from_label,
               value: r.reg_from
             }
           })
+          if (this.is_agent) {
+            user_sources = user_sources.filter(r => r.value === '07')
+            this.query_set.reg_from = '07'
+          }
+          this.user_sources = user_sources
         } else {
           this.user_sources = []
           this.$message.error(res.message)

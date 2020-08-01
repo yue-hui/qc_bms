@@ -905,6 +905,15 @@ export function get_business_cooperation_list(data) {
   })
 }
 
+// 获取当前登录用户相同角色用户列表
+export function get_manager_channel_associated_user_list(data) {
+  return request({
+    url: '/greenguard/manager/channel/associated/user',
+    method: 'post',
+    data
+  })
+}
+
 // 获取语音短信
 export function get_manager_voice_list(data) {
   return request({
@@ -1092,6 +1101,33 @@ export function create_or_update_sys_role(data) {
 export function delete_sys_role(data) {
   return request({
     url: '/greenguard/manager/sysRole/delete',
+    method: 'post',
+    data
+  })
+}
+
+// 发送设备运行指令
+export function device_send_ins(data) {
+  return request({
+    url: '/greenguard/manager/device/addMobileLog',
+    method: 'post',
+    data
+  })
+}
+
+// 查询设备日志列表
+export function get_device_upload_logs_list(data) {
+  return request({
+    url: '/greenguard/manager/device/findMobileLog',
+    method: 'post',
+    data
+  })
+}
+
+// 查询用户日志
+export function get_device_ali_log(data) {
+  return request({
+    url: '/greenguard/manager/device/findAliLog',
     method: 'post',
     data
   })

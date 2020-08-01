@@ -2,6 +2,7 @@ var config = require('../config')
 
 var initPermissions = require('../storages/permissions').PERMISSION_DATA
 var nodeRequest = require('../cube/tools').nodeRequest
+var getPermissionStructure = require('../cube/auth').getPermissionStructure
 var nodeRequestWithNewParams = require('../cube/tools').nodeRequestWithNewParams
 var buildHTTPHeader = require('../cube/common').buildHTTPHeader
 var patchRolesPermission = require('../cube/common').patchRolesPermission
@@ -24,12 +25,13 @@ function getRolePermissionsService(req, res, next) {
   var reqParam = req.body
   var reqHeaders = buildHTTPHeader(req)
   var role_id = reqParam['role_id']
+  var ptype = reqParam['ptype']
   if (!role_id) {
     var role_info = {
       role_id: '',
       role_name: '',
       function_list: [],
-      codes: initPermissions
+      codes: getPermissionStructure(ptype)
     }
     const ret = {
       status: 0,
@@ -38,11 +40,14 @@ function getRolePermissionsService(req, res, next) {
     ret['data'] = Encrypt(JSON.stringify(role_info))
     res.send(JSON.stringify(ret))
   } else {
-    nodeRequest(TransferReq, reqParam, method, reqHeaders, res).then(function(result) {
+    const newParams = {
+      role_id: reqParam['role_id']
+    }
+    nodeRequestWithNewParams(TransferReq, reqParam, method, reqHeaders, res, reqParam).then(function(result) {
       var status = result.status
       if (status === 0) {
         var function_list = result.data.function_list || []
-        var codes = patchRolesPermission(function_list)
+        var codes = patchRolesPermission(ptype, function_list)
         result.data.codes = codes
         result['data'] = Encrypt(JSON.stringify(result.data))
         res.send(result)

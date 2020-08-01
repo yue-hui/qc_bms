@@ -9,11 +9,29 @@
             <div class="device-tools">
               <div class="tools-area">
                 <!--一直显示给用户-->
-                <div v-if="device.device_type === 'IOS' || device.device_type === '02'" class="un-lock-icon" title="重置描述文件状态" @click.stop="confirm_delete_desc_file_status">
-                  <svg-icon class="icon" icon-class="unbind_desc_file" />
+                <div
+                  v-if="!is_agent && device.bind_type === '1' && device.device_type !== 'IOS'"
+                  class="tools-area-item"
+                  title="开发日志上传"
+                  @click.stop="device_upload_logs">
+                  <svg-icon class="icon" icon-class="upload" />
+                  <span>开发日志上传</span>
                 </div>
-                <div v-if="device.bind_type === '1'" title="解绑孩子端设备" class="un-lock-icon" @click.stop="confirm_un_lock_child_device">
+                <div
+                  v-if="!is_agent && (device.device_type === 'IOS' || device.device_type === '02')"
+                  class="tools-area-item"
+                  title="证书重置"
+                  @click.stop="confirm_delete_desc_file_status">
+                  <svg-icon class="icon" icon-class="unbind_desc_file" />
+                  <span>证书重置</span>
+                </div>
+                <div
+                  v-if="!is_agent && (device.bind_type === '1')"
+                  title="解绑孩子端设备"
+                  class="tools-area-item"
+                  @click.stop="confirm_un_lock_child_device">
                   <svg-icon class="icon" icon-class="unlock" />
+                  <span>解绑孩子端设备</span>
                 </div>
               </div>
             </div>
@@ -84,6 +102,9 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <!--日志上传-->
+    <device-upload-logs v-if="device_upload_logs_show" :device_info="device" @device_upload_logs_close="device_upload_logs_close" />
+    <!--日志上传 end-->
   </div>
 </template>
 
@@ -91,9 +112,15 @@
 import { DATE_TIME_FORMAT, get_chinese_index } from '@/utils/constant'
 import { date_formatter } from '@/utils/common'
 import { do_unbind_desc_file, unbind_user_device } from '@/api/interactive'
+import { mapGetters } from 'vuex'
+// 日志上传
+const DeviceUploadLogs = () => import('./device_upload_logs')
 
 export default {
   name: 'DeviceCard',
+  components: {
+    DeviceUploadLogs
+  },
   props: {
     device: {
       type: Object,
@@ -124,10 +151,14 @@ export default {
         bind_time: true,
         last_use_time: true,
         device_type: true
-      }
+      },
+      device_upload_logs_show: false
     }
   },
   computed: {
+    ...mapGetters([
+      'is_agent'
+    ]),
     device_index: function() {
       const device_title = ['设备', get_chinese_index(this.index), '信息']
       return device_title.join('')
@@ -215,6 +246,14 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    // 日志上传
+    device_upload_logs() {
+      this.device_upload_logs_show = true
+    },
+    // 日志上传弹出框关闭
+    device_upload_logs_close() {
+      this.device_upload_logs_show = false
     }
   }
 }
@@ -262,6 +301,23 @@ export default {
           color: #4aff24;
         }
       }
+    }
+  }
+  .tools-area-item{
+    height: 80%;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 4px;
+    svg{
+      margin-right: 6px;
+    }
+    span{
+      color: #fff;
+    }
+    &:hover{
+      background-color: #304156;
     }
   }
 }

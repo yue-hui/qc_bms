@@ -298,7 +298,7 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        name: 'user_details',
+        name: 'UserDetails',
         params: {
           pid: row.patriarch_id
         }

@@ -1,9 +1,14 @@
+const FUNCTION_MODULE_WIDTH = 120
+const FUNCTION_PAGE_WIDTH = 200
+const BUTTON_OPERATION_WIDTH = 132
+
+// max auth id 20095
 // layout  vertical | horizotal
 const PERMISSION_DATA = [
   {
     name: '控制面板',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20000,
@@ -13,18 +18,18 @@ const PERMISSION_DATA = [
       {
         name: '首页',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20001,
         children: []
-      },
+      }
     ]
   },
   // {
   //   name: '首页',
   //   checked: false,
-  //   width: 200,
+  //   width: FUNCTION_PAGE_WIDTH,
   //   layout: 'horizotal',
   //   c_layout: 'horizotal',
   //   code: 20001,
@@ -33,16 +38,17 @@ const PERMISSION_DATA = [
   {
     name: '用户管理',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20002,
+    baseline: true,
     page: false,
     children: [
       {
         name: '家长信息管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20003,
@@ -50,7 +56,7 @@ const PERMISSION_DATA = [
           {
             name: '查看',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20008,
@@ -59,7 +65,7 @@ const PERMISSION_DATA = [
           {
             name: '交易记录',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20010,
@@ -68,7 +74,7 @@ const PERMISSION_DATA = [
           {
             name: '会员记录',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20009,
@@ -77,7 +83,7 @@ const PERMISSION_DATA = [
           {
             name: '导出',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20011,
@@ -86,7 +92,7 @@ const PERMISSION_DATA = [
           // {
           //   name: '退订记录',
           //   checked: false,
-          //   width: 120,
+          //   width: BUTTON_OPERATION_WIDTH,
           //   layout: 'vertical',
           //   c_layout: 'vertical',
           //   code: 20096,
@@ -97,7 +103,7 @@ const PERMISSION_DATA = [
       {
         name: '孩子信息管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20004,
@@ -105,7 +111,7 @@ const PERMISSION_DATA = [
           {
             name: '查看',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20099,
@@ -114,7 +120,7 @@ const PERMISSION_DATA = [
           {
             name: '导出',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20005,
@@ -125,7 +131,7 @@ const PERMISSION_DATA = [
       // {
       //   name: '用户详细信息',
       //   checked: false,
-      //   width: 200,
+      //   width: FUNCTION_PAGE_WIDTH,
       //   layout: 'horizotal',
       //   c_layout: 'vertical',
       //   code: 20097,
@@ -134,7 +140,7 @@ const PERMISSION_DATA = [
       {
         name: '订单管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'vertical',
         code: 20006,
@@ -142,7 +148,7 @@ const PERMISSION_DATA = [
           {
             name: '导出', // 整改
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20007,
@@ -153,7 +159,7 @@ const PERMISSION_DATA = [
       {
         name: '设备信息管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'vertical',
         code: 20092,
@@ -161,7 +167,7 @@ const PERMISSION_DATA = [
           {
             name: '导出', // 整改
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20093,
@@ -172,10 +178,19 @@ const PERMISSION_DATA = [
       {
         name: '设备使用记录',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'vertical',
         code: 20094,
+        children: []
+      },
+      {
+        name: '查询用户日志',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'vertical',
+        code: 20112,
         children: []
       }
     ]
@@ -183,7 +198,7 @@ const PERMISSION_DATA = [
   {
     name: '用户数据分析',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20095,
@@ -193,7 +208,7 @@ const PERMISSION_DATA = [
       {
         name: '家长端总体数据',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20012,
@@ -211,7 +226,7 @@ const PERMISSION_DATA = [
       {
         name: '孩子端总体数据',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20014,
@@ -231,7 +246,7 @@ const PERMISSION_DATA = [
   {
     name: '会员管理',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20016,
@@ -241,7 +256,7 @@ const PERMISSION_DATA = [
       {
         name: '会员套餐管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20017,
@@ -249,7 +264,7 @@ const PERMISSION_DATA = [
           {
             name: '创建套餐',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20018,
@@ -258,7 +273,7 @@ const PERMISSION_DATA = [
           {
             name: '下架',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20019,
@@ -267,7 +282,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20020,
@@ -276,7 +291,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20021,
@@ -287,7 +302,7 @@ const PERMISSION_DATA = [
       {
         name: '会员活动管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20022,
@@ -295,7 +310,7 @@ const PERMISSION_DATA = [
           {
             name: '创建会员活动',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20023,
@@ -304,7 +319,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20024,
@@ -313,7 +328,7 @@ const PERMISSION_DATA = [
           {
             name: '查看',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20025,
@@ -324,7 +339,7 @@ const PERMISSION_DATA = [
       // {
       //   name: '活动详细信息',
       //   checked: false,
-      //   width: 200,
+      //   width: FUNCTION_PAGE_WIDTH,
       //   layout: 'horizotal',
       //   c_layout: 'horizotal',
       //   code: 20098,
@@ -335,7 +350,7 @@ const PERMISSION_DATA = [
   {
     name: '消息推送',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20026,
@@ -345,7 +360,7 @@ const PERMISSION_DATA = [
       {
         name: '文本短信',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20027,
@@ -354,7 +369,7 @@ const PERMISSION_DATA = [
       {
         name: '语音短信',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20028,
@@ -365,7 +380,7 @@ const PERMISSION_DATA = [
   {
     name: '应用推荐管理',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20029,
@@ -375,7 +390,7 @@ const PERMISSION_DATA = [
       {
         name: '推荐应用',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20030,
@@ -383,7 +398,7 @@ const PERMISSION_DATA = [
           {
             name: '创建应用',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20031,
@@ -392,7 +407,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20075,
@@ -401,7 +416,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20076,
@@ -412,7 +427,7 @@ const PERMISSION_DATA = [
       {
         name: '推荐应用组合',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20032,
@@ -420,7 +435,7 @@ const PERMISSION_DATA = [
           {
             name: '创建系统推荐',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20033,
@@ -429,7 +444,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20077,
@@ -438,7 +453,7 @@ const PERMISSION_DATA = [
           {
             name: '推送/暂停',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20078,
@@ -449,7 +464,7 @@ const PERMISSION_DATA = [
       {
         name: '推荐应用专题',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20034,
@@ -457,7 +472,7 @@ const PERMISSION_DATA = [
           {
             name: '创建应用专题',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20035,
@@ -466,7 +481,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20079,
@@ -475,7 +490,7 @@ const PERMISSION_DATA = [
           {
             name: '上架/下架',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20080,
@@ -484,7 +499,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20100,
@@ -494,10 +509,117 @@ const PERMISSION_DATA = [
       }
     ]
   },
+
+  {
+    name: '客服工单系统',
+    checked: false,
+    width: FUNCTION_MODULE_WIDTH,
+    layout: 'horizotal',
+    c_layout: 'vertical',
+    code: 20101,
+    baseline: true,
+    page: false,
+    children: [
+      {
+        name: '工单首页',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20102,
+        children: [
+          {
+            name: '创建工单',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20103,
+            children: []
+          }
+        ]
+      },
+      {
+        name: '我创建的工单',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20104,
+        children: [
+          {
+            name: '创建工单',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20105,
+            children: []
+          },
+          {
+            name: '编辑',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20106,
+            children: []
+          }
+        ]
+      },
+      {
+        name: '抄送我的工单',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20107,
+        children: []
+      },
+      {
+        name: '我受理的工单',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20108,
+        children: []
+      },
+      {
+        name: '工单标签管理',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20109,
+        children: [
+          {
+            name: '添加下一级',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20110,
+            children: []
+          },
+          {
+            name: '编辑',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20111,
+            children: []
+          }
+        ]
+      }
+    ]
+  },
+
   {
     name: '活动管理',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20036,
@@ -507,7 +629,7 @@ const PERMISSION_DATA = [
       {
         name: '邀请好友数据',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20037,
@@ -515,7 +637,7 @@ const PERMISSION_DATA = [
           {
             name: '导出',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20038,
@@ -526,7 +648,7 @@ const PERMISSION_DATA = [
       {
         name: '邀请好友配置',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20039,
@@ -534,7 +656,7 @@ const PERMISSION_DATA = [
           {
             name: '重置',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20040,
@@ -543,7 +665,7 @@ const PERMISSION_DATA = [
           {
             name: '保存',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20041,
@@ -556,7 +678,7 @@ const PERMISSION_DATA = [
   {
     name: '工具使用',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20042,
@@ -566,7 +688,7 @@ const PERMISSION_DATA = [
       {
         name: '帮助中心',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20043,
@@ -574,7 +696,7 @@ const PERMISSION_DATA = [
           {
             name: '添加帮助问题',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20044,
@@ -583,7 +705,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20081,
@@ -592,7 +714,7 @@ const PERMISSION_DATA = [
           {
             name: '关闭',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20045,
@@ -601,7 +723,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20046,
@@ -612,7 +734,7 @@ const PERMISSION_DATA = [
       {
         name: '应用升级',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20047,
@@ -620,7 +742,7 @@ const PERMISSION_DATA = [
           {
             name: '发送同步版本指令',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20048,
@@ -629,7 +751,7 @@ const PERMISSION_DATA = [
           {
             name: '创建应用策略',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20049,
@@ -638,7 +760,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20050,
@@ -647,7 +769,7 @@ const PERMISSION_DATA = [
           {
             name: '启动/停止',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20051,
@@ -658,7 +780,7 @@ const PERMISSION_DATA = [
       {
         name: '广告配置',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20052,
@@ -666,7 +788,7 @@ const PERMISSION_DATA = [
           {
             name: '创建广告',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20053,
@@ -675,7 +797,7 @@ const PERMISSION_DATA = [
           {
             name: '上架/下架',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20054,
@@ -684,7 +806,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20055,
@@ -693,7 +815,7 @@ const PERMISSION_DATA = [
           // {
           //   name: '关闭',
           //   checked: false,
-          //   width: 120,
+          //   width: BUTTON_OPERATION_WIDTH,
           //   layout: 'vertical',
           //   c_layout: 'vertical',
           //   code: 20056,
@@ -702,7 +824,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20057,
@@ -713,7 +835,7 @@ const PERMISSION_DATA = [
       {
         name: '版本管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20058,
@@ -722,7 +844,7 @@ const PERMISSION_DATA = [
       {
         name: '系统参数',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20059,
@@ -730,7 +852,7 @@ const PERMISSION_DATA = [
           {
             name: '创建系统参数',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20060,
@@ -739,7 +861,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20082,
@@ -748,7 +870,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20083,
@@ -759,7 +881,7 @@ const PERMISSION_DATA = [
       {
         name: '高危应用表',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20061,
@@ -767,7 +889,7 @@ const PERMISSION_DATA = [
           {
             name: '新建',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20062,
@@ -776,7 +898,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20084,
@@ -785,7 +907,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20085,
@@ -796,7 +918,7 @@ const PERMISSION_DATA = [
       {
         name: '小程序管控',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20086,
@@ -804,6 +926,7 @@ const PERMISSION_DATA = [
           {
             name: '新建',
             checked: false,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20087,
@@ -812,6 +935,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20088,
@@ -820,6 +944,7 @@ const PERMISSION_DATA = [
           {
             name: '删除',
             checked: false,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20089,
@@ -830,7 +955,7 @@ const PERMISSION_DATA = [
       {
         name: '商务合作注册页',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20063,
@@ -838,7 +963,7 @@ const PERMISSION_DATA = [
           {
             name: '创建页面',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20064,
@@ -847,7 +972,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20090,
@@ -860,7 +985,7 @@ const PERMISSION_DATA = [
   {
     name: '系统管理',
     checked: false,
-    width: 120,
+    width: FUNCTION_MODULE_WIDTH,
     layout: 'horizotal',
     c_layout: 'vertical',
     code: 20065,
@@ -870,7 +995,7 @@ const PERMISSION_DATA = [
       {
         name: '账号管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20066,
@@ -878,7 +1003,7 @@ const PERMISSION_DATA = [
           {
             name: '创建账号',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20067,
@@ -887,7 +1012,7 @@ const PERMISSION_DATA = [
           {
             name: '开启/关闭',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20068,
@@ -896,7 +1021,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20069,
@@ -905,7 +1030,7 @@ const PERMISSION_DATA = [
           // {
           //   name: '删除',
           //   checked: false,
-          //   width: 120,
+          //   width: BUTTON_OPERATION_WIDTH,
           //   layout: 'vertical',
           //   c_layout: 'vertical',
           //   code: 20070,
@@ -914,7 +1039,7 @@ const PERMISSION_DATA = [
           {
             name: '重置密码',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20091,
@@ -925,7 +1050,7 @@ const PERMISSION_DATA = [
       {
         name: '角色管理',
         checked: false,
-        width: 200,
+        width: FUNCTION_PAGE_WIDTH,
         layout: 'horizotal',
         c_layout: 'horizotal',
         code: 20071,
@@ -933,7 +1058,7 @@ const PERMISSION_DATA = [
           {
             name: '创建角色',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20072,
@@ -942,7 +1067,7 @@ const PERMISSION_DATA = [
           {
             name: '编辑权限',
             checked: false,
-            width: 120,
+            width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20073,
@@ -951,7 +1076,7 @@ const PERMISSION_DATA = [
           // {
           //   name: '编辑',
           //   checked: false,
-          //   width: 120,
+          //   width: BUTTON_OPERATION_WIDTH,
           //   layout: 'vertical',
           //   c_layout: 'vertical',
           //   code: 20074,
@@ -963,11 +1088,168 @@ const PERMISSION_DATA = [
   }
 ]
 
+// 代理商权限
+const AGENT_PERMISSION_DATA = [
+  {
+    name: '用户管理',
+    checked: false,
+    width: FUNCTION_MODULE_WIDTH,
+    layout: 'horizotal',
+    c_layout: 'vertical',
+    code: 20002,
+    page: false,
+    children: [
+      {
+        name: '家长信息管理',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20003,
+        children: [
+          {
+            name: '查看',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20008,
+            children: []
+          },
+          {
+            name: '交易记录',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20010,
+            children: []
+          },
+          {
+            name: '会员记录',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20009,
+            children: []
+          },
+          {
+            name: '导出',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20011,
+            children: []
+          }
+          // {
+          //   name: '退订记录',
+          //   checked: false,
+          //   width: BUTTON_OPERATION_WIDTH,
+          //   layout: 'vertical',
+          //   c_layout: 'vertical',
+          //   code: 20096,
+          //   children: []
+          // }
+        ]
+      },
+      {
+        name: '孩子信息管理',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20004,
+        children: [
+          {
+            name: '查看',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20099,
+            children: []
+          },
+          {
+            name: '导出',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20005,
+            children: []
+          }
+        ]
+      },
+      {
+        name: '订单管理',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'vertical',
+        code: 20006,
+        children: [
+          {
+            name: '导出', // 整改
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20007,
+            children: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: '工具使用',
+    checked: false,
+    width: FUNCTION_MODULE_WIDTH,
+    layout: 'horizotal',
+    c_layout: 'vertical',
+    code: 20042,
+    baseline: true,
+    page: false,
+    children: [
+      {
+        name: '商务合作注册页',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20063,
+        children: [
+          {
+            name: '创建页面',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20064,
+            children: []
+          },
+          {
+            name: '编辑',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20090,
+            children: []
+          }
+        ]
+      }
+    ]
+  }
+]
+
 // 权限头部信息栏
 const PERMISSION_HEADER = [
   {
     name: '功能模块',
-    width: 120
+    width: FUNCTION_MODULE_WIDTH
   },
   {
     name: '功能页面',
@@ -980,5 +1262,6 @@ const PERMISSION_HEADER = [
 
 module.exports = {
   PERMISSION_DATA,
+  AGENT_PERMISSION_DATA,
   PERMISSION_HEADER
 }

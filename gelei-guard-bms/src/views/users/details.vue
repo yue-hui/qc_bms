@@ -129,7 +129,7 @@
               <td>{{ member.valid_days }}天</td>
               <td>{{ member.status_label }}</td>
               <td>
-                <template v-if="member.order_ctcc_sp_status">
+                <template v-if="member.order_ctcc_sp_status && !is_agent">
                   <gl-button
                     pid="10079"
                     size="small"
@@ -168,6 +168,7 @@ import memberUnsubscribeRecord from './components/member_unsubscribe_record'
 import { get_parent_details, monthlyplan_unsubscribe_ctccsp } from '@/api/interactive'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT, ORDERED_MEMBER_STATUS_LABEL } from '@/utils/constant'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -195,7 +196,7 @@ export default {
       loading: false,
       information: {},
       transfer_member_list: [],
-      show_unsubscribe_record: false,
+      show_unsubscribe_record: false, // 会员退订记录
       edit: {
         nick_name: true,
         phone: true,
@@ -209,7 +210,11 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'is_agent'
+    ])
+  },
   mounted: function() {
     this.fetch_details()
   },

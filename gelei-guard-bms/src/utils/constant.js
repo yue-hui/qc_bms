@@ -9,6 +9,10 @@ export const SYSTEM_CONSTANT = {
   'title': '格雷盒子'
 }
 
+/* 后台消息同步时间设置 */
+export const SYNC_MESSAGE_SECOND = 60
+export const SYNC_USER_VARIABLE_INFOMATION = 10
+
 /* 表格长度 */
 export const TABLE_PAGE_SIEZS_LIST = [10, 20, 50, 100]
 
@@ -223,7 +227,7 @@ export const RATE_STARTS_COLOR = ['#b9b9b9', '#bdbdbd', '#b8b8b8', '#8c8c8c', '#
   '#444444', '#404040', '#303030', '#121212', '#000000']
 
 // 当前版本号
-export const __VERSION__ = '201902281003'
+export const __VERSION__ = 'v2.0.0'
 
 // 当前版本号
 export const PagenationSizeKey = 'page_sizes_1'
@@ -486,12 +490,16 @@ export const DEVICE_TYPE_LIST = [
 // 孩子设备绑定状态
 export const CHILD_BIND_TYPE_STATUS = [
   {
+    value: '2',
+    label: '未绑定'
+  },
+  {
     value: '1',
-    label: '绑定'
+    label: '绑定中'
   },
   {
     value: '0',
-    label: '解绑'
+    label: '已解绑'
   }
 ]
 
@@ -545,5 +553,159 @@ export const ACCOUNT_NAME_LIST = [
   {
     value: '01',
     label: '代理商'
+  }
+]
+
+// 退出到欢迎页router白名单
+export const WelcomeRouteWhiteList = [
+  'Profile',
+  'ModifiedPassword'
+]
+
+/*
+* 工单系统常量区域
+*  */
+// TODO: 增加状态值
+// 工单紧急程度
+export const WORK_ORDERS_URGENCY_DEGREE = [
+  {
+    value: '1',
+    label: '紧急'
+  },
+  {
+    value: '2',
+    label: '重要'
+  },
+  {
+    value: '3',
+    label: '正常'
+  }
+]
+
+// 工单状态
+export const WORK_ORDERS_STATUS = [
+  {
+    value: '1',
+    label: '已处理'
+  },
+  {
+    value: '2',
+    label: '已关闭'
+  },
+  {
+    value: '3',
+    label: '待处理'
+  },
+  {
+    value: '4',
+    label: '重新打开'
+  }
+]
+
+// 工单问题分类
+export const WORK_ORDERS_QUESTION_CLASSIFIES = [
+  {
+    value: '1',
+    label: 'Bug-已处理'
+  },
+  {
+    value: '4',
+    label: 'Bug-无法处理'
+  },
+  {
+    value: '2',
+    label: '需求-已接受'
+  },
+  {
+    value: '5',
+    label: '需求-不接受'
+  },
+  {
+    value: '3',
+    label: '设计如此'
+  }
+]
+
+// 工单标签级别
+export const WORK_ORDERS_LEVELS = [
+  {
+    value: '00',
+    label: '一级'
+  },
+  {
+    value: '01',
+    label: '二级'
+  },
+  {
+    value: '02',
+    label: '三级'
+  },
+  {
+    value: '03',
+    label: '四级'
+  }
+]
+
+// 工单来源类型
+export const COMMUNICATION_METHODS = [
+  {
+    value: '1',
+    label: '手机'
+  },
+  {
+    value: '2',
+    label: '微信'
+  },
+  {
+    value: '3',
+    label: 'QQ'
+  },
+  {
+    value: '4',
+    label: '邮箱'
+  }
+]
+
+// 终端类型
+export const TERMINAL_TYPES = [
+  {
+    value: '1',
+    label: '家长端'
+  },
+  {
+    value: '2',
+    label: '孩子端'
+  },
+  {
+    value: '3',
+    label: '校园端'
+  },
+  {
+    value: '4',
+    label: 'PC端'
+  },
+  {
+    value: '5',
+    label: 'SP业务'
+  },
+  {
+    value: '6',
+    label: '其它'
+  }
+]
+
+// 紧急程度
+export const URGENCY_DEGREES = [
+  {
+    value: '3',
+    label: '正常'
+  },
+  {
+    value: '2',
+    label: '重要'
+  },
+  {
+    value: '1',
+    label: '紧急'
   }
 ]

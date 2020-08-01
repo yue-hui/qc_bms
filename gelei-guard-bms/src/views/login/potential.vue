@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import { setButtonPermission } from '@/utils/auth'
-
 export default {
   name: 'Console',
   components: {},
@@ -17,24 +15,6 @@ export default {
   },
   methods: {
     init_page: function() {
-      // 页面功能
-      const item = this.$route.params.item
-      const status = this.$route.params.status
-      if (['0', '1'].indexOf(status) !== -1) {
-        switch (item) {
-          case 'btn':
-            this.switch_btn_permission(status)
-            break
-          case 'disabled':
-            break
-          default:
-            break
-        }
-      }
-    },
-    switch_btn_permission: function(status) {
-      // 按钮权限开放 1 开放 0 使用默认权限
-      setButtonPermission(status)
     }
   }
 }

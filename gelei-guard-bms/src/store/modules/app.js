@@ -7,6 +7,8 @@ const app = {
       opened: !+Cookies.get('sidebarStatus'),
       withoutAnimation: false
     },
+    drawer: false, // 抽屉是否显示
+    msg_reminder_status: false, // 消息通知状态
     routes: [],
     device: 'desktop',
     language: 'zh'
@@ -20,6 +22,16 @@ const app = {
       }
       state.sidebar.opened = !state.sidebar.opened
       state.sidebar.withoutAnimation = false
+    },
+    TOGGLE_GL_DRAWER: (state, status) => {
+      if (status) {
+        state.drawer = status
+      } else {
+        state.drawer = !state.drawer
+      }
+    },
+    TOGGLE_GL_MESSAGE_REMINDER_STATUS: (state, status) => {
+      state.msg_reminder_status = status
     },
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
       Cookies.set('sidebarStatus', 1)
@@ -36,6 +48,9 @@ const app = {
   actions: {
     ToggleSideBar: ({ commit }) => {
       commit('TOGGLE_SIDEBAR')
+    },
+    ToggleGlDrawer: ({ commit }, { status }) => {
+      commit('TOGGLE_GL_DRAWER', status)
     },
     CloseSideBar({ commit }, { withoutAnimation }) {
       commit('CLOSE_SIDEBAR', withoutAnimation)

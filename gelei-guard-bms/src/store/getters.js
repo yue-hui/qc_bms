@@ -7,12 +7,13 @@ const getters = {
   avatar: state => state.user.avatar,
   name: state => state.user.name,
   real_name: state => state.user.real_name,
+  email: state => state.user.email,
   role_id: state => state.user.role_id,
   role_name: state => state.user.role_name,
   btns: state => state.user.btns,
   auths: state => state.user.auths,
   roles: state => state.user.roles,
   is_agent: state => state.user.is_agent,
-  account_name: state => state.user.account_name
+  account_type: state => state.user.account_type
 }
 export default getters

@@ -142,6 +142,9 @@ function nodeRequest(TransferReq, reqParam, method, headers, res) {
   })
 }
 
+/*
+* 修改参数并发送请求
+*  */
 function nodeRequestWithNewParams(TransferReq, reqParam, method, headers, res, newParams) {
   return new Promise(function(resolve, reject) {
     if (!reqParam.sign) {

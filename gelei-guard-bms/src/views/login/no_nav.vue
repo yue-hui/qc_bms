@@ -1,17 +1,21 @@
 <template>
-  <div :style="{'height': height}" class="no-navigation-page" />
+  <div :style="{height: height}" :class="{'agent': is_agent}" class="no-navigation-page" />
 </template>
 
 <script>
 import { get_client_height } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'NoNavigationPage',
   data() {
     const height = get_client_height()
     return {
-      height: height - 60 + 'px'
+      height: (height - 60) + 'px'
     }
+  },
+  computed: {
+    ...mapGetters(['is_agent'])
   }
 }
 </script>
@@ -23,6 +27,13 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  /*background-size: contain;*/
+
+  &.agent {
+    width: 100%;
+    background-image: url("../../assets/imgs/no_nav_agent.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
 }
 </style>

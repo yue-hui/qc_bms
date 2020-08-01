@@ -12,14 +12,20 @@
         label-width="100px"
         class="demo-ruleForm"
         label-suffix=":">
-        <el-form-item label="账号" prop="user_id">
+        <el-form-item label="账号名称" prop="user_id">
           <el-input v-model="form.user_id" disabled />
         </el-form-item>
         <el-form-item label="真实姓名" prop="real_name">
           <el-input v-model="form.real_name" disabled />
         </el-form-item>
-        <el-form-item label="部门" prop="role_name">
+        <el-form-item label="账号类型" prop="account_name">
+          <el-input v-model="form.account_name" disabled />
+        </el-form-item>
+        <el-form-item label="账号角色" prop="role_name">
           <el-input v-model="form.role_name" disabled />
+        </el-form-item>
+        <el-form-item label="账号邮箱" prop="email">
+          <el-input v-model="form.email" disabled />
         </el-form-item>
         <el-form-item label="个人头像" prop="img_url">
           <el-upload
@@ -55,11 +61,13 @@
 <script>
 import { uploadFormDataSecondPassServer, uploadFormDataServer } from '@/utils/uploadResource'
 import { update_system_account_avatar } from '@/api/login'
+import { get_value_from_map_list } from '@/utils/common'
+import { ACCOUNT_NAME_LIST } from '@/utils/constant'
 // import { Decrypt, Encrypt } from '@/utils/secret'
 // https://filedev.dev.zhixike.net/437EC0AC7F0000015E2BBF4849643C96/2020/3/828247dfc112cabc7e7ea466249c08d43c61f869423eaf03804752d8a9cd0a28.jfif
 
 export default {
-  name: 'Resume',
+  name: 'Profile',
   components: {},
   data() {
     const img_url = this.$store.getters.avatar
@@ -74,11 +82,14 @@ export default {
     } else {
       file_list = []
     }
+    const account_name = get_value_from_map_list(this.$store.getters.account_type, ACCOUNT_NAME_LIST, ACCOUNT_NAME_LIST[0].label)
     return {
       form: {
         user_id: this.$store.getters.name,
         real_name: this.$store.getters.real_name,
         role_name: this.$store.getters.role_name,
+        email: this.$store.getters.email,
+        account_name,
         img_url: this.$store.getters.avatar
       },
       rules: {

@@ -208,7 +208,7 @@
 import AdvertiseConfiguration from './components/advertise_configuration'
 import {
   ADVERTISEMENT_PLATFORM,
-  ADVERTISEMENT_STATUS, DATE_TIME_FORMAT, DEFAULT_PAGE_SIZE,
+  ADVERTISEMENT_STATUS, DATE_TIME_FORMAT,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { delete_advertising, edit_advertising, get_advertising_list } from '@/api/interactive'
@@ -270,7 +270,6 @@ export default {
     },
     query_condition_change() {
       this.page = 1
-      this.page_size = DEFAULT_PAGE_SIZE
       this.query()
     },
     query() {
