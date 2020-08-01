@@ -28,6 +28,11 @@ switch (global.env_config) {
       baseURL: 'https://ms-beta.gwchina.cn/'
     }
     break
+  case 'beta1':
+    config = {
+      baseURL: 'https://ms-beta.qcgelei.com/'
+    }
+    break
   case 'pres':
     config = {
       baseURL: 'https://mspres.dev.zhixike.net/'

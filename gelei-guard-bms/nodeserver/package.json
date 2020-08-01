@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.js --port 4004 --env_config=dev",
     "prod": "nodemon src/index.js --port 4004 --env_config=prod",
     "beta": "nodemon src/index.js --port 4004 --env_config=beta",
+    "beta1": "nodemon src/index.js --port 4004 --env_config=beta1",
     "pres": "nodemon src/index.js --port 4004 --env_config=pres"
   },
   "author": "yexl",
