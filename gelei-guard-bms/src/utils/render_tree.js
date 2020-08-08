@@ -4,7 +4,7 @@ export function get_editing_content(h, data, node) {
   return h('span', {
     class: 'ly-visible'
   }, [
-    h('el-button', {
+    h('gl-button', {
       attrs: {
         size: 'mini',
         type: 'text'
@@ -19,7 +19,7 @@ export function get_editing_content(h, data, node) {
         }
       }
     }, '取消'),
-    h('el-button', {
+    h('gl-button', {
       attrs: {
         size: 'mini',
         type: 'text'
@@ -54,10 +54,11 @@ export function get_operation_content(h, data, node) {
   if (self.is_superuser) {
     const button_group = []
     // 编辑元素
-    const edit_element = h('el-button', {
+    const edit_element = h('gl-button', {
       attrs: {
         size: 'mini',
         type: 'text',
+        pid: '20113',
         disabled: self.is_edit
       },
       on: {
@@ -73,10 +74,11 @@ export function get_operation_content(h, data, node) {
     button_group.push(edit_element)
     if (node.level < 5) {
       // 添加元素
-      const add_element = h('el-button', {
+      const add_element = h('gl-button', {
         attrs: {
           size: 'mini',
           type: 'text',
+          pid: '20110',
           disabled: self.is_edit
         },
         on: {
@@ -108,10 +110,11 @@ export function get_operation_content(h, data, node) {
     }
 
     // 添加同级元素
-    const add_peer_element = h('el-button', {
+    const add_peer_element = h('gl-button', {
       attrs: {
         size: 'mini',
         type: 'text',
+        pid: '20111',
         disabled: self.is_edit
       },
       on: {

@@ -64,7 +64,6 @@ export default {
     },
     edit_tag: async function(data, node, e) {
       if (node.loading) {
-        debugger
         if (!this.edit_name) {
           self.close(data, node)
         }

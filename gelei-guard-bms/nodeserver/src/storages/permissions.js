@@ -594,7 +594,16 @@ const PERMISSION_DATA = [
         code: 20109,
         children: [
           {
-            name: '添加下一级',
+            name: '重命名',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20113,
+            children: []
+          },
+          {
+            name: '添加子层级',
             checked: false,
             width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
@@ -603,7 +612,7 @@ const PERMISSION_DATA = [
             children: []
           },
           {
-            name: '编辑',
+            name: '添加同层级',
             checked: false,
             width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical',
