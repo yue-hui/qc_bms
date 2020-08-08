@@ -2,11 +2,14 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import sign from './sign'
+import { SILENCE_API_WHITE_LIST } from './api_features'
 
 // 全局配置
 axios.defaults.headers['transfer-req'] = process.env.TRANSFER_REQ
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.post['charset'] = 'utf-8'
+
+const cancelTokenMap = {}
 
 // 创建axios实例
 const service = axios.create({
@@ -30,6 +33,14 @@ service.interceptors.request.use(
     //   delete config.headers['Content-Type']
     //   console.log('config - ', config)
     // }
+    const request_key = config.method + ':' + config.url
+    // 实现上一个接口还未响应  下一个接口开始请求，把上一个接口取消
+    if (typeof (cancelTokenMap[request_key]) === 'function') {
+      cancelTokenMap[request_key]('强制取消了请求')
+    }
+    config['cancelToken'] = new axios.CancelToken(function(c) {
+      cancelTokenMap[request_key] = c
+    })
     return config
   },
   error => {
@@ -45,13 +56,17 @@ service.interceptors.response.use(
     /**
      * status为非0是抛错 可结合自己业务进行修改
      */
+    const request_key = response.config.method + ':' + response.config.url
+    cancelTokenMap[request_key] = null
     const res = response.data
     if (res.status !== 0) {
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 5 * 1000
-      })
+      if (SILENCE_API_WHITE_LIST.indexOf(response.config.url) === -1) {
+        Message({
+          message: res.message,
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
 
       /*
       -: 非法的token
@@ -64,19 +79,21 @@ service.interceptors.response.use(
       -999: 未知异常
        */
       if (res.status === 1 || res.status === 11 || res.status === 50014) {
-        MessageBox.confirm(
-          '你已被登出，可以取消继续留在该页面，或者重新登录',
-          '确定登出',
-          {
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }
-        ).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
+        if (SILENCE_API_WHITE_LIST.indexOf(response.config.url) === -1) {
+          MessageBox.confirm(
+            '你已被登出，可以取消继续留在该页面，或者重新登录',
+            '确定登出',
+            {
+              confirmButtonText: '重新登录',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }
+          ).then(() => {
+            store.dispatch('FedLogOut').then(() => {
+              location.reload() // 为了重新实例化vue-router对象 避免bug
+            })
           })
-        })
+        }
       }
       return Promise.reject('error')
     } else {
@@ -84,13 +101,21 @@ service.interceptors.response.use(
     }
   },
   error => {
-    // console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
+    if (axios.isCancel(error)) {
+      // 取消上一个请求
+      console.error('cancel')
+      // 中断promise链接
+      return new Promise(() => {
+      })
+    } else {
+      // console.log('err' + error) // for debug
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(error)
+    }
   }
 )
 
