@@ -536,6 +536,15 @@ const PERMISSION_DATA = [
             c_layout: 'vertical',
             code: 20103,
             children: []
+          },
+          {
+            name: '导出工单',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20114,
+            children: []
           }
         ]
       },

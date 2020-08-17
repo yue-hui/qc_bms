@@ -225,6 +225,9 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button pid="20103" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
+                <gl-button pid="20103" :loading="export_loading" size="mini" type="success" @click="export_work_orders">
+                  导出工单
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -338,6 +341,8 @@ import { get_work_orders } from '@/api/work_order_system'
 import { beautifyWordsFormatter } from '@/filters'
 import { date_formatter, get_value_from_map_list, pure_object_null_value } from '@/utils/common'
 import { mapGetters } from 'vuex'
+import { export_work_order_list } from '../../api/work_order_system'
+import { COMMUNICATION_METHODS, EXPORT_MAX_RECORD_LENGTH, EXPORT_OVER_MAX_TIPS_REMINDER } from '../../utils/constant'
 
 // page_type 00 工单首页 01 我创建页面 02 抄送我的工单 03 我受理的工单
 
@@ -347,6 +352,7 @@ export default {
     const page_size = getPagenationSize()
     return {
       loading: false,
+      export_loading: false,
       query_sets: {
         page_type: '00',
         ticket_no: '',
@@ -412,6 +418,75 @@ export default {
     change_current: function(page) {
       this.page = page
       this.search()
+    },
+    formatJson(filterVal, jsonData) {
+      const convert_date_time_fields = [
+        'create_time'
+      ]
+      const convert_degree_fields = [
+        'degree'
+      ]
+      const convert_ticket_source_fields = [
+        'ticket_source'
+      ]
+      return jsonData.map(v => filterVal.map(j => {
+        if (convert_date_time_fields.indexOf(j) !== -1) {
+          return date_formatter(v[j], DATE_TIME_FORMAT, false)
+        } else if (convert_degree_fields.indexOf(j) !== -1) {
+          return get_value_from_map_list(v[j], WORK_ORDERS_URGENCY_DEGREE, '3')
+        } else if (convert_ticket_source_fields.indexOf(j) !== -1) {
+          return get_value_from_map_list(v[j], COMMUNICATION_METHODS, '2')
+        } else {
+          return v[j]
+        }
+      }))
+    },
+    export_excel(data_list) {
+      const filename = '客服工单数据'
+      import('@/utils/Export2Excel').then(excel => {
+        const t_header = ['工单号', '终端类型', '工单标题', '工单类别', '问题分类',
+          '问题细分', '紧急程度', '工单来源', '用户昵称', '手机号码', '家长端版本号',
+          '问题描述', '创建人', '创建时间', '处理人', '客服跟进']
+        // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
+        const filter_val = ['ticket_no', 'device_type_name', 'ticket_title', 'ticket_type_name', 'question_type_name',
+          'question_detail_name', 'degree', 'ticket_source', 'p_nick_name', 'p_phone', 'p_version',
+          'problem_description', 'applicant_name', 'create_time', 'assigned_ao_name', 'customer_service']
+        const data = this.formatJson(filter_val, data_list)
+        const options = {
+          header: t_header,
+          data,
+          filename,
+          autoWidth: true,
+          bookType: 'xlsx'
+        }
+        excel.export_json_to_excel(options)
+        this.download_loading = false
+      })
+    },
+    export_work_orders: function() {
+      // 导出工单接口
+      this.export_loading = true
+      const config = this.get_condition_with_pagination()
+      export_work_order_list(config).then(res => {
+        if (res.status === 0) {
+          if (res.total_count >= EXPORT_MAX_RECORD_LENGTH) {
+            const options = {
+              title: '提示',
+              type: 'warning',
+              message: EXPORT_OVER_MAX_TIPS_REMINDER,
+              duration: 0
+            }
+            this.$notify(options)
+            return
+          }
+          const remote_data = res.data
+          this.export_excel(remote_data)
+        } else {
+          this.$message.error(res.message)
+        }
+      }).finally(() => {
+        this.export_loading = false
+      })
     },
     add_work_order: function() {
       const name = 'WorkOrdersSystemDetails'

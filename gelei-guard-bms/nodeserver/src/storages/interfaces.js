@@ -764,6 +764,11 @@ export const PAGE_PERMISSION = [
     code: '10230'
   },
   {
+    name: '工单导出',
+    path: 'manager/ticket/list/export',
+    code: '10249'
+  },
+  {
     name: '模糊查询已经创建工单标题',
     path: 'manager/ticket/title/query',
     code: '10238'
@@ -786,11 +791,7 @@ export const PAGE_PERMISSION = [
   {
     name: '转交工单',
     path: 'manager/ticket/change/record',
-<<<<<<< HEAD
-    code: '10241'
-=======
     code: '10239'
->>>>>>> c6c60e06bf5912a934bab2fa57c1e544d6f9970f
   },
   {
     name: '添加评论',
@@ -798,14 +799,11 @@ export const PAGE_PERMISSION = [
     code: '10227'
   },
   {
-<<<<<<< HEAD
-=======
     name: '评论列表',
     path: 'manager/ticket/comment/list',
     code: '10228'
   },
   {
->>>>>>> c6c60e06bf5912a934bab2fa57c1e544d6f9970f
     name: '更新我受理工单的评论',
     path: 'manager/ticket/update/assigned',
     code: '10240'

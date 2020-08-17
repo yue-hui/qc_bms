@@ -31,29 +31,44 @@ export const PAGE_PERMISSION = [
     code: '40008'
   },
   {
-    name: '获取设备的应用使用记录',  // 家长端
+    name: '获取设备的应用使用记录', // 家长端
     path: 'manager/device/getAppUsage',
     code: '10030'
   },
   {
-    name: '秒传接口',  // 家长端
+    name: '秒传接口', // 家长端
     path: 'file/data/secondpass',
     code: '40019'
   },
   {
-    name: '文件上传接口',  // 家长端
+    name: '文件上传接口', // 家长端
     path: 'file/data/upload',
     code: '40020'
   },
   {
-    name: '获取广告类型列表',  // 家长端
+    name: '获取广告类型列表', // 家长端
     path: 'common/advertising/type/list',
     code: '40027'
   },
   {
-    name: '获取广告位置列表',  // 家长端
+    name: '获取广告位置列表', // 家长端
     path: 'common/advertising/point/list',
     code: '40028'
+  },
+  {
+    name: '查询用户日志',
+    path: 'manager/device/findAliLog',
+    code: '10246'
+  },
+  {
+    name: '发送设备运行指令',
+    path: 'manager/device/addMobileLog',
+    code: '10248'
+  },
+  {
+    name: '查询设备日志列表',
+    path: 'manager/device/findMobileLog',
+    code: '10247'
   },
   // 系统用户
   {
@@ -659,6 +674,11 @@ export const PAGE_PERMISSION = [
     code: '10080'
   },
   {
+    name: '获取当前登录用户相同角色用户',
+    path: 'manager/channel/associated/user',
+    code: '10226'
+  },
+  {
     name: '获取指定注册来源详情',
     path: 'manager/channel/info',
     code: '10097'
@@ -731,6 +751,101 @@ export const PAGE_PERMISSION = [
     name: '删除系统角色',
     path: 'manager/sysRole/delete',
     code: '10093'
+  },
+  // 工单系统
+  {
+    name: '获取用户未读消息数',
+    path: 'manager/ticket/message/unreadCount',
+    code: '10244'
+  },
+  {
+    name: '工单列表接口',
+    path: 'manager/ticket/list',
+    code: '10230'
+  },
+  {
+    name: '工单导出',
+    path: 'manager/ticket/list/export',
+    code: '10249'
+  },
+  {
+    name: '模糊查询已经创建工单标题',
+    path: 'manager/ticket/title/query',
+    code: '10238'
+  },
+  {
+    name: '根据手机号码查询家长信息',
+    path: 'manager/ticket/patriarch/detail',
+    code: '10234'
+  },
+  {
+    name: '创建工单',
+    path: 'manager/ticket/save',
+    code: '10231'
+  },
+  {
+    name: '更新工单 、重新打开工单、关闭工单',
+    path: 'manager/ticket/update',
+    code: '10229'
+  },
+  {
+    name: '转交工单',
+    path: 'manager/ticket/change/record',
+    code: '10239'
+  },
+  {
+    name: '添加评论',
+    path: 'manager/ticket/comment/add',
+    code: '10227'
+  },
+  {
+    name: '评论列表',
+    path: 'manager/ticket/comment/list',
+    code: '10228'
+  },
+  {
+    name: '更新我受理工单的评论',
+    path: 'manager/ticket/update/assigned',
+    code: '10240'
+  },
+  {
+    name: '变更历史',
+    path: 'manager/ticket/change/record',
+    code: '10241'
+  },
+  {
+    name: '工单信息',
+    path: 'manager/ticket/info',
+    code: '10232'
+  },
+  {
+    name: '历史关联工单',
+    path: 'manager/ticket/associated/list',
+    code: '10242'
+  },
+  {
+    name: '工单关联用户',
+    path: 'manager/ticket/associated/user',
+    code: '10236'
+  },
+  {
+    name: '最新消息',
+    path: 'manager/ticket/last/message',
+    code: '10237'
+  },
+  {
+    name: '多级联动 - 新增',
+    path: 'manager/ticket/type/add',
+    code: '10233'
+  },
+  {
+    name: '逐级获取多级联动',
+    path: 'manager/ticket/type/list',
+    code: '10235'
+  },
+  {
+    name: '多级联动-编辑',
+    path: 'manager/ticket/type/edit',
+    code: '10243'
   }
 ]
-

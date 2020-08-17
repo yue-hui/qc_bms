@@ -22,6 +22,15 @@ export function get_work_orders(data) {
   })
 }
 
+// 导出工单
+export function export_work_order_list(data) {
+  return request({
+    url: '/greenguard/manager/ticket/list/export',
+    method: 'post',
+    data
+  })
+}
+
 // 模糊查询已经创建工单名称
 export function query_manager_ticket_title(data) {
   return request({

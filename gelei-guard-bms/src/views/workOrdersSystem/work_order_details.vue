@@ -587,6 +587,14 @@
                 class="problem-description"
                 v-html="forms.problem_description" />
             </el-form-item>
+            <el-form-item label="客服回复内容" prop="customer_service">
+              <el-input
+                v-model="forms.customer_service"
+                rows="3"
+                type="textarea"
+                resize="none"
+                placeholder="请输入客服回复内容" />
+            </el-form-item>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
@@ -624,6 +632,18 @@
                       v-model="forms.problem_description"
                       :height="200"
                       class="question-details" />
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="客服回复内容" prop="customer_service">
+                    <el-input
+                      v-model="forms.customer_service"
+                      rows="3"
+                      type="textarea"
+                      resize="none"
+                      placeholder="请输入客服回复内容" />
                   </el-form-item>
                 </div>
               </el-col>
@@ -1013,7 +1033,7 @@ export default {
       comment: '',
       patriarch_info: {},
       communication_methods: COMMUNICATION_METHODS,
-      communication_method: '微信/QQ/邮箱',
+      communication_method: '微信', // 微信/QQ/邮箱
       current_child: {}, // 当前孩子
       child_device_list: [], // 当前孩子的设备列表
       current_device: {}, // 当前孩子指定设备信息
@@ -1029,9 +1049,10 @@ export default {
         ticket_type_id: '',
         question_type_id: '',
         question_detail_id: '',
-        degree: '',
-        ticket_source: '',
+        degree: '3',
+        ticket_source: '2',
         ticket_source_details: '',
+        customer_service: '',
         p_phone: '',
         p_user_id: '',
         c_user_id: '',
@@ -1062,12 +1083,15 @@ export default {
           { type: 'string', required: true, message: '请选择工单来源', trigger: 'blur' }
         ],
         ticket_source_details: [
-          { type: 'string', required: true, message: '请输入微信/QQ/邮箱', trigger: 'blur' }
+          { type: 'string', message: '请输入微信/QQ/邮箱', trigger: 'blur' }
         ]
       },
       work_order_detail_rules: { // 工单详情规则
         problem_description: [
           { type: 'string', required: true, message: '请输入填写问题描述', trigger: 'blur' }
+        ],
+        customer_service: [
+          { type: 'string', required: true, message: '请输入客服回复内容', trigger: 'blur' }
         ],
         assigned_ao_id: [
           { type: 'string', required: true, message: '请输入选择处理人', trigger: 'blur' }
@@ -1174,9 +1198,9 @@ export default {
 
     if (['1', '2', '3'].indexOf(this.action) !== -1) {
       // 处理人列表
-      this.fetch_acceptors()
+      await this.fetch_acceptors()
       // @我的人列表
-      this.fetch_comment_users()
+      await this.fetch_comment_users()
     }
     if (['2', '3'].indexOf(this.action) !== -1) {
       // 历史工单
@@ -1199,6 +1223,7 @@ export default {
         degree: this.forms.degree,
         ticket_source: this.forms.ticket_source,
         ticket_source_details: this.forms.ticket_source_details,
+        customer_service: this.forms.customer_service,
         p_user_id: this.forms.p_user_id,
         c_user_id: this.forms.c_user_id,
         c_device_id: this.forms.c_device_id,
@@ -1220,7 +1245,8 @@ export default {
       create_work_order(pure_object_null_value(config)).then(res => {
         if (res.status === 0) {
           this.$message.success('工单添加成功')
-          window.close()
+          // window.close()
+          window.location.href = window.location.href
         } else {
           this.$message.error(res.message)
         }
@@ -1254,6 +1280,7 @@ export default {
         degree: this.forms.degree,
         ticket_source: this.forms.ticket_source,
         ticket_source_details: this.forms.ticket_source_details,
+        customer_service: this.forms.customer_service,
         problem_description: this.forms.problem_description,
         assigned_ao_id: this.forms.assigned_ao_id
       }
@@ -1394,10 +1421,10 @@ export default {
         }
       })
     },
-    transfer_work_order_action: function() {
+    transfer_work_order_action: async function() {
       // 转发
       this.transfer_visible = true
-      this.fetch_tranfer_user()
+      await this.fetch_tranfer_user()
     },
     before_close_transfer: function() {
       this.$confirm('确认是否转交窗口？', '提示', {
