@@ -1963,6 +1963,7 @@ $text_color: #365638;
     padding: 0 20px 20px 20px;
 
     .comment {
+      border: 0;
       border-top: 1px solid #dcdcdc;
     }
 
