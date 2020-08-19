@@ -650,19 +650,43 @@ export const WORK_ORDERS_LEVELS = [
 export const COMMUNICATION_METHODS = [
   {
     value: '1',
-    label: '手机'
+    label: '手机',
+    account_label: '手机'
   },
   {
     value: '2',
-    label: '微信'
+    label: '微信',
+    account_label: '微信'
   },
   {
     value: '3',
-    label: 'QQ'
+    label: 'QQ',
+    account_label: 'QQ'
   },
   {
     value: '4',
-    label: '邮箱'
+    label: '邮箱',
+    account_label: '邮箱'
+  },
+  {
+    value: '5',
+    label: 'Ec在线',
+    account_label: 'Ec账号'
+  },
+  {
+    value: '6',
+    label: '旺旺',
+    account_label: '旺旺账号'
+  },
+  {
+    value: '7',
+    label: '抖音小店',
+    account_label: '抖音账号'
+  },
+  {
+    value: '8',
+    label: '微店',
+    account_label: '微店账号'
   }
 ]
 

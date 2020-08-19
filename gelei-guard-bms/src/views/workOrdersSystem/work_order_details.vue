@@ -1442,7 +1442,7 @@ export default {
     },
     select_work_order_source: function() {
       const communication = COMMUNICATION_METHODS.find(r => r.value === this.forms.ticket_source)
-      this.communication_method = communication.label
+      this.communication_method = communication.account_label
     },
     jump_to_history_page(ticket_id) {
       // 历史工单界面

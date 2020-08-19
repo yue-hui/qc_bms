@@ -4,7 +4,7 @@ export function get_editing_content(h, data, node) {
   return h('span', {
     class: 'ly-visible'
   }, [
-    h('gl-button', {
+    h('el-button', {
       attrs: {
         size: 'mini',
         type: 'text'
@@ -19,7 +19,7 @@ export function get_editing_content(h, data, node) {
         }
       }
     }, '取消'),
-    h('gl-button', {
+    h('el-button', {
       attrs: {
         size: 'mini',
         type: 'text'
