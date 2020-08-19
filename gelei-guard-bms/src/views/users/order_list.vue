@@ -85,17 +85,38 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="10" class="order-number-list">用户联系方式:</el-col>
-                <el-col :span="14">
+                <el-col :span="8" class="order-number-list">用户联系方式:</el-col>
+                <el-col :span="16">
                   <el-input v-model="query_sets.contact_phone" size="mini" clearable @change="query_condition_change" />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">会员类型:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.member_type"
+                    size="mini"
+                    placeholder="订单状态"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in patriarch_member_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="8" class="order-number-list">用户来源渠道:</el-col>
@@ -110,11 +131,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="18" :sm="16" :md="12" :lg="10" :xl="8" class="col-bg">
+          <el-col :xs="18" :sm="12" :md="12" :lg="10" :xl="8" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <el-col :span="4" class="order-number-list">交易时间:</el-col>
-                <el-col :span="16">
+                <el-col :span="20">
                   <el-date-picker
                     v-model="query_sets.order_time_range"
                     type="daterange"
@@ -127,7 +148,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="18" :sm="24" :md="18" :lg="21" :xl="12" class="col-bg layout-right col-right-button">
+          <el-col :xs="6" :sm="12" :md="12" :lg="14" :xl="8" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -172,6 +193,10 @@
             align="center"
             label="订单详情"
             prop="order_desc" />
+          <el-table-column
+            align="center"
+            label="会员类型"
+            prop="member_type_label" />
           <el-table-column
             align="center"
             label="交易金额"
@@ -232,6 +257,7 @@ import { get_order_list } from '@/api/interactive'
 import { date_formatter, formatter_transaction_amount, get_value_from_map_list } from '@/utils/common'
 import { fetch_all_order_filter_list } from '@/api/merge'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { PATRIARCH_MEMBER_TYPES } from '../../utils/constant'
 
 export default {
   components: {},
@@ -239,6 +265,7 @@ export default {
     // const now_time = dayjs()
     // const month_ago = dayjs().subtract(1, 'month')
     const page_size = getPagenationSize()
+    const patriarch_member_types = PATRIARCH_MEMBER_TYPES.filter(r => ['02', '03'].indexOf(r.value) !== -1)
     return {
       loading: false,
       query_sets: {
@@ -246,11 +273,13 @@ export default {
         order_time_range: [],
         order_desc: '',
         order_status: '',
+        member_type: '',
         pay_type: '',
         nick_name: '',
         channel_name: '',
         contact_phone: ''
       },
+      patriarch_member_types,
       order_source: COMMODITY_TYPE,
       order_status_list: [],
       pay_type_mode: [],
@@ -335,7 +364,7 @@ export default {
       return data.map(r => {
         const order_time_label = date_formatter(r.order_time, DATE_TIME_FORMAT)
         const order_amount_label = formatter_transaction_amount(r.order_amount)
-        const member_type_label = get_value_from_map_list(r.member_type, this.patriarch_member_types)
+        const member_type_label = get_value_from_map_list(r.member_type, PATRIARCH_MEMBER_TYPES)
         return {
           ...r,
           order_amount_label,

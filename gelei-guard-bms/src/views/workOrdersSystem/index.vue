@@ -224,10 +224,17 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <gl-button pid="20103" size="mini" type="success" @click="add_work_order">创建工单</gl-button>
-                <gl-button pid="20103" :loading="export_loading" size="mini" type="success" @click="export_work_orders">
-                  导出工单
-                </gl-button>
+                <gl-button
+                  pid="20103"
+                  size="mini"
+                  type="success"
+                  @click="add_work_order">创建工单</gl-button>
+                <gl-button
+                  :loading="export_loading"
+                  pid="20103"
+                  size="mini"
+                  type="success"
+                  @click="export_work_orders">导出工单</gl-button>
               </el-row>
             </div>
           </el-col>

@@ -651,17 +651,17 @@ export const COMMUNICATION_METHODS = [
   {
     value: '1',
     label: '手机',
-    account_label: '手机'
+    account_label: '手机号码'
   },
   {
     value: '2',
     label: '微信',
-    account_label: '微信'
+    account_label: '微信号'
   },
   {
     value: '3',
     label: 'QQ',
-    account_label: 'QQ'
+    account_label: 'QQ号码'
   },
   {
     value: '4',
