@@ -20,7 +20,7 @@ switch (global.env_config) {
     break
   case 'prod1':
     config = {
-      baseURL: 'https://greenguard-bms.qcgelei.com/'
+      baseURL: 'https://ms.qcgelei.com/'
     }
     break
   case 'prod':
