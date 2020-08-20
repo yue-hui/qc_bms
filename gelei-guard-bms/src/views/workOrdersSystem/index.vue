@@ -453,11 +453,11 @@ export default {
       import('@/utils/Export2Excel').then(excel => {
         const t_header = ['工单号', '终端类型', '工单标题', '工单类别', '问题分类',
           '问题细分', '紧急程度', '工单来源', '用户昵称', '手机号码', '家长端版本号',
-          '问题描述', '创建人', '创建时间', '处理人', '客服跟进']
+          '问题描述', '客服跟进', '创建人', '创建时间', '处理人']
         // filter_val 必须为存在的字段，且filter_val的长度要小于t_header的长度
         const filter_val = ['ticket_no', 'device_type_name', 'ticket_title', 'ticket_type_name', 'question_type_name',
           'question_detail_name', 'degree', 'ticket_source', 'p_nick_name', 'p_phone', 'p_version',
-          'problem_description', 'applicant_name', 'create_time', 'assigned_ao_name', 'customer_service']
+          'problem_description', 'customer_service', 'applicant_name', 'create_time', 'assigned_ao_name']
         const data = this.formatJson(filter_val, data_list)
         const options = {
           header: t_header,
