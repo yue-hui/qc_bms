@@ -18,6 +18,11 @@ switch (global.env_config) {
       baseURL: 'https://mstes2.dev.zhixike.net/'
     }
     break
+  case 'prod1':
+    config = {
+      baseURL: 'https://greenguard-bms.qcgelei.com/'
+    }
+    break
   case 'prod':
     config = {
       baseURL: 'https://ms.gwchina.cn/'

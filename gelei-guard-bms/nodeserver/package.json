@@ -6,6 +6,7 @@
     "test": "nodemon src/index.js --port=4004 --env_config=test",
     "test2": "nodemon src/index.js --port=4004 --env_config=test2",
     "dev": "nodemon src/index.js --port 4004 --env_config=dev",
+    "prod1": "nodemon src/index.js --port 4004 --env_config=prod1",
     "prod": "nodemon src/index.js --port 4004 --env_config=prod",
     "beta": "nodemon src/index.js --port 4004 --env_config=beta",
     "beta1": "nodemon src/index.js --port 4004 --env_config=beta1",
