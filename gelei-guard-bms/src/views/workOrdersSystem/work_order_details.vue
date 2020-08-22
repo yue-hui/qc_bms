@@ -587,13 +587,13 @@
                 class="problem-description"
                 v-html="forms.problem_description" />
             </el-form-item>
-            <el-form-item label="客服回复内容" prop="customer_service">
+            <el-form-item label="客服跟进内容" prop="customer_service">
               <el-input
                 v-model="forms.customer_service"
                 rows="3"
                 type="textarea"
                 resize="none"
-                placeholder="请输入客服回复内容" />
+                placeholder="请输入客服跟进内容" />
             </el-form-item>
           </div>
         </el-col>
@@ -637,13 +637,13 @@
               </el-col>
               <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="客服回复内容" prop="customer_service">
+                  <el-form-item label="客服跟进内容" prop="customer_service">
                     <el-input
                       v-model="forms.customer_service"
                       rows="3"
                       type="textarea"
                       resize="none"
-                      placeholder="请输入客服回复内容" />
+                      placeholder="请输入客服跟进内容" />
                   </el-form-item>
                 </div>
               </el-col>
@@ -671,7 +671,11 @@
             </el-row>
           </template>
           <template v-else>
-            <div v-if="['3'].indexOf(action) !== -1" v-html="forms.problem_description" />
+            <div v-if="['3'].indexOf(action) !== -1" class="question-description" v-html="forms.problem_description" />
+            <div class="customer-service-description">
+              <span class="title">客服跟进内容</span>
+              <p v-html="forms.customer_service" class="customer-content" />
+            </div>
           </template>
         </div>
         <div v-if="detail_active === '2'" class="detail-content detail-change-content">
@@ -1091,7 +1095,7 @@ export default {
           { type: 'string', required: true, message: '请输入填写问题描述', trigger: 'blur' }
         ],
         customer_service: [
-          { type: 'string', required: true, message: '请输入客服回复内容', trigger: 'blur' }
+          { type: 'string', required: true, message: '请输入客服跟进内容', trigger: 'blur' }
         ],
         assigned_ao_id: [
           { type: 'string', required: true, message: '请输入选择处理人', trigger: 'blur' }
@@ -2211,6 +2215,31 @@ $text_color: #365638;
         font-size: 12px;
         white-space: nowrap;
         text-align: center;
+      }
+
+      .question-description {
+        border-bottom: #c2b4b4 solid 1px;
+        margin-bottom: 15px;
+      }
+
+      .customer-service-description {
+        display: flex;
+        flex-direction: column;
+        line-height: 14px;
+        color: #3a3a3a;
+
+        .title {
+          font-size: 14px;
+          font-weight: bold;
+        }
+
+        .customer-content {
+          flex: 1;
+          font-size: 12px;
+          padding-top: 14px;
+          margin: 0;
+          text-indent: 2em;
+        }
       }
     }
   }
