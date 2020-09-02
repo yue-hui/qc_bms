@@ -623,6 +623,10 @@ export const WORK_ORDERS_QUESTION_CLASSIFIES = [
   {
     value: '3',
     label: '设计如此'
+  },
+  {
+    value: '6',
+    label: '其它'
   }
 ]
 
