@@ -228,13 +228,15 @@
                   pid="20103"
                   size="mini"
                   type="success"
-                  @click="add_work_order">创建工单</gl-button>
+                  @click="add_work_order">创建工单
+                </gl-button>
                 <gl-button
                   :loading="export_loading"
                   pid="20103"
                   size="mini"
                   type="success"
-                  @click="export_work_orders">导出工单</gl-button>
+                  @click="export_work_orders">导出工单
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -394,8 +396,25 @@ export default {
   },
   mounted: function() {
     this.search()
+    this.build_children_message()
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.receive_message_event)
   },
   methods: {
+    receive_message_event(event) {
+      if (event.origin === window.location.origin) {
+        // 根据接受到的信息执行对应的方法
+        if (event.data === 'update') {
+          // 这里调用刷新数据列表方法
+          this.search()
+        }
+      }
+    },
+    build_children_message() {
+      // 接受子页面的请求信息
+      window.addEventListener('message', this.receive_message_event)
+    },
     get_condition() {
       const query_params = JSON.parse(JSON.stringify(this.query_sets))
       const pure_params = {}

@@ -376,8 +376,25 @@ export default {
   },
   mounted: function() {
     this.search()
+    this.build_children_message()
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.receive_message_event)
   },
   methods: {
+    receive_message_event(event) {
+      if (event.origin === window.location.origin) {
+        // 根据接受到的信息执行对应的方法
+        if (event.data === 'update') {
+          // 这里调用刷新数据列表方法
+          this.search()
+        }
+      }
+    },
+    build_children_message() {
+      // 接受子页面的请求信息
+      window.addEventListener('message', this.receive_message_event)
+    },
     get_condition() {
       const query_params = JSON.parse(JSON.stringify(this.query_sets))
       const pure_params = {}

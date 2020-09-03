@@ -674,7 +674,7 @@
             <div v-if="['3'].indexOf(action) !== -1" class="question-description" v-html="forms.problem_description" />
             <div class="customer-service-description">
               <span class="title">客服跟进内容</span>
-              <p v-html="forms.customer_service" class="customer-content" />
+              <p class="customer-content" v-html="forms.customer_service" />
             </div>
           </template>
         </div>
@@ -1215,6 +1215,17 @@ export default {
     this.page_loading = false
   },
   methods: {
+    handle_close_page(action = 'close') {
+      if (window.opener) {
+        window.opener.postMessage('update', window.opener.origin)
+      }
+      // action: close 关闭当前页面 refresh 刷新当前页面
+      if (action === 'close') {
+        window.close()
+      } else if (action === 'refresh') {
+        window.location.href = window.location.href
+      }
+    },
     get_form_data() {
       // 创建工单字段
       const config = {
@@ -1249,8 +1260,7 @@ export default {
       create_work_order(pure_object_null_value(config)).then(res => {
         if (res.status === 0) {
           this.$message.success('工单添加成功')
-          // window.close()
-          window.location.href = window.location.href
+          this.handle_close_page('refresh')
         } else {
           this.$message.error(res.message)
         }
@@ -1299,7 +1309,7 @@ export default {
         const config = this.get_edit_form_data()
         this.update_work_order_info_or_action(config).then(res => {
           if (res.status === 0) {
-            window.close()
+            this.handle_close_page()
           } else {
             this.$message.error(res.message)
           }
@@ -1321,7 +1331,7 @@ export default {
           }
           update_assigned_work_order_comment(pure_object_null_value(config)).then(res => {
             if (res.status === 0) {
-              window.close()
+              this.handle_close_page()
             } else {
               this.$message.error(res.message)
             }
@@ -1338,7 +1348,7 @@ export default {
       config['msg_type'] = '06'
       this.update_work_order_info_or_action(config).then(res => {
         if (res.status === 0) {
-          window.close()
+          this.handle_close_page()
         } else {
           this.$message.error(res.message)
         }
@@ -1362,7 +1372,7 @@ export default {
       this.close_work_order_loading = true
       this.update_work_order_info_or_action(config).then(res => {
         if (res.status === 0) {
-          window.close()
+          this.handle_close_page()
         } else {
           this.$message.error(res.message)
         }
@@ -1415,7 +1425,7 @@ export default {
           transfer_work_order(pure_object_null_value(config)).then(res => {
             if (res.status === 0) {
               this.close_transfer_dialog()
-              window.close()
+              this.handle_close_page()
             } else {
               this.$message.error(res.message)
             }
