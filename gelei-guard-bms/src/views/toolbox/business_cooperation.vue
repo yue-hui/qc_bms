@@ -240,9 +240,16 @@ export default {
       }
       this.show_pannel = false
     },
-    build_channel_url(channel_id) {
+    build_channel_url(info) {
+      const {channel_id, sys_user_list} = info
       const h5_domain = get_h5_domain()
-      return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+      const user_id_list = sys_user_list.map(r => r.user_id)
+      if (user_id_list.indexOf('santao') === 0) {
+        // 三陶的渠道链接
+        return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/3rd-tao?cid=' + channel_id + '&uid=' + user_id_list[0]
+      } else {
+        return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+      }
     },
     fetch_business_cooperation: function() {
       this.loading = true
@@ -253,7 +260,7 @@ export default {
             const channel_owner = r.sys_user_list ? r.sys_user_list.map(r => r.real_name + '(' + r.role_name + ')').join('、') : ''
             const create_time_label = date_formatter(r.create_time, DATE_TIME_FORMAT)
             const row_id = (this.page - 1) * this.page_size + index + 1
-            const virtual_channel_url = this.build_channel_url(r.channel_id)
+            const virtual_channel_url = this.build_channel_url(r)
             return {
               ...r,
               row_id,

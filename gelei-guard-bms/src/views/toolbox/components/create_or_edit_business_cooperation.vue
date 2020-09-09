@@ -230,7 +230,7 @@ export default {
             }
           ]
           this.title = res.data.channel_name
-          this.virtual_channel_url = this.build_channel_url(res.data.channel_id)
+          this.virtual_channel_url = this.build_channel_url(res.data)
         } else {
           this.$message.error(res.msg)
         }
@@ -272,9 +272,15 @@ export default {
         this.loading = false
       })
     },
-    build_channel_url(channel_id) {
+    build_channel_url(info) {
+      const {channel_id, user_id_list} = info
       const h5_domain = get_h5_domain()
-      return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+      if (user_id_list.indexOf('santao') === 0) {
+        // 三陶的渠道链接
+        return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/3rd-tao?cid=' + channel_id + '&uid=' + user_id_list[0]
+      } else {
+        return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/business-cooperation?cid=' + channel_id
+      }
     },
     push_picture_to_cloud(params) {
       if (this.form.file_list.length >= 1) {
