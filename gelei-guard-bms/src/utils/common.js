@@ -241,6 +241,12 @@ export function get_h5_domain(relative = true) {
   } else if (hostname === 'greenguard-bms.gwchina.cn') {
     // 线上环境
     domain = 'greenguard-h5.gwchina.cn'
+  } else if (hostname === 'greenguard-bms-beta.qcgelei.com') {
+    // Beta1环境
+    domain = 'greenguard-h5-beta.qcgelei.com'
+  } else if (hostname === 'greenguard-bms.qcgelei.com') {
+    // Prod1线上环境
+    domain = 'greenguard-h5.qcgelei.com'
   } else {
     // 其它转到开发环境域名
     domain = 'g8ddev.dev.zhixike.net'
