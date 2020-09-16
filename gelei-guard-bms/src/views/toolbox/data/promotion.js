@@ -116,6 +116,10 @@ export const bms_platform_classification = [
         {
           value: '62',
           label: 'VIVO政企Y3'
+        },
+        {
+          value: '72',
+          label: '华为企业模式'
         }
       ],
       update_models: [
@@ -237,6 +241,10 @@ export const platforms = [
     label: 'vivo Y3孩子端'
   },
   {
+    value: '72',
+    label: '华为企业模式孩子端'
+  },
+  {
     value: '13',
     label: 'vivo中间件'
   },
@@ -303,6 +311,10 @@ export const platform_version_instructions = [
   {
     value: '62',
     label: 'vivo Y3孩子端'
+  },
+  {
+    value: '72',
+    label: '华为企业模式孩子端'
   },
   {
     value: '13',
