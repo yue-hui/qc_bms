@@ -339,7 +339,7 @@ export const platform_version_instructions = [
   {
     value: '72',
     label: '华为企业模式孩子端'
-  }, ,
+  },
   {
     value: '82',
     label: 'OPPO定制机A8'
