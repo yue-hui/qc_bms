@@ -120,6 +120,10 @@ export const bms_platform_classification = [
         {
           value: '72',
           label: '华为企业模式'
+        },
+        {
+          value: '82',
+          label: 'OPPO定制机A8'
         }
       ],
       update_models: [
@@ -170,6 +174,14 @@ export const bms_platform_classification = [
         {
           value: '63',
           label: 'VIVO政企Y3中间件'
+        },
+        {
+          value: '73',
+          label: '华为企业模式中间件'
+        },
+        {
+          value: '83',
+          label: 'OPPO定制机A8中间件'
         }
       ],
       update_models: [
@@ -245,6 +257,10 @@ export const platforms = [
     label: '华为企业模式孩子端'
   },
   {
+    value: '82',
+    label: 'OPPO定制机A8'
+  },
+  {
     value: '13',
     label: 'vivo中间件'
   },
@@ -267,6 +283,14 @@ export const platforms = [
   {
     value: '63',
     label: 'vivo Y3中间件'
+  },
+  {
+    value: '73',
+    label: '华为企业模式中间件'
+  },
+  {
+    value: '83',
+    label: 'OPPO定制机A8中间件'
   }
 ]
 
@@ -315,6 +339,10 @@ export const platform_version_instructions = [
   {
     value: '72',
     label: '华为企业模式孩子端'
+  }, ,
+  {
+    value: '82',
+    label: 'OPPO定制机A8'
   },
   {
     value: '13',
@@ -339,6 +367,14 @@ export const platform_version_instructions = [
   {
     value: '63',
     label: 'vivo Y3中间件'
+  },
+  {
+    value: '73',
+    label: '华为企业模式中间件'
+  },
+  {
+    value: '83',
+    label: 'OPPO定制机A8中间件'
   }
 ]
 
