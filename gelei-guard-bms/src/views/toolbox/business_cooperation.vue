@@ -241,7 +241,7 @@ export default {
       this.show_pannel = false
     },
     build_channel_url(info) {
-      const {channel_id, sys_user_list} = info
+      const { channel_id, sys_user_list } = info
       const h5_domain = get_h5_domain()
       const user_id_list = sys_user_list.map(r => r.user_id)
       if (user_id_list.indexOf('santao') === 0) {
