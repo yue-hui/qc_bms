@@ -1132,3 +1132,12 @@ export function get_device_ali_log(data) {
     data
   })
 }
+
+// 7天签到接口
+export function get_seven_clock(data) {
+  return request({
+    url: '/greenguard/manager/sign/list',
+    method: 'post',
+    data
+  })
+}

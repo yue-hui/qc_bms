@@ -153,6 +153,12 @@ export const asyncRoutes = [
         name: 'ChildrenSummaryDataAnalysis',
         component: () => import('@/views/analysis/kids'),
         meta: { title: '孩子端总体数据', icon: 'analysis_kids', pid: '20014' }
+      },
+      {
+        path: 'unbind',
+        name: 'UnbindReasonStatistics',
+        component: () => import('@/views/analysis/unbind_statistics'),
+        meta: { title: '解绑原因统计', icon: 'unbind' }
       }
     ]
   },
@@ -321,6 +327,12 @@ export const asyncRoutes = [
         name: 'InvatationFriendsConfiguration',
         component: () => import('@/views/activity/invatation_details'),
         meta: { title: '邀请好友配置', icon: 'invatation_user', pid: '20039' }
+      },
+      {
+        path: 'new-user-with-7-days-clock',
+        name: 'NewserWithSevenSigned',
+        component: () => import('@/views/activity/seven_days_clock'),
+        meta: { title: '新用户7天签到数据', icon: 'signed' }
       }
       // {
       //   path: 'props',
