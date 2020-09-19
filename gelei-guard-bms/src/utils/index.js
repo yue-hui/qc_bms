@@ -72,3 +72,23 @@ export function formatTime(time, option) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+/**
+ * @description 计算分页编号
+ * @param index {Number} 索引 0 开始
+ * @param currentPage {Number} 页码 1 开始
+ * @param pageSize {Number} 页条数
+ * */
+export function computePageNumber(index, currentPage, pageSize) {
+  return (currentPage - 1) * pageSize + index + 1
+}
+/**
+ * @description 字符串超过指定长度之后出现 ...
+ * @param text {String | Number}
+ * @param length {Number}
+ * @return text {String}
+ * */
+export function stringSlice(text, length = 15) {
+  text = String(text)
+  return text.length > 15 ? text.slice(0, length - 3) + '...' : text
+}
+

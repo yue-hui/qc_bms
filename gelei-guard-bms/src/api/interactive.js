@@ -1141,3 +1141,29 @@ export function get_seven_clock(data) {
     data
   })
 }
+
+// 获取解绑原因占比
+export function query_unbind_why_report_list(data) {
+  return request({
+    url: '/greenguard/manager/opinFeedback/reportList',
+    method: 'post',
+    data
+  })
+}
+
+// 获取全部反馈类型
+export function query_unbind_why_list(data) {
+  return request({
+    url: '/greenguard/manager/opinFeedback/type/list',
+    method: 'post',
+    data
+  })
+}
+// 查询用户解绑详情列表
+export function query_unbind_user_list(data) {
+  return request({
+    url: '/greenguard/manager/opinFeedback/list',
+    method: 'post',
+    data
+  })
+}
