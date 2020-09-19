@@ -138,7 +138,7 @@ export default {
         begin_time: '',
         end_time: '',
         page_no: 1,
-        page_num: 10
+        page_num: page_size
       }
     }
   },
