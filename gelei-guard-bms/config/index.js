@@ -13,7 +13,9 @@ module.exports = {
       '/gelei-guard-bms/api/ns-permission/*': { // 这里是公共部分，在调用接口时后面接不相同的部分
         // target: 'http://localhost:4004', // 本地开发
         // target: 'http://172.168.50.134:4004/', // 开发服务器
+        // target: 'http://172.168.50.124:4004/', // 测试服务器
         target: 'http://172.168.50.143:4004/', // 测试2服务器
+        // target: 'https://ms.gwchina.cn:4004', // 线上环境
         changeOrigin: true,
         secure: false,
         pathRewrite: { // 重命名
@@ -27,9 +29,9 @@ module.exports = {
         // target: 'http://172.168.50.58:12720', // 这里写的是访问接口的域名和端口号
         // target: 'https://mstes.dev.zhixike.net/', // 测试
         target: 'https://g8dtes2.dev.zhixike.net/', // 测试 2
-        // target: 'https://mspres.dev.zhixike.net/', // 压测
-        // target: 'https://ms.gwchina.cn/greenguard', // 线上环境
+        // target: 'https://ms.gwchina.cn/', // 线上环境
         changeOrigin: true,
+        ws: false,
         secure: false,
         pathRewrite: { // 重命名
           // '^/gelei-guard-bms/api': '/'

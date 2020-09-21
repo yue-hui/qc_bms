@@ -137,7 +137,7 @@ export default {
         begin_time: '',
         end_time: ''
       },
-      datetime_range: [yesterday, pre_7],
+      datetime_range: [pre_7, yesterday],
       loading: false,
       resources: [],
       page: 1,
@@ -217,8 +217,9 @@ export default {
       get_seven_clock(config).then(res => {
         if (res.status === 0) {
           this.resources = this.transfer_data(res.data)
-          this.total = res.total_count
+          this.total = res.total_count || (res.data ? res.data.length : 0)
         } else {
+          this.total = 0
           this.$message.error(res.message)
         }
       }).finally(() => {
