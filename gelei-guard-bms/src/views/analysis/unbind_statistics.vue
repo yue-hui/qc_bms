@@ -300,7 +300,7 @@ export default {
     },
     view_details: function(row) {
       const options = {
-        name: 'UserDetails',
+        name: 'UserDetailsShadow',
         params: {
           pid: row.userId
         }

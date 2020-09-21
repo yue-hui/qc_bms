@@ -16,6 +16,7 @@ router.beforeEach(async(to, from, next) => {
       if (store.getters.btns.length === 0) {
         try {
           const routes = await store.dispatch('GetInfo')
+          console.log(routes)
           router.addRoutes(routes)
           await store.dispatch('GenerateAsyncRoute', routes)
           next({ ...to, replace: true })

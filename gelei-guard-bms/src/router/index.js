@@ -159,6 +159,13 @@ export const asyncRoutes = [
         name: 'UnbindReasonStatistics',
         component: () => import('@/views/analysis/unbind_statistics'),
         meta: { title: '解绑原因统计', icon: 'unbind', pid: '20116' }
+      },
+      {
+        path: 'user/detail/:pid',
+        name: 'UserDetailsShadow',
+        hidden: true,
+        component: () => import('@/views/users/details'), // 与用户管理的页面保持一致
+        meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
       }
     ]
   },

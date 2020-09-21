@@ -1120,7 +1120,7 @@ const PERMISSION_DATA = [
             children: []
           }
           // {
-          //   name: '编辑',
+          //   name: '用户详细信息',
           //   checked: false,
           //   width: BUTTON_OPERATION_WIDTH,
           //   layout: 'vertical',
