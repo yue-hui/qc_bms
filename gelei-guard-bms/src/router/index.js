@@ -158,7 +158,7 @@ export const asyncRoutes = [
         path: 'unbind',
         name: 'UnbindReasonStatistics',
         component: () => import('@/views/analysis/unbind_statistics'),
-        meta: { title: '解绑原因统计', icon: 'unbind' }
+        meta: { title: '解绑原因统计', icon: 'unbind', pid: '20116' }
       }
     ]
   },
@@ -332,7 +332,7 @@ export const asyncRoutes = [
         path: 'new-user-with-7-days-clock',
         name: 'NewserWithSevenSigned',
         component: () => import('@/views/activity/seven_days_clock'),
-        meta: { title: '新用户7天签到数据', icon: 'signed' }
+        meta: { title: '新用户7天签到数据', icon: 'signed', pid: '20115' }
       }
       // {
       //   path: 'props',

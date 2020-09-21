@@ -23,7 +23,7 @@
               <el-row>
                 <gl-button
                   :loading="download_loading"
-                  pid="10088"
+                  pid="20117"
                   class="download details-tab"
                   size="mini"
                   type="success"

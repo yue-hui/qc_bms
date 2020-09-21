@@ -1,3 +1,4 @@
+// MAX ID: 20118
 const FUNCTION_MODULE_WIDTH = 120
 const FUNCTION_PAGE_WIDTH = 200
 const BUTTON_OPERATION_WIDTH = 132
@@ -237,6 +238,24 @@ const PERMISSION_DATA = [
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20015,
+            children: []
+          }
+        ]
+      },
+      {
+        name: '解绑原因统计',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20116,
+        children: [
+          {
+            name: '导出',
+            checked: false,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20117,
             children: []
           }
         ]
@@ -690,6 +709,15 @@ const PERMISSION_DATA = [
             children: []
           }
         ]
+      },
+      {
+        name: '新用户7天签到数据',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 20115,
+        children: []
       }
     ]
   },
