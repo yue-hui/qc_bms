@@ -3,8 +3,8 @@
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
-          <el-col :xs="12" :sm="12" :md="8" :lg="9" :xl="8" class="col-bg">
-            <div class="grid-content bg-purple">
+          <el-col class="col-bg">
+            <div class="grid-content bg-purple" style="display: flex;justify-content: space-between;width: 100%;">
               <el-row>
                 <el-col :span="4" class="order-number-list">选择时间:</el-col>
                 <el-col :span="20">
@@ -19,6 +19,18 @@
                     unlink-panels
                     @change="filter" />
                 </el-col>
+              </el-row>
+              <el-row>
+                <gl-button
+                  v-if="false"
+                  :loading="download_loading"
+                  pid="10088"
+                  class="download details-tab"
+                  size="mini"
+                  type="success"
+                  @click="download">导出
+                  <svg-icon icon-class="download" />
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -45,7 +57,7 @@
         </div>
       </div>
       <div class="between-search-area-and-table-display" />
-      <div class="table-content table-block">
+      <div v-if="table_column.length > 0" class="table-content table-block">
         <el-table
           v-loading="loading"
           :data="resources"
@@ -55,12 +67,18 @@
             align="center"
             width="80"
             label="序号"
-            prop="optiId" />
+            prop="_number" />
           <el-table-column
             align="center"
             width="100"
             label="用户昵称"
-            prop="userName" />
+            prop="userName">
+            <template slot-scope="scope">
+              <div>
+                <span class="user-name" @click="view_details(scope.row)">{{ scope.row.userName }}</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             width="80"
@@ -114,6 +132,7 @@ import { TABLE_PAGE_SIEZS_LIST } from '../../utils/constant'
 import { getPagenationSize, setPagenationSize } from '../../utils/auth'
 import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list } from '@/api/interactive'
 import { stringSlice } from '@/utils/index'
+import { computePageNumber } from '../../utils'
 
 export default {
   name: 'UnbindStatistics',
@@ -139,13 +158,14 @@ export default {
         end_time: '',
         page_no: 1,
         page_num: page_size
-      }
+      },
+      download_loading: false
     }
   },
   computed: {},
   mounted: function() {
     this.get_unbind_why_report_list()
-    this.get_unbind_why_list()
+    this.get_list()
   },
   methods: {
     filter() {
@@ -153,6 +173,7 @@ export default {
       this.get_list()
     },
     table_size_change: function(size) {
+      this.requestData.page_no = 1
       this.requestData.page_num = size
       setPagenationSize(size)
       this.get_list()
@@ -224,75 +245,142 @@ export default {
      * @description 获取全部反馈类型
      * */
     get_unbind_why_list() {
-      query_unbind_why_list()
-        .then((data) => {
-          if (data.status !== 0) throw data
-          this.unbind_why_type_list = data.data
-          this.unbind_why_type_list.forEach(item => {
-            this.table_column.push({
-              label: item.name,
-              prop: 'T' + item.value
+      return new Promise((resolve, reject) => {
+        query_unbind_why_list()
+          .then((data) => {
+            if (data.status !== 0) throw data
+            this.unbind_why_type_list = data.data
+            this.unbind_why_type_list.forEach(item => {
+              this.table_column.push({
+                label: item.name,
+                prop: 'T' + item.value
+              })
             })
+            resolve()
           })
-          this.get_list()
-        })
-        .catch(error => {
-          this.$message.error(error.message)
-        })
+          .catch(error => {
+            reject(error)
+          })
+      })
     },
-    get_list() {
-      if (Array.isArray(this.query_set.datetime_range) && this.query_set.datetime_range.length > 0) {
-        this.requestData.begin_time = this.query_set.datetime_range[0].getTime()
-        this.requestData.end_time = this.query_set.datetime_range[1].getTime()
-        if (this.requestData.begin_time === this.requestData.end_time) {
-          this.requestData.end_time = this.requestData.begin_time + 24 * 60 * 60 * 1000 - 1
+    async get_list() {
+      if (this.unbind_why_type_list.length === 0) {
+        try {
+          await this.get_unbind_why_list()
+        } catch (e) {
+          return this.$message.error(e.message)
         }
-      } else {
-        this.requestData.begin_time = ''
-        this.requestData.end_time = ''
       }
-      query_unbind_user_list(this.requestData)
+      this.loading = true
+      query_unbind_user_list(this.get_request_data())
         .then((data) => {
           if (data.status !== 0) throw data
           /**
-{
-  optiId: 0,
-  userName: '龙锦文003',
-  createTime: '2020-02-05 12:00:05',
-  _memberType: 'SVIP会员',
-  otherOpinion: '',
-  T1: false,
-  T2: true,
-  Txx: true
-  ...
-}
-           * */
-          this.resources = data.data.map(item => {
-            // 会员类型
-            item._memberType = (() => {
-              return ({
-                '01': '体验会员',
-                '02': 'SVIP会员',
-                '03': 'VIP会员',
-                '00': '普通用户'
-              })[item.memberType]
-            })()
-            // 反馈
-            this.unbind_why_type_list.forEach(type => {
-              item['T' + type.value] = (() => {
-                // 判断该值是否在列表 typeId 里面
-                const typeIds = item.typeId.split(',').map(item => Number(item))
-                return typeIds.includes(Number(type.value))
-              })()
-            })
-            item.otherOpinion = item.otherOpinion || '无'
-            return item
-          })
+  {
+    optiId: 0,
+    userName: '龙锦文003',
+    createTime: '2020-02-05 12:00:05',
+    _memberType: 'SVIP会员',
+    otherOpinion: '',
+    T1: false,
+    T2: true,
+    Txx: true
+    ...
+  }
+          * */
+          this.resources = this.parse_resp_data(data.data)
           this.total = data.total_count
         })
         .catch(error => {
           this.$message.error(error.message)
         })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    view_details: function(row) {
+      const options = {
+        name: 'UserDetails',
+        params: {
+          pid: row.userId
+        }
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href, '_blank')
+    },
+    async download() {
+      if (this.unbind_why_type_list.length === 0) {
+        try {
+          await this.get_unbind_why_list()
+        } catch (e) {
+          return this.$message.error(e.message)
+        }
+      }
+      this.download_loading = true
+      const request_data = this.get_request_data()
+      request_data.page_no = 1
+      request_data.page_num = this.total
+      query_unbind_user_list(request_data)
+        .then((data) => {
+          if (data.status !== 0) throw data
+          /**
+ {
+    optiId: 0,
+    userName: '龙锦文003',
+    createTime: '2020-02-05 12:00:05',
+    _memberType: 'SVIP会员',
+    otherOpinion: '',
+    T1: false,
+    T2: true,
+    Txx: true
+    ...
+  }
+           * */
+          const resources = this.parse_resp_data(data.data)
+          console.log(resources)
+        })
+        .catch(error => {
+          this.$message.error(error.message)
+        })
+        .finally(() => {
+          this.download_loading = false
+        })
+      //
+    },
+    get_request_data() {
+      if (Array.isArray(this.query_set.datetime_range) && this.query_set.datetime_range.length > 0) {
+        this.requestData.begin_time = this.query_set.datetime_range[0].getTime()
+        this.requestData.end_time = this.query_set.datetime_range[1].getTime()
+        // this.requestData.end_time = this.requestData.begin_time + 24 * 60 * 60 * 1000 - 1
+      } else {
+        this.requestData.begin_time = ''
+        this.requestData.end_time = ''
+      }
+      return JSON.parse(JSON.stringify(this.requestData))
+    },
+    parse_resp_data(list) {
+      return list.map((item, index) => {
+        // 会员类型
+        item._memberType = (() => {
+          return ({
+            '01': '体验会员',
+            '02': 'SVIP会员',
+            '03': 'VIP会员',
+            '00': '普通用户'
+          })[item.memberType]
+        })()
+        // 反馈
+        this.unbind_why_type_list.forEach(type => {
+          item['T' + type.value] = (() => {
+            // 判断该值是否在列表 typeId 里面
+            const typeIds = item.typeId.split(',').map(item => Number(item))
+            return typeIds.includes(Number(type.value))
+          })()
+        })
+        item.otherOpinion = item.otherOpinion || '未填写'
+        item._number = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
+        return item
+      })
     }
   }
 }
@@ -392,5 +480,9 @@ export default {
     padding-bottom: 20px;
     font-size: 20px;
   }
+}
+.user-name{
+  color: #409EFF;
+  cursor: pointer;
 }
 </style>
