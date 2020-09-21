@@ -22,7 +22,6 @@
               </el-row>
               <el-row>
                 <gl-button
-                  v-if="false"
                   :loading="download_loading"
                   pid="10088"
                   class="download details-tab"
@@ -111,7 +110,7 @@
             align="center"
             width="160"
             label="提交时间"
-            prop="createTime" />
+            prop="_createTime" />
         </el-table>
         <el-pagination
           :current-page="requestData.page_no"
@@ -130,9 +129,9 @@
 import dayjs from 'dayjs'
 import { TABLE_PAGE_SIEZS_LIST } from '../../utils/constant'
 import { getPagenationSize, setPagenationSize } from '../../utils/auth'
-import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list } from '@/api/interactive'
+import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list, export_unbind_user_list } from '@/api/interactive'
 import { stringSlice } from '@/utils/index'
-import { computePageNumber } from '../../utils'
+import { computePageNumber, parseTime } from '../../utils'
 
 export default {
   name: 'UnbindStatistics',
@@ -232,6 +231,7 @@ export default {
           this.unbind_why_list = data.data.map((item, index) => {
             if (item.typeName) {
               item._color = this.get_color(index)
+              item.ratio = Number.parseFloat(item.ratio) + '%'
               return item
             }
             return null
@@ -320,24 +320,48 @@ export default {
       const request_data = this.get_request_data()
       request_data.page_no = 1
       request_data.page_num = this.total
-      query_unbind_user_list(request_data)
+      export_unbind_user_list(request_data)
+      // query_unbind_user_list(request_data)
         .then((data) => {
           if (data.status !== 0) throw data
-          /**
- {
-    optiId: 0,
-    userName: '龙锦文003',
-    createTime: '2020-02-05 12:00:05',
-    _memberType: 'SVIP会员',
-    otherOpinion: '',
-    T1: false,
-    T2: true,
-    Txx: true
-    ...
-  }
-           * */
-          const resources = this.parse_resp_data(data.data)
-          console.log(resources)
+          const resources = this.parse_resp_data(data.data, request_data)
+          const filename = '用户数据分析-解绑原因统计'
+          import('@/utils/Export2Excel').then(excel => {
+            const header = ['序号', '用户昵称', '手机号', '会员类型', '孩子年级', '解绑设备类型', '设备绑定时间', '设备解绑时间']
+            const fields = ['_number', 'userName', 'phone', '_memberType', '_grade', 'deviceType', '_bindTime', '_unbindTime']
+            // 动态字段
+            this.unbind_why_type_list.forEach(item => {
+              header.push(item.name)
+              fields.push('T' + item.value)
+            })
+            header.push('其他')
+            fields.push('otherOpinion')
+            header.push('提交时间')
+            fields.push('_createTime')
+            const data = []
+            resources.forEach((item, index) => {
+              data[index] = []
+              fields.forEach(field => {
+                let fieldValue = item[field]
+                fieldValue = (() => {
+                  if ([true, false].includes(fieldValue)) {
+                    return fieldValue ? '是' : '-'
+                  }
+                  return fieldValue
+                })()
+                data[index].push(fieldValue)
+              })
+            })
+            const options = {
+              header,
+              data,
+              filename,
+              autoWidth: true,
+              bookType: 'xlsx'
+            }
+            excel.export_json_to_excel(options)
+            this.download_loading = false
+          })
         })
         .catch(error => {
           this.$message.error(error.message)
@@ -358,7 +382,8 @@ export default {
       }
       return JSON.parse(JSON.stringify(this.requestData))
     },
-    parse_resp_data(list) {
+    parse_resp_data(list, request_data) {
+      !request_data && (request_data = this.requestData)
       return list.map((item, index) => {
         // 会员类型
         item._memberType = (() => {
@@ -377,8 +402,20 @@ export default {
             return typeIds.includes(Number(type.value))
           })()
         })
-        item.otherOpinion = item.otherOpinion || '未填写'
-        item._number = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
+        // item.otherOpinion = item.otherOpinion
+        item._number = computePageNumber(index, request_data.page_no, request_data.page_num)
+        // 提交时间
+        item._createTime = parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')
+        //
+        if (item.unbindTime) {
+          item._unbindTime = parseTime(item.unbindTime, '{y}-{m}-{d} {h}:{i}')
+        }
+        if (item.bindTime) {
+          item._bindTime = parseTime(item.bindTime, '{y}-{m}-{d} {h}:{i}')
+        }
+        if (item.grade) {
+          item._grade = String(item.grade) + '年级'
+        }
         return item
       })
     }

@@ -1167,3 +1167,12 @@ export function query_unbind_user_list(data) {
     data
   })
 }
+
+// 获取导出用户解绑详情列表
+export function export_unbind_user_list(data) {
+  return request({
+    url: '/greenguard/manager/opinFeedback/listExport',
+    method: 'post',
+    data
+  })
+}
