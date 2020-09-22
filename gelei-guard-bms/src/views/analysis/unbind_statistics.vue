@@ -101,7 +101,7 @@
             width="160"
             label="其他">
             <template slot-scope="scope">
-              <el-popover :content="scope.row.otherOpinion" class="item" trigger="hover" placement="top">
+              <el-popover :content="scope.row.otherOpinion" popper-class="unbind-popper-list" class="item" trigger="hover" placement="top">
                 <span slot="reference">{{ scope.row.otherOpinion | beautifyWordsFormatter(20) }}</span>
               </el-popover>
             </template>
@@ -507,5 +507,11 @@ export default {
 .user-name{
   color: #409EFF;
   cursor: pointer;
+}
+</style>
+<style lang="scss">
+.unbind-popper-list{
+  max-width: 600px;
+  word-break: break-all;
 }
 </style>
