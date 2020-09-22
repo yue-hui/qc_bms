@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="between-search-area-and-table-display" />
-      <div v-if="resources && resources.length !== 0" class="table-content table-block">
+      <div v-if="table_column && table_column.length > 0" class="table-content table-block">
         <el-table
           v-loading="loading"
           :data="resources"
