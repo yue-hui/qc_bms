@@ -89,6 +89,6 @@ export function computePageNumber(index, currentPage, pageSize) {
  * */
 export function stringSlice(text, length = 15) {
   text = String(text)
-  return text.length > 15 ? text.slice(0, length - 3) + '...' : text
+  return text.length > length ? text.slice(0, length - 3) + '...' : text
 }
 
