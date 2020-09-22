@@ -163,27 +163,27 @@ export const GRADE_LIST = [
     val: '6'
   },
   {
-    name: '初一',
+    name: '七年级(初一)',
     val: '7'
   },
   {
-    name: '初二',
+    name: '八年级(初二)',
     val: '8'
   },
   {
-    name: '初三',
+    name: '九年级(初三)',
     val: '9'
   },
   {
-    name: '高一',
+    name: '十年级(高一)',
     val: '10'
   },
   {
-    name: '高二',
+    name: '十一年级(高二)',
     val: '11'
   },
   {
-    name: '高三',
+    name: '十二年级(高三)',
     val: '12'
   },
   {

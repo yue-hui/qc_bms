@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="between-search-area-and-table-display" />
-      <div class="table-content table-block">
+      <div v-if="resources && resources.length !== 0" class="table-content table-block">
         <el-table
           v-loading="loading"
           :data="resources"
@@ -127,10 +127,11 @@
 
 <script>
 import dayjs from 'dayjs'
-import { TABLE_PAGE_SIEZS_LIST } from '../../utils/constant'
+import { TABLE_PAGE_SIEZS_LIST, GRADE_LIST } from '../../utils/constant'
 import { getPagenationSize, setPagenationSize } from '../../utils/auth'
 import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list, export_unbind_user_list } from '@/api/interactive'
 import { stringSlice } from '@/utils/index'
+import { get_value_from_map_list } from '@/utils/common'
 import { computePageNumber, parseTime } from '../../utils'
 
 export default {
@@ -275,19 +276,6 @@ export default {
       query_unbind_user_list(this.get_request_data())
         .then((data) => {
           if (data.status !== 0) throw data
-          /**
-  {
-    optiId: 0,
-    userName: '龙锦文003',
-    createTime: '2020-02-05 12:00:05',
-    _memberType: 'SVIP会员',
-    otherOpinion: '',
-    T1: false,
-    T2: true,
-    Txx: true
-    ...
-  }
-          * */
           this.resources = this.parse_resp_data(data.data)
           this.total = data.total_count
         })
@@ -413,9 +401,7 @@ export default {
         if (item.bindTime) {
           item._bindTime = parseTime(item.bindTime, '{y}-{m}-{d} {h}:{i}')
         }
-        if (item.grade) {
-          item._grade = String(item.grade) + '年级'
-        }
+        item._grade = get_value_from_map_list(String(item.grade), GRADE_LIST, '未知', '2')
         return item
       })
     }
