@@ -395,8 +395,8 @@ export default {
         // 提交时间
         item._createTime = parseTime(item.createTime, '{y}-{m}-{d} {h}:{i}')
         //
-        if (item.unbindTime) {
-          item._unbindTime = parseTime(item.unbindTime, '{y}-{m}-{d} {h}:{i}')
+        if (item.unBindTime) {
+          item._unbindTime = parseTime(item.unBindTime, '{y}-{m}-{d} {h}:{i}')
         }
         if (item.bindTime) {
           item._bindTime = parseTime(item.bindTime, '{y}-{m}-{d} {h}:{i}')
