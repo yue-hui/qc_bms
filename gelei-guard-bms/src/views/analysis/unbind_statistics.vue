@@ -126,7 +126,6 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import { TABLE_PAGE_SIEZS_LIST, GRADE_LIST } from '../../utils/constant'
 import { getPagenationSize, setPagenationSize } from '../../utils/auth'
 import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list, export_unbind_user_list } from '@/api/interactive'
@@ -138,8 +137,6 @@ export default {
   name: 'UnbindStatistics',
   components: {},
   data() {
-    const yesterday = dayjs()
-    console.log(yesterday)
     const page_size = getPagenationSize()
     return {
       query_set: {

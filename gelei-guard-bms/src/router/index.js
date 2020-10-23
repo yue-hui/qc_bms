@@ -340,6 +340,26 @@ export const asyncRoutes = [
         name: 'NewserWithSevenSigned',
         component: () => import('@/views/activity/seven_days_clock'),
         meta: { title: '新用户7天签到数据', icon: 'signed', pid: '20115' }
+      },
+      {
+        path: 'topic',
+        name: 'activity-topic',
+        component: () => import('@/views/activity/topic'),
+        meta: { title: '话题首页', icon: 'signed', pid: '' }
+      },
+      {
+        path: 'topic-action',
+        name: 'activity-topic-action',
+        hidden: true,
+        component: () => import('@/views/activity/topic-action'),
+        meta: { title: '话题创建', icon: 'signed', pid: '' }
+      },
+      {
+        path: 'topic-join-detail',
+        name: 'activity-topic-join-detail',
+        hidden: true,
+        component: () => import('@/views/activity/topic-join-detail'),
+        meta: { title: '话题创建', icon: 'signed', pid: '' }
       }
       // {
       //   path: 'props',
@@ -426,6 +446,12 @@ export const asyncRoutes = [
         name: 'BusinessCooperationRegistrationPage',
         component: () => import('@/views/toolbox/business_cooperation'),
         meta: { title: '商务合作注册页', icon: 'business_cooperation', pid: '20063' }
+      },
+      {
+        path: 'push-notification',
+        name: 'push-notification',
+        component: () => import('@/views/toolbox/push-notification/push-notification'),
+        meta: { title: 'PUSH通知管理', icon: 'push', pid: '' }
       }
     ]
   },

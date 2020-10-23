@@ -17,6 +17,26 @@ const service = axios.create({
   timeout: 30 * 1000 // 请求超时时间
 })
 
+service.interceptors.response.use(
+  (response) => {
+    try {
+      console.groupCollapsed(`api：${response.config.url}`)
+      console.group('request：')
+      console.log(JSON.stringify(JSON.parse(response.config.data), null, 2))
+      console.groupEnd()
+      console.group('response：')
+      console.log(JSON.stringify(response.data, null, 2))
+      console.groupEnd()
+      console.groupEnd()
+      // eslint-disable-next-line no-empty
+    } catch (e) {
+      console.log(e)
+    }
+    return Promise.resolve(response)
+  }, (error) => {
+    return Promise.reject(error)
+  })
+
 // request拦截器
 service.interceptors.request.use(
   config => {
