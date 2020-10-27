@@ -252,7 +252,7 @@ export default {
   },
   methods: {
     init() {
-      // this.refresh_data()
+      this.refresh_data()
     },
     search(e) {
       this.page = 1

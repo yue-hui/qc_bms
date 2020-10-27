@@ -364,7 +364,7 @@ export default {
       })
     },
     init() {
-      // this.refresh_data()
+      this.refresh_data()
       this.fetch_register_source_list()
     },
     blur_search(e) {
