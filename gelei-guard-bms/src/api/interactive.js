@@ -1176,3 +1176,137 @@ export function export_unbind_user_list(data) {
     data
   })
 }
+
+// /////////////////////////////////
+/**
+ * @description 获取话题首页分页数据
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1379
+ * */
+export function getTopicList(data) {
+  // eslint-disable-next-line no-unreachable
+  return request({
+    url: '/greenguard/manager/supertopic/list',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 话题新增
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1380
+ * */
+export function addTopic(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/add',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 话题上架/下架/删除
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1399
+ * */
+export function topicAction(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/listing',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description push 推送列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1389
+ */
+export function pushNotificationList(data) {
+  return request({
+    url: '/greenguard/manager/push/notice/list',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 新增 push 推送
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1391
+ * */
+export function addPushNotification(data) {
+  return request({
+    url: '/greenguard/manager/push/notice/add',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 运营位统计
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1383
+ * */
+export function topicBannerListStatistics(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/bannerlist',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 参与详情
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1384
+ * */
+export function topicJoinDetail(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/votedetail',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 话题详情
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1384
+ * */
+export function topicDetail(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/detail',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 话题更新
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1381
+ * */
+export function topicUpdate(data) {
+  return request({
+    url: '/greenguard/manager/supertopic/edit',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 删除 push 通知
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1403
+ * */
+export function removePushNotice(data) {
+  return request({
+    url: '/greenguard/manager/push/notice/delete',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 获取 push 详情
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1390
+ * */
+export function getPushNoticeInfo(data) {
+  return request({
+    url: '/greenguard/manager/push/notice/count/info',
+    method: 'post',
+    data
+  })
+}
+

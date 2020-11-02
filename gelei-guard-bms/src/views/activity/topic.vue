@@ -9,11 +9,12 @@
                 <el-col :span="8" class="order-number-list">话题标题:</el-col>
                 <el-col :span="16">
                   <el-input
-                    v-model="query_set.name"
+                    v-model="requestData.title"
                     maxlength="11"
                     size="mini"
                     clearable
                     placeholder="请输入话题标题"
+                    @change="filterList"
                   />
                 </el-col>
               </el-row>
@@ -25,16 +26,17 @@
                 <el-col :span="8" class="order-number-list">话题状态:</el-col>
                 <el-col :span="16">
                   <el-select
-                    v-model="query_set.status"
+                    v-model="requestData.status"
                     size="mini"
                     placeholder="请选择话题状态"
                     clearable
+                    @change="filterList"
                   >
                     <el-option
                       v-for="item in topic_type_list"
                       :key="item.name"
                       :label="item.name"
-                      :value="item.name" />
+                      :value="item.value" />
                   </el-select>
                 </el-col>
               </el-row>
@@ -46,7 +48,7 @@
                 <el-col :span="4" class="order-number-list">开始时间:</el-col>
                 <el-col :span="20">
                   <el-date-picker
-                    v-model="query_set.datetime_range"
+                    v-model="requestTime"
                     end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -54,6 +56,7 @@
                     clearable
                     size="mini"
                     unlink-panels
+                    @change="filterList"
                   />
                 </el-col>
               </el-row>
@@ -79,7 +82,7 @@
       <div class="table-content table-block">
         <el-table
           v-loading="loading"
-          :data="table_data"
+          :data="tableData"
           stripe
           size="mini"
           style="width: 100%">
@@ -87,59 +90,102 @@
             align="center"
             label="序号"
             prop="_id"
-            width="80" />
+          />
           <el-table-column
             align="center"
             label="标题"
-            prop="nick_name"
-            width="180" />
+            prop="title"
+          >
+            <template slot-scope="scope">
+              <span style="color: #409EFF;cursor: pointer" @click="joinDetail(scope.row)">{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="参与人数"
-            prop="phone" />
+            prop="voteNum" />
           <el-table-column
             align="center"
-            width="132"
             label="运营位"
-            prop="create_time" />
+            prop="bannerNum">
+            <template slot-scope="scope">
+              <span v-if="scope.row.bannerNum === 0" style="">{{ scope.row.bannerNum }}</span>
+              <span v-else style="color: #409EFF;cursor: pointer" @click="operateDialogOpenHandle(scope.row)">{{ scope.row.bannerNum }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="选项1"
-            prop="device_type_label" />
+            prop="optionNum1" />
           <el-table-column
             align="center"
             label="选项2"
-            prop="reg_from_label" />
+            prop="optionNum2" />
           <el-table-column
             align="center"
             label="投票比例"
-            prop="vip_label"
-            width="220" />
+            prop="votePe"
+            width="180" />
           <el-table-column
             align="center"
             label="状态"
-            prop="valid_days_label" />
+          >
+            <template slot-scope="scope">
+              <span v-if="scope.row._status === 10">待上架</span>
+              <span v-if="scope.row._status === 20" style="color: #1e6abc">已下架</span>
+              <span v-if="scope.row._status === 30" style="color: #00c250">进行中</span>
+              <span v-if="scope.row._status === 40" style="color: red">已经结束（上架）</span>
+              <span v-if="scope.row._status === 41" style="color: red">已经结束（下架）</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="开始时间"
-            prop="valid_days_label" />
+            prop="_startTime" />
           <el-table-column
             align="center"
             label="结束时间"
-            prop="valid_days_label" />
+            prop="_endTime" />
           <el-table-column
             align="center"
             label="操作"
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <gl-button
-                pid="20008"
+              <el-button
+                v-if="[30, 40].includes(scope.row._status)"
+                pid="0"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
+                @click="topicAction(scope.row, 0)"
+              >下架
+              </el-button>
+              <el-button
+                v-if="[10, 20, 41].includes(scope.row._status)"
+                pid="0"
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="topicAction(scope.row, 1)"
+              >上架
+              </el-button>
+              <el-button
+                pid="0"
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="topicUpdate(scope.row)"
+              >编辑
+              </el-button>
+              <el-button
+                pid="0"
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="topicAction(scope.row, '-1')"
               >删除
-              </gl-button>
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -151,8 +197,6 @@
           layout="total, sizes, prev, pager, next, jumper"
           @current-change="change_current"
           @size-change="table_size_change" />
-        <el-button type="primary" @click="operateDialogOpenHandle">打开运营位数据统计</el-button>
-        <el-button type="primary" @click="joinDetail">打开参与详情</el-button>
       </div>
     </div>
     <!--运营位数据统计-->
@@ -161,9 +205,9 @@
       :before-close="operateDialogCloseHandle"
       title="运营位数据统计"
       custom-class="operate-statistics-component"
-      width="800px"
+      width="1000px"
     >
-      <operate-statistics-component v-if="operateDialogVisible" />
+      <operate-statistics-component v-if="operateDialogVisible" :list="operateList" />
     </el-dialog>
   </div>
 </template>
@@ -173,9 +217,10 @@ import {
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { getTopicList, topicAction, topicBannerListStatistics } from '../../api/interactive'
 import { mapGetters } from 'vuex'
 // import dayjs from 'dayjs'
-
+import { computePageNumber, computePercentage, parseDateTime } from '../../utils/index'
 // 运营位数据统计组件
 import operateStatisticsComponent from './topic-component/operate-statistics'
 
@@ -188,37 +233,48 @@ export default {
     return {
       loading: false,
       topic_type_list: [
-        { name: '全部' },
-        { name: '待上架' },
-        { name: '已下架' },
-        { name: '进行中' },
-        { name: '已结束' }
+        { name: '全部', value: '' },
+        { name: '待上架', value: 2 },
+        { name: '已下架', value: 0 },
+        { name: '进行中', value: 3 },
+        { name: '已结束', value: 4 }
       ],
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
-      query_set: {
-        name: '',
+      requestData: {
+        title: '',
         status: '',
-        datetime_range: null
+        startTime: '',
+        endTime: '',
+        page_no: 1,
+        page_num: page_size
       },
-      table_data: [],
+      requestTime: null,
+      tableData: [],
       dialogVisible: false,
       dialogType: 1, // 1 新增 | 2 编辑
-      operateDialogVisible: false // 运营位数据统计弹出框状态
+      operateDialogVisible: false, // 运营位数据统计弹出框状态
+      operateList: []
     }
   },
   computed: {
     ...mapGetters(['is_agent'])
   },
-  mounted: function() {
+  mounted() {
+    this.getList()
   },
   methods: {
     table_size_change: function(size) {
       setPagenationSize(size)
+      this.requestData.page_no = 1
+      this.requestData.page_num = size
+      this.getList()
     },
     change_current: function(page) {
+      this.requestData.page_no = page
+      this.getList()
     },
     get_config: function() {
       return {
@@ -234,9 +290,41 @@ export default {
     },
     /**
      * @description 运营位数据统计弹窗框打开
+     * @param row {Object}
      * */
-    operateDialogOpenHandle() {
-      this.operateDialogVisible = true
+    operateDialogOpenHandle(row) {
+      topicBannerListStatistics({ topicId: row.topicId })
+        .then(res => {
+          if (res.status !== 0) throw res
+          this.operateDialogVisible = true
+          this.operateList = res.data.sort((a, b) => a.rank - b.rank).map((item, index) => {
+            item._id = computePageNumber(index, 1, 10)
+            // /
+            item._startTime = parseDateTime('y-m-d h:i', item.startTime)
+            item._endTime = parseDateTime('y-m-d h:i', item.endTime)
+            // 跳转方式 01 app | 02 h5 | 03 微信小程序
+            item._jumpTarget = {
+              '01': 'APP原生页',
+              '02': 'H5',
+              '03': '微信小程序'
+            }[item.jumpTarget]
+            // 状态
+            item._status = (() => {
+              if (new Date().getTime() >= item.startTime && new Date().getTime() <= item.endTime) {
+                return '进行中'
+              }
+              if (new Date().getTime() < item.startTime) {
+                return '待上架'
+              }
+              if (new Date().getTime() > item.endTime) {
+                return '已下架'
+              }
+            })()
+            return item
+          })
+        })
+        .catch(() => {
+        })
     },
     /**
      * @description 跳转至话题创建
@@ -248,13 +336,132 @@ export default {
       const { href } = this.$router.resolve(options)
       window.open(href, '_blank')
     },
-    joinDetail() {
+    /**
+     * @description 打开参与详情列表
+     * @param row {Object}
+     * */
+    joinDetail(row) {
       // activity-topic-join-detail
       const options = {
-        name: 'activity-topic-join-detail'
+        name: 'activity-topic-join-detail',
+        query: { title: row.title, topicId: row.topicId }
       }
       const { href } = this.$router.resolve(options)
       window.open(href, '_blank')
+    },
+    /**
+     * @description 获取话题列表
+     * */
+    getList() {
+      if (Array.isArray(this.requestTime)) {
+        this.requestData.startTime = this.requestTime[0].getTime()
+        this.requestData.endTime = this.requestTime[1].getTime()
+      } else {
+        this.requestData.startTime = ''
+        this.requestData.endTime = ''
+      }
+      this.loading = true
+      getTopicList(this.requestData)
+        .then(res => {
+          this.total = res.total_count
+          this.tableData = res.data.map((item, index) => {
+            item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
+            // 选项 1 2 的具体数值
+            item.optionNum1 = item.optionNum[0]
+            item.optionNum2 = item.optionNum[1]
+            // 选项 1 2 的具体百分比
+            const votePe = computePercentage(item.optionNum1, item.optionNum2)
+            item.votePe = votePe[0] + ' PK ' + votePe[1]
+            item._startTime = parseDateTime('y-m-d h:i', item.startTime)
+            item._endTime = parseDateTime('y-m-d h:i', item.endTime)
+            // 判断上下架
+            /*
+            * 10 待上架
+              20 已下架
+              30 进行中
+              40 已经结束（上架）
+              41 已经结束（下架）
+            * */
+            item._status = (() => {
+              // 在投票时间里面
+              if (item.startTime <= new Date().getTime() && item.endTime >= new Date().getTime()) {
+                if (item.status === 0) return 20
+                if (item.status === 1) return 30
+              }
+              // 投票时间还没开始
+              if (item.startTime > new Date().getTime()) {
+                if (item.status === 0) return 20
+                if (item.status === 1) return 10
+              }
+              // 投票结束时间已经结束
+              if (new Date().getTime() > item.endTime) {
+                if (item.status === 0) return 41
+                if (item.status === 1) return 40
+              }
+              return 0
+            })()
+            return item
+          })
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    /**
+     * @description 删除话题
+     * @param row {Object}
+     * @param status {Number}
+     * */
+    topicAction(row, status) {
+      const msg = {
+        0: '确认下架？',
+        1: '确认上架？',
+        '-1': '确认删除？'
+      }
+      this.$confirm(msg[status], '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.topicActionRequest(row.topicId, status)
+            .then(res => {
+              if (res.status !== 0) throw res
+              this.getList()
+            })
+            .catch(() => {
+            })
+        })
+        .catch(() => {
+        })
+    },
+    /**
+     * @description 跳转至编辑页面
+     * @param row {Object}
+     * */
+    topicUpdate(row) {
+      const options = {
+        name: 'activity-topic-update',
+        query: { topicId: row.topicId, update: 1, page: this.requestData.page_no }
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href, '_blank')
+    },
+    topicActionRequest(topicId, status) {
+      return topicAction({
+        topicId: topicId,
+        status: status
+      })
+    },
+    /**
+     * @description 筛选条件查询
+     * */
+    filterList() {
+      this.requestData.page_no = 1
+      this.getList()
     }
   }
 }

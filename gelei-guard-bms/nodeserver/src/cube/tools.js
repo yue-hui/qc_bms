@@ -15,12 +15,12 @@ function checkedParams(reqsign, params, currentTime) {
   const reqStamp = reqsign.substring(0, 13)
   const timediff = currentTime - reqStamp
   if (timediff > 0 && (timediff / 1000) > 40) {
-    console.log('request timeout: ', timediff / 1000)
+    // console.log('request timeout: ', timediff / 1000)
     return { message: 'node sign miss 2!', status: -1 }
   }
-  console.log('确认' + reqsign)
-  console.log(getSign(reqStamp, true, params))
-  console.log(params)
+  // console.log('确认' + reqsign)
+  // console.log(getSign(reqStamp, true, params))
+  // console.log(params)
   if (reqsign !== getSign(reqStamp, true, params)) {
     return { message: 'node sign error!', status: -1 }
   }
@@ -69,7 +69,7 @@ function getSign(timeStamp, compSign, params) {
   arr.sort()
   // 加密
   const str = arr.join('')
-  console.log(str)
+  // console.log(str)
   const sign = sha256(str)
   // 返回所有参数
   const mergeSign = timeStamp + sign
@@ -124,11 +124,11 @@ function nodeRequest(TransferReq, reqParam, method, headers, res) {
       return
     }
     var encryptParams = compTime(reqParam.sign, reqParam)
+    // 前端不能使用 status = -1
     if (encryptParams.status === -1) {
       resolve(encryptParams)
       return
     }
-
     request({
       url: TransferReq,
       body: encryptParams,

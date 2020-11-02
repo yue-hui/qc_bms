@@ -17,3 +17,4 @@ package-lock.json
 # 个性配置
 ./src/utils/pathparse.js
 ./src/utils/server.js
+test.js

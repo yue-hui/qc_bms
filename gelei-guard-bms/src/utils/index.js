@@ -1,6 +1,9 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+const BigDecimal = require('js-big-decimal')
+import { removeDom } from './dom.util'
+import _cloneDeep from 'lodash/cloneDeep'
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -91,4 +94,112 @@ export function stringSlice(text, length = 15) {
   text = String(text)
   return text.length > length ? text.slice(0, length - 3) + '...' : text
 }
-
+/**
+ * @description 根据地址/域名判断是否是本地环境
+ * @param text {String}
+ * @return {Boolean}
+ * */
+export function isLocalEnv(text) {
+  text = text.replace(/^http:\/\//, '')
+  return /^localhost/.test(text) || /^192\.168/.test(text)
+}
+/**
+ * @description 根据两个数返回百分比
+ * @param num1 {Number}
+ * @param num2 {Number}
+ * @return {String[]}
+ * */
+export function computePercentage(num1, num2) {
+  if (num1 === 0 && num2 === 0) {
+    return ['0%', '0%']
+  }
+  if (num1 === 0) {
+    return ['0%', '100%']
+  }
+  if (num2 === 0) {
+    return ['100%', '0%']
+  }
+  const count = new BigDecimal(num1).add(new BigDecimal(num2))
+  const num1Pe = new BigDecimal(num1).divide(count, 2).getValue().replace(/(\.|)[0]+$/, '')
+  return [new BigDecimal(num1Pe).multiply(new BigDecimal('100')).getValue() + '%',
+    new BigDecimal('1').subtract(new BigDecimal(num1Pe)).multiply(new BigDecimal('100')).getValue() + '%']
+}
+/**
+ * @description 格式化时间
+ * @param dateTime {String}
+ * @param time {Number}
+ * @return {String}
+ * */
+export function parseDateTime(dateTime = 'y-m-d h:i:s', time = 0) {
+  // eslint-disable-next-line one-var,prefer-const
+  let date = time === 0 ? new Date() : new Date(time),
+    // eslint-disable-next-line prefer-const
+    y = date.getFullYear(),
+    // eslint-disable-next-line prefer-const
+    m = date.getMonth() + 1,
+    // eslint-disable-next-line prefer-const
+    d = date.getDate(),
+    // eslint-disable-next-line prefer-const
+    h = date.getHours(),
+    // eslint-disable-next-line prefer-const
+    i = date.getMinutes(),
+    // eslint-disable-next-line prefer-const
+    s = date.getSeconds()
+  return dateTime
+    .replace(/y/g, y)
+    .replace(/m/g, m < 10 ? '0' + m : m)
+    .replace(/d/g, d < 10 ? '0' + d : d)
+    .replace(/h/g, h < 10 ? '0' + h : h)
+    .replace(/i/g, i < 10 ? '0' + i : i)
+    .replace(/s/g, s < 10 ? '0' + s : s)
+}
+/**
+ * @description 从本地选择一个文件
+ * @param accept {String}
+ * @return Promise
+ * */
+export function selectLocalFile(accept = '') {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input')
+    document.body.appendChild(input)
+    input.style.display = 'none'
+    input.type = 'file'
+    input.accept = accept
+    input.onchange = () => {
+      resolve(input.files[0])
+      removeDom(input)
+    }
+    input.click()
+  })
+}
+/**
+ * @description 获取数据类型
+ * @param value {*}
+ * @return {String}
+ * */
+export function getValueType(value) {
+  return /\[object ([\w\W]+)\]/.exec(({}).toString.call(value))[1].toLowerCase()
+}
+/**
+ * @description 深拷贝
+ * @param value {*}
+ * @return {*}
+ * */
+export function cloneDeep(value) {
+  if (!['array', 'object'].includes(getValueType(value))) {
+    return value
+  }
+  return _cloneDeep(value)
+}
+/**
+ * @description 计算会员天数
+ * @param vipEndTime {Number} 会员到期时间戳
+ * @return {Number}
+ * */
+export function computeVipDayNumber(vipEndTime) {
+  const nowTime = new Date().getTime()
+  if (vipEndTime < nowTime) {
+    return 0
+  }
+  return Math.ceil((vipEndTime - nowTime) / (24 * 60 * 60 * 1000))
+}

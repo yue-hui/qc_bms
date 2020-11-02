@@ -20,7 +20,7 @@ var Decrypt = require('../cube/secret').Decrypt
 function getRolePermissionsService(req, res, next) {
   // var TransferReq = config.baseURL + 'manager/sysRole/info'
   var TransferReq = config.baseURL + req.originalUrl.split('ns-permission/roles/')[1]
-  console.log(TransferReq)
+  // console.log(TransferReq)
   var method = req.method.toLowerCase()
   var reqParam = req.body
   var reqHeaders = buildHTTPHeader(req)

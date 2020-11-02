@@ -344,7 +344,7 @@ export const asyncRoutes = [
       {
         path: 'topic',
         name: 'activity-topic',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/activity/topic'),
         meta: { title: '话题首页', icon: 'signed', pid: '' }
       },
@@ -356,11 +356,18 @@ export const asyncRoutes = [
         meta: { title: '话题创建', icon: 'signed', pid: '' }
       },
       {
+        path: 'topic-update',
+        name: 'activity-topic-update',
+        hidden: true,
+        component: () => import('@/views/activity/topic-action'),
+        meta: { title: '话题编辑', icon: 'signed', pid: '' }
+      },
+      {
         path: 'topic-join-detail',
         name: 'activity-topic-join-detail',
         hidden: true,
         component: () => import('@/views/activity/topic-join-detail'),
-        meta: { title: '话题创建', icon: 'signed', pid: '' }
+        meta: { title: '参与详情', icon: 'signed', pid: '' }
       }
       // {
       //   path: 'props',
@@ -451,7 +458,7 @@ export const asyncRoutes = [
       {
         path: 'push-notification',
         name: 'push-notification',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/toolbox/push-notification/push-notification'),
         meta: { title: 'PUSH通知管理', icon: 'push', pid: '' }
       }

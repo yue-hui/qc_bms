@@ -2,8 +2,7 @@
   <div>
     <div class="table-content table-block">
       <el-table
-        v-loading="loading"
-        :data="table_data"
+        :data="list"
         stripe
         size="mini"
         style="width: 100%">
@@ -15,29 +14,29 @@
         <el-table-column
           align="center"
           label="标题"
-          prop="nick_name"
+          prop="title"
           width="180" />
         <el-table-column
           align="center"
           label="图片跳转"
-          prop="phone" />
+          prop="_jumpTarget" />
         <el-table-column
           align="center"
           width="132"
           label="点击次数"
-          prop="create_time" />
+          prop="clickedCount" />
         <el-table-column
           align="center"
           label="状态"
-          prop="device_type_label" />
+          prop="_status" />
         <el-table-column
           align="center"
           label="开始时间"
-          prop="valid_days_label" />
+          prop="_startTime" />
         <el-table-column
           align="center"
           label="结束时间"
-          prop="valid_days_label" />
+          prop="_endTime" />
       </el-table>
     </div>
   </div>
@@ -45,10 +44,16 @@
 
 <script>
 export default {
+  props: {
+    list: {
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
   data() {
     return {
-      table_data: [],
-      loading: false
     }
   }
 }
