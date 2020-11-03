@@ -129,7 +129,7 @@ import {
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import { topicJoinDetail } from '../../api/interactive'
-import { computePageNumber, parseDateTime } from '../../utils'
+import { cloneDeep, computePageNumber, parseDateTime } from '../../utils'
 import { PATRIARCH_MEMBER_TYPES } from '../../utils/constant'
 
 export default {
@@ -174,7 +174,8 @@ export default {
     change_current: function(page) {
     },
     getList() {
-      topicJoinDetail(this.requestData)
+      const requestData = cloneDeep(this.requestData)
+      topicJoinDetail(requestData)
         .then(res => {
           if (res.status !== 0) throw res
           this.total = res.total_count
