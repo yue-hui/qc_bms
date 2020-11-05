@@ -65,6 +65,48 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">会员订阅平台:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.renew_org"
+                    size="mini"
+                    placeholder="请选择订阅平台"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in renew_org_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">会员订阅状态:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.auto_type"
+                    size="mini"
+                    placeholder="请选择会员类型"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in auto_type_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">用户来源:</el-col>
                 <el-col :span="16">
                   <el-select
@@ -167,7 +209,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="4" :md="16" :lg="24" :xl="12" class="col-bg layout-right">
+          <el-col :xs="24" :sm="4" :md="16" :lg="24" :xl="4" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -337,8 +379,21 @@ export default {
         bind_type: '',
         begin_valid_days: '',
         end_valid_days: '',
-        datetime_range: []
+        datetime_range: [],
+        auto_type: '',
+        renew_org: ''
       },
+      auto_type_list: [
+        { label: '全部', value: '' },
+        { label: '订购中', value: '01' },
+        { label: '已退订', value: '02' },
+        { label: '异常', value: '03' }
+      ],
+      renew_org_list: [
+        { label: '全部', value: '' },
+        { label: '电信', value: 1 },
+        { label: '苹果', value: 2 }
+      ],
       table_data: [],
       current_uid: '',
       recharge_dialog_visible: false,
@@ -364,7 +419,7 @@ export default {
       })
     },
     init() {
-      this.refresh_data()
+      // this.refresh_data()
       this.fetch_register_source_list()
     },
     blur_search(e) {
@@ -427,6 +482,12 @@ export default {
       }
       if (this.query_set.end_valid_days) {
         config['end_valid_days'] = this.query_set.end_valid_days
+      }
+      if (this.query_set.auto_type) {
+        config['auto_type'] = this.query_set.auto_type
+      }
+      if (this.query_set.renew_org) {
+        config['renew_org'] = this.query_set.renew_org
       }
       return config
     },

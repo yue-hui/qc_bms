@@ -5,7 +5,7 @@
       :before-close="before_close"
       top="20vh"
       size="mini"
-      title="电信会员退订记录">
+      title="会员订阅开通和退订记录">
       <el-table
         v-loading="loading"
         :data="gridData"

@@ -344,7 +344,7 @@ export const asyncRoutes = [
       {
         path: 'topic',
         name: 'activity-topic',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/activity/topic'),
         meta: { title: '话题首页', icon: 'signed', pid: '' }
       },
@@ -458,7 +458,7 @@ export const asyncRoutes = [
       {
         path: 'push-notification',
         name: 'push-notification',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/toolbox/push-notification/push-notification'),
         meta: { title: 'PUSH通知管理', icon: 'push', pid: '' }
       }

@@ -103,7 +103,23 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="24" class="col-bg layout-right">
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">会员订阅类型:</el-col>
+                <el-col :span="16">
+                  <el-select v-model="query_sets.renew_type" size="mini" clearable placeholder="所有状态" @change="query_condition_change">
+                    <el-option
+                      v-for="item in renew_list"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="20" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -147,6 +163,10 @@
             prop="original_price" />
           <el-table-column
             align="center"
+            label="首开价"
+            prop="_first_discount_price" />
+          <el-table-column
+            align="center"
             label="套餐活动价"
             prop="discount_price" />
           <el-table-column
@@ -157,6 +177,10 @@
             align="center"
             label="限购次数"
             prop="purchase_quota" />
+          <el-table-column
+            align="center"
+            label="订阅方式"
+            prop="_renew_type" />
           <el-table-column
             align="center"
             label="活动起始时间"
@@ -249,7 +273,8 @@ export default {
         plan_type: '',
         is_member: '',
         device_type: '',
-        is_listing: '1'
+        is_listing: '1',
+        renew_type: ''
       },
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
       packages: PACKAGE_TYPE,
@@ -261,7 +286,12 @@ export default {
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
-      total: 0
+      total: 0,
+      renew_list: [
+        { label: '全部', value: '' },
+        { label: '非自动续费', value: 1 },
+        { label: '自动续费', value: 2 }
+      ]
     }
   },
   computed: {},
@@ -309,7 +339,15 @@ export default {
           plan_type_label,
           is_member_label,
           create_time_label,
-          member_type_label
+          member_type_label,
+          _renew_type: (() => {
+            if (!r.renew_type) return '非自动续费'
+            if (String(r.renew_type) === '1') return '非自动续费'
+            if (String(r.renew_type) === '2') return '自动续费'
+          })(),
+          _first_discount_price: (() => {
+            return r.first_discount_price || '-'
+          })()
         }
       })
     },

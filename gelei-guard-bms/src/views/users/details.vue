@@ -112,7 +112,6 @@
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">
           <span>会员信息</span>
-          <span class="order-unsubscribe-history" @click="show_unsubscribe_record = !show_unsubscribe_record">(退订记录)</span>
         </div>
         <div class="card-block-body order-list">
           <table v-if="transfer_member_list.length !== 0" class="table" border="0">
@@ -121,15 +120,42 @@
               <th>会员有效时间</th>
               <th>会员有效天数</th>
               <th>会员状态</th>
-              <th>操作</th>
             </tr>
             <tr v-for="member in transfer_member_list" :key="member.record_id">
               <td>{{ member.member_type_name }}</td>
               <td>{{ member.valid_date_label }}</td>
               <td>{{ member.valid_days }}天</td>
               <td>{{ member.status_label }}</td>
+            </tr>
+          </table>
+          <p v-else class="table-no-data">该用户未开通任何会员</p>
+        </div>
+      </el-card>
+      <!--会员信息 end-->
+      <!--会员订阅项目-->
+      <el-card class="box-card parent-card-block gg-user-details-with-all">
+        <div slot="header" class="clearfix">
+          <span>会员订阅项目</span>
+          <span class="order-unsubscribe-history" @click="show_unsubscribe_record = !show_unsubscribe_record">(开通和退订记录)</span>
+        </div>
+        <div class="card-block-body order-list">
+          <table v-if="transfer_member_list.length !== 0" class="table" border="0">
+            <tr>
+              <th>会员类型</th>
+              <th>订阅套餐</th>
+              <th>订阅平台</th>
+              <th>订阅开始时间</th>
+              <th>续费状态</th>
+              <th>操作</th>
+            </tr>
+            <tr v-for="member in auto_plan_list" :key="member.record_id">
+              <td>{{ member._memberLevel }}</td>
+              <td>{{ member.planName }}</td>
+              <td>{{ member._renewOrg }}</td>
+              <td>{{ member.beginDate | formatter_date_string }}</td>
+              <td>{{ member._status }}</td>
               <td>
-                <template v-if="member.order_ctcc_sp_status && !is_agent">
+                <template v-if="member.renewOrg !== 2 && !is_agent">
                   <gl-button
                     pid="10079"
                     size="small"
@@ -138,14 +164,16 @@
                     style="text-decoration: underline;"
                     @click="order_callback">退订</gl-button>
                 </template>
+                <template v-else>
+                  <span>-</span>
+                </template>
               </td>
             </tr>
           </table>
           <p v-else class="table-no-data">该用户未开通任何会员</p>
         </div>
       </el-card>
-      <!--会员信息 end-->
-
+      <!--会员订阅项目 end-->
       <div class="black-block" />
 
       <template>
@@ -165,9 +193,9 @@
 // import { parent_info } from '@/views/users/data'
 import child from './components/child'
 import memberUnsubscribeRecord from './components/member_unsubscribe_record'
-import { get_parent_details, monthlyplan_unsubscribe_ctccsp } from '@/api/interactive'
+import { get_parent_details, monthlyplan_unsubscribe_ctccsp } from '../../api/interactive'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
-import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT, ORDERED_MEMBER_STATUS_LABEL } from '@/utils/constant'
+import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT, ORDERED_MEMBER_STATUS_LABEL } from '../../utils/constant'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -207,7 +235,8 @@ export default {
         create_time: true,
         last_use_time: true,
         device_type: true
-      }
+      },
+      auto_plan_list: []
     }
   },
   computed: {
@@ -236,6 +265,18 @@ export default {
               valid_date_label
             }
           })
+          this.auto_plan_list = res.data.auto_plan_list.map(item => {
+            item._renewOrg = String(item.renewOrg) === '1' ? '电信' : '苹果'
+            item._memberLevel = String(item.memberLevel) === '001' ? '高级会员' : '普通会员'
+            item._status = (() => {
+              const status = String(item.status)
+              if (status === '01') return '定购中'
+              if (status === '02') return '已退定'
+              if (status === '03') return '异常'
+            })()
+            return item
+          })
+          console.log(this.auto_plan_list)
         } else {
           this.$message.error(res.message)
         }

@@ -103,11 +103,32 @@
                   <el-select
                     v-model="query_sets.member_type"
                     size="mini"
-                    placeholder="订单状态"
+                    placeholder="会员类型"
                     clearable
                     @change="query_condition_change">
                     <el-option
                       v-for="item in patriarch_member_types"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">会员订阅方式:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_sets.renew_type"
+                    size="mini"
+                    placeholder="会员订阅方式"
+                    clearable
+                    @change="query_condition_change">
+                    <el-option
+                      v-for="item in auto_type_list"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value" />
@@ -148,7 +169,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="6" :sm="12" :md="12" :lg="14" :xl="8" class="col-bg layout-right col-right-button">
+          <el-col :xs="1" :sm="12" :md="3" :lg="14" :xl="4" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -201,6 +222,10 @@
             align="center"
             label="交易金额"
             prop="order_amount_label" />
+          <el-table-column
+            align="center"
+            label="会员订阅方式"
+            prop="_renew_type" />
           <el-table-column
             align="center"
             label="支付方式"
@@ -277,9 +302,15 @@ export default {
         pay_type: '',
         nick_name: '',
         channel_name: '',
-        contact_phone: ''
+        contact_phone: '',
+        renew_type: ''
       },
       patriarch_member_types,
+      auto_type_list: [
+        { label: '全部', value: '' },
+        { label: '自动续费', value: '1' },
+        { label: '非自动续费', value: '2' }
+      ],
       order_source: COMMODITY_TYPE,
       order_status_list: [],
       pay_type_mode: [],
@@ -369,7 +400,8 @@ export default {
           ...r,
           order_amount_label,
           order_time_label,
-          member_type_label
+          member_type_label,
+          _renew_type: String(r.renew_type) === '1' ? '自动续费' : '非自动续费'
         }
       })
     },

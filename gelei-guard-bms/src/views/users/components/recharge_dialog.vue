@@ -53,6 +53,11 @@
         width="100" />
       <el-table-column
         align="center"
+        label="会员订阅方式"
+        prop="_renew_type"
+        width="100" />
+      <el-table-column
+        align="center"
         label="订单状态"
         prop="order_status"
         width="100" />
@@ -123,7 +128,8 @@ export default {
         return {
           ...r,
           order_amount_label,
-          order_time_label
+          order_time_label,
+          _renew_type: String(r.renew_type) === '1' ? '自动续费' : '非自动续费'
         }
       })
     },

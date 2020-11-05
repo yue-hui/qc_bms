@@ -119,7 +119,7 @@ export const bms_platform_classification = [
         },
         {
           value: '62',
-          label: 'VIVO政企Y3'
+          label: 'VIVO Y3孩子端'
         },
         {
           value: '72',
