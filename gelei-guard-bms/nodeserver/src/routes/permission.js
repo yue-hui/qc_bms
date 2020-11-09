@@ -27,7 +27,6 @@ router.post('/roles/greenguard/manager/sysRole/info', function(req, res, next) {
   var reqConType = req.headers['content-type']
   var contentTypeLower = reqConType || reqConType.toLowerCase()
   if (contentTypeLower.indexOf('application/json') !== -1) {
-    var reqHeaders = buildHTTPHeader(req)
     try {
       getRolePermissionsService(req, res, next)
     } catch (err) {
@@ -46,7 +45,6 @@ router.post('/roles/greenguard/manager/sysRole/saveOrUpdate', function(req, res,
   var reqConType = req.headers['content-type']
   var contentTypeLower = reqConType || reqConType.toLowerCase()
   if (contentTypeLower.indexOf('application/json') !== -1) {
-    var reqHeaders = buildHTTPHeader(req)
     try {
       createOrEditRolePermissionsService(req, res, next)
     } catch (err) {

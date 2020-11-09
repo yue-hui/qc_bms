@@ -19,8 +19,6 @@
 <script>
 export default {
   name: 'Permission',
-  beforecreate: function() {
-  },
   props: {
     resource: {
       type: Object,

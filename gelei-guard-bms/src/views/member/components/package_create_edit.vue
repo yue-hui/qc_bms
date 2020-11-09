@@ -44,7 +44,7 @@
                 <el-radio v-for="(item, index) in member_package_objects" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="套餐订阅方式" prop="renew_type">
+            <el-form-item label="会员订阅方式" prop="renew_type">
               <el-radio-group v-model="public_form.renew_type" size="mini">
                 <el-radio v-for="(item, index) in renew_type_list" :disabled="action === 2" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
@@ -122,7 +122,7 @@
                 <el-radio v-for="(item, index) in member_package_objects" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="套餐订阅方式" prop="renew_type">
+            <el-form-item label="会员订阅方式" prop="renew_type">
               <el-radio-group v-model="public_form.renew_type" size="mini">
                 <el-radio v-for="(item, index) in renew_type_list" :disabled="action === 2" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
@@ -148,16 +148,16 @@
               </el-input>
             </el-form-item>
             <el-form-item label="首开活动标签">
-              <el-input v-model="public_form.first_plan_label" size="mini" type="text" />
+              <el-input v-model="public_form.first_plan_label" maxlength="10" size="mini" type="text" />
             </el-form-item>
             <el-form-item label="首开价格标签">
-              <el-input v-model="public_form.first_price_label" size="mini" type="text" />
+              <el-input v-model="public_form.first_price_label" maxlength="10" size="mini" type="text" />
             </el-form-item>
             <el-form-item label="续费活动标签">
               <el-input v-model="public_form.plan_label" maxlength="10" size="mini" />
             </el-form-item>
             <el-form-item label="续费价格标签">
-              <el-input v-model="public_form.remark" maxlength="20" size="mini" />
+              <el-input v-model="public_form.remark" maxlength="15" size="mini" />
             </el-form-item>
             <el-form-item label="设备类型" prop="device_type">
               <el-select
@@ -315,7 +315,7 @@ export default {
         remark: '限时优惠',
         row_order: '',
         date_range: [],
-        renew_type: 1, // 套餐订阅方式：1 按月购买 | 2 自动续费
+        renew_type: 1, // 会员订阅方式：1 按月购买 | 2 自动续费
         first_plan_label: '',
         first_price_label: '',
         first_discount_price: ''
@@ -347,7 +347,7 @@ export default {
           { required: true, message: '套餐对象为必选项', trigger: 'blur' }
         ],
         renew_type: [
-          { required: true, message: '套餐订阅方式为必选项', trigger: 'blur' }
+          { required: true, message: '会员订阅方式为必选项', trigger: 'blur' }
         ],
         valid_days: [
           { required: true, message: '套餐时长不能为空', trigger: 'blur' },

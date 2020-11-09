@@ -719,6 +719,22 @@ const PERMISSION_DATA = [
         code: 20115,
         children: []
       }
+      // {
+      //   name: '话题管理',
+      //   checked: false,
+      //   width: FUNCTION_PAGE_WIDTH,
+      //   layout: 'horizotal',
+      //   c_layout: 'horizotal',
+      //   code: 20999,
+      //   children: [
+      //     { name: '话题列表', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21000, children: [] },
+      //     { name: '创建话题', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21001, children: [] },
+      //     { name: '话题上/下架/删除', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21002, children: [] },
+      //     { name: '话题编辑', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21003, children: [] },
+      //     { name: '话题参与详情', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21004, children: [] },
+      //     { name: '话题运营位详情', checked: false, width: BUTTON_OPERATION_WIDTH, layout: 'vertical', c_layout: 'vertical', code: 21005, children: [] },
+      //   ]
+      // }
     ]
   },
   {

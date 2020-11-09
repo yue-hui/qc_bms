@@ -106,7 +106,7 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员订阅类型:</el-col>
+                <el-col :span="8" class="order-number-list">会员订阅方式:</el-col>
                 <el-col :span="16">
                   <el-select v-model="query_sets.renew_type" size="mini" clearable placeholder="所有状态" @change="query_condition_change">
                     <el-option

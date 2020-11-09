@@ -42,6 +42,9 @@ export default {
     }
   },
   mounted: function() {
+    // setTimeout(() => {
+    //   console.log('pdata: ', this.pdata)
+    // }, 1000)
   },
   methods: {
     get_all_data() {

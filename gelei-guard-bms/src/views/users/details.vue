@@ -145,6 +145,7 @@
               <th>订阅套餐</th>
               <th>订阅平台</th>
               <th>订阅开始时间</th>
+              <th>下次续费日期</th>
               <th>续费状态</th>
               <th>操作</th>
             </tr>
@@ -153,6 +154,7 @@
               <td>{{ member.planName }}</td>
               <td>{{ member._renewOrg }}</td>
               <td>{{ member.beginDate | formatter_date_string }}</td>
+              <td>{{ member.nextTime | formatter_date_string }}</td>
               <td>{{ member._status }}</td>
               <td>
                 <template v-if="member.renewOrg !== 2 && !is_agent">
