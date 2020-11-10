@@ -66,7 +66,7 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
-                  pid="10088"
+                  pid="21005"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -152,40 +152,40 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button
+              <gl-button
                 v-if="[30, 40].includes(scope.row._status)"
-                pid="0"
+                pid="21008"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="topicAction(scope.row, 0)"
               >下架
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
                 v-if="[10, 20, 41].includes(scope.row._status)"
-                pid="0"
+                pid="21008"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="topicAction(scope.row, 1)"
               >上架
-              </el-button>
-              <el-button
-                pid="0"
+              </gl-button>
+              <gl-button
+                pid="21006"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="topicUpdate(scope.row)"
               >编辑
-              </el-button>
-              <el-button
-                pid="0"
+              </gl-button>
+              <gl-button
+                pid="21008"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="topicAction(scope.row, '-1')"
               >删除
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -293,6 +293,9 @@ export default {
      * @param row {Object}
      * */
     operateDialogOpenHandle(row) {
+      if (!this.$store.getters.auths.includes('21009')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       topicBannerListStatistics({ topicId: row.topicId })
         .then(res => {
           if (res.status !== 0) throw res
@@ -341,6 +344,9 @@ export default {
      * @param row {Object}
      * */
     joinDetail(row) {
+      if (!this.$store.getters.auths.includes('21007')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       // activity-topic-join-detail
       const options = {
         name: 'activity-topic-join-detail',

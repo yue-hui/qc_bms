@@ -35,7 +35,7 @@
 import { date_formatter } from '@/utils/common'
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { get_monthlyplan_unsubscribe_list } from '@/api/interactive'
+import { get_monthlyplan_unsubscribe_list } from '../../../api/interactive'
 
 export default {
   name: 'DeviceBindRecords',

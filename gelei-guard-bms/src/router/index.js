@@ -344,30 +344,30 @@ export const asyncRoutes = [
       {
         path: 'topic',
         name: 'activity-topic',
-        hidden: true, // 745
+        hidden: false, // 745
         component: () => import('@/views/activity/topic'),
-        meta: { title: '话题首页', icon: 'signed', pid: '21000' }
+        meta: { title: '话题首页', icon: 'signed', pid: '21004' }
       },
       {
         path: 'topic-action',
         name: 'activity-topic-action',
         hidden: true,
         component: () => import('@/views/activity/topic-action'),
-        meta: { title: '话题创建', icon: 'signed', pid: '' }
+        meta: { title: '话题创建', icon: 'signed', pid: '21005' }
       },
       {
         path: 'topic-update',
         name: 'activity-topic-update',
         hidden: true,
         component: () => import('@/views/activity/topic-action'),
-        meta: { title: '话题编辑', icon: 'signed', pid: '' }
+        meta: { title: '话题编辑', icon: 'signed', pid: '21006' }
       },
       {
         path: 'topic-join-detail',
         name: 'activity-topic-join-detail',
         hidden: true,
         component: () => import('@/views/activity/topic-join-detail'),
-        meta: { title: '参与详情', icon: 'signed', pid: '' }
+        meta: { title: '参与详情', icon: 'signed', pid: '21007' }
       }
       // {
       //   path: 'props',
@@ -458,9 +458,9 @@ export const asyncRoutes = [
       {
         path: 'push-notification',
         name: 'push-notification',
-        hidden: true, // 745
+        hidden: false, // 745
         component: () => import('@/views/toolbox/push-notification/push-notification'),
-        meta: { title: 'PUSH通知管理', icon: 'push', pid: '' }
+        meta: { title: 'PUSH通知管理', icon: 'push', pid: '21000' }
       }
     ]
   },

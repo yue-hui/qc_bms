@@ -85,7 +85,7 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
-                  pid="10088"
+                  pid="21002"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -154,14 +154,14 @@
             width="80"
             prop="control">
             <template slot-scope="scope">
-              <el-button
-                pid=""
+              <gl-button
+                pid="21003"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="remove(scope.row)"
               >删除
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
           <el-table-column width="50" type="expand">
