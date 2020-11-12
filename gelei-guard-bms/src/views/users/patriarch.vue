@@ -385,7 +385,7 @@ export default {
       },
       auto_type_list: [
         { label: '全部', value: '' },
-        { label: '订购', value: '01' },
+        { label: '正常', value: '01' },
         { label: '退订', value: '02' },
         { label: '异常', value: '03' }
       ],

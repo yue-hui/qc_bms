@@ -142,7 +142,7 @@
           <table v-if="transfer_member_list.length !== 0" class="table" border="0">
             <tr>
               <th>会员类型</th>
-              <th>订阅套餐</th>
+              <th>套餐名称</th>
               <th>订阅平台</th>
               <th>订阅开始时间</th>
               <th>下次续费日期</th>
@@ -272,8 +272,8 @@ export default {
             item._memberLevel = String(item.memberLevel) === '001' ? '高级会员' : '普通会员'
             item._status = (() => {
               const status = String(item.status)
-              if (status === '01') return '定购中'
-              if (status === '02') return '已退定'
+              if (status === '01') return '正常'
+              if (status === '02') return '退订'
               if (status === '03') return '异常'
             })()
             return item

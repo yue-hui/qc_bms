@@ -31,7 +31,7 @@
         prop="nick_name" />
       <el-table-column
         align="center"
-        label="套餐类型"
+        label="套餐名称"
         prop="order_desc" />
       <el-table-column
         align="center"
