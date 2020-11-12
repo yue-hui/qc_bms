@@ -97,13 +97,18 @@
             prop="title"
           >
             <template slot-scope="scope">
-              <span style="color: #409EFF;cursor: pointer" @click="joinDetail(scope.row)">{{ scope.row.title }}</span>
+              <span v-if="scope.row.bannerNum === 0">{{ scope.row.title }}</span>
+              <span v-else style="color: #409EFF;cursor: pointer" @click="joinDetail(scope.row)">{{ scope.row.title }}</span>
             </template>
           </el-table-column>
           <el-table-column
             align="center"
             label="参与人数"
             prop="voteNum" />
+          <el-table-column
+            align="center"
+            label="围观人数"
+            prop="onlookers" />
           <el-table-column
             align="center"
             label="运营位"
@@ -179,6 +184,7 @@
               >编辑
               </gl-button>
               <gl-button
+                :disabled="scope.row._status === 30"
                 pid="21008"
                 size="small"
                 style="text-decoration: underline;"
