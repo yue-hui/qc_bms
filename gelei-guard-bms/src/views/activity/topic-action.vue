@@ -7,11 +7,11 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <!------------------------------>
         <el-form-item label="标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入话题标题" size="mini" />
+          <el-input v-model="form.title" maxlength="35" placeholder="请输入话题标题" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="投票项" prop="options">
-          <el-input v-for="(item, index) in form.options" :key="index" v-model="item.option" :placeholder="'请输入选项' + (index + 1) + '名称'" size="mini" />
+          <el-input v-for="(item, index) in form.options" :key="index" v-model="item.option" :placeholder="'请输入选项' + (index + 1) + '名称'" maxlength="10" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="简介" prop="description">
@@ -21,7 +21,7 @@
         </el-form-item>
         <!------------------------------>
         <el-form-item label="围观次数" prop="onlookers">
-          <el-input v-model="form.onlookers" placeholder="请输入围观次数" size="mini" />
+          <el-input v-model="form.onlookers" placeholder="请输入围观次数" type="number" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="福利说明" prop="benefitUrl">
@@ -44,7 +44,7 @@
         <div v-if="form.isShowBanner === 1" class="operate-list">
           <div v-for="(item, index) in form.banners" :key="index" class="operate-item">
             <el-form-item :prop="'banners.' + index + '.title'" :rules="{required: true, message: '标题不能为空', trigger: 'blur'}" label="标题">
-              <el-input v-model="item.title" placeholder="标题仅在后台展示" size="mini" />
+              <el-input v-model="item.title" maxlength="35" placeholder="标题仅在后台展示" size="mini" />
             </el-form-item>
             <el-form-item :prop="'banners.' + index + '.url'" :rules="{required: true, message: '请选择图片', trigger: 'blur'}" label="图片上传">
               <el-button size="mini" @click="selectOperate(index)">选择图片</el-button>
@@ -91,7 +91,7 @@
         <!------------------------------>
         <el-form-item label="新话题气泡" prop="bubbles">
           <div v-for="(item, index) in form.bubbles" :key="index" class="bubbles-item">
-            <el-input v-model="item.title" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
+            <el-input v-model="item.title" maxlength="15" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
             <div class="bubbles-action" >
               <span v-show="form.bubbles.length === 1" @click="addBubbles">
                 <svg-icon icon-class="add" />
@@ -215,6 +215,9 @@ export default {
         benefitUrl: [
           {
             validator: (rule, value, callback) => {
+              // 福利说明不是必填项
+              return callback()
+              // eslint-disable-next-line no-unreachable
               if (value) {
                 return callback()
               }
