@@ -97,7 +97,7 @@
             prop="title"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.bannerNum === 0">{{ scope.row.title }}</span>
+              <span v-if="scope.row.voteNum === 0">{{ scope.row.title }}</span>
               <span v-else style="color: #409EFF;cursor: pointer" @click="joinDetail(scope.row)">{{ scope.row.title }}</span>
             </template>
           </el-table-column>
