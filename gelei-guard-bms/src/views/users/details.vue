@@ -267,13 +267,15 @@ export default {
               valid_date_label
             }
           })
-          this.auto_plan_list = res.data.auto_plan_list.map(item => {
+          this.auto_plan_list = res.data.auto_plan_list.filter(item => {
+            return String(item.status) !== '02'
+          }).map(item => {
             item._renewOrg = String(item.renewOrg) === '1' ? '电信' : '苹果'
             item._memberLevel = String(item.memberLevel) === '001' ? '高级会员' : '普通会员'
             item._status = (() => {
               const status = String(item.status)
               if (status === '01') return '正常'
-              if (status === '02') return '退订'
+              // if (status === '02') return '退订'
               if (status === '03') return '异常'
             })()
             return item
