@@ -184,7 +184,6 @@
               >编辑
               </gl-button>
               <gl-button
-                :disabled="scope.row._status === 30"
                 pid="21008"
                 size="small"
                 style="text-decoration: underline;"
@@ -428,6 +427,9 @@ export default {
      * @param status {Number}
      * */
     topicAction(row, status) {
+      if (row._status === 30) {
+        return this.$message.warning('进行中的话题不支持删除')
+      }
       const msg = {
         0: '确认下架？',
         1: '确认上架？',
