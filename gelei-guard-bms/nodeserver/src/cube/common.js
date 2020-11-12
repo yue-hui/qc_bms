@@ -34,7 +34,7 @@ function pagePermissionMapToGlobal(codes) {
   for (var i = 0; i < codes.length; i++) {
     var code = codes[i] + ''
     var _curr = PAGE_MAPPER[code]
-    console.log(_curr, code)
+    // console.log(_curr, code)
     for (var j = 0; j < _curr.length; j++) {
       _p.add(_curr[j])
     }

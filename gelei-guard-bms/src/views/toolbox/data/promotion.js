@@ -66,6 +66,10 @@ export const bms_platform_classification = [
         {
           value: 'F2',
           label: '安卓孩子端'
+        },
+        {
+          value: 'E2',
+          label: 'PC孩子端(win)'
         }
       ],
       update_models: [
@@ -115,7 +119,7 @@ export const bms_platform_classification = [
         },
         {
           value: '62',
-          label: 'VIVO政企Y3'
+          label: 'VIVO Y3孩子端'
         },
         {
           value: '72',
@@ -291,6 +295,10 @@ export const platforms = [
   {
     value: '83',
     label: 'OPPO定制机A8中间件'
+  },
+  {
+    value: 'E2',
+    label: 'PC孩子端(win)'
   }
 ]
 

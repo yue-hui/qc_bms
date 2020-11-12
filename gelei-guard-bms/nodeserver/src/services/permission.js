@@ -20,7 +20,7 @@ var Decrypt = require('../cube/secret').Decrypt
 function getRolePermissionsService(req, res, next) {
   // var TransferReq = config.baseURL + 'manager/sysRole/info'
   var TransferReq = config.baseURL + req.originalUrl.split('ns-permission/roles/')[1]
-  console.log(TransferReq)
+  // console.log(TransferReq)
   var method = req.method.toLowerCase()
   var reqParam = req.body
   var reqHeaders = buildHTTPHeader(req)
@@ -37,7 +37,8 @@ function getRolePermissionsService(req, res, next) {
       status: 0,
       message: 'success'
     }
-    ret['data'] = Encrypt(JSON.stringify(role_info))
+    // ret['data'] = Encrypt(JSON.stringify(role_info))
+    ret['data'] = role_info
     res.send(JSON.stringify(ret))
   } else {
     const newParams = {
@@ -49,7 +50,8 @@ function getRolePermissionsService(req, res, next) {
         var function_list = result.data.function_list || []
         var codes = patchRolesPermission(ptype, function_list)
         result.data.codes = codes
-        result['data'] = Encrypt(JSON.stringify(result.data))
+        // result['data'] = Encrypt(JSON.stringify(result.data))
+        result['data'] = result.data
         res.send(result)
       } else {
         res.send(result)
@@ -73,7 +75,8 @@ function createOrEditRolePermissionsService(req, res, next) {
   var method = req.method.toLowerCase()
   var reqParam = req.body
   var newParams = JSON.parse(JSON.stringify(reqParam))
-  var permissions = JSON.parse(Decrypt(newParams['permissions']))
+  // var permissions = JSON.parse(Decrypt(newParams['permissions']))
+  var permissions = newParams['permissions']
   delete newParams['permissions']
   newParams = {...newParams, ...permissions}
   var function_list = newParams['function_list']

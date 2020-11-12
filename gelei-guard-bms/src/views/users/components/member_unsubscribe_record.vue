@@ -5,14 +5,14 @@
       :before-close="before_close"
       top="20vh"
       size="mini"
-      title="电信会员退订记录">
+      title="会员订阅开通和退订记录">
       <el-table
         v-loading="loading"
         :data="gridData"
         empty-text="该用户没有退订记录"
         size="mini">
-        <el-table-column property="time_label" label="时间" width="150" />
-        <el-table-column property="desc" label="事件描述" />
+        <el-table-column property="_begin_time" label="时间" width="150" />
+        <el-table-column property="remark" label="事件描述" />
       </el-table>
 
       <div slot="footer" class="dialog-footer">
@@ -35,7 +35,7 @@
 import { date_formatter } from '@/utils/common'
 import { DATE_TIME_FORMAT, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { get_monthlyplan_unsubscribe_list } from '@/api/interactive'
+import { get_monthlyplan_unsubscribe_list } from '../../../api/interactive'
 
 export default {
   name: 'DeviceBindRecords',
@@ -89,21 +89,17 @@ export default {
     },
     load_data() {
       const config = this.get_config()
-      config['patriarch_id'] = this.patriarchId
+      // config['patriarch_id'] = this.patriarchId
       this.loading = true
-      const data = {
-        user_id: this.$route.params.pid
-      }
-      get_monthlyplan_unsubscribe_list(data).then(res => {
+      config.user_id = this.$route.params.pid
+      get_monthlyplan_unsubscribe_list(config).then(res => {
         if (res.status === 0) {
           const gridData = res.data || []
           this.gridData = gridData.map(r => {
-            const time_label = date_formatter(r.end_date, DATE_TIME_FORMAT)
-            const desc = r.unsubscribe_op_user_id + ' 退订了 ' + r.phone + ' 的电信会员'
+            const _begin_time = date_formatter(r.begin_time, DATE_TIME_FORMAT)
             return {
               ...r,
-              time_label,
-              desc
+              _begin_time
             }
           })
           this.total = res.total_count

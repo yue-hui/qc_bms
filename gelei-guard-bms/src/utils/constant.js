@@ -1,6 +1,8 @@
 /* 签名时间偏移量 */
 // import { extendPath } from 'echarts/src/util/graphic'
 
+import { isLocalEnv } from './index'
+
 export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 
 /* 系统常量配置 */
@@ -11,7 +13,7 @@ export const SYSTEM_CONSTANT = {
 
 /* 后台消息同步时间设置 */
 export const SYNC_MESSAGE_SECOND = 60
-export const SYNC_USER_VARIABLE_INFOMATION = 10
+export const SYNC_USER_VARIABLE_INFOMATION = isLocalEnv ? 120 : 10
 
 /* 表格长度 */
 export const TABLE_PAGE_SIEZS_LIST = [10, 20, 50, 100]

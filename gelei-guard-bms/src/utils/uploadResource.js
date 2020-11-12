@@ -13,6 +13,7 @@ export async function uploadFormDataSecondPassServer(file) {
   const url = '/file/data/secondpass'
   const sign_data = getSign(params)
   const data = JSON.parse(sign_data)
+  console.log(data)
   return await axios.post(url, data, config)
 }
 

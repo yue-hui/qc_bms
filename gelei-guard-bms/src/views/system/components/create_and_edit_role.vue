@@ -54,10 +54,10 @@
 <script>
 import Permissions from '@/components/Permissions'
 import { PERMISSION_HEADER } from '@/views/system/data/permissions'
-import { create_or_update_sys_role, get_sys_role_configure } from '@/api/interactive'
+import { create_or_update_sys_role, get_sys_role_configure } from '../../../api/interactive'
 import { delayering_page_tree } from '@/utils/common'
 import { ACCOUNT_NAME_LIST, W_CONSTANT } from '@/utils/constant'
-import { Decrypt, Encrypt } from '@/utils/secret'
+// import { Decrypt, Encrypt } from '@/utils/secret'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -153,14 +153,19 @@ export default {
       }
       get_sys_role_configure(config).then(res => {
         if (res.status === 0) {
-          const remote_data = JSON.parse(Decrypt(res.data))
-          console.log('remote_data: ', remote_data)
+          // const remote_data = JSON.parse(Decrypt(res.data))
+          const remote_data = res.data
+          console.log(JSON.parse(JSON.stringify(remote_data)))
+
+          // console.log('remote_data: ')
+          // console.log(JSON.stringify(remote_data, null, '\t'))
           if (this.role.role_id) {
             this.form.role_name = remote_data.role_name
             this.form.account_type = remote_data.account_type
           }
           this.form.function_list = remote_data.function_list.filter(r => parseInt(r / W_CONSTANT) === 2)
           this.pdata = remote_data.codes
+          console.log(JSON.parse(JSON.stringify(this.pdata)))
         }
       }).finally(() => {
         this.loading = false
@@ -187,7 +192,8 @@ export default {
           if (this.role.role_id) {
             config['role_id'] = this.role.role_id
           }
-          const permissions = Encrypt(JSON.stringify(config))
+          // const permissions = Encrypt(JSON.stringify(config))
+          const permissions = config
           const packages = {
             permissions
           }
