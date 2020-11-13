@@ -212,7 +212,7 @@
       custom-class="operate-statistics-component"
       width="1000px"
     >
-      <operate-statistics-component v-if="operateDialogVisible" :list="operateList" />
+      <operate-statistics-component v-if="operateDialogVisible" :visible.sync="operateDialogVisible" :list="operateList" />
     </el-dialog>
   </div>
 </template>
@@ -545,9 +545,15 @@ $label_height: 28px;
     }
   }
 }
+
+</style>
+<style lang="scss">
 .operate-statistics-component{
-  .el-dialog__body{
-    padding-top: 4px;
-  }
+.el-dialog__body{
+  padding-top: 4px;
+}
+.el-icon-close{
+  display: none !important;
+}
 }
 </style>

@@ -4,11 +4,11 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <!------------------------------>
         <el-form-item label="通知标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入通知标题" size="mini" />
+          <el-input v-model="form.title" maxlength="15" placeholder="请输入通知标题" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="通知内容" prop="content">
-          <el-input v-model="form.content" placeholder="请输入通知内容" size="mini" />
+          <el-input v-model="form.content" maxlength="30" placeholder="请输入通知内容" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="目标平台" prop="platformList">
