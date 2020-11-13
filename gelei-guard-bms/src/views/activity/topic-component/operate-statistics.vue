@@ -8,12 +8,12 @@
         style="width: 100%">
         <el-table-column
           align="center"
-          label="序号"
+          label="排序"
           prop="_id"
           width="80" />
         <el-table-column
           align="center"
-          label="标题"
+          label="运营位标题"
           prop="title"
           width="180" />
         <el-table-column
@@ -39,6 +39,9 @@
           prop="_endTime" />
       </el-table>
     </div>
+    <div style="display: flex;justify-content: center;margin-top: 20px">
+      <el-button size="mini" @click="close">知道了</el-button>
+    </div>
   </div>
 </template>
 
@@ -54,6 +57,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  methods: {
+    close() {
+      this.$emit('update:visible', false)
     }
   }
 }

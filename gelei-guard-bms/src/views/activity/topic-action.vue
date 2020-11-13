@@ -26,7 +26,7 @@
         <!------------------------------>
         <el-form-item label="福利说明" prop="benefitUrl">
           <el-button size="mini" @click="selectBenefitFile">选择图片</el-button>
-          <span>格式jpg/png</span>
+          <span>格式：jpg/png</span>
           <span>尺寸：690x240</span>
           <span>大小：不超过500kb</span>
           <div v-if="form.benefitUrl">
@@ -48,7 +48,7 @@
             </el-form-item>
             <el-form-item :prop="'banners.' + index + '.url'" :rules="{required: true, message: '请选择图片', trigger: 'blur'}" label="图片上传">
               <el-button size="mini" @click="selectOperate(index)">选择图片</el-button>
-              <span>格式jpg/png</span>
+              <span>格式：jpg/png</span>
               <span>尺寸：690x240</span>
               <span>大小：不超过500kb</span>
               <div v-if="item.url">
@@ -116,8 +116,8 @@
         </el-form-item>
       </el-form>
       <div class="button-block">
-        <el-button v-if="!isUpdate" pid="10020,10086" type="primary" size="mini" @click="save">保 存</el-button>
-        <el-button v-if="isUpdate" pid="10020,10086" type="primary" size="mini" @click="update">保 存</el-button>
+        <el-button v-if="!isUpdate" type="primary" size="mini" @click="save">保 存</el-button>
+        <el-button v-if="isUpdate" type="primary" size="mini" @click="update">保 存</el-button>
       </div>
     </div>
   </div>
