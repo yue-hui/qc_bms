@@ -308,8 +308,8 @@ export default {
       patriarch_member_types,
       auto_type_list: [
         { label: '全部', value: '' },
-        { label: '自动续费', value: '1' },
-        { label: '非自动续费', value: '2' }
+        { label: '非自动续费', value: '1' },
+        { label: '自动续费', value: '2' }
       ],
       order_source: COMMODITY_TYPE,
       order_status_list: [],
@@ -401,7 +401,7 @@ export default {
           order_amount_label,
           order_time_label,
           member_type_label,
-          _renew_type: String(r.renew_type) === '1' ? '自动续费' : '非自动续费'
+          _renew_type: String(r.renew_type) === '2' ? '自动续费' : '非自动续费'
         }
       })
     },

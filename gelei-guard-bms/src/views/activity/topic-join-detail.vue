@@ -181,13 +181,17 @@ export default {
           this.total = res.total_count
           this.tableData = res.data.map((item, index) => {
             item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
-            item._createTime = parseDateTime('y-m-d h:i', item.createTime)
+            item._createTime = parseDateTime('y-m-d h:i:s', item.createTime)
             // item._memberType = { '01': '体验会员(电信送30天)', '02': 'svip会员', '03': 'vip' }[item.memberType]
             item._memberType = (() => {
               try {
                 return this.memberTypeList.find(memberType => {
                   return item.memberType === memberType.value
-                })['label']
+                })['label'] + (() => {
+                  // 已经到期不显示时间
+                  if (item.endTime < new Date().getTime()) return ''
+                  return `(${parseDateTime('y-m-d', item.beginTime)}-${parseDateTime('y-m-d', item.endTime)})`
+                })()
               } catch (e) {
                 return '未知'
               }

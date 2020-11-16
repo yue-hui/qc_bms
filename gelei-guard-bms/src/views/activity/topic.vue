@@ -427,7 +427,7 @@ export default {
      * @param status {Number}
      * */
     topicAction(row, status) {
-      if (row._status === 30) {
+      if (row._status === 30 && status === '-1') {
         return this.$message.warning('进行中的话题不支持删除')
       }
       const msg = {
