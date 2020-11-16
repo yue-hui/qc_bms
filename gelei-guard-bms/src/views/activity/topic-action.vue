@@ -10,17 +10,17 @@
           <el-input v-model="form.title" maxlength="35" placeholder="请输入话题标题" size="mini" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="投票项" prop="options">
+        <el-form-item :required="true" label="投票项" prop="options">
           <el-input v-for="(item, index) in form.options" :key="index" v-model="item.option" :placeholder="'请输入选项' + (index + 1) + '名称'" maxlength="10" size="mini" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="简介" prop="description">
+        <el-form-item :required="true" label="简介" prop="description">
           <tinymce
             :height="200"
             v-model="form.description" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="围观次数" prop="onlookers">
+        <el-form-item :required="true" label="围观次数" prop="onlookers">
           <el-input v-model="form.onlookers" placeholder="请输入围观次数" type="number" size="mini" />
         </el-form-item>
         <!------------------------------>
@@ -34,7 +34,7 @@
           </div>
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="运营位展示" prop="show_type">
+        <el-form-item :required="true" label="运营位展示" prop="isShowBanner">
           <el-radio-group v-model="form.isShowBanner">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="2">否</el-radio>
@@ -55,7 +55,7 @@
                 <img :src="item.url" style="height: 80px" alt="">
               </div>
             </el-form-item>
-            <el-form-item label="图片跳转" prop="jumpTarget">
+            <el-form-item :required="true" :prop="'banners.' + index + '.jumpTarget'" label="图片跳转">
               <el-radio-group v-model="item.jumpTarget">
                 <el-radio label="01">APP原生页</el-radio>
                 <el-radio label="02">H5链接</el-radio>
@@ -89,7 +89,7 @@
           </div>
         </div>
         <!------------------------------>
-        <el-form-item label="新话题气泡" prop="bubbles">
+        <el-form-item :required="true" label="新话题气泡" prop="bubbles">
           <div v-for="(item, index) in form.bubbles" :key="index" class="bubbles-item">
             <el-input v-model="item.title" maxlength="15" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
             <div class="bubbles-action" >
@@ -103,7 +103,7 @@
           </div>
         </el-form-item>
         <!------------------------>
-        <el-form-item label="上线时间" prop="startTime">
+        <el-form-item :required="true" label="上线时间" prop="startTime">
           <el-date-picker
             v-model="form.time"
             type="datetimerange"
@@ -202,6 +202,7 @@ export default {
           }
         ],
         onlookers: [
+          { required: true, trigger: ['blur', 'change'], message: '围观次数不能为空' },
           {
             validator: (rule, value, callback) => {
               if (value !== '') {
@@ -239,6 +240,7 @@ export default {
           }
         ],
         startTime: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择上线时间' },
           {
             validator: (rule, value, callback) => {
               if (!value) {
@@ -413,6 +415,7 @@ export default {
         .then(file => {
           this.uploadFileImg(file)
             .then(url => {
+              this.$refs['form'].clearValidate('banners.' + index + '.url')
               this.form.banners[index].url = url
             })
         })
