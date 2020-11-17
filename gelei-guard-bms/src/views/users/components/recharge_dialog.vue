@@ -129,7 +129,7 @@ export default {
           ...r,
           order_amount_label,
           order_time_label,
-          _renew_type: String(r.renew_type) === '1' ? '自动续费' : '非自动续费'
+          _renew_type: String(r.renew_type) === '2' ? '自动续费' : '非自动续费'
         }
       })
     },
