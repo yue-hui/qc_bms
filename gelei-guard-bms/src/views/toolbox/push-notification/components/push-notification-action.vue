@@ -3,22 +3,22 @@
     <div class="push-notification-page">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <!------------------------------>
-        <el-form-item label="通知标题" prop="title">
-          <el-input v-model="form.title" maxlength="15" placeholder="请输入通知标题" size="mini" />
+        <el-form-item required label="通知标题" prop="title">
+          <el-input v-model="form.title" maxlength="100" placeholder="请输入通知标题" size="mini" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="通知内容" prop="content">
-          <el-input v-model="form.content" maxlength="30" placeholder="请输入通知内容" size="mini" />
+        <el-form-item required label="通知内容" prop="content">
+          <el-input v-model="form.content" maxlength="100" placeholder="请输入通知内容" size="mini" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="目标平台" prop="platformList">
+        <el-form-item required label="目标平台" prop="platformList">
           <el-checkbox-group v-model="form.platformList">
             <el-checkbox label="02">IOS家长端</el-checkbox>
             <el-checkbox label="03">安卓家长端</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="目标平台" prop="target">
+        <el-form-item required label="跳转目标" prop="target">
           <el-radio-group v-model="form.target">
             <el-radio label="01">APP原生页</el-radio>
             <el-radio label="02">H5</el-radio>
@@ -27,8 +27,8 @@
           </el-radio-group>
         </el-form-item>
         <!------------------------------>
-        <el-form-item label="跳转参数" prop="parameter">
-          <el-input v-model="form.parameter" placeholder="请输入跳转参数" size="mini" />
+        <el-form-item :required="form.target !== '00'" label="跳转参数" prop="parameter">
+          <el-input :disabled="form.target === '00'" v-model="form.parameter" placeholder="请输入跳转参数" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item label="发送类型" prop="type">
@@ -36,7 +36,7 @@
           <el-radio v-model="form.type" label="02">定时发送</el-radio>
         </el-form-item>
         <!------------------------>
-        <el-form-item label="发送时间" prop="sendTime">
+        <el-form-item :required="form.type === '02'" label="发送时间" prop="sendTime">
           <el-date-picker
             v-model="sendTime"
             :disabled="form.type === '01'"
@@ -64,7 +64,7 @@
           <div><span>通知内容：</span><span>{{ form.content }}</span></div>
           <div><span>目标平台：</span><span>{{ sendPlatform }}</span></div>
           <div><span>跳转目标：</span><span>{{ sendTarget }}</span></div>
-          <div><span>跳转参数：</span><span>{{ form.parameter }}</span></div>
+          <div><span>跳转参数：</span><span>{{ form.parameter || '无' }}</span></div>
           <div v-if="form.type === '01'"><span>发送时间：</span><span>立即发送</span></div>
           <div v-if="form.type === '02'"><span>发送时间：</span><span>定时发送 {{ pushSendTime }}</span></div>
         </div>
@@ -112,7 +112,7 @@ export default {
               if (value) return callback()
               callback(new Error('通知标题不能为空'))
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         content: [
@@ -121,7 +121,7 @@ export default {
               if (value) return callback()
               callback(new Error('通知内容不能为空'))
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         platformList: [
@@ -130,12 +130,13 @@ export default {
               if (value.length > 0) return callback()
               callback(new Error('至少选择一个目标平台'))
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         parameter: [
           {
             validator: (rule, value, callback) => {
+              if (this.form.target === '00') return callback()
               if (value) return callback()
               callback(new Error('跳转参数不能为空'))
             },
@@ -175,6 +176,7 @@ export default {
       if (this.form.target === '01') return 'APP原生'
       if (this.form.target === '02') return 'H5'
       if (this.form.target === '03') return '微信小程序'
+      return '无'
     },
     pushSendTime() {
       return parseDateTime('y-m-d h:i', this.form.sendTime)
@@ -183,8 +185,15 @@ export default {
   watch: {
     'form.type'(val) {
       if (val === '01') {
+        this.$refs.form.clearValidate('sendTime')
         this.sendTime = null
         this.form.sendTime = ''
+      }
+    },
+    'form.target'(val) {
+      if (val === '00') {
+        this.$refs.form.clearValidate('parameter')
+        this.form.parameter = ''
       }
     }
   },

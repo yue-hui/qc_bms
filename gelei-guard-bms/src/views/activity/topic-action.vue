@@ -93,7 +93,7 @@
           <div v-for="(item, index) in form.bubbles" :key="index" class="bubbles-item">
             <el-input v-model="item.title" maxlength="15" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
             <div class="bubbles-action" >
-              <span v-show="form.bubbles.length === 1" @click="addBubbles">
+              <span @click="addBubbles">
                 <svg-icon icon-class="add" />
               </span>
               <span v-show="form.bubbles.length > 1" @click="removeBubbles(index)">
