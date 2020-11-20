@@ -71,11 +71,11 @@
                 <el-col :span="8" class="order-number-list">创建人:</el-col>
                 <el-col :span="16">
                   <el-input
-                    v-model="requestData.sys_user_name"
+                    v-model="requestData.sysUserName"
                     maxlength="11"
                     size="mini"
                     clearable
-                    placeholder="请输入手机号码"
+                    placeholder="请输入创建人名称"
                     @change="filterList"
                   />
                 </el-col>
@@ -274,7 +274,7 @@ export default {
         title: '',
         platform: '',
         status: '',
-        sys_user_name: '',
+        sysUserName: '',
         page_no: 1,
         page_num: page_size
       },
