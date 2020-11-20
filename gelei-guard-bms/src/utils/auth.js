@@ -1,11 +1,8 @@
 /* 本地存储 */
 import Cookies from 'js-cookie'
 import { __VERSION__, DEFAULT_PAGE_SIZE, PagenationSizeKey } from '@/utils/constant'
-// import { get_current_env } from '@/utils/common'
 
 const TokenKey = 'APP-Token'
-
-// export const current_env_type = get_current_env()
 
 export function getToken() {
   return Cookies.get(TokenKey)

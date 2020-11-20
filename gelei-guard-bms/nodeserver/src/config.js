@@ -4,25 +4,30 @@ var config
 switch (global.env_config) {
   case 'dev':
     config = {
-      baseURL: 'https://msdev.dev.zhixike.net/'
-      // baseURL: 'http://192.168.2.127:9999/',
+      baseURL: 'https://ms-dev.qcg.cc/'
     }
     break
   case 'test':
     config = {
-      baseURL: 'https://mstes.dev.zhixike.net/'
+      baseURL: 'https://ms-test1.qcg.cc/'
     }
     break
   case 'test2':
     config = {
-      baseURL: 'https://mstes2.dev.zhixike.net/'
+      baseURL: 'https://ms-test2.qcg.cc/'
+    }
+    break
+  case 'beta1':
+    config = {
+      baseURL: 'https://ms-beta.qcg.cc/'
     }
     break
   case 'prod1':
     config = {
-      baseURL: 'https://ms.qcgelei.com/'
+      baseURL: 'https://ms.qcg.cc/'
     }
     break
+  // 以下都不用看
   case 'prod':
     config = {
       baseURL: 'https://ms.gwchina.cn/'
@@ -31,11 +36,6 @@ switch (global.env_config) {
   case 'beta':
     config = {
       baseURL: 'https://ms-beta.gwchina.cn/'
-    }
-    break
-  case 'beta1':
-    config = {
-      baseURL: 'https://ms-beta.qcgelei.com/'
     }
     break
   case 'pres':

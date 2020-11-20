@@ -383,6 +383,10 @@ export const platform_version_instructions = [
   {
     value: '83',
     label: 'OPPO定制机A8中间件'
+  },
+  {
+    value: 'E2',
+    label: 'PC孩子端(win)'
   }
 ]
 
