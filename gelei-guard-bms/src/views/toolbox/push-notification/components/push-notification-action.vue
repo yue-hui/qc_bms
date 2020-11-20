@@ -153,7 +153,8 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      requestLoading: false
     }
   },
   computed: {
@@ -216,6 +217,8 @@ export default {
       })
     },
     save() {
+      if (this.requestLoading) return
+      this.requestLoading = true
       addPushNotification(this.form)
         .then(res => {
           if (res.status !== 0) throw res
@@ -225,6 +228,9 @@ export default {
         })
         .catch(error => {
           this.$message.error(error.message)
+        })
+        .finally(() => {
+          this.requestLoading = false
         })
     },
     close() {

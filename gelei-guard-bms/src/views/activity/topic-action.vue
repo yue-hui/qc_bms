@@ -7,11 +7,11 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix=":">
         <!------------------------------>
         <el-form-item label="标题" prop="title">
-          <el-input v-model="form.title" maxlength="35" placeholder="请输入话题标题" size="mini" />
+          <el-input v-model="form.title" maxlength="100" placeholder="请输入话题标题" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item :required="true" label="投票项" prop="options">
-          <el-input v-for="(item, index) in form.options" :key="index" v-model="item.option" :placeholder="'请输入选项' + (index + 1) + '名称'" maxlength="10" size="mini" />
+          <el-input v-for="(item, index) in form.options" :key="index" v-model="item.option" :placeholder="'请输入选项' + (index + 1) + '名称'" maxlength="100" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item :required="true" label="简介" prop="description">
@@ -91,7 +91,7 @@
         <!------------------------------>
         <el-form-item :required="true" label="新话题气泡" prop="bubbles">
           <div v-for="(item, index) in form.bubbles" :key="index" class="bubbles-item">
-            <el-input v-model="item.title" maxlength="15" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
+            <el-input v-model="item.title" maxlength="100" placeholder="气泡在话题上架后不可编辑和新增" size="mini" />
             <div class="bubbles-action" >
               <span @click="addBubbles">
                 <svg-icon icon-class="add" />

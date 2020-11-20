@@ -76,6 +76,7 @@
                     size="mini"
                     clearable
                     placeholder="请输入手机号码"
+                    @change="filterList"
                   />
                 </el-col>
               </el-row>
