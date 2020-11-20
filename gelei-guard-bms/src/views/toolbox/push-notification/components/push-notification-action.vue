@@ -64,7 +64,7 @@
           <div><span>通知内容：</span><span>{{ form.content }}</span></div>
           <div><span>目标平台：</span><span>{{ sendPlatform }}</span></div>
           <div><span>跳转目标：</span><span>{{ sendTarget }}</span></div>
-          <div><span>跳转参数：</span><span>{{ form.parameter || '无' }}</span></div>
+          <div style="word-break: break-all;"><span>跳转参数：</span><span>{{ form.parameter || '无' }}</span></div>
           <div v-if="form.type === '01'"><span>发送时间：</span><span>立即发送</span></div>
           <div v-if="form.type === '02'"><span>发送时间：</span><span>定时发送 {{ pushSendTime }}</span></div>
         </div>
