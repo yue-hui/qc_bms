@@ -49,7 +49,7 @@
             <el-form-item :prop="'banners.' + index + '.url'" :rules="{required: true, message: '请选择图片', trigger: 'blur'}" label="图片上传">
               <el-button size="mini" @click="selectOperate(index)">选择图片</el-button>
               <span>格式：jpg/png</span>
-              <span>尺寸：690x240</span>
+              <span>尺寸：690x300</span>
               <span>大小：不超过500kb</span>
               <div v-if="item.url">
                 <img :src="item.url" style="height: 80px" alt="">
