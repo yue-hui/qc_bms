@@ -195,14 +195,6 @@ export default {
           console.log(res)
           // eslint-disable-next-line no-empty
           if (res.status === 0) {
-            /* res.data = [
-              {
-                'record_id': 0,
-                'uploadTime': '1594894954651',
-                'url': 'https://file.gwchina.cn/greenguard/com.txtw.learn.txtw_learn.png',
-                'is_normal': '0'
-              }
-            ]*/
             this.list = res.data.map(item => {
               item.uploadTime = date_formatter(Number(item.uploadTime), DATE_TIME_FORMAT)
               return item

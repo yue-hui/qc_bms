@@ -229,8 +229,17 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
 /*
 * 获取环境配置的URL
 * */
-export function get_h5_domain(relative = true) {
+export function get_h5_domain() {
   let domain
+  const hostname = window.location.hostname
+  hostname === 'bms-dev.qcg.cc' && (domain = 'h5-dev.qcg.cc')
+  hostname === 'bms-test1.qcg.cc' && (domain = 'h5-test1.qcg.cc')
+  hostname === 'bms-test2.qcg.cc' && (domain = 'h5-test2.qcg.cc')
+  hostname === 'bms-beta.qcg.cc' && (domain = 'h5-beta.qcg.cc')
+  hostname === 'bms.qcg.cc' && (domain = 'h5.qcg.cc')
+  domain === undefined && (domain = 'h5-dev.qcg.cc')
+  return 'https://' + domain
+  /* let domain
   const hostname = window.location.hostname
   if (['g8ddev.dev.zhixike.net', 'g8dtes.dev.zhixike.net', 'g8dtes2.dev.zhixike.net'].indexOf(hostname) !== -1) {
     // 开发与测试环境
@@ -251,7 +260,7 @@ export function get_h5_domain(relative = true) {
     // 其它转到开发环境域名
     domain = 'g8ddev.dev.zhixike.net'
   }
-  return 'https://' + domain
+  return 'https://' + domain*/
 }
 
 /*
