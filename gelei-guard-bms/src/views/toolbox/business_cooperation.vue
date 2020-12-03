@@ -243,6 +243,7 @@ export default {
     build_channel_url(info) {
       const { channel_id, sys_user_list } = info
       const h5_domain = get_h5_domain()
+      console.log(h5_domain)
       const user_id_list = sys_user_list.map(r => r.user_id)
       if (user_id_list.indexOf('santao') === 0) {
         // 三陶的渠道链接

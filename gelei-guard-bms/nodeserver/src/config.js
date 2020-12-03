@@ -27,26 +27,6 @@ switch (global.env_config) {
       baseURL: 'https://ms.qcg.cc/'
     }
     break
-  // 以下都不用看
-  case 'prod':
-    config = {
-      baseURL: 'https://ms.gwchina.cn/'
-    }
-    break
-  case 'beta':
-    config = {
-      baseURL: 'https://ms-beta.gwchina.cn/'
-    }
-    break
-  case 'pres':
-    config = {
-      baseURL: 'https://mspres.dev.zhixike.net/'
-    }
-    break
-  default:
-    config = {
-      baseURL: 'https://ms.gwchina.cn/'
-    }
 }
 
 config['STATIC_PATH'] = path.join(__dirname, 'static')

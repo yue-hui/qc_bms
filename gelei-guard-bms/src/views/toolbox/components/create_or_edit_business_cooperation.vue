@@ -275,6 +275,7 @@ export default {
     build_channel_url(info) {
       const { channel_id, user_id_list } = info
       const h5_domain = get_h5_domain()
+      console.log(h5_domain)
       if (user_id_list.indexOf('santao') === 0) {
         // 三陶的渠道链接
         return h5_domain + '/gelei-guard-h5/share/invited_friends.html#/3rd-tao?cid=' + channel_id + '&uid=' + user_id_list[0]
