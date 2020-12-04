@@ -128,6 +128,18 @@ export const bms_platform_classification = [
         {
           value: '82',
           label: 'OPPO定制机A8'
+        },
+        {
+          value: '92',
+          label: 'OPPO政企A72'
+        },
+        {
+          value: 'A2',
+          label: 'OPPO定制机A32'
+        },
+        {
+          value: 'B2',
+          label: 'VIVO定制机Y51S'
         }
       ],
       update_models: [
@@ -186,6 +198,18 @@ export const bms_platform_classification = [
         {
           value: '83',
           label: 'OPPO定制机A8中间件'
+        },
+        {
+          value: '93',
+          label: 'OPPO政企A72中间件'
+        },
+        {
+          value: 'A3',
+          label: 'OPPO定制机A32中间件'
+        },
+        {
+          value: 'B3',
+          label: 'VIVO定制机Y51S中间件'
         }
       ],
       update_models: [
@@ -299,6 +323,30 @@ export const platforms = [
   {
     value: 'E2',
     label: 'PC孩子端(win)'
+  },
+  {
+    value: '92',
+    label: 'OPPO政企A72'
+  },
+  {
+    value: 'A2',
+    label: 'OPPO定制机A32'
+  },
+  {
+    value: 'B2',
+    label: 'VIVO定制机Y51S'
+  },
+  {
+    value: '93',
+    label: 'OPPO政企A72中间件'
+  },
+  {
+    value: 'A3',
+    label: 'OPPO定制机A32中间件'
+  },
+  {
+    value: 'B3',
+    label: 'VIVO定制机Y51S中间件'
   }
 ]
 
@@ -387,6 +435,30 @@ export const platform_version_instructions = [
   {
     value: 'E2',
     label: 'PC孩子端(win)'
+  },
+  {
+    value: '92',
+    label: 'OPPO政企A72'
+  },
+  {
+    value: 'A2',
+    label: 'OPPO定制机A32'
+  },
+  {
+    value: 'B2',
+    label: 'VIVO定制机Y51S'
+  },
+  {
+    value: '93',
+    label: 'OPPO政企A72中间件'
+  },
+  {
+    value: 'A3',
+    label: 'OPPO定制机A32中间件'
+  },
+  {
+    value: 'B3',
+    label: 'VIVO定制机Y51S中间件'
   }
 ]
 
