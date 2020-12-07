@@ -64,7 +64,7 @@
           stripe>
           <el-table-column
             align="center"
-            width="80"
+            width="75"
             label="序号"
             prop="_number" />
           <el-table-column
@@ -80,9 +80,19 @@
           </el-table-column>
           <el-table-column
             align="center"
-            width="80"
+            width="112"
+            label="手机号"
+            prop="phone" />
+          <el-table-column
+            align="center"
+            width="220"
             label="会员类型"
             prop="_memberType" />
+          <el-table-column
+            align="center"
+            width="80"
+            label="会员有效天数"
+            prop="validDays" />
           <el-table-column
             v-for="(item, index) in table_column"
             :key="index"
@@ -131,7 +141,7 @@ import { getPagenationSize, setPagenationSize } from '../../utils/auth'
 import { query_unbind_why_report_list, query_unbind_why_list, query_unbind_user_list, export_unbind_user_list } from '@/api/interactive'
 import { stringSlice } from '@/utils/index'
 import { get_value_from_map_list } from '@/utils/common'
-import { computePageNumber, parseTime } from '../../utils'
+import { computePageNumber, parseTime, parseDateTime } from '../../utils'
 
 export default {
   name: 'UnbindStatistics',
@@ -168,6 +178,7 @@ export default {
     filter() {
       this.requestData.page_no = 1
       this.get_list()
+      this.get_unbind_why_report_list()
     },
     table_size_change: function(size) {
       this.requestData.page_no = 1
@@ -220,10 +231,14 @@ export default {
      * @description 获取占比信息
      * */
     get_unbind_why_report_list() {
-      query_unbind_why_report_list({
-        begin_time: 1,
-        end_time: 99999999999999999
-      })
+      let requestData = this.get_request_data()
+      if (requestData.begin_time === '') {
+        requestData = {
+          begin_time: 1,
+          end_time: new Date().getTime()
+        }
+      }
+      query_unbind_why_report_list(requestData)
         .then((data) => {
           if (data.status !== 0) throw data
           this.unbind_why_list = data.data.map((item, index) => {
@@ -378,6 +393,13 @@ export default {
             '03': 'VIP会员',
             '00': '普通用户'
           })[item.memberType]
+        })()
+        // 会员起止时间
+        item._memberType = (() => {
+          if (item.memberStatus === '01' && item.beginTime && item.endTime) {
+            return `${item._memberType}(${parseDateTime('y-m-d', item.beginTime)}-${parseDateTime('y-m-d', item.endTime)})`
+          }
+          return item._memberType
         })()
         // 反馈
         this.unbind_why_type_list.forEach(type => {
