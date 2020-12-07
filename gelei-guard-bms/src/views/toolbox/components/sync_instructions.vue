@@ -4,14 +4,17 @@
       :before-close="handle_close"
       :visible.sync="dialog_visible"
       title="发送同步版本指令"
+      custom-class="sync-instructions-component"
       width="40%"
       top="30vh">
       <span class="platform-group-title">发送平台类型</span>
       <hr class="diviser">
       <div class="platform-group">
-        <el-row gutter="24">
+        <el-row v-for="type in platform_version_instruction_type" :key="type.value" :gutter="24" >
+          <div style="font-size: 14px;font-weight: bold;margin-left: 11px; margin-bottom: 6px;margin-top: 16px">{{ type.label }}</div>
           <el-col
             v-for="(platform_version_instruction, index) in platform_version_instructions"
+            v-if="type.value === platform_version_instruction.type"
             :key="index"
             :xs="6"
             :sm="6"
@@ -36,7 +39,7 @@
 </template>
 
 <script>
-import { platform_version_instructions } from '@/views/toolbox/data/promotion'
+import { platform_version_instructions, platform_version_instruction_type } from '@/views/toolbox/data/promotion'
 import { sync_platform_to_all } from '@/api/interactive'
 
 export default {
@@ -45,6 +48,7 @@ export default {
   data: function() {
     return {
       platform_version_instructions,
+      platform_version_instruction_type,
       platform_type: '',
       dialog_visible: false,
       is_busy: false
@@ -137,6 +141,13 @@ export default {
         color: #49A3EF;
       }
     }
+  }
+}
+</style>
+<style lang="scss">
+.sync-instructions-component{
+  .el-dialog__body{
+    padding-top: 10px;
   }
 }
 </style>
