@@ -125,6 +125,12 @@ export default {
     this.loginForm.verify_uid = get_uuid()
     this.refreshVerifyCode()
   },
+  mounted() {
+    if (process.env.NODE_ENV === 'development') {
+      this.loginForm.username = 'gladmin'
+      this.loginForm.password = 'gelei_2020'
+    }
+  },
   methods: {
     showPwd() {
       if (this.pwdType === 'password') {

@@ -203,3 +203,60 @@ export function computeVipDayNumber(vipEndTime) {
   }
   return Math.ceil((vipEndTime - nowTime) / (24 * 60 * 60 * 1000))
 }
+
+export function getWeekRangeTime(startTime, endTime, list = []) {
+  const nowData = new Date(startTime)
+  nowData.setHours(0)
+  nowData.setMinutes(0)
+  nowData.setSeconds(0)
+  nowData.setMilliseconds(0)
+  const currentDay = nowData.getDay()
+  const _startTime = nowData.getTime() - currentDay * 24 * 60 * 60 * 1000
+  const _endTime = nowData.getTime() + (6 - currentDay) * 24 * 60 * 60 * 1000
+  list.push({
+    startTime: _startTime,
+    endTime: _endTime,
+    startDate: parseDateTime('y-m-d', _startTime),
+    endDate: parseDateTime('y-m-d', _endTime)
+  })
+  if (startTime === endTime) {
+    return list
+  }
+  if (_endTime < endTime) {
+    getWeekRangeTime(_endTime + 24 * 60 * 60 * 1000 + 1, endTime, list)
+  }
+  return list
+}
+
+export function getMonthRangeTime(startTime, endTime, list = []) {
+  const nowData = new Date(startTime)
+  nowData.setHours(0)
+  nowData.setDate(1)
+  nowData.setMinutes(0)
+  nowData.setSeconds(0)
+  nowData.setMilliseconds(0)
+  const _startTime = nowData.getTime()
+  console.log(parseDateTime('y-m-d', _startTime))
+  const month = nowData.getMonth()
+  if (month === 11) {
+    nowData.setFullYear(nowData.getFullYear() + 1)
+    nowData.setMonth(0)
+  } else {
+    nowData.setMonth(nowData.getMonth() + 1)
+  }
+  let _endTime = nowData.getTime()
+  _endTime = _endTime - 24 * 60 * 60 * 1000
+  list.push({
+    startTime: _startTime,
+    endTime: _endTime,
+    startDate: parseDateTime('y-m-d', _startTime),
+    endDate: parseDateTime('y-m-d', _endTime)
+  })
+  if (startTime === endTime) {
+    return list
+  }
+  if (_endTime < endTime) {
+    getMonthRangeTime(_endTime + 24 * 60 * 60 * 1000 + 1, endTime, list)
+  }
+  return list
+}
