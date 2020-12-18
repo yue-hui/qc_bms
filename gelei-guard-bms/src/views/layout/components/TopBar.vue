@@ -2,7 +2,7 @@
   <div class="component-card">
     <div class="left-item">
       <img src="@/assets/imgs/logo.png" alt="">
-      <div class="hover-system-subject" @click="go_to_home_page">{{ title }}</div>
+      <div class="hover-system-subject bms-logo-text" @click="go_to_home_page">{{ title }}</div>
     </div>
     <div class="user-info">
       <img :src="avatar || default_avatar" class="avatar" alt="" @click="avatar_click">

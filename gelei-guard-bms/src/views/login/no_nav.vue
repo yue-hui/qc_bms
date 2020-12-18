@@ -16,6 +16,13 @@ export default {
   },
   computed: {
     ...mapGetters(['is_agent'])
+  },
+  mounted() {
+    if (window.innerWidth <= 600) {
+      this.$router.push({
+        path: '/m/welcome'
+      })
+    }
   }
 }
 </script>

@@ -59,6 +59,13 @@ export const constantRoutes = [
         component: () => import('@/views/login/no_nav'),
         hidden: true,
         meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: false, hide: true, icon: 'profile' }
+      },
+      {
+        path: '/m/welcome',
+        name: 'M-Welcome',
+        component: () => import('@/views/login/no_nav'),
+        hidden: true,
+        meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: true, hide: true, icon: 'profile' }
       }
     ]
   },

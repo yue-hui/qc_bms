@@ -1,0 +1,89 @@
+@charset "utf-8";
+
+@media screen and (min-width: 0) and (max-width: 600px) {
+  .bms-logo-text {
+    display: none !important;
+  }
+  // 家长首页
+  .users-information{
+    .search-area{
+      .col-bg{
+        width: 100%;
+      }
+      .order-number-list{
+        width: 190px;
+      }
+      .valid-date-range{
+        padding: 0;
+      }
+    }
+  }
+  // 家长详情
+  .users-detail{
+    .content-body{
+      padding: 0 !important;
+    }
+    .el-col{
+      width: 100%;
+    }
+    .el-form-item__label{
+      width: 120px !important;
+      float: none;
+      padding-left: 20px;
+    }
+    .el-form-item__content{
+      margin-left: 0 !important;
+      float: none;
+      padding-left: 20px;
+    }
+    .el-dialog{
+      width: 99%;
+    }
+    .component-card-with-dialog .component-card .dialog{
+      min-width: auto !important;
+      .filter-label{
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  // 孩子
+  .users-children{
+    .search-area{
+      .col-bg{
+        width: 100%;
+      }
+      .order-number-list{
+        width: 190px;
+      }
+      .valid-date-range{
+        padding: 0;
+      }
+    }
+  }
+  .users-order-list, .user-devices-manage,.user-devices-record,.user-logs{
+    .search-area{
+      .col-bg{
+        width: 100%;
+      }
+      .order-number-list{
+        width: 190px;
+      }
+      .valid-date-range{
+        padding: 0;
+      }
+    }
+  }
+  .el-pagination{
+    overflow-x:auto !important;
+  }
+  #app .mobile.hideSidebar .sidebar-container{
+  }
+  // 通用
+  .el-message-box{
+    width: 98vw !important;
+    margin-left: 1vw !important;
+  }
+}
+
+
