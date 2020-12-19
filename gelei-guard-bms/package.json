@@ -41,6 +41,7 @@
     "xlsx": "^0.14.5"
   },
   "devDependencies": {
+    "address": "^1.1.2",
     "autoprefixer": "8.5.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.2.6",

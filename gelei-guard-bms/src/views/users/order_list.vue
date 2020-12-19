@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content users-order-list">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">

@@ -1,5 +1,5 @@
 <template>
-  <div class="gelei-content">
+  <div class="gelei-content users-information">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">

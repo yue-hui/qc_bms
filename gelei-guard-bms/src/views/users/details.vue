@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content users-detail">
     <div v-loading="loading" class="content-body">
       <el-card class="box-card parent-card-block gg-user-details-with-all">
         <div slot="header" class="clearfix">

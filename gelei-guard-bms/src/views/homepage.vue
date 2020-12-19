@@ -1,359 +1,483 @@
 <template>
   <div class="gelei-content">
     <div class="content-body">
-      <div class="total-data-area">
-        <div class="title-area"><span class="title">整体数据</span></div>
-        <div class="summary-items-area">
-          <div :style="'background-color: ' + theme_color[0]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">{{ overall_data.pay_member_count }}</div>
-              <div class="item-name">付费用户数</div>
-            </div>
+      <div class="card-box" style="margin-bottom: 30px">
+        <div class="total-data-area">
+          <div class="title-area">
+            <span class="title">整体数据</span>
+            <span class="title-tips" @click="showTips(1)">？</span>
           </div>
-          <div :style="'background-color: ' + theme_color[1]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">{{ overall_data.experience_member_count }}</div>
-              <div class="item-name">体验用户数</div>
+          <div class="summary-items-area">
+            <div :style="'background-color: ' + theme_color[0]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.pay_member_count }}</div>
+                <div class="item-name">付费用户数</div>
+              </div>
             </div>
-          </div>
-          <div :style="'background-color: ' + theme_color[1]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">{{ overall_data.telecom_count || '--' }}</div>
-              <div class="item-name">电信付费用户数</div>
+            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.experience_member_count }}</div>
+                <div class="item-name">体验用户数</div>
+              </div>
             </div>
-          </div>
-          <div :style="'background-color: ' + theme_color[2]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
-              <div class="item-name">即将到期会员</div>
+            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.telecom_count || '--' }}</div>
+                <div class="item-name">电信付费用户数</div>
+              </div>
             </div>
-          </div>
-          <div :style="'background-color: ' + theme_color[3]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">{{ overall_data.order_count }}</div>
-              <div class="item-name">订单成交量</div>
+            <div :style="'background-color: ' + theme_color[2]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
+                <div class="item-name">即将到期会员</div>
+              </div>
             </div>
-          </div>
-          <div :style="'background-color: ' + theme_color[4]" class="summary-item">
-            <div class="item-info">
-              <div class="item-value">¥{{ overall_data.order_amount }}</div>
-              <div class="item-name">充值金额</div>
+            <div :style="'background-color: ' + theme_color[3]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.order_count }}</div>
+                <div class="item-name">订单成交量</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[4]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">¥{{ overall_data.order_amount }}</div>
+                <div class="item-name">充值金额</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="search-area">
-        <el-row :gutter="10" class="row-bg">
-          <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
-            <div class="grid-content bg-purple">
-              <el-row>
-                <el-col :span="8" class="order-number-list">选择日期:</el-col>
-                <el-col :span="16">
-                  <el-date-picker
-                    v-model="datetime_range"
-                    clearable
-                    end-placeholder="结束日期"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    type="daterange"
-                    size="medium"
-                    unlink-panels
-                    @change="page_query" />
-                </el-col>
-              </el-row>
+      <div class="card-box">
+        <div class="title-area">
+          <span class="title">关键数据</span>
+          <span class="title-tips" @click="showTips(2)">？</span>
+        </div>
+        <div class="search-area">
+          <el-row :gutter="10" class="row-bg">
+            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+              <div class="grid-content bg-purple">
+                <el-row>
+                  <el-col :span="8" class="order-number-list">选择日期:</el-col>
+                  <el-col :span="16">
+                    <el-date-picker
+                      v-model="datetime_range"
+                      clearable
+                      end-placeholder="结束日期"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      type="daterange"
+                      size="medium"
+                      unlink-panels
+                      @change="dateTimeChange" />
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="data-comparison-area">
+          <div class="new-user-and-amount-area">
+            <!-- 付费用户总数 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">付费用户总数</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ growth_data.pay_user_count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span>
+                    <span class="ratio-name">同比:</span>
+                    <span
+                      :class="{green: growth_data.pay_user_count_conversion < 0, red: growth_data.pay_user_count_conversion > 0, blue: growth_data.pay_user_count_conversion === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.pay_user_count_conversion | abs }}%
+                      <template v-if="growth_data.pay_user_count_conversion > 0">↑</template>
+                      <template v-else-if="growth_data.pay_user_count_conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
             </div>
-          </el-col>
-        </el-row>
-      </div>
-      <div class="data-comparison-area">
-        <div class="new-user-and-amount-area">
-          <div class="data-item">
-            <div class="item-row item-title">新增绑定用户</div>
-            <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <span class="total-count">{{ growth_data.increase_bind_user }}</span>
-                  <label class="item-label">总数</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increase_bind_ios_user }}</span>
-                  <label class="item-label">苹果</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increase_bind_android_user }}</span>
-                  <label class="item-label">安卓</label>
-                </span>
-              </p>
-              <div class="diviser" />
-              <p class="ratio-data">
-                <span>
-                  <span class="ratio-name">同比:</span>
-                  <span
-                    :class="{green: growth_data.increased_bind_user_comparison < 0, red: growth_data.increased_bind_user_comparison > 0, blue: growth_data.increased_bind_user_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_bind_user_comparison | abs }}%
-                    <template v-if="growth_data.increased_bind_user_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.increased_bind_user_comparison === 0" />
-                    <template v-else>↓</template>
+            <!-- 新增付费用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增付费用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ growth_data.increased_pay_user }}</span>
+                    <label class="item-label">总数</label>
                   </span>
-                </span>
-                <span>
-                  <span class="ratio-name">转化率:</span>
-                  <span
-                    :class="{green: growth_data.increased_bind_user_conversion < 0, red: growth_data.increased_bind_user_conversion > 0, blue: growth_data.increased_bind_user_conversion === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_bind_user_conversion | abs }}%
-                    <template v-if="growth_data.increased_bind_user_conversion > 0">↑</template>
-                    <template v-else-if="growth_data.increased_bind_user_conversion === 0" />
-                    <template v-else>↓</template>
+                  <span>
+                    <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
+                    <label class="item-label">IOS</label>
                   </span>
-                </span>
-              </p>
+                  <span>
+                    <span class="total-count">{{ growth_data.increased_pay_we_chat_user }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.increased_pay_ali_user }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.increased_pay_telecom_user }}</span>
+                    <label class="item-label">电信</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span>
+                    <span class="ratio-name">同比:</span>
+                    <span
+                      :class="{green: growth_data.increased_pay_user_comparison < 0, red: growth_data.increased_pay_user_comparison > 0, blue: growth_data.increased_pay_user_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_pay_user_comparison | abs }}%
+                      <template v-if="growth_data.increased_pay_user_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.increased_pay_user_comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                  <span>
+                    <span class="ratio-name">转化率:</span>
+                    <span
+                      :class="{green: growth_data.increased_pay_user_conversion < 0, red: growth_data.increased_pay_user_conversion > 0, blue: growth_data.increased_pay_user_conversion === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_pay_user_conversion | abs }}%
+                      <template v-if="growth_data.increased_pay_user_conversion > 0">↑</template>
+                      <template v-else-if="growth_data.increased_pay_user_conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <!-- 复购付费用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">复购付费用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ growth_data.repurchase_user_count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.repurchase_user_ios_count }}</span>
+                    <label class="item-label">IOS</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.repurchase_user_wechat_count }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.repurchase_user_ali_count }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ growth_data.repurchase_user_ctcc_count }}</span>
+                    <label class="item-label">电信</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span>
+                    <span class="ratio-name">同比:</span>
+                    <span
+                      :class="{green: growth_data.repurchase_user_count_conversion < 0, red: growth_data.repurchase_user_count_conversion > 0, blue: growth_data.repurchase_user_count_conversion === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.repurchase_user_count_conversion | abs }}%
+                      <template v-if="growth_data.repurchase_user_count_conversion > 0">↑</template>
+                      <template v-else-if="growth_data.repurchase_user_count_conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
-          <div class="data-item">
-            <div class="item-row item-title">新增付费用户</div>
-            <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <span class="total-count">{{ growth_data.increased_pay_user }}</span>
-                  <label class="item-label">总数</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
-                  <label class="item-label">IOS</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increased_pay_we_chat_user }}</span>
-                  <label class="item-label">微信</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increased_pay_ali_user }}</span>
-                  <label class="item-label">支付宝</label>
-                </span>
-                <span>
-                  <span class="total-count">{{ growth_data.increased_pay_telecom_user }}</span>
-                  <label class="item-label">电信</label>
-                </span>
-              </p>
-              <div class="diviser" />
-              <p class="ratio-data">
-                <span>
-                  <span class="ratio-name">同比:</span>
-                  <span
-                    :class="{green: growth_data.increased_pay_user_comparison < 0, red: growth_data.increased_pay_user_comparison > 0, blue: growth_data.increased_pay_user_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_pay_user_comparison | abs }}%
-                    <template v-if="growth_data.increased_pay_user_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.increased_pay_user_comparison === 0" />
-                    <template v-else>↓</template>
+          <div class="ratio-with-chart-area">
+            <!-- 新增绑定用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增绑定用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ growth_data.increase_bind_user }}</span>
                   </span>
-                </span>
-                <span>
-                  <span class="ratio-name">转化率:</span>
-                  <span
-                    :class="{green: growth_data.increased_pay_user_conversion < 0, red: growth_data.increased_pay_user_conversion > 0, blue: growth_data.increased_pay_user_conversion === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_pay_user_conversion | abs }}%
-                    <template v-if="growth_data.increased_pay_user_conversion > 0">↑</template>
-                    <template v-else-if="growth_data.increased_pay_user_conversion === 0" />
-                    <template v-else>↓</template>
+                  <span>
+                    <span class="item-label">同比: </span>
+                    <span
+                      :class="{green: growth_data.increased_bind_user_comparison < 0, red: growth_data.increased_bind_user_comparison > 0, blue: growth_data.increased_bind_user_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_bind_user_comparison | abs }}%
+                      <template v-if="growth_data.increased_bind_user_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.increased_bind_user_comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
                   </span>
-                </span>
-              </p>
+                  <span>
+                    <span class="item-label">转化率: </span>
+                    <span
+                      :class="{green: growth_data.increased_bind_user_conversion < 0, red: growth_data.increased_bind_user_conversion > 0, blue: growth_data.increased_bind_user_conversion === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_bind_user_conversion | abs }}%
+                      <template v-if="growth_data.increased_bind_user_conversion > 0">↑</template>
+                      <template v-else-if="growth_data.increased_bind_user_conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="increase_bind_user_data"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="data-item">
-            <div class="item-row item-title">充值金额</div>
-            <div class="item-row item-data-section">
-              <div class="item-row-box">
-                <div class="item-subscribe-line">
-                  <div>
+
+            <!-- 新增注册用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增注册用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ growth_data.increased_user }}</span>
+                  </span>
+                  <span>
+                    <span class="item-label">同比: </span>
+                    <span
+                      :class="{green: growth_data.increased_user_comparison < 0, red: growth_data.increased_user_comparison > 0, blue: growth_data.increased_user_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_user_comparison | abs }}%
+                      <template v-if="growth_data.increased_user_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.increased_user_comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="increased_user_data"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+            <!-- 充值金额 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">充值金额</div>
+              <div class="item-row item-data-section" style="min-width: 418px;">
+                <p class="item-subscribe">
+                  <span>
                     <label class="item-label">总数: </label>
                     <span class="total-count">
                       <template v-if="growth_data.order_amount">¥</template>
                       {{ growth_data.order_amount || '--' }}
                     </span>
-                  </div>
-                </div>
-                <div class="item-subscribe-line">
-                  <div>
-                    <label class="item-label">微信: </label>
-                    <span class="total-count">
-                      <template v-if="growth_data.we_chat_order_amount">¥</template>
-                      {{ growth_data.we_chat_order_amount || '--' }}
+                  </span>
+                  <span>
+                    <span class="item-label">同比: </span>
+                    <span
+                      :class="{green: growth_data.order_amount_comparison < 0, red: growth_data.order_amount_comparison > 0, blue: growth_data.order_amount_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.order_amount_comparison | abs }}%
+                      <template v-if="growth_data.order_amount_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.order_amount_comparison === 0" />
+                      <template v-else>↓</template>
                     </span>
-                  </div>
-                  <div>
-                    <label class="item-label">IOS: </label>
-                    <span class="total-count">
-                      <template v-if="growth_data.ios_order_amount">¥</template>
-                      {{ growth_data.ios_order_amount || '--' }}
-                    </span>
-                  </div>
-                </div>
-                <div class="item-subscribe-line">
-                  <div>
-                    <label class="item-label">支付宝: </label>
-                    <span class="total-count">
-                      <template v-if="growth_data.ali_order_amount">¥</template>
-                      {{ growth_data.ali_order_amount || '--' }}
-                    </span>
-                  </div>
-                  <div>
-                    <label class="item-label">电信: </label>
-                    <span class="total-count">
-                      <template v-if="growth_data.telecom_order_amount">¥</template>
-                      {{ growth_data.telecom_order_amount || '--' }}
-                    </span>
-                  </div>
-                </div>
+                  </span>
+                </p>
               </div>
-              <div class="diviser" />
-              <p class="ratio-data">
-                <span>
-                  <span class="ratio-name">同比:</span>
-                  <span
-                    :class="{green: growth_data.order_amount_comparison < 0, red: growth_data.order_amount_comparison > 0, blue: growth_data.order_amount_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.order_amount_comparison | abs }}%
-                    <template v-if="growth_data.order_amount_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.order_amount_comparison === 0" />
-                    <template v-else>↓</template>
-                  </span>
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="ratio-with-chart-area">
-          <div class="data-item">
-            <div class="item-row item-title">新增注册用户</div>
-            <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <label class="item-label">总数: </label>
-                  <span class="total-count">{{ growth_data.increased_user }}</span>
-                </span>
-                <span>
-                  <span class="item-label">同比: </span>
-                  <span
-                    :class="{green: growth_data.increased_user_comparison < 0, red: growth_data.increased_user_comparison > 0, blue: growth_data.increased_user_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_user_comparison | abs }}%
-                    <template v-if="growth_data.increased_user_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.increased_user_comparison === 0" />
-                    <template v-else>↓</template>
-                  </span>
-                </span>
-              </p>
-            </div>
-            <div class="item-row item-chart-area">
-              <div class="chart">
-                <ve-ring
-                  :data="increased_user_data"
-                  :legend-visible="true"
-                  :extend="chart_extend"
-                  :settings="chart_settings"
-                  height="205px" />
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="orderAmountData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
               </div>
             </div>
           </div>
-          <div class="data-item">
-            <div class="item-row item-title">新增绑定设备及占比</div>
-            <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <label class="item-label">总数: </label>
-                  <span class="total-count">{{ growth_data.increased_bind_device }}</span>
-                </span>
-                <span>
-                  <label class="item-label">同比: </label>
-                  <span
-                    :class="{green: growth_data.increased_bind_device_comparison < 0, red: growth_data.increased_bind_device_comparison > 0, blue: growth_data.increased_bind_device_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.increased_bind_device_comparison | abs }}%
-                    <template v-if="growth_data.increased_bind_device_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.increased_bind_device_comparison === 0" />
-                    <template v-else>↓</template>
+          <div class="ratio-with-chart-area" style="justify-content: flex-start;">
+            <!-- 新增绑定设备及占比 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增绑定设备及占比</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ growth_data.increased_bind_device }}</span>
                   </span>
-                </span>
-              </p>
-            </div>
-            <div class="item-row item-chart-area">
-              <div class="chart">
-                <ve-ring
-                  :data="device_ratio_data"
-                  :legend-visible="true"
-                  :extend="chart_extend"
-                  :settings="chart_settings"
-                  height="205px" />
+                  <span>
+                    <label class="item-label">同比: </label>
+                    <span
+                      :class="{green: growth_data.increased_bind_device_comparison < 0, red: growth_data.increased_bind_device_comparison > 0, blue: growth_data.increased_bind_device_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.increased_bind_device_comparison | abs }}%
+                      <template v-if="growth_data.increased_bind_device_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.increased_bind_device_comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="device_ratio_data"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
               </div>
             </div>
-          </div>
-          <div class="data-item">
-            <div class="item-row item-title">订单类型及支付渠道占比</div>
-            <div class="item-row item-data-section">
-              <p class="item-subscribe">
-                <span>
-                  <label class="item-label">总数: </label>
-                  <span class="total-count">{{ growth_data.order_count }}</span>
-                </span>
-                <span>
-                  <label class="item-label">同比: </label>
-                  <span
-                    :class="{green: growth_data.order_count_comparison < 0, red: growth_data.order_count_comparison > 0, blue: growth_data.order_count_comparison === 0 }"
-                    class="ratio-value">
-                    {{ growth_data.order_count_comparison | abs }}%
-                    <template v-if="growth_data.order_count_comparison > 0">↑</template>
-                    <template v-else-if="growth_data.order_count_comparison === 0" />
-                    <template v-else>↓</template>
+            <!-- 订单类型及支付渠道占比 ------------------------------------ -->
+            <div class="data-item" style="margin-left: 20px;">
+              <div class="item-row item-title">订单类型及支付渠道占比</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ growth_data.order_count }}</span>
                   </span>
-                </span>
-              </p>
-            </div>
-            <div class="item-row item-chart-area">
-              <div class="chart">
-                <ve-pie
-                  :data="order_radio_data"
-                  :legend-visible="false"
-                  :extend="order_chart_extend"
-                  :settings="chart_settings_array"
-                  height="205px" />
+                  <span>
+                    <label class="item-label">同比: </label>
+                    <span
+                      :class="{green: growth_data.order_count_comparison < 0, red: growth_data.order_count_comparison > 0, blue: growth_data.order_count_comparison === 0 }"
+                      class="ratio-value">
+                      {{ growth_data.order_count_comparison | abs }}%
+                      <template v-if="growth_data.order_count_comparison > 0">↑</template>
+                      <template v-else-if="growth_data.order_count_comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-pie
+                    :data="order_radio_data"
+                    :legend-visible="false"
+                    :extend="order_chart_extend"
+                    :settings="chart_settings_array"
+                    height="205px" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="data-line-chart-area">
-        <el-tabs
-          v-model="active_name"
-          type="border-card"
-          @tab-click="tab_change">
-          <el-tab-pane
-            v-for="(line_chart_tab, index) in line_chart_tabs"
-            :key="index"
-            :name="line_chart_tab.name"
-            :label="line_chart_tab.label">
-            <div class="line-chart-area">
-              <ve-histogram
-                :ref="'chart' + line_chart_tab.name"
-                :data="dimension_data"
-                :extend="dimension_chart_extend"
-                :settings="chart_settings"
-                class="line-chart-style" />
+        <div class="data-line-chart-area">
+          <div style="margin-top: 20px;margin-bottom: 10px;display: flex;align-items: center">
+            <div>
+              <span class="order-number-list">查看维度：</span>
             </div>
-          </el-tab-pane>
-        </el-tabs>
+            <el-radio-group v-model="showLineDayType" size="small" @change="lineDayTypeShowChange">
+              <el-radio-button label="日"/>
+              <el-radio-button label="周"/>
+              <el-radio-button label="月"/>
+            </el-radio-group>
+          </div>
+          <el-tabs
+            v-model="active_name"
+            @tab-click="tabChange">
+            <el-tab-pane
+              v-for="(line_chart_tab, index) in line_chart_tabs"
+              :key="index"
+              :name="line_chart_tab.name"
+              :label="line_chart_tab.label">
+              <div class="line-chart-area">
+                <ve-histogram
+                  :ref="'chart' + line_chart_tab.name"
+                  :data="dimension_data"
+                  :extend="dimension_chart_extend"
+                  :settings="chart_settings"
+                  class="line-chart-style" />
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <div style="margin-top: 0px;margin-bottom: 30px;display: flex;align-items: center">
+          <div style="">
+            <span class="order-number-list">详细数据：</span>
+          </div>
+          <el-radio-group v-model="showLineTable" size="small" @change="showLineTableShowChange">
+            <el-radio-button label="展开"/>
+            <el-radio-button label="收起"/>
+          </el-radio-group>
+        </div>
+        <transition name="el-zoom-in-top">
+          <div v-if="showLineTable === '展开'" class="table-content table-block">
+            <el-table v-if="active_name === '0'" :data="increasedPayUserListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="APP付费用户数" prop="app" />
+              <el-table-column align="center" label="电信付费用户数" prop="ctcc" />
+              <el-table-column align="center" label="总付费用户数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '1'" :data="orderCountListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="高级会员" prop="senior" />
+              <el-table-column align="center" label="电信会员" prop="ctcc" />
+              <el-table-column align="center" label="普通会员" prop="common" />
+              <el-table-column align="center" label="总订单总数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '2'" :data="registerUserListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="家长用户" prop="parent" />
+              <el-table-column align="center" label="孩子用户" prop="child" />
+              <el-table-column align="center" label="总注册用户数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '3'" :data="orderAmountListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="APP充值金额" prop="app" />
+              <el-table-column align="center" label="电信充值金额" prop="ctcc" />
+              <el-table-column align="center" label="总充值金额" prop="count" />
+            </el-table>
+          </div>
+        </transition>
       </div>
     </div>
+    <!-- 提示框 -->
+    <el-dialog
+      :visible.sync="tipsDialog.dialogVisible"
+      :title="tipsDialog.title"
+      custom-class="tips-dialog-custom-class"
+      width="660px">
+      <div class="item-list">
+        <div v-for="item in tipsDialog.list" :key="item.label" class="item">
+          <span class="label">{{ item.label }}：</span>
+          <span class="content">{{ item.content }}</span>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="tipsDialog.dialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
 import MultiProcess from '@/components/MultiProcess'
-import { get_homepage_growth_data, get_homepage_overall_data } from '@/api/interactive'
+import { get_homepage_growth_data, get_homepage_overall_data } from '../api/interactive'
+import { parseDateTime, getWeekRangeTime, getMonthRangeTime, cloneDeep } from '../utils'
 
 const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
   '#FFA069', '#8d98b3', '#e5cf0d', '#97b552',
@@ -382,10 +506,8 @@ export default {
     const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
-      increase_bind_items_list: [],
-      increased_pay_items_list: [],
-      order_amount_items_list: [],
       datetime_range: [new Date(pre_week), new Date(day)],
+      defaultDateRange: [new Date(pre_week), new Date(day)],
       query_sets: {},
       overall_data: {
         pay_member_count: '-',
@@ -464,8 +586,102 @@ export default {
       dimension_chart_extend: {
         barMaxWidth: 30
       },
+      /**
+       * 新增注册用户
+       * {
+          "columns": [
+            "name",
+            "value"
+          ],
+          "center": [
+            "50%",
+            "50%"
+          ],
+          "rows": [
+            {
+              "name": "家长端",
+              "value": 8
+            },
+            {
+              "name": "孩子端",
+              "value": 2
+            }
+          ]
+        }
+       * */
       increased_user_data: {},
+      /**
+       * 充值金额
+       * */
+      orderAmountData: {
+        'columns': [
+          'name',
+          'value'
+        ],
+        'center': [
+          '50%',
+          '50%'
+        ],
+        'rows': []
+      },
+      /**
+       * 新增绑定设备及占比
+       * {
+          "columns": [
+            "name",
+            "value"
+          ],
+          "rows": [
+            {
+              "name": "VIVO",
+              "value": 0
+            },
+            {
+              "name": "OPPO",
+              "value": 0
+            },
+            {
+              "name": "公版",
+              "value": 18
+            }
+          ]
+        }
+       * */
       device_ratio_data: {},
+      /**
+       * {
+          "columns": [
+            "name",
+            "value"
+          ],
+          "rows": [
+            {
+              "name": "普通会员",
+              "value": 60
+            },
+            {
+              "name": "高级会员",
+              "value": 6
+            },
+            {
+              "name": "IOS",
+              "value": 3
+            },
+            {
+              "name": "微信",
+              "value": 0
+            },
+            {
+              "name": "支付宝",
+              "value": 0
+            },
+            {
+              "name": "电信",
+              "value": 59
+            }
+          ]
+        }
+       * */
       order_radio_data: {},
       line_chart_tabs: [
         {
@@ -473,21 +689,58 @@ export default {
           name: '0'
         },
         {
+          label: '新增注册用户',
+          name: '2'
+        },
+        {
           label: '订单成交量',
           name: '1'
         },
         {
-          label: '电信充值金额',
-          name: '3'
-        },
-        {
           label: '充值金额',
-          name: '2'
+          name: '3'
         }
       ],
       line_chart_tabs_data: [{}, {}, {}, {}],
       active_name: '0',
-      dimension_data: {}
+      dimension_data: {},
+      /**
+       * 新增绑定用户
+       * */
+      increase_bind_user_data: {
+        'columns': [
+          'name',
+          'value'
+        ],
+        'center': [
+          '50%',
+          '50%'
+        ],
+        'rows': []
+      },
+      // 条形统计图天数类型
+      showLineDayType: '日',
+      // 条形统计图的时间样式
+      lineDateStyleList: [
+        // { type: '日', date: ['2020-01-01', '2020-01-02', '2020-01-03'], startDate: '2020-01-01', endDate: '2020-01-03' },
+        // { type: '周', date: ['2020-01-01~2020-01-07', '2020-01-08~2020-01-15'], startDate: '2020-01-01', endDate: '2020-01-15' },
+        // { type: '月', date: ['2020-01-01~2020-01-31', '2020-02-01~2020-02-29'], startDate: '2020-01-01', endDate: '2020-02-29' }
+      ],
+      // 明细数据 - 新增付费用户列表
+      increasedPayUserListTableData: [],
+      // 明细数据 - 订单成交量
+      orderCountListTableData: [],
+      // 明细数据 - 新增用户注册
+      registerUserListTableData: [],
+      // 明细数据 - 充值金额
+      orderAmountListTableData: [],
+      // 展开详细
+      showLineTable: '收起',
+      tipsDialog: {
+        title: '整体数据说明',
+        dialogVisible: false,
+        list: []
+      }
     }
   },
   computed: {},
@@ -503,15 +756,20 @@ export default {
       immediate: true
     }
   },
-  mounted: function() {
-    this.fetch_page_data()
+  mounted() {
+    this.makeDateStyleList()
+    this.fetchPageData()
   },
   methods: {
-    fetch_page_data() {
-      this.fetch_overall_data()
-      this.fetch_growth_data()
+    fetchPageData() {
+      this.fetchOverallData()
+      this.fetchGrowthData()
     },
-    fetch_overall_data() {
+    /**
+     * @description 获取首页整体数据
+     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=106
+     * */
+    fetchOverallData() {
       get_homepage_overall_data().then(r => {
         if (r.status === 0) {
           this.overall_data = r.data
@@ -521,8 +779,12 @@ export default {
         }
       })
     },
-    fetch_growth_data() {
-      const config = this.get_query()
+    /**
+     * @description 获取关键数据
+     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=107
+     * */
+    fetchGrowthData() {
+      const config = this.getQuery()
       get_homepage_growth_data(config).then(r => {
         if (r.status === 0) {
           this.growth_data = r.data
@@ -531,18 +793,27 @@ export default {
           this.growth_data.ios_order_amount = r.data.ios_order_amount.toFixed(2)
           this.growth_data.ali_order_amount = r.data.ali_order_amount.toFixed(2)
           this.growth_data.telecom_order_amount = r.data.telecom_order_amount.toFixed(2)
+          // ###
+          this.growth_data.pay_user_count = 92
+          this.growth_data.pay_user_count_conversion = 93
+          this.growth_data.repurchase_user_count = 94
+          this.growth_data.repurchase_user_ios_count = 95
+          this.growth_data.repurchase_user_wechat_count = 96
+          this.growth_data.repurchase_user_ali_count = 97
+          this.growth_data.repurchase_user_ctcc_count = 98
+          this.growth_data.repurchase_user_count_conversion = 99
+          // ###
           // this.$message.success(r.message)
         } else {
           this.$message.error(r.message)
-          this.growth_data = []
+          this.growth_data = {}
         }
       }).finally(() => {
-        this.update_platform_ratio()
-        this.update_chat_chart()
-        this.update_line_chart()
+        this.updateChatChart()
+        this.updateLineChart()
       })
     },
-    update_chat_chart() {
+    updateChatChart() {
       const growth_data = this.growth_data
       if (Object.keys(growth_data).length) {
         // 新增注册用户
@@ -626,6 +897,27 @@ export default {
             data: field_filter_list
           }
         ]
+        // 充值金额
+        this.orderAmountData = {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { 'name': '微信', 'value': growth_data.we_chat_order_amount },
+            { 'name': '支付宝', 'value': growth_data.ali_order_amount },
+            { 'name': 'iOS', 'value': growth_data.ios_order_amount },
+            { 'name': '电信', 'value': growth_data.telecom_order_amount }
+          ]
+        }
+        // 新增绑定用户
+        this.increase_bind_user_data = {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { 'name': 'iOS', 'value': growth_data.increase_bind_ios_user },
+            { 'name': '安卓', 'value': growth_data.increase_bind_android_user }
+          ]
+        }
+        // console.log(JSON.stringify(this.order_radio_data, null, 2))
       } else {
         this.increased_user_data = {
           columns: ['name', 'value'],
@@ -649,80 +941,169 @@ export default {
         }
       }
     },
-    update_line_chart() {
+    /**
+     * @description 解析条形统计图数据
+     * */
+    updateLineChart() {
       const growth_data = this.growth_data
       if (Object.keys(growth_data).length) {
+        // 新增付费用户列表 --------------
+        growth_data.increased_pay_user_list = [
+          { date: '2020-12-07', count: 200, type: 'app' },
+          { date: '2020-12-07', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-08', count: 200, type: 'app' },
+          { date: '2020-12-08', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-09', count: 100, type: 'app' },
+          { date: '2020-12-09', count: 300, type: 'ctcc' },
+
+          { date: '2020-12-10', count: 500, type: 'app' },
+          { date: '2020-12-10', count: 400, type: 'ctcc' },
+
+          { date: '2020-12-11', count: 200, type: 'app' },
+          { date: '2020-12-11', count: 300, type: 'ctcc' },
+
+          { date: '2020-12-12', count: 100, type: 'app' },
+          { date: '2020-12-12', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-13', count: 200, type: 'app' },
+          { date: '2020-12-13', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-14', count: 400, type: 'app' },
+          { date: '2020-12-14', count: 100, type: 'ctcc' }
+        ]
+
+        growth_data.increased_pay_user_list = this.parseLineData(growth_data.increased_pay_user_list, 0, this.showLineDayType)
+        // 当查看维度为日时则是明细数据
+        if (this.showLineDayType === '日' && this.increasedPayUserListTableData.length === 0) {
+          this.increasedPayUserListTableData = cloneDeep(growth_data.increased_pay_user_list)
+        }
+        // console.log(JSON.stringify(growth_data.increased_pay_user_list, null, 2))
         const increased_pay_user_chart = {
-          columns: ['date', 'count'],
+          columns: ['date', 'count', 'app', 'ctcc'],
           rows: growth_data.increased_pay_user_list
         }
+        // 新增付费用户列表 end
+        // 订单成交量 ---------------
+        growth_data.order_count_list = [
+          { date: '2020-12-07', count: 100, type: 'senior' },
+          { date: '2020-12-07', count: 100, type: 'ctcc' },
+          { date: '2020-12-07', count: 100, type: 'common' },
+
+          { date: '2020-12-08', count: 100, type: 'senior' },
+          { date: '2020-12-08', count: 100, type: 'ctcc' },
+          { date: '2020-12-08', count: 100, type: 'common' },
+
+          { date: '2020-12-09', count: 100, type: 'senior' },
+          { date: '2020-12-09', count: 100, type: 'ctcc' },
+          { date: '2020-12-09', count: 100, type: 'common' },
+
+          { date: '2020-12-10', count: 100, type: 'senior' },
+          { date: '2020-12-10', count: 100, type: 'ctcc' },
+          { date: '2020-12-10', count: 100, type: 'common' },
+
+          { date: '2020-12-11', count: 100, type: 'senior' },
+          { date: '2020-12-11', count: 100, type: 'ctcc' },
+          { date: '2020-12-11', count: 100, type: 'common' },
+
+          { date: '2020-12-12', count: 100, type: 'senior' },
+          { date: '2020-12-12', count: 100, type: 'ctcc' },
+          { date: '2020-12-12', count: 100, type: 'common' },
+
+          { date: '2020-12-13', count: 100, type: 'senior' },
+          { date: '2020-12-13', count: 100, type: 'ctcc' },
+          { date: '2020-12-13', count: 100, type: 'common' }
+        ]
+        growth_data.order_count_list = this.parseLineData(growth_data.order_count_list, 2, this.showLineDayType)
+        // 当查看维度为日时则是明细数据
+        if (this.showLineDayType === '日' && this.orderCountListTableData.length === 0) {
+          this.orderCountListTableData = cloneDeep(growth_data.order_count_list)
+        }
+        // console.log(JSON.stringify(growth_data.order_count_list, null, 2))
         const order_count_list_chart = {
-          columns: ['date', 'count'],
+          columns: ['date', 'count', 'senior', 'ctcc', 'common'],
           rows: growth_data.order_count_list
         }
+        // 订单成交量 end
+        // 新增注册用户
+        growth_data.register_user_list = [
+          { date: '2020-12-10', count: 200, type: 'parent' },
+          { date: '2020-12-10', count: 200, type: 'child' },
+
+          { date: '2020-12-11', count: 200, type: 'parent' },
+          { date: '2020-12-11', count: 100, type: 'child' },
+
+          { date: '2020-12-12', count: 100, type: 'parent' },
+          { date: '2020-12-12', count: 200, type: 'child' },
+
+          { date: '2020-12-13', count: 100, type: 'parent' },
+          { date: '2020-12-13', count: 200, type: 'child' },
+
+          { date: '2020-12-14', count: 200, type: 'parent' },
+          { date: '2020-12-14', count: 100, type: 'child' }
+        ]
+        growth_data.register_user_list = this.parseLineData(growth_data.register_user_list, 1, this.showLineDayType)
+        // 当查看维度为日时则是明细数据
+        if (this.showLineDayType === '日' && this.registerUserListTableData.length === 0) {
+          this.registerUserListTableData = cloneDeep(growth_data.register_user_list)
+        }
+        const register_user_list = {
+          columns: ['date', 'count', 'parent', 'child'],
+          rows: growth_data.register_user_list
+        }
+        // 新增注册用户 end
+        // 充值金额
+        growth_data.order_amount_list = [
+          { date: '2020-12-10', count: 200, type: 'app' },
+          { date: '2020-12-10', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-11', count: 200, type: 'app' },
+          { date: '2020-12-11', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-12', count: 200, type: 'app' },
+          { date: '2020-12-12', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-13', count: 200, type: 'app' },
+          { date: '2020-12-13', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-14', count: 400, type: 'app' },
+          { date: '2020-12-14', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-15', count: 200, type: 'app' },
+          { date: '2020-12-15', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-16', count: 200, type: 'app' },
+          { date: '2020-12-16', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-17', count: 300, type: 'app' },
+          { date: '2020-12-17', count: 500, type: 'ctcc' }
+        ]
+        growth_data.order_amount_list = this.parseLineData(growth_data.order_amount_list, 3, this.showLineDayType)
+        // 当查看维度为日时则是明细数据
+        if (this.showLineDayType === '日' && this.orderAmountListTableData.length === 0) {
+          this.orderAmountListTableData = cloneDeep(growth_data.order_amount_list)
+        }
         const order_amount_list_chart = {
-          columns: ['date', 'amount'],
+          columns: ['date', 'count', 'app', 'ctcc'],
           rows: growth_data.order_amount_list
         }
-        const telecom_order_amount_list_chart = {
-          columns: ['date', 'amount'],
-          rows: growth_data.telecom_order_amount_list || []
-        }
+        // 充值金额 end
         this.line_chart_tabs_data = [
           increased_pay_user_chart,
           order_count_list_chart,
-          order_amount_list_chart,
-          telecom_order_amount_list_chart]
+          register_user_list,
+          order_amount_list_chart
+        ]
       } else {
         this.line_chart_tabs_data = [{}, {}, {}, {}]
       }
-      this.dimension_data = this.line_chart_tabs_data[+this.active_name]
+      this.tabChange({ name: this.active_name })
     },
-    update_platform_ratio() {
-      const growth_data = this.growth_data
-      const ios_color = '#2ec7c9'
-      const and_color = '#b6a2de'
-      // 新增绑定平台类型占比
-      this.increase_bind_items_list = [
-        {
-          name: 'IOS',
-          value: growth_data.increase_bind_android_user,
-          color: ios_color
-        },
-        {
-          name: '安卓',
-          value: growth_data.increase_bind_ios_user,
-          color: and_color
-        }
-      ]
-      // 新增付费平台类型占比
-      this.increased_pay_items_list = [
-        {
-          name: 'IOS',
-          value: growth_data.increased_pay_ios_user,
-          color: ios_color
-        },
-        {
-          name: '安卓',
-          value: growth_data.increased_pay_android_user,
-          color: and_color
-        }
-      ]
-      // 充值金额平台类型占比
-      this.order_amount_items_list = [
-        {
-          name: 'IOS',
-          value: growth_data.ios_order_amount,
-          color: ios_color
-        },
-        {
-          name: '安卓',
-          value: growth_data.android_order_amount,
-          color: and_color
-        }
-      ]
-    },
-    get_query() {
+    /**
+     * @description 获取查询数据
+     * */
+    getQuery() {
       const config = {}
       if (this.datetime_range) {
         config['begin_time'] = this.datetime_range[0].getTime()
@@ -730,48 +1111,450 @@ export default {
       }
       return config
     },
-    page_query() {
-      this.fetch_growth_data()
+    /**
+     * @description 查询时间发生改变
+     * */
+    dateTimeChange() {
+      this.increasedPayUserListTableData = []
+      this.orderCountListTableData = []
+      this.registerUserListTableData = []
+      this.orderAmountListTableData = []
+      this.makeDateStyleList()
+      this.fetchGrowthData()
     },
-    tab_change(obj) {
+    /**
+     * @description 条形统计图 tab 切换
+     * */
+    tabChange(obj) {
       const active_name = obj.name
       if (active_name === '0') {
         this.chart_settings['labelMap'] = {
           date: '日期',
-          count: '用户数量'
+          count: '总付费用户',
+          app: 'APP付费用户',
+          ctcc: '电信付费用户'
         }
       } else if (active_name === '1') {
         this.chart_settings['labelMap'] = {
           date: '日期',
-          count: '成交量'
-        }
-      } else if (active_name === '2') {
-        this.chart_settings['labelMap'] = {
-          date: '日期',
-          amount: '充值金额'
+          count: '总订单数',
+          senior: '高级会员',
+          ctcc: '电信会员',
+          common: '普通会员'
         }
       } else if (active_name === '3') {
         this.chart_settings['labelMap'] = {
           date: '日期',
-          amount: '充值金额'
+          count: '总充值金额',
+          app: 'APP充值金额',
+          ctcc: '电信充值金额'
+        }
+      } else if (active_name === '2') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '总注册用户',
+          parent: '家长用户',
+          child: '孩子用户'
         }
       }
-      this.dimension_data = this.line_chart_tabs_data[+active_name]
+      this.dimension_data = this.line_chart_tabs_data[Number(active_name)]
+    },
+    /**
+     * @description 条形统计图切换 日 周 月
+     * */
+    lineDayTypeShowChange(e) {
+      this.updateLineChart()
+    },
+    /**
+     * @description 解析条形统计图的数据
+     * @param list {Array} 后台原数据
+     * @param type {Number} 0 新增付费用户 | 1 新增注册用户 | 2 订单成交量 | 3 充值金额
+     * @param showType {String} 日 周 月
+     * @return {Object}
+     * */
+    parseLineData(list, type, showType) {
+      if (type === 0 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+          const app = list.find(_item => {
+            return _item.date === date && _item.type === 'app'
+          })
+          return {
+            date: date,
+            count: ctcc.count + app.count,
+            ctcc: ctcc.count,
+            app: app.count
+          }
+        })
+      }
+      if (type === 2 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // 高级会员
+          const senior = list.find(_item => {
+            return _item.date === date && _item.type === 'senior'
+          })
+          // 电信会员
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+          // 普通会员
+          const common = list.find(_item => {
+            return _item.date === date && _item.type === 'common'
+          })
+          // 普通会员
+          return {
+            date: date,
+            count: senior.count + ctcc.count + common.count,
+            senior: senior.count,
+            ctcc: ctcc.count,
+            common: common.count
+          }
+        })
+      }
+      if (type === 1 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // 家长
+          const parent = list.find(_item => {
+            return _item.date === date && _item.type === 'parent'
+          })
+          // 孩纸
+          const child = list.find(_item => {
+            return _item.date === date && _item.type === 'child'
+          })
+          // 普通会员
+          return {
+            date: date,
+            count: parent.count + child.count,
+            parent: parent.count,
+            child: child.count
+          }
+        })
+      }
+      if (type === 3 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // app
+          const app = list.find(_item => {
+            return _item.date === date && _item.type === 'app'
+          })
+          // 电信
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+          // 普通会员
+          return {
+            date: date,
+            count: app.count + ctcc.count,
+            app: app.count,
+            ctcc: ctcc.count
+          }
+        })
+      }
+      const rangeDate = showType === '周' ? this.lineDateStyleList[1].date : this.lineDateStyleList[2].date
+      if (type === 0 && (showType === '周' || showType === '月')) {
+        // [{"date": "2020-12-07", "count": 32, "ctcc": 22, "app": 10}]
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // app 付费用户
+          let appCount = 0
+          // 电信付费用户
+          let ctccCount = 0
+          list.forEach(item => {
+            if (item.type === 'app') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                appCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: appCount + ctccCount,
+            ctcc: ctccCount,
+            app: appCount
+          })
+        })
+        return weekList
+      }
+      if (type === 2 && (showType === '周' || showType === '月')) {
+        // [{"date": "2020-12-07", "count": 32, "senior": 22, "ctcc": 22, "common": 10}]
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // 高级会员
+          let seniorCount = 0
+          // 电信会员
+          let ctccCount = 0
+          // 普通会员
+          let commonCount = 0
+          list.forEach(item => {
+            if (item.type === 'senior') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                seniorCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+            if (item.type === 'common') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                commonCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: seniorCount + ctccCount + commonCount,
+            senior: seniorCount,
+            ctcc: ctccCount,
+            common: commonCount
+          })
+        })
+        return weekList
+      }
+      if (type === 1 && (showType === '周' || showType === '月')) {
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // 家长
+          let parentCount = 0
+          // 孩纸
+          let childCount = 0
+          list.forEach(item => {
+            if (item.type === 'parent') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                parentCount += item.count
+              }
+            }
+            if (item.type === 'child') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                childCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: parentCount + childCount,
+            parent: parentCount,
+            child: childCount
+          })
+        })
+        return weekList
+      }
+      if (type === 3 && (showType === '周' || showType === '月')) {
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // app
+          let appCount = 0
+          // 电信
+          let ctccCount = 0
+          list.forEach(item => {
+            if (item.type === 'app') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                appCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: appCount + ctccCount,
+            app: appCount,
+            ctcc: ctccCount
+          })
+        })
+        return weekList
+      }
+    },
+    /**
+     * @description 生成查询 开始时间 和 结束时间 生成 日 周 月 的时间范围
+     * */
+    makeDateStyleList() {
+      let queryDateRange = this.getQuery()
+      if (!queryDateRange.hasOwnProperty('begin_time')) {
+        queryDateRange = {
+          begin_time: this.defaultDateRange[0].getTime(),
+          end_time: this.defaultDateRange[1].getTime()
+        }
+      }
+      this.lineDateStyleList = []
+      this.lineDateStyleList.push(
+        { type: '日', date: [], startDate: parseDateTime('y-m-d', queryDateRange.begin_time), endDate: parseDateTime('y-m-d', queryDateRange.end_time) }
+      )
+      const weekDate = getWeekRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
+      this.lineDateStyleList.push(
+        { type: '周', date: weekDate.map(item => {
+          return item.startDate + '~' + item.endDate
+        }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
+      )
+      const monthDate = getMonthRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
+      this.lineDateStyleList.push(
+        { type: '月', date: monthDate.map(item => {
+          return item.startDate + '~' + item.endDate
+        }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
+      )
+      // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+    },
+    /**
+     * @description 展开详细数据切换
+     * */
+    showLineTableShowChange(val) {
+    },
+    /**
+     * @description 显示提示弹窗
+     * @param type {Number} 1 整体数据 | 2 关键数据
+     * */
+    showTips(type) {
+      this.tipsDialog.dialogVisible = true
+      this.tipsDialog.title = type === 1 ? '整体数据说明' : '关键数据说明'
+      if (type === 1) {
+        // eslint-disable-next-line no-return-assign
+        return this.tipsDialog.list = [
+          {
+            label: '付费用户数',
+            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '订单成交量',
+            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '注册用户总数',
+            content: '累计在格雷盒子7注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
+          },
+          {
+            label: '累计绑定设备',
+            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
+          },
+          {
+            label: '充值金额',
+            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+          }
+        ]
+      }
+      this.tipsDialog.list = [
+        {
+          label: '新增绑定用户',
+          content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
+        },
+        {
+          label: '新增付费用户',
+          content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
+        },
+        {
+          label: '复购付费用户',
+          content: '以前买过任意一个会员套餐的用户，再次付费进行会员购买的用户'
+        },
+        {
+          label: '充值金额',
+          content: '筛选的时间段内付费成功订单的总金额，支持查询更多时间段的数据'
+        },
+        {
+          label: '新增注册用户数',
+          content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
+        },
+        {
+          label: '新增绑定设备及占比',
+          content: '筛选的时间段内新增绑定成功设备的类型，包括公版和定制机'
+        },
+        {
+          label: '订单类型及支付渠道占比',
+          content: '筛选的时间段内新增付费成功订单的类型以及支付渠道的占比'
+        }
+      ]
     }
   }
 }
 </script>
-
+<style lang="scss">
+.tips-dialog-custom-class{
+  .el-dialog__body{
+    padding: 12px 20px !important;
+    padding-bottom: 0 !important;
+  }
+  .el-dialog__footer{
+    padding-top: 0 !important;
+  }
+  .item{
+    //display: flex;
+    margin-bottom: 20px;
+  }
+  .label{
+    //width: 105px;
+    font-weight: bold;
+    //position: relative;
+    //top: 2px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    display: block;
+    font-size: 15px;
+  }
+  .content{
+    line-height: 1.5;
+    //max-width: calc(100% - 110px);
+  }
+}
+</style>
+<style scoped lang="scss">
+.card-box{
+  background-color: #ffffff;
+  padding: 24px;
+  box-shadow: 6px 4px 20px 5px #f1f1f1;
+  border-radius: 4px;
+  .title-area {
+    width: 100%;
+    padding: 0 0 30px 0;
+    display: flex;
+    align-items: center;
+    .title {
+      font-family: PingFangSC-Regular, 微软雅黑, serif;
+      font-size: 20px;
+      color: #454545;
+      font-weight: bold;
+    }
+  }
+}
+</style>
 <style rel="stylesheet/scss" lang="scss" scoped>
 $border_line_color: #c7d5ee;
-$border_radius_size: 5px;
+$border_radius_size: 3px;
 $box_shadow_color: #3c3c3c;
 $radio_fair_color: rgba(0, 0, 0, 0.71);
 .gelei-content {
   width: 100%;
   height: 100%;
   /*min-height: 480px;*/
-  padding: 20px 40px 36px 40px;
+  padding: 20px 30px 36px 30px;
   display: flex;
   flex-direction: column;
   background-color: #fafafa;
@@ -784,25 +1567,9 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
 
     .total-data-area {
       width: 100%;
-      padding: 23px 30px 48px 30px;
       display: flex;
       flex-direction: column;
       background: #FFFFFF;
-      border: 1px solid #EAEAEA;
-      border-radius: 5px;
-      margin-bottom: 40px;
-
-      .title-area {
-        width: 100%;
-        padding: 0 15px 15px 15px;
-
-        .title {
-          font-family: PingFangSC-Regular, 微软雅黑, serif;
-          font-size: 20px;
-          color: #454545;
-        }
-      }
-
       .summary-items-area {
         width: 100%;
         min-width: 1150px;
@@ -810,7 +1577,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 0 15px 15px 15px;
+        padding: 0 0 15px 0;
         user-select: none;
 
         .summary-item {
@@ -855,13 +1622,6 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     }
 
     .search-area {
-      padding: 29px 30px;
-      background: #FFFFFF;
-      border: 1px solid #EAEAEA;
-      border-radius: 5px;
-      height: 100px;
-      margin-bottom: 40px;
-
       .row-bg {
         .col-bg {
           padding: 5px 0;
@@ -902,7 +1662,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           background: #FFFFFF;
           border: 1px solid #EAEAEA;
           border-radius: $border_radius_size;
-          padding: 34px 35px 27px 32px;
+          padding: 20px 32px;
 
           .item-title {
             border-top-left-radius: $border_radius_size;
@@ -965,57 +1725,6 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
                 }
               }
             }
-
-            .item-row-box {
-              width: 100%;
-              height: 58px;
-              margin: 16px auto;
-
-              .item-subscribe-line {
-                width: 100%;
-                position: relative;
-                display: flex;
-                flex-direction: row;
-
-                div {
-                  width: 50%;
-
-                  .item-label {
-                    font-family: PingFangSC-Regular, 微软雅黑, serif;
-                    font-size: 12px;
-                    color: #454545;
-                    width: 46px;
-                    display: inline-block;
-                  }
-
-                  .item-number {
-                    font-size: 12px;
-                    font-weight: 200;
-                  }
-
-                  .total-count {
-                    padding-left: 7px;
-                    font-family: PingFangSC-Regular, 微软雅黑, serif;
-                    font-size: 14px;
-                    color: #454545;
-                    margin-bottom: 10px;
-                  }
-
-                  .upper {
-                    color: green;
-                  }
-
-                  .fair {
-                    color: $radio_fair_color;
-                  }
-
-                  .down {
-                    color: red;
-                  }
-                }
-              }
-            }
-
             .diviser {
               height: 1px;
               background-color: #EAEAEA;
@@ -1080,8 +1789,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           border-radius: $border_radius_size;
           background: #FFFFFF;
           border: 1px solid #EAEAEA;
-          padding: 34px 35px 27px 32px;
-
+          padding: 20px 32px;
           .item-title {
             height: 28px;
             line-height: 28px;
@@ -1179,6 +1887,91 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             }
           }
         }
+
+        .item-row-box {
+          width: 100%;
+          height: 58px;
+          margin: 16px auto;
+
+          .item-subscribe-line {
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+
+            div {
+              width: 50%;
+
+              .item-label {
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 12px;
+                color: #454545;
+                width: 46px;
+                display: inline-block;
+              }
+
+              .item-number {
+                font-size: 12px;
+                font-weight: 200;
+              }
+
+              .total-count {
+                padding-left: 7px;
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 14px;
+                color: #454545;
+                margin-bottom: 10px;
+              }
+
+              .upper {
+                color: green;
+              }
+
+              .fair {
+                color: $radio_fair_color;
+              }
+
+              .down {
+                color: red;
+              }
+            }
+          }
+        }
+        .diviser {
+          height: 1px;
+          background-color: #EAEAEA;
+          width: 100%;
+        }
+        .ratio-data {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+
+          .ratio-name {
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 14px;
+            color: #454545;
+          }
+
+          .ratio-value {
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 20px;
+            color: #000000;
+            line-height: 20px;
+
+            &.green {
+              color: #5EC821;
+            }
+
+            &.red {
+              color: #F14F4F;
+            }
+
+            &.blue {
+              color: #368EE0;
+            }
+          }
+        }
       }
     }
 
@@ -1190,6 +1983,20 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         height: 400px;
       }
     }
+  }
+  .title-tips{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    color: #ababab;
+    font-size: 12px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    line-height: 1;
+    cursor: pointer;
   }
 }
 </style>

@@ -59,6 +59,13 @@ export const constantRoutes = [
         component: () => import('@/views/login/no_nav'),
         hidden: true,
         meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: false, hide: true, icon: 'profile' }
+      },
+      {
+        path: '/m/welcome',
+        name: 'M-Welcome',
+        component: () => import('@/views/login/no_nav'),
+        hidden: true,
+        meta: { title: '欢迎使用格雷盒子后台管理系统', keepAlive: true, showNavbar: true, hide: true, icon: 'profile' }
       }
     ]
   },
@@ -166,6 +173,12 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/users/details'), // 与用户管理的页面保持一致
         meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
+      },
+      {
+        path: 'user/channel',
+        name: 'UserChannel',
+        component: () => import('@/views/users/channel'),
+        meta: { title: '渠道数据', hide: true, icon: 'form', pid: '' }
       }
     ]
   },

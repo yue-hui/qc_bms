@@ -1,5 +1,5 @@
 <template>
-  <div class="device-recorrd-content users-logs-page">
+  <div class="device-recorrd-content users-logs-page user-logs">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">

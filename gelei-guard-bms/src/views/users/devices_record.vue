@@ -1,5 +1,5 @@
 <template>
-  <div class="device-recorrd-content">
+  <div class="device-recorrd-content user-devices-record">
     <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
@@ -77,6 +77,7 @@
                   <el-date-picker
                     v-model="query_sets.datetime_range"
                     :disabled="query_sets.use_interval === '01' || query_sets.use_interval === ''"
+                    :picker-options="pickerOptions"
                     end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -192,7 +193,21 @@ export default {
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       child_platform_type: [],
-      device_list: []
+      device_list: [],
+      pickerOptions: {
+        // 限制仅选择近七天
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 365 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
+      }
     }
   },
   computed: {},
@@ -235,7 +250,12 @@ export default {
         const now = new Date()
         this.query_sets.datetime_range = [now, now]
       } else {
-        const now = new Date()
+        let now = new Date()
+        now.setHours(0)
+        now.setMinutes(0)
+        now.setMilliseconds(0)
+        now.setSeconds(0)
+        now = new Date(now.getTime() - 1000)
         const pre_week = new Date(now.getTime() - 6 * 24 * 3600 * 1000)
         this.query_sets.datetime_range = [pre_week, now]
       }
