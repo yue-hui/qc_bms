@@ -232,12 +232,12 @@ export function get_value_from_map_list(key, map_list = [], default_value = '-',
 export function get_h5_domain() {
   let domain
   const hostname = window.location.hostname
-  hostname === 'bms-dev.qcg.cc' && (domain = 'h5-dev.qcg.cc')
-  hostname === 'bms-test1.qcg.cc' && (domain = 'h5-test1.qcg.cc')
-  hostname === 'bms-test2.qcg.cc' && (domain = 'h5-test2.qcg.cc')
+  hostname === 'bms-dev.qcg.cc' && (domain = 'h5-dev.qcg.cc:9999')
+  hostname === 'bms-test1.qcg.cc' && (domain = 'h5-test1.qcg.cc:9999')
+  hostname === 'bms-test2.qcg.cc' && (domain = 'h5-test2.qcg.cc:9999')
   hostname === 'bms-beta.qcg.cc' && (domain = 'h5-beta.qcg.cc')
   hostname === 'bms.qcg.cc' && (domain = 'h5.qcg.cc')
-  domain === undefined && (domain = 'h5-dev.qcg.cc')
+  domain === undefined && (domain = 'h5-dev.qcg.cc:9999')
   return 'https://' + domain
   /* let domain
   const hostname = window.location.hostname
