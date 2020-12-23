@@ -83,7 +83,7 @@
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
-                    <span class="total-count">{{ growth_data.pay_user_count }}</span>
+                    <span class="total-count">{{ payUser.count }}</span>
                     <label class="item-label">总数</label>
                   </span>
                 </p>
@@ -92,11 +92,11 @@
                   <span>
                     <span class="ratio-name">同比:</span>
                     <span
-                      :class="{green: growth_data.pay_user_count_conversion < 0, red: growth_data.pay_user_count_conversion > 0, blue: growth_data.pay_user_count_conversion === 0 }"
+                      :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.pay_user_count_conversion | abs }}%
-                      <template v-if="growth_data.pay_user_count_conversion > 0">↑</template>
-                      <template v-else-if="growth_data.pay_user_count_conversion === 0" />
+                      {{ payUser.comparison | abs }}%
+                      <template v-if="payUser.comparison > 0">↑</template>
+                      <template v-else-if="payUser.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -109,23 +109,23 @@
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
-                    <span class="total-count">{{ growth_data.increased_pay_user }}</span>
+                    <span class="total-count">{{ increasedPayUserType.count }}</span>
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.increased_pay_ios_user }}</span>
+                    <span class="total-count">{{ increasedPayUserType.ios }}</span>
                     <label class="item-label">IOS</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.increased_pay_we_chat_user }}</span>
+                    <span class="total-count">{{ increasedPayUserType.wechat }}</span>
                     <label class="item-label">微信</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.increased_pay_ali_user }}</span>
+                    <span class="total-count">{{ increasedPayUserType.aliPay }}</span>
                     <label class="item-label">支付宝</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.increased_pay_telecom_user }}</span>
+                    <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
                     <label class="item-label">电信</label>
                   </span>
                 </p>
@@ -134,22 +134,22 @@
                   <span>
                     <span class="ratio-name">同比:</span>
                     <span
-                      :class="{green: growth_data.increased_pay_user_comparison < 0, red: growth_data.increased_pay_user_comparison > 0, blue: growth_data.increased_pay_user_comparison === 0 }"
+                      :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_pay_user_comparison | abs }}%
-                      <template v-if="growth_data.increased_pay_user_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.increased_pay_user_comparison === 0" />
+                      {{ increasedPayUserType.comparison | abs }}%
+                      <template v-if="increasedPayUserType.comparison > 0">↑</template>
+                      <template v-else-if="increasedPayUserType.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
                   <span>
                     <span class="ratio-name">转化率:</span>
                     <span
-                      :class="{green: growth_data.increased_pay_user_conversion < 0, red: growth_data.increased_pay_user_conversion > 0, blue: growth_data.increased_pay_user_conversion === 0 }"
+                      :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_pay_user_conversion | abs }}%
-                      <template v-if="growth_data.increased_pay_user_conversion > 0">↑</template>
-                      <template v-else-if="growth_data.increased_pay_user_conversion === 0" />
+                      {{ increasedPayUserType.conversion | abs }}%
+                      <template v-if="increasedPayUserType.conversion > 0">↑</template>
+                      <template v-else-if="increasedPayUserType.conversion === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -162,23 +162,23 @@
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
-                    <span class="total-count">{{ growth_data.repurchase_user_count }}</span>
+                    <span class="total-count">{{ repurchaseUser.count }}</span>
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.repurchase_user_ios_count }}</span>
+                    <span class="total-count">{{ repurchaseUser.ios }}</span>
                     <label class="item-label">IOS</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.repurchase_user_wechat_count }}</span>
+                    <span class="total-count">{{ repurchaseUser.wechat }}</span>
                     <label class="item-label">微信</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.repurchase_user_ali_count }}</span>
+                    <span class="total-count">{{ repurchaseUser.aliPay }}</span>
                     <label class="item-label">支付宝</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ growth_data.repurchase_user_ctcc_count }}</span>
+                    <span class="total-count">{{ repurchaseUser.ctcc }}</span>
                     <label class="item-label">电信</label>
                   </span>
                 </p>
@@ -187,11 +187,11 @@
                   <span>
                     <span class="ratio-name">同比:</span>
                     <span
-                      :class="{green: growth_data.repurchase_user_count_conversion < 0, red: growth_data.repurchase_user_count_conversion > 0, blue: growth_data.repurchase_user_count_conversion === 0 }"
+                      :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.repurchase_user_count_conversion | abs }}%
-                      <template v-if="growth_data.repurchase_user_count_conversion > 0">↑</template>
-                      <template v-else-if="growth_data.repurchase_user_count_conversion === 0" />
+                      {{ repurchaseUser.comparison | abs }}%
+                      <template v-if="repurchaseUser.comparison > 0">↑</template>
+                      <template v-else-if="repurchaseUser.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -207,27 +207,27 @@
                 <p class="item-subscribe">
                   <span>
                     <label class="item-label">总数: </label>
-                    <span class="total-count">{{ growth_data.increase_bind_user }}</span>
+                    <span class="total-count">{{ newBindUser.count }}</span>
                   </span>
                   <span>
                     <span class="item-label">同比: </span>
                     <span
-                      :class="{green: growth_data.increased_bind_user_comparison < 0, red: growth_data.increased_bind_user_comparison > 0, blue: growth_data.increased_bind_user_comparison === 0 }"
+                      :class="{green: newBindUser.comparison < 0, red: newBindUser.comparison > 0, blue: newBindUser.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_bind_user_comparison | abs }}%
-                      <template v-if="growth_data.increased_bind_user_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.increased_bind_user_comparison === 0" />
+                      {{ newBindUser.comparison | abs }}%
+                      <template v-if="newBindUser.comparison > 0">↑</template>
+                      <template v-else-if="newBindUser.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
                   <span>
                     <span class="item-label">转化率: </span>
                     <span
-                      :class="{green: growth_data.increased_bind_user_conversion < 0, red: growth_data.increased_bind_user_conversion > 0, blue: growth_data.increased_bind_user_conversion === 0 }"
+                      :class="{green: newBindUser.conversion < 0, red: newBindUser.conversion > 0, blue: newBindUser.conversion === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_bind_user_conversion | abs }}%
-                      <template v-if="growth_data.increased_bind_user_conversion > 0">↑</template>
-                      <template v-else-if="growth_data.increased_bind_user_conversion === 0" />
+                      {{ newBindUser.conversion | abs }}%
+                      <template v-if="newBindUser.conversion > 0">↑</template>
+                      <template v-else-if="newBindUser.conversion === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -236,7 +236,7 @@
               <div class="item-row item-chart-area">
                 <div class="chart">
                   <ve-ring
-                    :data="increase_bind_user_data"
+                    :data="newBindUser.chartData"
                     :legend-visible="true"
                     :extend="chart_extend"
                     :settings="chart_settings"
@@ -252,16 +252,16 @@
                 <p class="item-subscribe">
                   <span>
                     <label class="item-label">总数: </label>
-                    <span class="total-count">{{ growth_data.increased_user }}</span>
+                    <span class="total-count">{{ newRegisterUser.count }}</span>
                   </span>
                   <span>
                     <span class="item-label">同比: </span>
                     <span
-                      :class="{green: growth_data.increased_user_comparison < 0, red: growth_data.increased_user_comparison > 0, blue: growth_data.increased_user_comparison === 0 }"
+                      :class="{green: newRegisterUser.comparison < 0, red: newRegisterUser.comparison > 0, blue: newRegisterUser.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_user_comparison | abs }}%
-                      <template v-if="growth_data.increased_user_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.increased_user_comparison === 0" />
+                      {{ newRegisterUser.comparison | abs }}%
+                      <template v-if="newRegisterUser.comparison > 0">↑</template>
+                      <template v-else-if="newRegisterUser.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -270,7 +270,7 @@
               <div class="item-row item-chart-area">
                 <div class="chart">
                   <ve-ring
-                    :data="increased_user_data"
+                    :data="newRegisterUser.chartData"
                     :legend-visible="true"
                     :extend="chart_extend"
                     :settings="chart_settings"
@@ -286,18 +286,17 @@
                   <span>
                     <label class="item-label">总数: </label>
                     <span class="total-count">
-                      <template v-if="growth_data.order_amount">¥</template>
-                      {{ growth_data.order_amount || '--' }}
+                      {{ orderAmount.count }}¥
                     </span>
                   </span>
                   <span>
                     <span class="item-label">同比: </span>
                     <span
-                      :class="{green: growth_data.order_amount_comparison < 0, red: growth_data.order_amount_comparison > 0, blue: growth_data.order_amount_comparison === 0 }"
+                      :class="{green: orderAmount.comparison < 0, red: orderAmount.comparison > 0, blue: orderAmount.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.order_amount_comparison | abs }}%
-                      <template v-if="growth_data.order_amount_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.order_amount_comparison === 0" />
+                      {{ orderAmount.comparison | abs }}%
+                      <template v-if="orderAmount.comparison > 0">↑</template>
+                      <template v-else-if="orderAmount.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -306,7 +305,7 @@
               <div class="item-row item-chart-area">
                 <div class="chart">
                   <ve-ring
-                    :data="orderAmountData"
+                    :data="orderAmount.chartData"
                     :legend-visible="true"
                     :extend="chart_extend"
                     :settings="chart_settings"
@@ -323,16 +322,16 @@
                 <p class="item-subscribe">
                   <span>
                     <label class="item-label">总数: </label>
-                    <span class="total-count">{{ growth_data.increased_bind_device }}</span>
+                    <span class="total-count">{{ newBindDevice.count }}</span>
                   </span>
                   <span>
                     <label class="item-label">同比: </label>
                     <span
-                      :class="{green: growth_data.increased_bind_device_comparison < 0, red: growth_data.increased_bind_device_comparison > 0, blue: growth_data.increased_bind_device_comparison === 0 }"
+                      :class="{green: newBindDevice.comparison < 0, red: newBindDevice.comparison > 0, blue: newBindDevice.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.increased_bind_device_comparison | abs }}%
-                      <template v-if="growth_data.increased_bind_device_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.increased_bind_device_comparison === 0" />
+                      {{ newBindDevice.comparison | abs }}%
+                      <template v-if="newBindDevice.comparison > 0">↑</template>
+                      <template v-else-if="newBindDevice.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -341,7 +340,7 @@
               <div class="item-row item-chart-area">
                 <div class="chart">
                   <ve-ring
-                    :data="device_ratio_data"
+                    :data="newBindDevice.chartData"
                     :legend-visible="true"
                     :extend="chart_extend"
                     :settings="chart_settings"
@@ -356,16 +355,16 @@
                 <p class="item-subscribe">
                   <span>
                     <label class="item-label">总数: </label>
-                    <span class="total-count">{{ growth_data.order_count }}</span>
+                    <span class="total-count">{{ orderTypePay.count }}</span>
                   </span>
                   <span>
                     <label class="item-label">同比: </label>
                     <span
-                      :class="{green: growth_data.order_count_comparison < 0, red: growth_data.order_count_comparison > 0, blue: growth_data.order_count_comparison === 0 }"
+                      :class="{green: orderTypePay.comparison < 0, red: orderTypePay.comparison > 0, blue: orderTypePay.comparison === 0 }"
                       class="ratio-value">
-                      {{ growth_data.order_count_comparison | abs }}%
-                      <template v-if="growth_data.order_count_comparison > 0">↑</template>
-                      <template v-else-if="growth_data.order_count_comparison === 0" />
+                      {{ orderTypePay.comparison | abs }}%
+                      <template v-if="orderTypePay.comparison > 0">↑</template>
+                      <template v-else-if="orderTypePay.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -374,7 +373,7 @@
               <div class="item-row item-chart-area">
                 <div class="chart">
                   <ve-pie
-                    :data="order_radio_data"
+                    :data="orderTypePay.chartData"
                     :legend-visible="false"
                     :extend="order_chart_extend"
                     :settings="chart_settings_array"
@@ -586,103 +585,6 @@ export default {
       dimension_chart_extend: {
         barMaxWidth: 30
       },
-      /**
-       * 新增注册用户
-       * {
-          "columns": [
-            "name",
-            "value"
-          ],
-          "center": [
-            "50%",
-            "50%"
-          ],
-          "rows": [
-            {
-              "name": "家长端",
-              "value": 8
-            },
-            {
-              "name": "孩子端",
-              "value": 2
-            }
-          ]
-        }
-       * */
-      increased_user_data: {},
-      /**
-       * 充值金额
-       * */
-      orderAmountData: {
-        'columns': [
-          'name',
-          'value'
-        ],
-        'center': [
-          '50%',
-          '50%'
-        ],
-        'rows': []
-      },
-      /**
-       * 新增绑定设备及占比
-       * {
-          "columns": [
-            "name",
-            "value"
-          ],
-          "rows": [
-            {
-              "name": "VIVO",
-              "value": 0
-            },
-            {
-              "name": "OPPO",
-              "value": 0
-            },
-            {
-              "name": "公版",
-              "value": 18
-            }
-          ]
-        }
-       * */
-      device_ratio_data: {},
-      /**
-       * {
-          "columns": [
-            "name",
-            "value"
-          ],
-          "rows": [
-            {
-              "name": "普通会员",
-              "value": 60
-            },
-            {
-              "name": "高级会员",
-              "value": 6
-            },
-            {
-              "name": "IOS",
-              "value": 3
-            },
-            {
-              "name": "微信",
-              "value": 0
-            },
-            {
-              "name": "支付宝",
-              "value": 0
-            },
-            {
-              "name": "电信",
-              "value": 59
-            }
-          ]
-        }
-       * */
-      order_radio_data: {},
       line_chart_tabs: [
         {
           label: '新增付费用户',
@@ -704,20 +606,6 @@ export default {
       line_chart_tabs_data: [{}, {}, {}, {}],
       active_name: '0',
       dimension_data: {},
-      /**
-       * 新增绑定用户
-       * */
-      increase_bind_user_data: {
-        'columns': [
-          'name',
-          'value'
-        ],
-        'center': [
-          '50%',
-          '50%'
-        ],
-        'rows': []
-      },
       // 条形统计图天数类型
       showLineDayType: '日',
       // 条形统计图的时间样式
@@ -740,6 +628,110 @@ export default {
         title: '整体数据说明',
         dialogVisible: false,
         list: []
+      },
+      // /////////////////////////
+      // 付费用户总数卡片
+      payUser: {
+        count: '-', // 总数
+        comparison: 0 // 同比
+      },
+      // 新增付费用户卡片
+      increasedPayUserType: {
+        count: '-', // 总数
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0, // 同比
+        conversion: 0 // 转化率
+      },
+      // 复购付费用户卡片
+      repurchaseUser: {
+        count: '-', // 总数
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 同比
+      },
+      // 新增绑定用户卡片
+      newBindUser: {
+        count: '-', // 总数
+        comparison: 2020, // 同比
+        conversion: 2020, // 转化率
+        chartData: {
+          'columns': [
+            'name',
+            'value'
+          ],
+          'center': [
+            '50%',
+            '50%'
+          ],
+          'rows': [
+            { 'name': 'iOS', 'value': 2020 },
+            { 'name': '安卓', 'value': 2020 }
+          ]
+        }
+      },
+      // 新增注册用户卡片
+      newRegisterUser: {
+        count: '-', // 总数
+        comparison: 2020, // 同比
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { name: '家长端', value: 2020 },
+            { name: '孩子端', value: 2020 }
+          ]
+        }
+      },
+      // 充值金额卡片
+      orderAmount: {
+        count: '-',
+        comparison: 2020, // 同比
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { name: '微信', value: 2020 },
+            { name: '支付宝', value: 2020 },
+            { name: 'iOS', value: 2020 },
+            { name: '电信', value: 2020 }
+          ]
+        }
+      },
+      // 新增绑定设备及占比
+      newBindDevice: {
+        count: '-',
+        comparison: 2020, // 同比
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { name: 'VIVO', value: 2020 },
+            { name: 'OPPO', value: 2020 },
+            { name: '公版', value: 2020 }
+          ]
+        }
+      },
+      // 订单类型及支付渠道占比
+      orderTypePay: {
+        count: '-',
+        comparison: 2020, // 同比
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            { name: '普通会员', value: 2020 },
+            { name: '高级会员', value: 2020 },
+            { name: 'IOS', value: 2020 },
+            { name: '微信', value: 2020 },
+            { name: '支付宝', value: 2020 },
+            { name: '电信', value: 2020 }
+          ]
+        }
       }
     }
   },
@@ -785,161 +777,43 @@ export default {
      * */
     fetchGrowthData() {
       const config = this.getQuery()
-      get_homepage_growth_data(config).then(r => {
-        if (r.status === 0) {
-          this.growth_data = r.data
-          this.growth_data.order_amount = r.data.order_amount.toFixed(2)
-          this.growth_data.we_chat_order_amount = r.data.we_chat_order_amount.toFixed(2)
-          this.growth_data.ios_order_amount = r.data.ios_order_amount.toFixed(2)
-          this.growth_data.ali_order_amount = r.data.ali_order_amount.toFixed(2)
-          this.growth_data.telecom_order_amount = r.data.telecom_order_amount.toFixed(2)
-          // ###
-          this.growth_data.pay_user_count = 92
-          this.growth_data.pay_user_count_conversion = 93
-          this.growth_data.repurchase_user_count = 94
-          this.growth_data.repurchase_user_ios_count = 95
-          this.growth_data.repurchase_user_wechat_count = 96
-          this.growth_data.repurchase_user_ali_count = 97
-          this.growth_data.repurchase_user_ctcc_count = 98
-          this.growth_data.repurchase_user_count_conversion = 99
-          // ###
-          // this.$message.success(r.message)
+      get_homepage_growth_data(config).then(data => {
+        // eslint-disable-next-line no-empty
+        if (data.status === 0) {
+          this.growth_data = data
+          this.parseChatChart(cloneDeep(data.data))
+          this.updateLineChart()
         } else {
-          this.$message.error(r.message)
+          this.$message.error(data.message)
           this.growth_data = {}
         }
       }).finally(() => {
-        this.updateChatChart()
-        this.updateLineChart()
       })
     },
-    updateChatChart() {
-      const growth_data = this.growth_data
-      if (Object.keys(growth_data).length) {
-        // 新增注册用户
-        this.increased_user_data = {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            { 'name': '家长端', 'value': growth_data.patriarch_count },
-            { 'name': '孩子端', 'value': growth_data.child_count }
-          ]
-        }
-        // 新增绑定设备及占比
-        const device_data = growth_data.increased_bind_device_list.map(r => {
-          return {
-            name: r.name,
-            value: r.count
-          }
-        })
-        this.device_ratio_data = {
-          columns: ['name', 'value'],
-          rows: device_data
-        }
-        // 订单类型及支付渠道占比
-        const field_filter_list = ['IOS', '微信', '支付宝', '电信']
-        const order_data = [
-          {
-            name: '普通会员',
-            value: growth_data.vip_order_count
-          },
-          {
-            name: '高级会员',
-            value: growth_data.svip_order_count
-          },
-          {
-            name: 'IOS',
-            value: growth_data.ios_order_count
-          },
-          {
-            name: '微信',
-            value: growth_data.we_chat_order_count
-          },
-          {
-            name: '支付宝',
-            value: growth_data.ali_order_count
-          },
-          {
-            name: '电信',
-            value: growth_data.telecom_order_count
-          }
-        ]
-        // 后台返回数据格式不正确，前端用数据填补
-        field_filter_list.forEach(_c => {
-          const _item = order_data.filter(r => r.name === _c)
-          if (_item.length === 0) {
-            order_data.push(
-              {
-                name: _c,
-                value: 0
-              }
-            )
-          }
-        })
-        this.order_radio_data = {
-          columns: ['name', 'value'],
-          rows: order_data
-        }
-        this.chart_settings_array.level[1] = field_filter_list
-        this.order_chart_extend.legend = [
-          {
-            orient: 'vertical',
-            icon: 'circle',
-            x: '244',
-            y: 'center',
-            data: ['普通会员', '高级会员']
-          },
-          {
-            orient: 'vertical',
-            icon: 'circle',
-            x: '350',
-            y: 'center',
-            data: field_filter_list
-          }
-        ]
-        // 充值金额
-        this.orderAmountData = {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            { 'name': '微信', 'value': growth_data.we_chat_order_amount },
-            { 'name': '支付宝', 'value': growth_data.ali_order_amount },
-            { 'name': 'iOS', 'value': growth_data.ios_order_amount },
-            { 'name': '电信', 'value': growth_data.telecom_order_amount }
-          ]
-        }
-        // 新增绑定用户
-        this.increase_bind_user_data = {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            { 'name': 'iOS', 'value': growth_data.increase_bind_ios_user },
-            { 'name': '安卓', 'value': growth_data.increase_bind_android_user }
-          ]
-        }
-        // console.log(JSON.stringify(this.order_radio_data, null, 2))
-      } else {
-        this.increased_user_data = {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            { 'name': '家长端', 'value': growth_data.patriarch_count },
-            { 'name': '孩子端', 'value': growth_data.child_count }
-          ]
-        }
-        this.device_ratio_data = {}
-        this.order_radio_data = {
-          columns: ['name', 'value'],
-          center: ['20%', '50%'],
-          rows: [
-            { 'name': '6个月会员', 'value': 0 },
-            { 'name': '12个月会员', 'value': 0 },
-            { 'name': '24个月会员', 'value': 0 },
-            { 'name': 'IOS', 'value': 0 },
-            { 'name': '安卓', 'value': 0 }
-          ]
-        }
-      }
+    /**
+     * @description 解析卡片数据
+     * @param data {Object} 后台数据
+     * */
+    parseChatChart(data) {
+      // 付费用户总数
+      this.payUser.count = data.pay_user_count
+      this.payUser.comparison = data.pay_user_count_conversion
+      // 新增付费用户
+      this.increasedPayUserType.count = data.increased_pay_user_sum
+      this.increasedPayUserType.ios = data.increased_pay_user_type.find(item => item.name === '04').count
+      this.increasedPayUserType.wechat = data.increased_pay_user_type.find(item => item.name === '01').count
+      this.increasedPayUserType.aliPay = data.increased_pay_user_type.find(item => item.name === '02').count
+      this.increasedPayUserType.ctcc = data.increased_pay_user_type.find(item => item.name === '06').count
+      this.increasedPayUserType.comparison = data.increased_pay_user_comparison
+      this.increasedPayUserType.conversion = data.increased_pay_user_conversion
+      // 复购付费用户
+      this.repurchaseUser.count = data.repurchase_user_count
+      this.repurchaseUser.ios = data.repurchase_user_count_type.find(item => item.payType === '04').pcount
+      this.repurchaseUser.wechat = data.repurchase_user_count_type.find(item => item.payType === '01').pcount
+      this.repurchaseUser.aliPay = data.repurchase_user_count_type.find(item => item.payType === '02').pcount
+      this.repurchaseUser.ctcc = data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+      this.repurchaseUser.comparison = data.repurchase_user_count_conversion
+      console.log(data)
     },
     /**
      * @description 解析条形统计图数据
