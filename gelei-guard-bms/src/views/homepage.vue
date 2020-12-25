@@ -477,7 +477,6 @@ import dayjs from 'dayjs'
 import MultiProcess from '@/components/MultiProcess'
 import { get_homepage_growth_data, get_homepage_overall_data } from '../api/interactive'
 import { parseDateTime, getWeekRangeTime, getMonthRangeTime, cloneDeep } from '../utils'
-
 const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
   '#FFA069', '#8d98b3', '#e5cf0d', '#97b552',
   '#95706d', '#dc69aa', '#07a2a4', '#9a7fd1',
@@ -543,8 +542,8 @@ export default {
           show: false
         },
         level: [
-          ['普通会员', '高级会员'],
-          ['IOS', '微信', '支付宝', '电信']
+          ['普通会员', '高级会员', '电信会员'],
+          ['iOS', '微信', '支付宝', '电信']
         ],
         offsetY: 180
       },
@@ -657,20 +656,20 @@ export default {
       // 新增绑定用户卡片
       newBindUser: {
         count: '-', // 总数
-        comparison: 2020, // 同比
-        conversion: 2020, // 转化率
+        comparison: 0, // 同比
+        conversion: 0, // 转化率
         chartData: {
-          'columns': [
+          columns: [
             'name',
             'value'
           ],
-          'center': [
+          center: [
             '50%',
             '50%'
           ],
-          'rows': [
-            { 'name': 'iOS', 'value': 2020 },
-            { 'name': '安卓', 'value': 2020 }
+          rows: [
+            // { 'name': 'iOS', 'value': 0 },
+            // { 'name': '安卓', 'value': 0 }
           ]
         }
       },
@@ -682,54 +681,54 @@ export default {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            { name: '家长端', value: 2020 },
-            { name: '孩子端', value: 2020 }
+            // { name: '家长端', value: 2020 },
+            // { name: '孩子端', value: 2020 }
           ]
         }
       },
       // 充值金额卡片
       orderAmount: {
         count: '-',
-        comparison: 2020, // 同比
+        comparison: 0, // 同比
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            { name: '微信', value: 2020 },
-            { name: '支付宝', value: 2020 },
-            { name: 'iOS', value: 2020 },
-            { name: '电信', value: 2020 }
+            // { name: '微信', value: 2020 },
+            // { name: '支付宝', value: 2020 },
+            // { name: 'iOS', value: 2020 },
+            // { name: '电信', value: 2020 }
           ]
         }
       },
       // 新增绑定设备及占比
       newBindDevice: {
         count: '-',
-        comparison: 2020, // 同比
+        comparison: 0, // 同比
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            { name: 'VIVO', value: 2020 },
-            { name: 'OPPO', value: 2020 },
-            { name: '公版', value: 2020 }
+            // { name: 'VIVO', value: 2020 },
+            // { name: 'OPPO', value: 2020 },
+            // { name: '公版', value: 2020 }
           ]
         }
       },
       // 订单类型及支付渠道占比
       orderTypePay: {
         count: '-',
-        comparison: 2020, // 同比
+        comparison: 0, // 同比
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            { name: '普通会员', value: 2020 },
-            { name: '高级会员', value: 2020 },
-            { name: 'IOS', value: 2020 },
-            { name: '微信', value: 2020 },
-            { name: '支付宝', value: 2020 },
-            { name: '电信', value: 2020 }
+            // { name: '普通会员', value: 2020 },
+            // { name: '高级会员', value: 2020 },
+            // { name: 'IOS', value: 2020 },
+            // { name: '微信', value: 2020 },
+            // { name: '支付宝', value: 2020 },
+            // { name: '电信', value: 2020 }
           ]
         }
       }
@@ -773,14 +772,15 @@ export default {
     },
     /**
      * @description 获取关键数据
-     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=107
+     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1464
      * */
     fetchGrowthData() {
       const config = this.getQuery()
       get_homepage_growth_data(config).then(data => {
+        // data = testData
         // eslint-disable-next-line no-empty
         if (data.status === 0) {
-          this.growth_data = data
+          this.growth_data = data.data
           this.parseChatChart(cloneDeep(data.data))
           this.updateLineChart()
         } else {
@@ -800,29 +800,166 @@ export default {
       this.payUser.comparison = data.pay_user_count_conversion
       // 新增付费用户
       this.increasedPayUserType.count = data.increased_pay_user_sum
-      this.increasedPayUserType.ios = data.increased_pay_user_type.find(item => item.name === '04').count
-      this.increasedPayUserType.wechat = data.increased_pay_user_type.find(item => item.name === '01').count
-      this.increasedPayUserType.aliPay = data.increased_pay_user_type.find(item => item.name === '02').count
-      this.increasedPayUserType.ctcc = data.increased_pay_user_type.find(item => item.name === '06').count
-      this.increasedPayUserType.comparison = data.increased_pay_user_comparison
-      this.increasedPayUserType.conversion = data.increased_pay_user_conversion
+      this.increasedPayUserType.ios = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '04').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.wechat = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '01').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.aliPay = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '02').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.ctcc = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '06').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.comparison = data.increased_pay_user_conversion
+      this.increasedPayUserType.conversion = data.increased_pay_user_comparison
       // 复购付费用户
       this.repurchaseUser.count = data.repurchase_user_count
-      this.repurchaseUser.ios = data.repurchase_user_count_type.find(item => item.payType === '04').pcount
-      this.repurchaseUser.wechat = data.repurchase_user_count_type.find(item => item.payType === '01').pcount
-      this.repurchaseUser.aliPay = data.repurchase_user_count_type.find(item => item.payType === '02').pcount
-      this.repurchaseUser.ctcc = data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+      this.repurchaseUser.ios = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '04').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.wechat = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '01').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.aliPay = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '02').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.ctcc = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
       this.repurchaseUser.comparison = data.repurchase_user_count_conversion
-      console.log(data)
+      // 新增绑定用户
+      this.newBindUser.count = data.bind_user_sum
+      this.newBindUser.comparison = data.bind_user_conversion
+      this.newBindUser.conversion = data.bind_user_comparison
+      if (data.bind_user_type.length === 0) {
+        this.newBindUser.chartData.rows = [
+          // { 'name': 'iOS', 'value': 0 },
+          { name: 'iOS', value: 0 },
+          { name: '安卓', value: 0 }
+        ]
+      } else {
+        this.newBindUser.chartData.rows = [
+          // { 'name': 'iOS', 'value': 0 },
+          { name: 'iOS', value: data.bind_user_type.find(item => item.name === '02').count },
+          { name: '安卓', value: data.bind_user_type.find(item => item.name === '03').count }
+        ]
+      }
+      // 新增注册用户
+      this.newRegisterUser.count = data.increased_reg_user_sum
+      this.newRegisterUser.comparison = data.increased_reg_user_conversion
+      if (data.increased_reg_user_type.length === 0) {
+        this.newRegisterUser.chartData.rows = [
+          // { 'name': 'iOS', 'value': 0 },
+          { name: '家长端', value: 0 },
+          { name: '孩子端', value: 0 }
+        ]
+      } else {
+        this.newRegisterUser.chartData.rows = [
+          // { 'name': 'iOS', 'value': 0 },
+          { name: '家长端', value: data.increased_reg_user_type.find(item => item.name === '01').count },
+          { name: '孩子端', value: data.increased_reg_user_type.find(item => item.name === '02').count }
+        ]
+      }
+      // 充值金额
+      this.orderAmount.count = data.order_amount_sum
+      this.orderAmount.comparison = data.order_amount_conversion
+      this.orderAmount.chartData.rows = data.order_amount_type.map(item => {
+        const type = {
+          '01': '微信',
+          '02': '支付宝',
+          '04': 'iOS',
+          '06': '电信'
+        }
+        const name = item.name
+        item.name = type[name]
+        item.value = item.count
+        return item
+      })
+      // 新增绑定设备及占比
+      this.newBindDevice.count = data.bind_device_sum
+      this.newBindDevice.comparison = data.bind_device_conversion
+      this.newBindDevice.chartData.rows = data.bind_device_type.map(item => {
+        const type = {
+          '01': 'PC',
+          '02': 'iOS公版',
+          '03': '安卓公版',
+          '04': '企业模式',
+          '05': '定制机'
+        }
+        const name = item.name
+        item.name = type[name]
+        item.value = item.count
+        return item
+      })
+      // 订单类型及支付渠道占比
+      this.orderTypePay.count = data.order_channel_count
+      this.orderTypePay.comparison = data.order_channel_count_conversion
+      this.orderTypePay.chartData.rows = data.order_channel_member_type.map(item => {
+        const type = {
+          '02': '高级会员',
+          '03': '普通会员',
+          '04': '电信会员'
+        }
+        const name = item.name
+        item.name = type[name]
+        item.value = item.count
+        return item
+      })
+      data.order_channel_pay_type.forEach(item => {
+        const type = {
+          '01': '微信',
+          '02': '支付宝',
+          '04': 'iOS',
+          '06': '电信'
+        }
+        const name = item.name
+        item.name = type[name]
+        item.value = item.count
+        this.orderTypePay.chartData.rows.push(item)
+      })
     },
     /**
      * @description 解析条形统计图数据
      * */
     updateLineChart() {
-      const growth_data = this.growth_data
+      const growth_data = cloneDeep(this.growth_data)
       if (Object.keys(growth_data).length) {
         // 新增付费用户列表 --------------
-        growth_data.increased_pay_user_list = [
+        /* growth_data.increased_pay_user_list = [
           { date: '2020-12-07', count: 200, type: 'app' },
           { date: '2020-12-07', count: 100, type: 'ctcc' },
 
@@ -846,9 +983,9 @@ export default {
 
           { date: '2020-12-14', count: 400, type: 'app' },
           { date: '2020-12-14', count: 100, type: 'ctcc' }
-        ]
+        ]*/
 
-        growth_data.increased_pay_user_list = this.parseLineData(growth_data.increased_pay_user_list, 0, this.showLineDayType)
+        growth_data.increased_pay_user_list = this.parseLineData(cloneDeep(growth_data.increased_pay_user_list), 0, this.showLineDayType)
         // 当查看维度为日时则是明细数据
         if (this.showLineDayType === '日' && this.increasedPayUserListTableData.length === 0) {
           this.increasedPayUserListTableData = cloneDeep(growth_data.increased_pay_user_list)
@@ -860,7 +997,7 @@ export default {
         }
         // 新增付费用户列表 end
         // 订单成交量 ---------------
-        growth_data.order_count_list = [
+        /*  growth_data.order_count_list = [
           { date: '2020-12-07', count: 100, type: 'senior' },
           { date: '2020-12-07', count: 100, type: 'ctcc' },
           { date: '2020-12-07', count: 100, type: 'common' },
@@ -888,8 +1025,8 @@ export default {
           { date: '2020-12-13', count: 100, type: 'senior' },
           { date: '2020-12-13', count: 100, type: 'ctcc' },
           { date: '2020-12-13', count: 100, type: 'common' }
-        ]
-        growth_data.order_count_list = this.parseLineData(growth_data.order_count_list, 2, this.showLineDayType)
+        ]*/
+        growth_data.order_count_list = this.parseLineData(cloneDeep(growth_data.order_count_list), 2, this.showLineDayType)
         // 当查看维度为日时则是明细数据
         if (this.showLineDayType === '日' && this.orderCountListTableData.length === 0) {
           this.orderCountListTableData = cloneDeep(growth_data.order_count_list)
@@ -901,7 +1038,7 @@ export default {
         }
         // 订单成交量 end
         // 新增注册用户
-        growth_data.register_user_list = [
+        /* growth_data.register_user_list = [
           { date: '2020-12-10', count: 200, type: 'parent' },
           { date: '2020-12-10', count: 200, type: 'child' },
 
@@ -916,7 +1053,7 @@ export default {
 
           { date: '2020-12-14', count: 200, type: 'parent' },
           { date: '2020-12-14', count: 100, type: 'child' }
-        ]
+        ]*/
         growth_data.register_user_list = this.parseLineData(growth_data.register_user_list, 1, this.showLineDayType)
         // 当查看维度为日时则是明细数据
         if (this.showLineDayType === '日' && this.registerUserListTableData.length === 0) {
@@ -928,7 +1065,7 @@ export default {
         }
         // 新增注册用户 end
         // 充值金额
-        growth_data.order_amount_list = [
+        /* growth_data.order_amount_list = [
           { date: '2020-12-10', count: 200, type: 'app' },
           { date: '2020-12-10', count: 200, type: 'ctcc' },
 
@@ -952,7 +1089,7 @@ export default {
 
           { date: '2020-12-17', count: 300, type: 'app' },
           { date: '2020-12-17', count: 500, type: 'ctcc' }
-        ]
+        ]*/
         growth_data.order_amount_list = this.parseLineData(growth_data.order_amount_list, 3, this.showLineDayType)
         // 当查看维度为日时则是明细数据
         if (this.showLineDayType === '日' && this.orderAmountListTableData.length === 0) {
@@ -989,6 +1126,7 @@ export default {
      * @description 查询时间发生改变
      * */
     dateTimeChange() {
+      this.showLineDayType = '日'
       this.increasedPayUserListTableData = []
       this.orderCountListTableData = []
       this.registerUserListTableData = []

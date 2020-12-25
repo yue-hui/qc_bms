@@ -61,6 +61,13 @@
               @click="download">导出
               <svg-icon icon-class="download" />
             </gl-button>
+            <gl-button
+              pid="20039"
+              class="download details-tab"
+              size="mini"
+              type="success"
+              @click="configDetail">配置
+            </gl-button>
           </div>
         </div>
         <div class="table-content table-block">
@@ -190,6 +197,11 @@ export default {
         }
       }).finally(() => {
         this.download_loading = false
+      })
+    },
+    configDetail() {
+      this.$router.push({
+        name: 'InvatationFriendsConfiguration'
       })
     },
     formatJson(filterVal, jsonData) {
