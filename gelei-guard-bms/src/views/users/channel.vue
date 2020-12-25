@@ -81,7 +81,19 @@
       <ve-line :rel="1" :data="chartData" :settings="chartSettings"/>
     </div>
     <div v-loading="loading" class="card-box" style="padding-bottom: 24px">
-      <div class="title-area"><span class="title">所有渠道数据</span></div>
+      <div class="title-area">
+        <span class="title">所有渠道数据</span>
+        <div class="download">
+          <el-button
+            pid=""
+            class="details-tab"
+            size="mini"
+            type="success"
+            @click="download">导出
+            <svg-icon icon-class="download" />
+          </el-button>
+        </div>
+      </div>
       <el-table :data="channelTableData" stripe size="mini" style="width: 100%">
         <el-table-column align="center" label="渠道名称" prop="tagName" />
         <el-table-column sortable align="center" label="新增注册用户" prop="incrRegUser" />
@@ -509,6 +521,36 @@ export default {
           }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
       )
       // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+    },
+    /**
+     * @description 导出
+     * */
+    download() {
+      import('@/utils/Export2Excel').then(excel => {
+        const header = ['渠道名称', '新增注册用户', '新增绑定用户', '绑定转化率', '新增付费用户', '付费转化率', '充值金额（元）', '累计注册用户', '累计充值金额（元）']
+        const data = this.channelTableData.map(item => {
+          return [item.tagName, item.incrRegUser, item.incrBindUser, item.bindConversion,
+            item.incrPayUser, item.payConversion, item.incrPayAmount, item.regUserTotal, item.payAmountTotal]
+        })
+        const time = this.getRequestTime()
+        data.push([])
+        data.push([
+          '数据统计时间：',
+          time.beginTime + ' 至 ' + time.endTime
+        ])
+        data.push([
+          '导出时间：',
+          parseDateTime('y-m-d h:i')
+        ])
+        const options = {
+          header,
+          data,
+          filename: `所有渠道数据_${time.beginTime}_${time.endTime}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        }
+        excel.export_json_to_excel(options)
+      })
     }
   }
 }
@@ -635,6 +677,12 @@ export default {
       color: #454545;
       font-weight: bold;
       margin-bottom: 30px;
+      position: relative;
+      .download{
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     }
   }
 }
