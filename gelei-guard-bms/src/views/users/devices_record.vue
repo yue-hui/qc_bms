@@ -195,7 +195,7 @@ export default {
       child_platform_type: [],
       device_list: [],
       pickerOptions: {
-        // 限制仅选择近七天
+        // 限制仅选择近365天
         disabledDate(time) {
           let curDate = new Date()
           curDate.setHours(0)

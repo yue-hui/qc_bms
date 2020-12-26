@@ -61,6 +61,7 @@
                   <el-col :span="16">
                     <el-date-picker
                       v-model="datetime_range"
+                      :picker-options="pickerOptions"
                       clearable
                       end-placeholder="结束日期"
                       range-separator="至"
@@ -390,8 +391,8 @@
             </div>
             <el-radio-group v-model="showLineDayType" size="small" @change="lineDayTypeShowChange">
               <el-radio-button label="日"/>
-              <el-radio-button label="周"/>
-              <el-radio-button label="月"/>
+              <el-radio-button :disabled="disabledWeekFilter" label="周"/>
+              <el-radio-button :disabled="disabledMonthFilter" label="月"/>
             </el-radio-group>
           </div>
           <el-tabs
@@ -504,6 +505,20 @@ export default {
     const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
+      pickerOptions: {
+        // 限制仅选择近3650天
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 3650 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
+      },
       datetime_range: [new Date(pre_week), new Date(day)],
       defaultDateRange: [new Date(pre_week), new Date(day)],
       query_sets: {},
@@ -734,7 +749,18 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    disabledWeekFilter() {
+      // 大于 7 天才展示周
+      const requestTime = this.getQuery()
+      return Math.ceil((requestTime.end_time - requestTime.begin_time) / (24 * 3600 * 1000)) + 1 <= 7
+    },
+    disabledMonthFilter() {
+      // 大于 31 天才展示周
+      const requestTime = this.getQuery()
+      return Math.ceil((requestTime.end_time - requestTime.begin_time) / (24 * 3600 * 1000)) + 1 <= 31
+    }
+  },
   watch: {
     active_name: {
       handler(v) {
@@ -776,6 +802,8 @@ export default {
      * */
     fetchGrowthData() {
       const config = this.getQuery()
+      config.begin_time = parseDateTime('y-m-d', config.begin_time)
+      config.end_time = parseDateTime('y-m-d', config.end_time)
       get_homepage_growth_data(config).then(data => {
         // data = testData
         // eslint-disable-next-line no-empty
@@ -944,6 +972,22 @@ export default {
         } catch (e) {
         }
         this.orderTypePay.chartData.rows.push(item)
+        this.order_chart_extend.legend = [
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '244',
+            y: 'center',
+            data: Object.values(orderTypePayType)
+          },
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '350',
+            y: 'center',
+            data: Object.values(orderChannelPayType)
+          }
+        ]
       })
     },
     /**
@@ -980,10 +1024,8 @@ export default {
         ]*/
 
         growth_data.increased_pay_user_list = this.parseLineData(cloneDeep(growth_data.increased_pay_user_list), 0, this.showLineDayType)
-        // 当查看维度为日时则是明细数据
-        if (this.showLineDayType === '日' && this.increasedPayUserListTableData.length === 0) {
-          this.increasedPayUserListTableData = cloneDeep(growth_data.increased_pay_user_list)
-        }
+        // 明细数据
+        this.increasedPayUserListTableData = cloneDeep(growth_data.increased_pay_user_list)
         // console.log(JSON.stringify(growth_data.increased_pay_user_list, null, 2))
         const increased_pay_user_chart = {
           columns: ['date', 'count', 'app', 'ctcc'],
@@ -1021,10 +1063,8 @@ export default {
           { date: '2020-12-13', count: 100, type: 'common' }
         ]*/
         growth_data.order_count_list = this.parseLineData(cloneDeep(growth_data.order_count_list), 2, this.showLineDayType)
-        // 当查看维度为日时则是明细数据
-        if (this.showLineDayType === '日' && this.orderCountListTableData.length === 0) {
-          this.orderCountListTableData = cloneDeep(growth_data.order_count_list)
-        }
+        // 明细数据
+        this.orderCountListTableData = cloneDeep(growth_data.order_count_list)
         // console.log(JSON.stringify(growth_data.order_count_list, null, 2))
         const order_count_list_chart = {
           columns: ['date', 'count', 'senior', 'ctcc', 'common'],
@@ -1049,10 +1089,8 @@ export default {
           { date: '2020-12-14', count: 100, type: 'child' }
         ]*/
         growth_data.register_user_list = this.parseLineData(growth_data.register_user_list, 1, this.showLineDayType)
-        // 当查看维度为日时则是明细数据
-        if (this.showLineDayType === '日' && this.registerUserListTableData.length === 0) {
-          this.registerUserListTableData = cloneDeep(growth_data.register_user_list)
-        }
+        // 明细数据
+        this.registerUserListTableData = cloneDeep(growth_data.register_user_list)
         const register_user_list = {
           columns: ['date', 'count', 'parent', 'child'],
           rows: growth_data.register_user_list
@@ -1085,10 +1123,8 @@ export default {
           { date: '2020-12-17', count: 500, type: 'ctcc' }
         ]*/
         growth_data.order_amount_list = this.parseLineData(growth_data.order_amount_list, 3, this.showLineDayType)
-        // 当查看维度为日时则是明细数据
-        if (this.showLineDayType === '日' && this.orderAmountListTableData.length === 0) {
-          this.orderAmountListTableData = cloneDeep(growth_data.order_amount_list)
-        }
+        // 明细数据
+        this.orderAmountListTableData = cloneDeep(growth_data.order_amount_list)
         const order_amount_list_chart = {
           columns: ['date', 'count', 'app', 'ctcc'],
           rows: growth_data.order_amount_list
@@ -1113,6 +1149,9 @@ export default {
       if (this.datetime_range) {
         config['begin_time'] = this.datetime_range[0].getTime()
         config['end_time'] = this.datetime_range[1].getTime()
+      } else {
+        config['begin_time'] = this.defaultDateRange[0].getTime()
+        config['end_time'] = this.defaultDateRange[1].getTime()
       }
       return config
     },
@@ -1169,6 +1208,10 @@ export default {
      * @description 条形统计图切换 日 周 月
      * */
     lineDayTypeShowChange(e) {
+      this.increasedPayUserListTableData = []
+      this.orderCountListTableData = []
+      this.registerUserListTableData = []
+      this.orderAmountListTableData = []
       this.updateLineChart()
     },
     /**
@@ -1406,30 +1449,34 @@ export default {
      * @description 生成查询 开始时间 和 结束时间 生成 日 周 月 的时间范围
      * */
     makeDateStyleList() {
-      let queryDateRange = this.getQuery()
-      if (!queryDateRange.hasOwnProperty('begin_time')) {
-        queryDateRange = {
-          begin_time: this.defaultDateRange[0].getTime(),
-          end_time: this.defaultDateRange[1].getTime()
-        }
-      }
+      const queryDateRange = this.getQuery()
       this.lineDateStyleList = []
       this.lineDateStyleList.push(
         { type: '日', date: [], startDate: parseDateTime('y-m-d', queryDateRange.begin_time), endDate: parseDateTime('y-m-d', queryDateRange.end_time) }
       )
+      // ///////////////
       const weekDate = getWeekRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '周', date: weekDate.map(item => {
           return item.startDate + '~' + item.endDate
         }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
       )
+      // 更改周的起止时间
+      this.lineDateStyleList[1].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[1].date[0].split('~')[1]
+      const weekLength = this.lineDateStyleList[1].date.length
+      this.lineDateStyleList[1].date[weekLength - 1] = this.lineDateStyleList[1].date[weekLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      // ///////////////
       const monthDate = getMonthRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '月', date: monthDate.map(item => {
           return item.startDate + '~' + item.endDate
         }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
       )
-      // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+      // 更改月的起止时间
+      this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
+      const monthLength = this.lineDateStyleList[2].date.length
+      this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
     },
     /**
      * @description 展开详细数据切换
