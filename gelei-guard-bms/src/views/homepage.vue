@@ -61,6 +61,7 @@
                   <el-col :span="16">
                     <el-date-picker
                       v-model="datetime_range"
+                      :picker-options="pickerOptions"
                       clearable
                       end-placeholder="结束日期"
                       range-separator="至"
@@ -504,6 +505,20 @@ export default {
     const pre_week = dayjs().subtract(7, 'days')
     return {
       theme_color,
+      pickerOptions: {
+        // 限制仅选择近3650天
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 3650 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
+      },
       datetime_range: [new Date(pre_week), new Date(day)],
       defaultDateRange: [new Date(pre_week), new Date(day)],
       query_sets: {},

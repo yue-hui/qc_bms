@@ -35,6 +35,7 @@
         <div class="input">
           <el-date-picker
             v-model="datePickerValue"
+            :picker-options="pickerOptions"
             type="daterange"
             size="small"
             range-separator="至"
@@ -129,6 +130,20 @@ export default {
   data() {
     return {
       loading: false,
+      pickerOptions: {
+        // 限制仅选择近3650天
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 3650 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
+      },
       top5Data: [
         {
           title: '注册用户总数',
@@ -166,7 +181,7 @@ export default {
           ]
         },
         {
-          title: '充值金额',
+          title: '充值金额（元）',
           max: 0,
           list: [
             { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
@@ -291,7 +306,7 @@ export default {
               list: data.payRateTop5
             },
             {
-              title: '充值金额',
+              title: '充值金额（元）',
               max: getMax(data.payAmountTop5),
               list: data.payAmountTop5
             }
