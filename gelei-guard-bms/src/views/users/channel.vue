@@ -386,7 +386,7 @@ export default {
       this.datePickerValue = this.getDatePickerDefaultValue()
     },
     getDatePickerDefaultValue() {
-      return [new Date(new Date().getTime() - 7 * 3600 * 24 * 1000), new Date(new Date().getTime() - 3600 * 24 * 1000)]
+      return [new Date(new Date().getTime() - 31 * 3600 * 24 * 1000), new Date(new Date().getTime() - 3600 * 24 * 1000)]
     },
     getRequestTime() {
       if (this.datePickerValue) {
