@@ -957,6 +957,22 @@ export default {
         } catch (e) {
         }
         this.orderTypePay.chartData.rows.push(item)
+        this.order_chart_extend.legend = [
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '244',
+            y: 'center',
+            data: Object.values(orderTypePayType)
+          },
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: '350',
+            y: 'center',
+            data: Object.values(orderChannelPayType)
+          }
+        ]
       })
     },
     /**
