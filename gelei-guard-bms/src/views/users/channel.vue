@@ -11,7 +11,8 @@
               </div>
               <div class="line">
                 <div v-for="countItem in item.list" :key="countItem.index" class="line-item">
-                  <span class="count-text">{{ countItem.number }}</span>
+                  <span v-if="['绑定转化率', '付费转化率'].includes(item.title)" class="count-text">{{ countItem.number }}%</span>
+                  <span v-if="!['绑定转化率', '付费转化率'].includes(item.title)" class="count-text">{{ countItem.number }}</span>
                   <span class="line-bo">
                     <span :style="{ height: countItem.number / item.max * 100 + '%' }" />
                   </span>
@@ -73,8 +74,8 @@
         <div class="input">
           <el-radio-group v-model="showLineDayType" size="small" @change="lineDayTypeShowChange">
             <el-radio-button label="日"/>
-            <el-radio-button label="周"/>
-            <el-radio-button label="月"/>
+            <el-radio-button :disabled="disabledWeekFilter" label="周"/>
+            <el-radio-button :disabled="disabledMonthFilter" label="月"/>
           </el-radio-group>
         </div>
       </div>
@@ -192,6 +193,18 @@ export default {
       originStoreDetailList: []
     }
   },
+  computed: {
+    disabledWeekFilter() {
+      // 大于 7 天才展示周
+      const requestTime = this.getRequestTime()
+      return Math.ceil((requestTime._endTime - requestTime._beginTime) / (24 * 3600 * 1000)) + 1 <= 7
+    },
+    disabledMonthFilter() {
+      // 大于 31 天才展示周
+      const requestTime = this.getRequestTime()
+      return Math.ceil((requestTime._endTime - requestTime._beginTime) / (24 * 3600 * 1000)) + 1 <= 31
+    }
+  },
   mounted() {
     this.setDatePickerDefaultValue()
     this.makeDateStyleList()
@@ -245,6 +258,12 @@ export default {
             return Math.max.apply(null, arr)
           }
           const data = res.data
+          data.payAmountTop5 = data.payAmountTop5.map(item => {
+            if (item.number !== 0) {
+              item.number = Number(new JsBigDecimal(item.number).divide(new JsBigDecimal(100), 2).getValue())
+            }
+            return item
+          })
           this.top5Data = [
             {
               title: '注册用户总数',
@@ -358,12 +377,16 @@ export default {
       if (this.datePickerValue) {
         return {
           beginTime: parseDateTime('y-m-d', this.datePickerValue[0].getTime()),
-          endTime: parseDateTime('y-m-d', this.datePickerValue[1].getTime())
+          _beginTime: this.datePickerValue[0].getTime(),
+          endTime: parseDateTime('y-m-d', this.datePickerValue[1].getTime()),
+          _endTime: this.datePickerValue[1].getTime()
         }
       }
       return {
         beginTime: parseDateTime('y-m-d', this.getDatePickerDefaultValue()[0].getTime()),
-        endTime: parseDateTime('y-m-d', this.getDatePickerDefaultValue()[1].getTime())
+        _beginTime: this.getDatePickerDefaultValue()[0].getTime(),
+        endTime: parseDateTime('y-m-d', this.getDatePickerDefaultValue()[1].getTime()),
+        _endTime: this.getDatePickerDefaultValue()[1].getTime()
       }
     },
     getFilter() {
@@ -387,7 +410,6 @@ export default {
           // 所有渠道标签
           const data = res.data.map(item => {
             if (this.activeName === '3') {
-              console.warn(item)
               // 充值金额 分 =》 元
               item.list.map(item => {
                 item.number = Number(new JsBigDecimal(item.number).divide(new JsBigDecimal(100), 2).getValue())
@@ -508,19 +530,29 @@ export default {
       this.lineDateStyleList.push(
         { type: '日', date: [], startDate: parseDateTime('y-m-d', queryDateRange.begin_time), endDate: parseDateTime('y-m-d', queryDateRange.end_time) }
       )
+      // ///////////////
       const weekDate = getWeekRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '周', date: weekDate.map(item => {
             return item.startDate + '~' + item.endDate
           }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
       )
+      // 更改周的起止时间
+      this.lineDateStyleList[1].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[1].date[0].split('~')[1]
+      const weekLength = this.lineDateStyleList[1].date.length
+      this.lineDateStyleList[1].date[weekLength - 1] = this.lineDateStyleList[1].date[weekLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      // ///////////////
       const monthDate = getMonthRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '月', date: monthDate.map(item => {
             return item.startDate + '~' + item.endDate
           }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
       )
-      // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+      // 更改月的起止时间
+      this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
+      const monthLength = this.lineDateStyleList[2].date.length
+      this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
     },
     /**
      * @description 导出
