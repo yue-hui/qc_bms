@@ -797,7 +797,7 @@ export default {
     parseChatChart(data) {
       // 付费用户总数
       this.payUser.count = data.pay_user_count
-      this.payUser.comparison = data.pay_user_count_conversion
+      this.payUser.comparison = data.pay_user_count_conversion || 0
       // 新增付费用户
       this.increasedPayUserType.count = data.increased_pay_user_sum
       this.increasedPayUserType.ios = (() => {
@@ -828,8 +828,8 @@ export default {
           return 0
         }
       })()
-      this.increasedPayUserType.comparison = data.increased_pay_user_conversion
-      this.increasedPayUserType.conversion = data.increased_pay_user_comparison
+      this.increasedPayUserType.comparison = data.increased_pay_user_conversion || 0
+      this.increasedPayUserType.conversion = data.increased_pay_user_comparison || 0
       // 复购付费用户
       this.repurchaseUser.count = data.repurchase_user_count
       this.repurchaseUser.ios = (() => {
@@ -860,11 +860,11 @@ export default {
           return 0
         }
       })()
-      this.repurchaseUser.comparison = data.repurchase_user_count_conversion
+      this.repurchaseUser.comparison = data.repurchase_user_count_conversion || 0
       // 新增绑定用户
       this.newBindUser.count = data.bind_user_sum
-      this.newBindUser.comparison = data.bind_user_conversion
-      this.newBindUser.conversion = data.bind_user_comparison
+      this.newBindUser.comparison = data.bind_user_conversion || 0
+      this.newBindUser.conversion = data.bind_user_comparison || 0
       this.newBindUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: 'iOS', value: (() => {
@@ -884,7 +884,7 @@ export default {
       ]
       // 新增注册用户
       this.newRegisterUser.count = data.increased_reg_user_sum
-      this.newRegisterUser.comparison = data.increased_reg_user_conversion
+      this.newRegisterUser.comparison = data.increased_reg_user_conversion || 0
       this.newRegisterUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: '家长端', value: (() => {
@@ -904,7 +904,7 @@ export default {
       ]
       // 充值金额
       this.orderAmount.count = data.order_amount_sum
-      this.orderAmount.comparison = data.order_amount_conversion
+      this.orderAmount.comparison = data.order_amount_conversion || 0
       const orderAmountType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
       this.orderAmount.chartData.rows = Object.keys(orderAmountType).map(key => {
         const value = data.order_amount_type.find(item => item.name === key)
@@ -915,7 +915,7 @@ export default {
       })
       // 新增绑定设备及占比
       this.newBindDevice.count = data.bind_device_sum
-      this.newBindDevice.comparison = data.bind_device_conversion
+      this.newBindDevice.comparison = data.bind_device_conversion || 0
       const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
@@ -926,7 +926,7 @@ export default {
       })
       // 订单类型及支付渠道占比
       this.orderTypePay.count = data.order_channel_count
-      this.orderTypePay.comparison = data.order_channel_count_conversion
+      this.orderTypePay.comparison = data.order_channel_count_conversion || 0
       const orderTypePayType = { '02': '高级会员', '03': '普通会员', '04': '电信会员' }
       this.orderTypePay.chartData.rows = Object.keys(orderTypePayType).map(key => {
         const value = data.order_channel_member_type.find(item => item.name === key)
@@ -939,8 +939,7 @@ export default {
       Object.keys(orderChannelPayType).forEach(key => {
         const item = { name: orderChannelPayType[key], value: 0 }
         try {
-          const value = data.order_channel_pay_type.find(item => item.name === key)
-          item.value = value.value
+          item.value = data.order_channel_pay_type.find(item => item.name === key).count
           // eslint-disable-next-line no-empty
         } catch (e) {
         }
