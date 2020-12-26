@@ -178,7 +178,7 @@ export const asyncRoutes = [
         path: 'user/channel',
         name: 'UserChannel',
         component: () => import('@/views/users/channel'),
-        meta: { title: '渠道数据', hide: true, icon: 'form', pid: '' }
+        meta: { title: '渠道数据', hide: true, icon: 'form', pid: '21010' }
       }
     ]
   },
@@ -340,12 +340,19 @@ export const asyncRoutes = [
         path: 'invatation',
         name: 'InvatationFriends',
         component: () => import('@/views/activity/invatation'),
-        meta: { title: '邀请好友数据', icon: 'invatation', pid: '20037' }
+        meta: { title: '邀请好友', icon: 'invatation', pid: '20037' }
       },
+      // {
+      //   path: 'invatationV2',
+      //   name: 'InvatationFriendsV2',
+      //   component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
+      //   meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      // },
       {
         path: 'invatation/details',
         name: 'InvatationFriendsConfiguration',
         component: () => import('@/views/activity/invatation_details'),
+        hidden: true,
         meta: { title: '邀请好友配置', icon: 'invatation_user', pid: '20039' }
       },
       {

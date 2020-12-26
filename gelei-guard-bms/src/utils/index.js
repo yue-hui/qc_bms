@@ -236,7 +236,6 @@ export function getMonthRangeTime(startTime, endTime, list = []) {
   nowData.setSeconds(0)
   nowData.setMilliseconds(0)
   const _startTime = nowData.getTime()
-  console.log(parseDateTime('y-m-d', _startTime))
   const month = nowData.getMonth()
   if (month === 11) {
     nowData.setFullYear(nowData.getFullYear() + 1)

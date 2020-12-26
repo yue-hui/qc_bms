@@ -137,9 +137,9 @@
           <el-form-item label="推荐理由:" prop="rec_desc">
             <el-input
               v-model="ruleForm.rec_desc"
-              maxlength="1000"
+              maxlength="200"
               columns="10"
-              placeholder="请输入推荐理由(1000字内)"
+              placeholder="请输入推荐理由(200字内)"
               rows="5"
               size="mini"
               resize="none"

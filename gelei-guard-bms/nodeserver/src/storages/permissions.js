@@ -259,6 +259,15 @@ const PERMISSION_DATA = [
             children: []
           }
         ]
+      },
+      {
+        name: '渠道数据',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 21010,
+        children: []
       }
     ]
   },

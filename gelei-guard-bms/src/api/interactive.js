@@ -1310,3 +1310,47 @@ export function getPushNoticeInfo(data) {
   })
 }
 
+/**
+ * @description 获取所有渠道 tag
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1469
+ * */
+export function getStoreAllTags(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/group',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 前五渠道总体数据
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1447
+ * */
+export function getStoreTagTypeTop5(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/type',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 获取渠道详情数据
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1448
+ * */
+export function getStoreDetail(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/details',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 获取渠道列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1450
+ * */
+export function getStoreListDetail(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/list',
+    method: 'post',
+    data
+  })
+}
