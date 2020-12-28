@@ -170,8 +170,13 @@ export default {
   methods: {
     table_size_change: function(size) {
       setPagenationSize(size)
+      this.requestData.page_num = size
+      this.requestData.page_no = 1
+      this.getList()
     },
     change_current: function(page) {
+      this.requestData.page_no = page
+      this.getList()
     },
     getList() {
       const requestData = cloneDeep(this.requestData)
