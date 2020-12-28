@@ -507,17 +507,17 @@ export default {
       theme_color,
       pickerOptions: {
         // 限制仅选择近3650天
-        disabledDate(time) {
-          let curDate = new Date()
-          curDate.setHours(0)
-          curDate.setMinutes(0)
-          curDate.setMilliseconds(0)
-          curDate.setSeconds(0)
-          curDate = new Date(curDate.getTime() - 1000)
-          const day = 3650 * 24 * 3600 * 1000
-          const dateRegion = curDate - day
-          return time.getTime() > curDate || time.getTime() < dateRegion
-        }
+        // disabledDate(time) {
+        //   let curDate = new Date()
+        //   curDate.setHours(0)
+        //   curDate.setMinutes(0)
+        //   curDate.setMilliseconds(0)
+        //   curDate.setSeconds(0)
+        //   curDate = new Date(curDate.getTime() - 1000)
+        //   const day = 3650 * 24 * 3600 * 1000
+        //   const dateRegion = curDate - day
+        //   return time.getTime() > curDate || time.getTime() < dateRegion
+        // }
       },
       datetime_range: [new Date(pre_week), new Date(day)],
       defaultDateRange: [new Date(pre_week), new Date(day)],
@@ -972,18 +972,24 @@ export default {
         } catch (e) {
         }
         this.orderTypePay.chartData.rows.push(item)
+        let x1 = 180
+        let x2 = 260
+        if (window.innerWidth > 1640) {
+          x1 = 244
+          x2 = 350
+        }
         this.order_chart_extend.legend = [
           {
             orient: 'vertical',
             icon: 'circle',
-            x: '244',
+            x: x1,
             y: 'center',
             data: Object.values(orderTypePayType)
           },
           {
             orient: 'vertical',
             icon: 'circle',
-            x: '350',
+            x: x2,
             y: 'center',
             data: Object.values(orderChannelPayType)
           }
