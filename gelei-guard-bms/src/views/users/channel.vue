@@ -96,16 +96,16 @@
           </el-button>
         </div>
       </div>
-      <el-table :data="channelTableData" stripe size="mini" style="width: 100%">
+      <el-table :data="channelTableData" stripe size="mini" style="width: 100%" @sort-change="sortFilter">
         <el-table-column align="center" label="渠道名称" prop="tagName" />
-        <el-table-column sortable align="center" label="新增注册用户" prop="incrRegUser" />
-        <el-table-column sortable align="center" label="新增绑定用户" prop="incrBindUser" />
-        <el-table-column sortable align="center" label="绑定转化率" prop="bindConversion" />
-        <el-table-column sortable align="center" label="新增付费用户" prop="incrPayUser" />
-        <el-table-column sortable align="center" label="付费转化率" prop="payConversion" />
-        <el-table-column sortable align="center" label="充值金额（元）" prop="incrPayAmount" />
-        <el-table-column sortable align="center" label="累计注册用户" prop="regUserTotal" />
-        <el-table-column sortable align="center" label="累计充值金额（元）" prop="payAmountTotal" />
+        <el-table-column sortable="custom" align="center" label="新增注册用户" prop="incrRegUser" />
+        <el-table-column sortable="custom" align="center" label="新增绑定用户" prop="incrBindUser" />
+        <el-table-column sortable="custom" align="center" label="绑定转化率" prop="bindConversion" />
+        <el-table-column sortable="custom" align="center" label="新增付费用户" prop="incrPayUser" />
+        <el-table-column sortable="custom" align="center" label="付费转化率" prop="payConversion" />
+        <el-table-column sortable="custom" align="center" label="充值金额（元）" prop="incrPayAmount" />
+        <el-table-column sortable="custom" align="center" label="累计注册用户" prop="regUserTotal" />
+        <el-table-column sortable="custom" align="center" label="累计充值金额（元）" prop="payAmountTotal" />
       </el-table>
     </div>
   </div>
@@ -205,6 +205,7 @@ export default {
         }
       },
       channelTableData: [],
+      originChannelTableData: [],
       originStoreDetailList: []
     }
   },
@@ -370,6 +371,7 @@ export default {
             })()
             return item
           })
+          this.originChannelTableData = cloneDeep(this.channelTableData)
           /* eslint-disable */
         })
         .catch((e) => {
@@ -598,6 +600,18 @@ export default {
         }
         excel.export_json_to_excel(options)
       })
+    },
+    sortFilter({ column, prop, order }) {
+      console.log(order)
+      if (prop) {
+        this.channelTableData = this.channelTableData.sort((a, b) => {
+          return order === 'descending'
+            ? Number.parseFloat(a[prop]) - Number.parseFloat(b[prop])
+            : Number.parseFloat(b[prop]) - Number.parseFloat(a[prop])
+        })
+      } else {
+        this.channelTableData = cloneDeep(this.originChannelTableData)
+      }
     }
   }
 }
