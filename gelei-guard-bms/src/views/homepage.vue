@@ -5,7 +5,21 @@
         <div class="total-data-area">
           <div class="title-area">
             <span class="title">整体数据</span>
-            <span class="title-tips" @click="showTips(1)">？</span>
+            <el-popover
+              placement="top-start"
+              title=""
+              width="500"
+              trigger="hover"
+              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+              <div class="item-list tips-dialog-custom-class">
+                <h3>整体数据说明</h3>
+                <div v-for="item in tipsDialog.list" :key="item.label" class="item">
+                  <span class="label">{{ item.label }}：</span>
+                  <span class="content">{{ item.content }}</span>
+                </div>
+              </div>
+              <span slot="reference" class="title-tips">？</span>
+            </el-popover>
           </div>
           <div class="summary-items-area">
             <div :style="'background-color: ' + theme_color[0]" class="summary-item">
@@ -50,7 +64,21 @@
       <div class="card-box">
         <div class="title-area">
           <span class="title">关键数据</span>
-          <span class="title-tips" @click="showTips(2)">？</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="500"
+            trigger="hover"
+            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+            <div class="item-list tips-dialog-custom-class">
+              <h3>关键数据说明</h3>
+              <div v-for="item in tipsDialog.list2" :key="item.label" class="item">
+                <span class="label">{{ item.label }}：</span>
+                <span class="content">{{ item.content }}</span>
+              </div>
+            </div>
+            <span slot="reference" class="title-tips">？</span>
+          </el-popover>
         </div>
         <div class="search-area">
           <el-row :gutter="10" class="row-bg">
@@ -454,22 +482,6 @@
         </transition>
       </div>
     </div>
-    <!-- 提示框 -->
-    <el-dialog
-      :visible.sync="tipsDialog.dialogVisible"
-      :title="tipsDialog.title"
-      custom-class="tips-dialog-custom-class"
-      width="660px">
-      <div class="item-list">
-        <div v-for="item in tipsDialog.list" :key="item.label" class="item">
-          <span class="label">{{ item.label }}：</span>
-          <span class="content">{{ item.content }}</span>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="tipsDialog.dialogVisible = false">关闭</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -639,9 +651,58 @@ export default {
       // 展开详细
       showLineTable: '收起',
       tipsDialog: {
-        title: '整体数据说明',
-        dialogVisible: false,
-        list: []
+        list: [
+          {
+            label: '付费用户数',
+            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '订单成交量',
+            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '注册用户总数',
+            content: '累计在格雷盒子7注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
+          },
+          {
+            label: '累计绑定设备',
+            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
+          },
+          {
+            label: '充值金额',
+            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+          }
+        ],
+        list2: [
+          {
+            label: '新增绑定用户',
+            content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
+          },
+          {
+            label: '新增付费用户',
+            content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
+          },
+          {
+            label: '复购付费用户',
+            content: '以前买过任意一个会员套餐的用户，再次付费进行会员购买的用户'
+          },
+          {
+            label: '充值金额',
+            content: '筛选的时间段内付费成功订单的总金额，支持查询更多时间段的数据'
+          },
+          {
+            label: '新增注册用户数',
+            content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
+          },
+          {
+            label: '新增绑定设备及占比',
+            content: '筛选的时间段内新增绑定成功设备的类型，包括公版和定制机'
+          },
+          {
+            label: '订单类型及支付渠道占比',
+            content: '筛选的时间段内新增付费成功订单的类型以及支付渠道的占比'
+          }
+        ]
       },
       // /////////////////////////
       // 付费用户总数卡片
@@ -1488,69 +1549,6 @@ export default {
      * @description 展开详细数据切换
      * */
     showLineTableShowChange(val) {
-    },
-    /**
-     * @description 显示提示弹窗
-     * @param type {Number} 1 整体数据 | 2 关键数据
-     * */
-    showTips(type) {
-      this.tipsDialog.dialogVisible = true
-      this.tipsDialog.title = type === 1 ? '整体数据说明' : '关键数据说明'
-      if (type === 1) {
-        // eslint-disable-next-line no-return-assign
-        return this.tipsDialog.list = [
-          {
-            label: '付费用户数',
-            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
-          },
-          {
-            label: '订单成交量',
-            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
-          },
-          {
-            label: '注册用户总数',
-            content: '累计在格雷盒子7注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
-          },
-          {
-            label: '累计绑定设备',
-            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
-          },
-          {
-            label: '充值金额',
-            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
-          }
-        ]
-      }
-      this.tipsDialog.list = [
-        {
-          label: '新增绑定用户',
-          content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
-        },
-        {
-          label: '新增付费用户',
-          content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
-        },
-        {
-          label: '复购付费用户',
-          content: '以前买过任意一个会员套餐的用户，再次付费进行会员购买的用户'
-        },
-        {
-          label: '充值金额',
-          content: '筛选的时间段内付费成功订单的总金额，支持查询更多时间段的数据'
-        },
-        {
-          label: '新增注册用户数',
-          content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
-        },
-        {
-          label: '新增绑定设备及占比',
-          content: '筛选的时间段内新增绑定成功设备的类型，包括公版和定制机'
-        },
-        {
-          label: '订单类型及支付渠道占比',
-          content: '筛选的时间段内新增付费成功订单的类型以及支付渠道的占比'
-        }
-      ]
     }
   }
 }
