@@ -287,7 +287,7 @@
                   <span>
                     <label class="item-label">总数: </label>
                     <span class="total-count">
-                      {{ orderAmount.count }}¥
+                      ¥{{ orderAmount.count }}
                     </span>
                   </span>
                   <span>
@@ -557,7 +557,7 @@ export default {
           show: false
         },
         level: [
-          ['普通会员', '高级会员', '电信会员'],
+          ['普通会员', '高级会员'],
           ['iOS', '微信', '支付宝', '电信']
         ],
         offsetY: 180
@@ -955,7 +955,7 @@ export default {
       // 订单类型及支付渠道占比
       this.orderTypePay.count = data.order_channel_count
       this.orderTypePay.comparison = data.order_channel_count_conversion || 0
-      const orderTypePayType = { '02': '高级会员', '03': '普通会员', '04': '电信会员' }
+      const orderTypePayType = { '02': '高级会员', '03': '普通会员' }
       this.orderTypePay.chartData.rows = Object.keys(orderTypePayType).map(key => {
         const value = data.order_channel_member_type.find(item => item.name === key)
         return {
