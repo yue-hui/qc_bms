@@ -1358,10 +1358,10 @@ export default {
           const ctcc = list.find(_item => {
             return _item.date === date && _item.type === 'ctcc'
           })
-          // 普通会员
+
           return {
             date: date,
-            count: app.count + ctcc.count,
+            count: Number(app.count) + Number(ctcc.count),
             app: app.count,
             ctcc: ctcc.count
           }
