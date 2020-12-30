@@ -1017,11 +1017,20 @@ export default {
       this.orderTypePay.count = data.order_channel_count
       this.orderTypePay.comparison = data.order_channel_count_conversion || 0
       const orderTypePayType = { '02': '高级会员', '03': '普通会员' }
+      // 电信会员
+      const ctccType = data.order_channel_member_type.find(item => item.name === '04')
+
       this.orderTypePay.chartData.rows = Object.keys(orderTypePayType).map(key => {
         const value = data.order_channel_member_type.find(item => item.name === key)
         return {
           name: orderTypePayType[key],
-          value: value ? value.count : 0
+          value: (value ? value.count : 0) + (() => {
+            // 加上电信会员
+            if (key === '03') {
+              return ctccType ? ctccType.count : 0
+            }
+            return 0
+          })()
         }
       })
       const orderChannelPayType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
@@ -1358,10 +1367,10 @@ export default {
           const ctcc = list.find(_item => {
             return _item.date === date && _item.type === 'ctcc'
           })
-          // 普通会员
+
           return {
             date: date,
-            count: app.count + ctcc.count,
+            count: Number(app.count) + Number(ctcc.count),
             app: app.count,
             ctcc: ctcc.count
           }
