@@ -118,8 +118,8 @@
                 </p>
                 <div class="diviser" />
                 <p class="ratio-data">
-                  <span>
-                    <span class="ratio-name">同比:</span>
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
                     <span
                       :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
                       class="ratio-value">
@@ -160,8 +160,8 @@
                 </p>
                 <div class="diviser" />
                 <p class="ratio-data">
-                  <span>
-                    <span class="ratio-name">同比:</span>
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
                     <span
                       :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
                       class="ratio-value">
@@ -213,8 +213,8 @@
                 </p>
                 <div class="diviser" />
                 <p class="ratio-data">
-                  <span>
-                    <span class="ratio-name">同比:</span>
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
                     <span
                       :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
                       class="ratio-value">
@@ -238,8 +238,8 @@
                     <label class="item-label">总数: </label>
                     <span class="total-count">{{ newBindUser.count }}</span>
                   </span>
-                  <span>
-                    <span class="item-label">同比: </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
                     <span
                       :class="{green: newBindUser.comparison < 0, red: newBindUser.comparison > 0, blue: newBindUser.comparison === 0 }"
                       class="ratio-value">
@@ -283,8 +283,8 @@
                     <label class="item-label">总数: </label>
                     <span class="total-count">{{ newRegisterUser.count }}</span>
                   </span>
-                  <span>
-                    <span class="item-label">同比: </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
                     <span
                       :class="{green: newRegisterUser.comparison < 0, red: newRegisterUser.comparison > 0, blue: newRegisterUser.comparison === 0 }"
                       class="ratio-value">
@@ -318,8 +318,8 @@
                       ¥{{ orderAmount.count }}
                     </span>
                   </span>
-                  <span>
-                    <span class="item-label">同比: </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
                     <span
                       :class="{green: orderAmount.comparison < 0, red: orderAmount.comparison > 0, blue: orderAmount.comparison === 0 }"
                       class="ratio-value">
@@ -353,8 +353,8 @@
                     <label class="item-label">总数: </label>
                     <span class="total-count">{{ newBindDevice.count }}</span>
                   </span>
-                  <span>
-                    <label class="item-label">同比: </label>
+                  <span v-if="isShowComparison">
+                    <label class="item-label">较上一周: </label>
                     <span
                       :class="{green: newBindDevice.comparison < 0, red: newBindDevice.comparison > 0, blue: newBindDevice.comparison === 0 }"
                       class="ratio-value">
@@ -386,8 +386,8 @@
                     <label class="item-label">总数: </label>
                     <span class="total-count">{{ orderTypePay.count }}</span>
                   </span>
-                  <span>
-                    <label class="item-label">同比: </label>
+                  <span v-if="isShowComparison">
+                    <label class="item-label">较上一周: </label>
                     <span
                       :class="{green: orderTypePay.comparison < 0, red: orderTypePay.comparison > 0, blue: orderTypePay.comparison === 0 }"
                       class="ratio-value">
@@ -708,7 +708,7 @@ export default {
       // 付费用户总数卡片
       payUser: {
         count: '-', // 总数
-        comparison: 0 // 同比
+        comparison: 0 // 较上一周
       },
       // 新增付费用户卡片
       increasedPayUserType: {
@@ -717,7 +717,7 @@ export default {
         wechat: '-', // 微信
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
-        comparison: 0, // 同比
+        comparison: 0, // 较上一周
         conversion: 0 // 转化率
       },
       // 复购付费用户卡片
@@ -727,12 +727,12 @@ export default {
         wechat: '-', // 微信
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
-        comparison: 0 // 同比
+        comparison: 0 // 较上一周
       },
       // 新增绑定用户卡片
       newBindUser: {
         count: '-', // 总数
-        comparison: 0, // 同比
+        comparison: 0, // 较上一周
         conversion: 0, // 转化率
         chartData: {
           columns: [
@@ -752,7 +752,7 @@ export default {
       // 新增注册用户卡片
       newRegisterUser: {
         count: '-', // 总数
-        comparison: 2020, // 同比
+        comparison: 2020, // 较上一周
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
@@ -765,7 +765,7 @@ export default {
       // 充值金额卡片
       orderAmount: {
         count: '-',
-        comparison: 0, // 同比
+        comparison: 0, // 较上一周
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
@@ -780,7 +780,7 @@ export default {
       // 新增绑定设备及占比
       newBindDevice: {
         count: '-',
-        comparison: 0, // 同比
+        comparison: 0, // 较上一周
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
@@ -794,7 +794,7 @@ export default {
       // 订单类型及支付渠道占比
       orderTypePay: {
         count: '-',
-        comparison: 0, // 同比
+        comparison: 0, // 较上一周
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
@@ -820,6 +820,11 @@ export default {
       // 大于 31 天才展示周
       const requestTime = this.getQuery()
       return Math.ceil((requestTime.end_time - requestTime.begin_time) / (24 * 3600 * 1000)) + 1 <= 31
+    },
+    isShowComparison() {
+      if (!this.datetime_range) return true
+      return parseDateTime('y-m-d', this.datetime_range[0].getTime()) === parseDateTime('y-m-d', this.defaultDateRange[0].getTime()) &&
+        parseDateTime('y-m-d', this.datetime_range[1].getTime()) === parseDateTime('y-m-d', this.defaultDateRange[1].getTime())
     }
   },
   watch: {
