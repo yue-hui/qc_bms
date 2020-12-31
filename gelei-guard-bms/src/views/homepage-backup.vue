@@ -1,0 +1,2073 @@
+<template>
+  <div class="gelei-content">
+    <div class="content-body">
+      <div class="card-box" style="margin-bottom: 30px">
+        <div class="total-data-area">
+          <div class="title-area">
+            <span class="title">整体数据</span>
+            <el-popover
+              placement="top-start"
+              title=""
+              width="500"
+              trigger="hover"
+              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+              <div class="item-list tips-dialog-custom-class">
+                <h3>整体数据说明</h3>
+                <div v-for="item in tipsDialog.list" :key="item.label" class="item">
+                  <span class="label">{{ item.label }}：</span>
+                  <span class="content">{{ item.content }}</span>
+                </div>
+              </div>
+              <span slot="reference" class="title-tips">？</span>
+            </el-popover>
+          </div>
+          <div class="summary-items-area">
+            <div :style="'background-color: ' + theme_color[0]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.pay_member_count }}</div>
+                <div class="item-name">付费用户数</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.experience_member_count }}</div>
+                <div class="item-name">体验用户数</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.telecom_count || '--' }}</div>
+                <div class="item-name">电信付费用户数</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[2]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
+                <div class="item-name">即将到期会员</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[3]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">{{ overall_data.order_count }}</div>
+                <div class="item-name">订单成交量</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[4]" class="summary-item">
+              <div class="item-info">
+                <div class="item-value">¥{{ overall_data.order_amount }}</div>
+                <div class="item-name">充值金额</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <div class="title-area">
+          <span class="title">关键数据</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="500"
+            trigger="hover"
+            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+            <div class="item-list tips-dialog-custom-class">
+              <h3>关键数据说明</h3>
+              <div v-for="item in tipsDialog.list2" :key="item.label" class="item">
+                <span class="label">{{ item.label }}：</span>
+                <span class="content">{{ item.content }}</span>
+              </div>
+            </div>
+            <span slot="reference" class="title-tips">？</span>
+          </el-popover>
+        </div>
+        <div class="search-area">
+          <el-row :gutter="10" class="row-bg">
+            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+              <div class="grid-content bg-purple">
+                <el-row>
+                  <el-col :span="8" class="order-number-list">选择日期:</el-col>
+                  <el-col :span="16">
+                    <el-date-picker
+                      v-model="datetime_range"
+                      :picker-options="pickerOptions"
+                      clearable
+                      end-placeholder="结束日期"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      type="daterange"
+                      size="medium"
+                      unlink-panels
+                      @change="dateTimeChange" />
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="data-comparison-area">
+          <div class="new-user-and-amount-area">
+            <!-- 付费用户总数 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">付费用户总数</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ payUser.count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
+                    <span
+                      :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
+                      class="ratio-value">
+                      {{ payUser.comparison | abs }}%
+                      <template v-if="payUser.comparison > 0">↑</template>
+                      <template v-else-if="payUser.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <!-- 新增付费用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增付费用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ increasedPayUserType.count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ increasedPayUserType.ios }}</span>
+                    <label class="item-label">IOS</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ increasedPayUserType.wechat }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ increasedPayUserType.aliPay }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
+                    <label class="item-label">电信</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
+                    <span
+                      :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
+                      class="ratio-value">
+                      {{ increasedPayUserType.comparison | abs }}%
+                      <template v-if="increasedPayUserType.comparison > 0">↑</template>
+                      <template v-else-if="increasedPayUserType.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                  <span>
+                    <span class="ratio-name">转化率:</span>
+                    <span
+                      :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
+                      class="ratio-value">
+                      {{ increasedPayUserType.conversion | abs }}%
+                      <template v-if="increasedPayUserType.conversion > 0">↑</template>
+                      <template v-else-if="increasedPayUserType.conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <!-- 复购付费用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">复购付费用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ repurchaseUser.count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ repurchaseUser.ios }}</span>
+                    <label class="item-label">IOS</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ repurchaseUser.wechat }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ repurchaseUser.aliPay }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ repurchaseUser.ctcc }}</span>
+                    <label class="item-label">电信</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
+                    <span
+                      :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
+                      class="ratio-value">
+                      {{ repurchaseUser.comparison | abs }}%
+                      <template v-if="repurchaseUser.comparison > 0">↑</template>
+                      <template v-else-if="repurchaseUser.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="ratio-with-chart-area">
+            <!-- 新增绑定用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增绑定用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ newBindUser.count }}</span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
+                    <span
+                      :class="{green: newBindUser.comparison < 0, red: newBindUser.comparison > 0, blue: newBindUser.comparison === 0 }"
+                      class="ratio-value">
+                      {{ newBindUser.comparison | abs }}%
+                      <template v-if="newBindUser.comparison > 0">↑</template>
+                      <template v-else-if="newBindUser.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                  <span>
+                    <span class="item-label">转化率: </span>
+                    <span
+                      :class="{green: newBindUser.conversion < 0, red: newBindUser.conversion > 0, blue: newBindUser.conversion === 0 }"
+                      class="ratio-value">
+                      {{ newBindUser.conversion | abs }}%
+                      <template v-if="newBindUser.conversion > 0">↑</template>
+                      <template v-else-if="newBindUser.conversion === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="newBindUser.chartData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 新增注册用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增注册用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ newRegisterUser.count }}</span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
+                    <span
+                      :class="{green: newRegisterUser.comparison < 0, red: newRegisterUser.comparison > 0, blue: newRegisterUser.comparison === 0 }"
+                      class="ratio-value">
+                      {{ newRegisterUser.comparison | abs }}%
+                      <template v-if="newRegisterUser.comparison > 0">↑</template>
+                      <template v-else-if="newRegisterUser.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="newRegisterUser.chartData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+            <!-- 充值金额 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">充值金额</div>
+              <div class="item-row item-data-section" style="min-width: 418px;">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">
+                      ¥{{ orderAmount.count }}
+                    </span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
+                    <span
+                      :class="{green: orderAmount.comparison < 0, red: orderAmount.comparison > 0, blue: orderAmount.comparison === 0 }"
+                      class="ratio-value">
+                      {{ orderAmount.comparison | abs }}%
+                      <template v-if="orderAmount.comparison > 0">↑</template>
+                      <template v-else-if="orderAmount.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="orderAmount.chartData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ratio-with-chart-area" style="justify-content: flex-start;">
+            <!-- 新增绑定设备及占比 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">新增绑定设备及占比</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ newBindDevice.count }}</span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <label class="item-label">较上一周: </label>
+                    <span
+                      :class="{green: newBindDevice.comparison < 0, red: newBindDevice.comparison > 0, blue: newBindDevice.comparison === 0 }"
+                      class="ratio-value">
+                      {{ newBindDevice.comparison | abs }}%
+                      <template v-if="newBindDevice.comparison > 0">↑</template>
+                      <template v-else-if="newBindDevice.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="newBindDevice.chartData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+            <!-- 订单类型及支付渠道占比 ------------------------------------ -->
+            <div class="data-item" style="margin-left: 20px;">
+              <div class="item-row item-title">订单类型及支付渠道占比</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ orderTypePay.count }}</span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <label class="item-label">较上一周: </label>
+                    <span
+                      :class="{green: orderTypePay.comparison < 0, red: orderTypePay.comparison > 0, blue: orderTypePay.comparison === 0 }"
+                      class="ratio-value">
+                      {{ orderTypePay.comparison | abs }}%
+                      <template v-if="orderTypePay.comparison > 0">↑</template>
+                      <template v-else-if="orderTypePay.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-pie
+                    :data="orderTypePay.chartData"
+                    :legend-visible="false"
+                    :extend="order_chart_extend"
+                    :settings="chart_settings_array"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="data-line-chart-area">
+          <div style="margin-top: 20px;margin-bottom: 10px;display: flex;align-items: center">
+            <div>
+              <span class="order-number-list">查看维度：</span>
+            </div>
+            <el-radio-group v-model="showLineDayType" size="small" @change="lineDayTypeShowChange">
+              <el-radio-button label="日"/>
+              <el-radio-button :disabled="disabledWeekFilter" label="周"/>
+              <el-radio-button :disabled="disabledMonthFilter" label="月"/>
+            </el-radio-group>
+          </div>
+          <el-tabs
+            v-model="active_name"
+            @tab-click="tabChange">
+            <el-tab-pane
+              v-for="(line_chart_tab, index) in line_chart_tabs"
+              :key="index"
+              :name="line_chart_tab.name"
+              :label="line_chart_tab.label">
+              <div class="line-chart-area">
+                <ve-histogram
+                  :ref="'chart' + line_chart_tab.name"
+                  :data="dimension_data"
+                  :extend="dimension_chart_extend"
+                  :settings="chart_settings"
+                  class="line-chart-style" />
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <div style="margin-top: 0px;margin-bottom: 30px;display: flex;align-items: center">
+          <div style="">
+            <span class="order-number-list">详细数据：</span>
+          </div>
+          <el-radio-group v-model="showLineTable" size="small" @change="showLineTableShowChange">
+            <el-radio-button label="展开"/>
+            <el-radio-button label="收起"/>
+          </el-radio-group>
+        </div>
+        <transition name="el-zoom-in-top">
+          <div v-if="showLineTable === '展开'" class="table-content table-block">
+            <el-table v-if="active_name === '0'" :data="increasedPayUserListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="APP付费用户数" prop="app" />
+              <el-table-column align="center" label="电信付费用户数" prop="ctcc" />
+              <el-table-column align="center" label="总付费用户数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '1'" :data="orderCountListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="高级会员" prop="senior" />
+              <el-table-column align="center" label="电信会员" prop="ctcc" />
+              <el-table-column align="center" label="普通会员" prop="common" />
+              <el-table-column align="center" label="总订单总数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '2'" :data="registerUserListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="家长用户" prop="parent" />
+              <el-table-column align="center" label="孩子用户" prop="child" />
+              <el-table-column align="center" label="总注册用户数" prop="count" />
+            </el-table>
+            <el-table v-if="active_name === '3'" :data="orderAmountListTableData" stripe size="mini" style="width: 100%">
+              <el-table-column align="center" label="日期" prop="date" width="180" />
+              <el-table-column align="center" label="APP充值金额" prop="app" />
+              <el-table-column align="center" label="电信充值金额" prop="ctcc" />
+              <el-table-column align="center" label="总充值金额" prop="count" />
+            </el-table>
+          </div>
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import dayjs from 'dayjs'
+import MultiProcess from '@/components/MultiProcess'
+import { get_homepage_growth_data, get_homepage_overall_data } from '../api/interactive'
+import { parseDateTime, getWeekRangeTime, getMonthRangeTime, cloneDeep } from '../utils'
+const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
+  '#FFA069', '#8d98b3', '#e5cf0d', '#97b552',
+  '#95706d', '#dc69aa', '#07a2a4', '#9a7fd1',
+  '#588dd5', '#f5994e', '#c05050', '#59678c',
+  '#c9ab00', '#7eb00a', '#6f5553', '#c14089']
+
+const echart_colors = [
+  '#338DE8', '#ED6060', '#EFAE3E', '#3CE5D5', '#92CC52'
+]
+
+export default {
+  filters: {
+    abs: function(value) {
+      if (value === undefined) {
+        return ''
+      }
+      return Math.abs(value)
+    }
+  },
+  components: {
+    MultiProcess
+  },
+  data() {
+    const day = dayjs().subtract(1, 'days')
+    const pre_week = dayjs().subtract(7, 'days')
+    return {
+      theme_color,
+      pickerOptions: {
+        // 限制仅选择近3650天
+        // disabledDate(time) {
+        //   let curDate = new Date()
+        //   curDate.setHours(0)
+        //   curDate.setMinutes(0)
+        //   curDate.setMilliseconds(0)
+        //   curDate.setSeconds(0)
+        //   curDate = new Date(curDate.getTime() - 1000)
+        //   const day = 3650 * 24 * 3600 * 1000
+        //   const dateRegion = curDate - day
+        //   return time.getTime() > curDate || time.getTime() < dateRegion
+        // }
+      },
+      datetime_range: [new Date(pre_week), new Date(day)],
+      defaultDateRange: [new Date(pre_week), new Date(day)],
+      query_sets: {},
+      overall_data: {
+        pay_member_count: '-',
+        experience_member_count: '-',
+        due_soon_member_count: '-',
+        order_count: '-',
+        order_amount: '-'
+      },
+      growth_data: {},
+      chart_settings: {
+        hoverAnimation: false,
+        labelMap: {
+          date: '日期',
+          count: '用户数量',
+          amount: '充值金额'
+        },
+        radius: 80,
+        offsetY: 120,
+        itemStyle: {
+          normal: {
+            label: {
+              show: false
+            },
+            labelLine: {
+              show: false
+            }
+          }
+        }
+      },
+      chart_settings_array: {
+        hoverAnimation: false,
+        radius: 70,
+        label: {
+          show: false
+        },
+        level: [
+          ['普通会员', '高级会员'],
+          ['iOS', '微信', '支付宝', '电信']
+        ],
+        offsetY: 180
+      },
+      chart_extend: {
+        color: echart_colors,
+        legend: {
+          orient: 'vertical',
+          icon: 'circle',
+          x: '244',
+          y: 'center',
+          textStyle: {
+            color: '#A0A0A0',
+            fontSize: 12
+          }
+        },
+        series: {
+          type: 'pie',
+          center: [90, '50%']
+        }
+      },
+      order_chart_extend: {
+        color: echart_colors,
+        legend: {
+          orient: 'vertical',
+          icon: 'circle',
+          x: '244',
+          y: 'center',
+          textStyle: {
+            color: '#A0A0A0',
+            fontSize: 12
+          }
+        },
+        series: {
+          type: 'pie',
+          center: [90, '50%']
+        }
+      },
+      dimension_chart_extend: {
+        barMaxWidth: 30
+      },
+      line_chart_tabs: [
+        {
+          label: '新增付费用户',
+          name: '0'
+        },
+        {
+          label: '新增注册用户',
+          name: '2'
+        },
+        {
+          label: '订单成交量',
+          name: '1'
+        },
+        {
+          label: '充值金额',
+          name: '3'
+        }
+      ],
+      line_chart_tabs_data: [{}, {}, {}, {}],
+      active_name: '0',
+      dimension_data: {},
+      // 条形统计图天数类型
+      showLineDayType: '日',
+      // 条形统计图的时间样式
+      lineDateStyleList: [
+        // { type: '日', date: ['2020-01-01', '2020-01-02', '2020-01-03'], startDate: '2020-01-01', endDate: '2020-01-03' },
+        // { type: '周', date: ['2020-01-01~2020-01-07', '2020-01-08~2020-01-15'], startDate: '2020-01-01', endDate: '2020-01-15' },
+        // { type: '月', date: ['2020-01-01~2020-01-31', '2020-02-01~2020-02-29'], startDate: '2020-01-01', endDate: '2020-02-29' }
+      ],
+      // 明细数据 - 新增付费用户列表
+      increasedPayUserListTableData: [],
+      // 明细数据 - 订单成交量
+      orderCountListTableData: [],
+      // 明细数据 - 新增用户注册
+      registerUserListTableData: [],
+      // 明细数据 - 充值金额
+      orderAmountListTableData: [],
+      // 展开详细
+      showLineTable: '收起',
+      tipsDialog: {
+        list: [
+          {
+            label: '付费用户数',
+            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '订单成交量',
+            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
+          },
+          {
+            label: '注册用户总数',
+            content: '累计在格雷盒子7注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
+          },
+          {
+            label: '累计绑定设备',
+            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
+          },
+          {
+            label: '充值金额',
+            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+          }
+        ],
+        list2: [
+          {
+            label: '新增绑定用户',
+            content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
+          },
+          {
+            label: '新增付费用户',
+            content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
+          },
+          {
+            label: '复购付费用户',
+            content: '以前买过任意一个会员套餐的用户，再次付费进行会员购买的用户'
+          },
+          {
+            label: '充值金额',
+            content: '筛选的时间段内付费成功订单的总金额，支持查询更多时间段的数据'
+          },
+          {
+            label: '新增注册用户数',
+            content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
+          },
+          {
+            label: '新增绑定设备及占比',
+            content: '筛选的时间段内新增绑定成功设备的类型，包括公版和定制机'
+          },
+          {
+            label: '订单类型及支付渠道占比',
+            content: '筛选的时间段内新增付费成功订单的类型以及支付渠道的占比'
+          }
+        ]
+      },
+      // /////////////////////////
+      // 付费用户总数卡片
+      payUser: {
+        count: '-', // 总数
+        comparison: 0 // 较上一周
+      },
+      // 新增付费用户卡片
+      increasedPayUserType: {
+        count: '-', // 总数
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0, // 较上一周
+        conversion: 0 // 转化率
+      },
+      // 复购付费用户卡片
+      repurchaseUser: {
+        count: '-', // 总数
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
+      },
+      // 新增绑定用户卡片
+      newBindUser: {
+        count: '-', // 总数
+        comparison: 0, // 较上一周
+        conversion: 0, // 转化率
+        chartData: {
+          columns: [
+            'name',
+            'value'
+          ],
+          center: [
+            '50%',
+            '50%'
+          ],
+          rows: [
+            // { 'name': 'iOS', 'value': 0 },
+            // { 'name': '安卓', 'value': 0 }
+          ]
+        }
+      },
+      // 新增注册用户卡片
+      newRegisterUser: {
+        count: '-', // 总数
+        comparison: 2020, // 较上一周
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            // { name: '家长端', value: 2020 },
+            // { name: '孩子端', value: 2020 }
+          ]
+        }
+      },
+      // 充值金额卡片
+      orderAmount: {
+        count: '-',
+        comparison: 0, // 较上一周
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            // { name: '微信', value: 2020 },
+            // { name: '支付宝', value: 2020 },
+            // { name: 'iOS', value: 2020 },
+            // { name: '电信', value: 2020 }
+          ]
+        }
+      },
+      // 新增绑定设备及占比
+      newBindDevice: {
+        count: '-',
+        comparison: 0, // 较上一周
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            // { name: 'VIVO', value: 2020 },
+            // { name: 'OPPO', value: 2020 },
+            // { name: '公版', value: 2020 }
+          ]
+        }
+      },
+      // 订单类型及支付渠道占比
+      orderTypePay: {
+        count: '-',
+        comparison: 0, // 较上一周
+        chartData: {
+          columns: ['name', 'value'],
+          center: ['50%', '50%'],
+          rows: [
+            // { name: '普通会员', value: 2020 },
+            // { name: '高级会员', value: 2020 },
+            // { name: 'IOS', value: 2020 },
+            // { name: '微信', value: 2020 },
+            // { name: '支付宝', value: 2020 },
+            // { name: '电信', value: 2020 }
+          ]
+        }
+      }
+    }
+  },
+  computed: {
+    disabledWeekFilter() {
+      // 大于 7 天才展示周
+      const requestTime = this.getQuery()
+      return Math.ceil((requestTime.end_time - requestTime.begin_time) / (24 * 3600 * 1000)) + 1 <= 7
+    },
+    disabledMonthFilter() {
+      // 大于 31 天才展示周
+      const requestTime = this.getQuery()
+      return Math.ceil((requestTime.end_time - requestTime.begin_time) / (24 * 3600 * 1000)) + 1 <= 31
+    },
+    isShowComparison() {
+      if (!this.datetime_range) return true
+      return parseDateTime('y-m-d', this.datetime_range[0].getTime()) === parseDateTime('y-m-d', this.defaultDateRange[0].getTime()) &&
+        parseDateTime('y-m-d', this.datetime_range[1].getTime()) === parseDateTime('y-m-d', this.defaultDateRange[1].getTime())
+    }
+  },
+  watch: {
+    active_name: {
+      handler(v) {
+        if (v !== '') {
+          this.$nextTick(_ => {
+            this.$refs[`chart${v}`][0].echarts.resize()
+          })
+        }
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    this.makeDateStyleList()
+    this.fetchPageData()
+  },
+  methods: {
+    fetchPageData() {
+      this.fetchOverallData()
+      this.fetchGrowthData()
+    },
+    /**
+     * @description 获取首页整体数据
+     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=106
+     * */
+    fetchOverallData() {
+      get_homepage_overall_data().then(r => {
+        if (r.status === 0) {
+          this.overall_data = r.data
+          // this.$message.success(r.message)
+        } else {
+          this.$message.error(r.message)
+        }
+      })
+    },
+    /**
+     * @description 获取关键数据
+     * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1464
+     * */
+    fetchGrowthData() {
+      const config = this.getQuery()
+      config.begin_time = parseDateTime('y-m-d', config.begin_time)
+      config.end_time = parseDateTime('y-m-d', config.end_time)
+      get_homepage_growth_data(config).then(data => {
+        // data = testData
+        // eslint-disable-next-line no-empty
+        if (data.status === 0) {
+          this.growth_data = data.data
+          this.parseChatChart(cloneDeep(data.data))
+          this.updateLineChart()
+        } else {
+          this.$message.error(data.message)
+          this.growth_data = {}
+        }
+      }).finally(() => {
+      })
+    },
+    /**
+     * @description 解析卡片数据
+     * @param data {Object} 后台数据
+     * */
+    parseChatChart(data) {
+      // 付费用户总数
+      this.payUser.count = data.pay_user_count
+      this.payUser.comparison = data.pay_user_count_conversion || 0
+      // 新增付费用户
+      this.increasedPayUserType.count = data.increased_pay_user_sum
+      this.increasedPayUserType.ios = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '04').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.wechat = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '01').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.aliPay = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '02').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.ctcc = (() => {
+        try {
+          return data.increased_pay_user_type.find(item => item.name === '06').count
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.increasedPayUserType.comparison = data.increased_pay_user_conversion || 0
+      this.increasedPayUserType.conversion = data.increased_pay_user_comparison || 0
+      // 复购付费用户
+      this.repurchaseUser.count = data.repurchase_user_count
+      this.repurchaseUser.ios = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '04').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.wechat = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '01').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.aliPay = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '02').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.ctcc = (() => {
+        try {
+          return data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+        } catch (e) {
+          return 0
+        }
+      })()
+      this.repurchaseUser.comparison = data.repurchase_user_count_conversion || 0
+      // 新增绑定用户
+      this.newBindUser.count = data.bind_user_sum
+      this.newBindUser.comparison = data.bind_user_conversion || 0
+      this.newBindUser.conversion = data.bind_user_comparison || 0
+      this.newBindUser.chartData.rows = [
+        // { 'name': 'iOS', 'value': 0 },
+        { name: 'iOS', value: (() => {
+          try {
+            return data.bind_user_type.find(item => item.name === '02').count
+          } catch (e) {
+            return 0
+          }
+        })() },
+        { name: '安卓', value: (() => {
+          try {
+            return data.bind_user_type.find(item => item.name === '03').count
+          } catch (e) {
+            return 0
+          }
+        })() }
+      ]
+      // 新增注册用户
+      this.newRegisterUser.count = data.increased_reg_user_sum
+      this.newRegisterUser.comparison = data.increased_reg_user_conversion || 0
+      this.newRegisterUser.chartData.rows = [
+        // { 'name': 'iOS', 'value': 0 },
+        { name: '家长端', value: (() => {
+          try {
+            return data.increased_reg_user_type.find(item => item.name === '01').count
+          } catch (e) {
+            return 0
+          }
+        })() },
+        { name: '孩子端', value: (() => {
+          try {
+            return data.increased_reg_user_type.find(item => item.name === '02').count
+          } catch (e) {
+            return 0
+          }
+        })() }
+      ]
+      // 充值金额
+      this.orderAmount.count = data.order_amount_sum
+      this.orderAmount.comparison = data.order_amount_conversion || 0
+      const orderAmountType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
+      this.orderAmount.chartData.rows = Object.keys(orderAmountType).map(key => {
+        const value = data.order_amount_type.find(item => item.name === key)
+        return {
+          name: orderAmountType[key],
+          value: value ? value.count : 0
+        }
+      })
+      // 新增绑定设备及占比
+      this.newBindDevice.count = data.bind_device_sum
+      this.newBindDevice.comparison = data.bind_device_conversion || 0
+      const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
+      this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
+        const value = data.bind_device_type.find(item => item.name === key)
+        return {
+          name: newBindDeviceType[key],
+          value: value ? value.count : 0
+        }
+      })
+      // 订单类型及支付渠道占比
+      this.orderTypePay.count = data.order_channel_count
+      this.orderTypePay.comparison = data.order_channel_count_conversion || 0
+      const orderTypePayType = { '02': '高级会员', '03': '普通会员' }
+      // 电信会员
+      const ctccType = data.order_channel_member_type.find(item => item.name === '04')
+
+      this.orderTypePay.chartData.rows = Object.keys(orderTypePayType).map(key => {
+        const value = data.order_channel_member_type.find(item => item.name === key)
+        return {
+          name: orderTypePayType[key],
+          value: (value ? value.count : 0) + (() => {
+            // 加上电信会员
+            if (key === '03') {
+              return ctccType ? ctccType.count : 0
+            }
+            return 0
+          })()
+        }
+      })
+      const orderChannelPayType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
+      Object.keys(orderChannelPayType).forEach(key => {
+        const item = { name: orderChannelPayType[key], value: 0 }
+        try {
+          item.value = data.order_channel_pay_type.find(item => item.name === key).count
+          // eslint-disable-next-line no-empty
+        } catch (e) {
+        }
+        this.orderTypePay.chartData.rows.push(item)
+        let x1 = 180
+        let x2 = 260
+        if (window.innerWidth > 1640) {
+          x1 = 244
+          x2 = 350
+        }
+        this.order_chart_extend.legend = [
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: x1,
+            y: 'center',
+            data: Object.values(orderTypePayType)
+          },
+          {
+            orient: 'vertical',
+            icon: 'circle',
+            x: x2,
+            y: 'center',
+            data: Object.values(orderChannelPayType)
+          }
+        ]
+      })
+    },
+    /**
+     * @description 解析条形统计图数据
+     * */
+    updateLineChart() {
+      const growth_data = cloneDeep(this.growth_data)
+      if (Object.keys(growth_data).length) {
+        // 新增付费用户列表 --------------
+        /* growth_data.increased_pay_user_list = [
+          { date: '2020-12-07', count: 200, type: 'app' },
+          { date: '2020-12-07', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-08', count: 200, type: 'app' },
+          { date: '2020-12-08', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-09', count: 100, type: 'app' },
+          { date: '2020-12-09', count: 300, type: 'ctcc' },
+
+          { date: '2020-12-10', count: 500, type: 'app' },
+          { date: '2020-12-10', count: 400, type: 'ctcc' },
+
+          { date: '2020-12-11', count: 200, type: 'app' },
+          { date: '2020-12-11', count: 300, type: 'ctcc' },
+
+          { date: '2020-12-12', count: 100, type: 'app' },
+          { date: '2020-12-12', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-13', count: 200, type: 'app' },
+          { date: '2020-12-13', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-14', count: 400, type: 'app' },
+          { date: '2020-12-14', count: 100, type: 'ctcc' }
+        ]*/
+
+        growth_data.increased_pay_user_list = this.parseLineData(cloneDeep(growth_data.increased_pay_user_list), 0, this.showLineDayType)
+        // 明细数据
+        this.increasedPayUserListTableData = cloneDeep(growth_data.increased_pay_user_list)
+        // console.log(JSON.stringify(growth_data.increased_pay_user_list, null, 2))
+        const increased_pay_user_chart = {
+          columns: ['date', 'count', 'app', 'ctcc'],
+          rows: growth_data.increased_pay_user_list
+        }
+        // 新增付费用户列表 end
+        // 订单成交量 ---------------
+        /*  growth_data.order_count_list = [
+          { date: '2020-12-07', count: 100, type: 'senior' },
+          { date: '2020-12-07', count: 100, type: 'ctcc' },
+          { date: '2020-12-07', count: 100, type: 'common' },
+
+          { date: '2020-12-08', count: 100, type: 'senior' },
+          { date: '2020-12-08', count: 100, type: 'ctcc' },
+          { date: '2020-12-08', count: 100, type: 'common' },
+
+          { date: '2020-12-09', count: 100, type: 'senior' },
+          { date: '2020-12-09', count: 100, type: 'ctcc' },
+          { date: '2020-12-09', count: 100, type: 'common' },
+
+          { date: '2020-12-10', count: 100, type: 'senior' },
+          { date: '2020-12-10', count: 100, type: 'ctcc' },
+          { date: '2020-12-10', count: 100, type: 'common' },
+
+          { date: '2020-12-11', count: 100, type: 'senior' },
+          { date: '2020-12-11', count: 100, type: 'ctcc' },
+          { date: '2020-12-11', count: 100, type: 'common' },
+
+          { date: '2020-12-12', count: 100, type: 'senior' },
+          { date: '2020-12-12', count: 100, type: 'ctcc' },
+          { date: '2020-12-12', count: 100, type: 'common' },
+
+          { date: '2020-12-13', count: 100, type: 'senior' },
+          { date: '2020-12-13', count: 100, type: 'ctcc' },
+          { date: '2020-12-13', count: 100, type: 'common' }
+        ]*/
+        growth_data.order_count_list = this.parseLineData(cloneDeep(growth_data.order_count_list), 2, this.showLineDayType)
+        // 明细数据
+        this.orderCountListTableData = cloneDeep(growth_data.order_count_list)
+        // console.log(JSON.stringify(growth_data.order_count_list, null, 2))
+        const order_count_list_chart = {
+          columns: ['date', 'count', 'senior', 'ctcc', 'common'],
+          rows: growth_data.order_count_list
+        }
+        // 订单成交量 end
+        // 新增注册用户
+        /* growth_data.register_user_list = [
+          { date: '2020-12-10', count: 200, type: 'parent' },
+          { date: '2020-12-10', count: 200, type: 'child' },
+
+          { date: '2020-12-11', count: 200, type: 'parent' },
+          { date: '2020-12-11', count: 100, type: 'child' },
+
+          { date: '2020-12-12', count: 100, type: 'parent' },
+          { date: '2020-12-12', count: 200, type: 'child' },
+
+          { date: '2020-12-13', count: 100, type: 'parent' },
+          { date: '2020-12-13', count: 200, type: 'child' },
+
+          { date: '2020-12-14', count: 200, type: 'parent' },
+          { date: '2020-12-14', count: 100, type: 'child' }
+        ]*/
+        growth_data.register_user_list = this.parseLineData(growth_data.register_user_list, 1, this.showLineDayType)
+        // 明细数据
+        this.registerUserListTableData = cloneDeep(growth_data.register_user_list)
+        const register_user_list = {
+          columns: ['date', 'count', 'parent', 'child'],
+          rows: growth_data.register_user_list
+        }
+        // 新增注册用户 end
+        // 充值金额
+        /* growth_data.order_amount_list = [
+          { date: '2020-12-10', count: 200, type: 'app' },
+          { date: '2020-12-10', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-11', count: 200, type: 'app' },
+          { date: '2020-12-11', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-12', count: 200, type: 'app' },
+          { date: '2020-12-12', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-13', count: 200, type: 'app' },
+          { date: '2020-12-13', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-14', count: 400, type: 'app' },
+          { date: '2020-12-14', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-15', count: 200, type: 'app' },
+          { date: '2020-12-15', count: 200, type: 'ctcc' },
+
+          { date: '2020-12-16', count: 200, type: 'app' },
+          { date: '2020-12-16', count: 100, type: 'ctcc' },
+
+          { date: '2020-12-17', count: 300, type: 'app' },
+          { date: '2020-12-17', count: 500, type: 'ctcc' }
+        ]*/
+        growth_data.order_amount_list = this.parseLineData(growth_data.order_amount_list, 3, this.showLineDayType)
+        // 明细数据
+        this.orderAmountListTableData = cloneDeep(growth_data.order_amount_list)
+        const order_amount_list_chart = {
+          columns: ['date', 'count', 'app', 'ctcc'],
+          rows: growth_data.order_amount_list
+        }
+        // 充值金额 end
+        this.line_chart_tabs_data = [
+          increased_pay_user_chart,
+          order_count_list_chart,
+          register_user_list,
+          order_amount_list_chart
+        ]
+      } else {
+        this.line_chart_tabs_data = [{}, {}, {}, {}]
+      }
+      this.tabChange({ name: this.active_name })
+    },
+    /**
+     * @description 获取查询数据
+     * */
+    getQuery() {
+      const config = {}
+      if (this.datetime_range) {
+        config['begin_time'] = this.datetime_range[0].getTime()
+        config['end_time'] = this.datetime_range[1].getTime()
+      } else {
+        config['begin_time'] = this.defaultDateRange[0].getTime()
+        config['end_time'] = this.defaultDateRange[1].getTime()
+      }
+      return config
+    },
+    /**
+     * @description 查询时间发生改变
+     * */
+    dateTimeChange() {
+      this.showLineDayType = '日'
+      this.increasedPayUserListTableData = []
+      this.orderCountListTableData = []
+      this.registerUserListTableData = []
+      this.orderAmountListTableData = []
+      this.makeDateStyleList()
+      this.fetchGrowthData()
+    },
+    /**
+     * @description 条形统计图 tab 切换
+     * */
+    tabChange(obj) {
+      const active_name = obj.name
+      if (active_name === '0') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '总付费用户',
+          app: 'APP付费用户',
+          ctcc: '电信付费用户'
+        }
+      } else if (active_name === '1') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '总订单数',
+          senior: '高级会员',
+          ctcc: '电信会员',
+          common: '普通会员'
+        }
+      } else if (active_name === '3') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '总充值金额',
+          app: 'APP充值金额',
+          ctcc: '电信充值金额'
+        }
+      } else if (active_name === '2') {
+        this.chart_settings['labelMap'] = {
+          date: '日期',
+          count: '总注册用户',
+          parent: '家长用户',
+          child: '孩子用户'
+        }
+      }
+      this.dimension_data = this.line_chart_tabs_data[Number(active_name)]
+    },
+    /**
+     * @description 条形统计图切换 日 周 月
+     * */
+    lineDayTypeShowChange(e) {
+      this.increasedPayUserListTableData = []
+      this.orderCountListTableData = []
+      this.registerUserListTableData = []
+      this.orderAmountListTableData = []
+      this.updateLineChart()
+    },
+    /**
+     * @description 解析条形统计图的数据
+     * @param list {Array} 后台原数据
+     * @param type {Number} 0 新增付费用户 | 1 新增注册用户 | 2 订单成交量 | 3 充值金额
+     * @param showType {String} 日 周 月
+     * @return {Object}
+     * */
+    parseLineData(list, type, showType) {
+      if (type === 0 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+          const app = list.find(_item => {
+            return _item.date === date && _item.type === 'app'
+          })
+          return {
+            date: date,
+            count: ctcc.count + app.count,
+            ctcc: ctcc.count,
+            app: app.count
+          }
+        })
+      }
+      if (type === 2 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // 高级会员
+          const senior = list.find(_item => {
+            return _item.date === date && _item.type === 'senior'
+          })
+          // 电信会员
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+          // 普通会员
+          const common = list.find(_item => {
+            return _item.date === date && _item.type === 'common'
+          })
+          // 普通会员
+          return {
+            date: date,
+            count: senior.count + ctcc.count + common.count,
+            senior: senior.count,
+            ctcc: ctcc.count,
+            common: common.count
+          }
+        })
+      }
+      if (type === 1 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // 家长
+          const parent = list.find(_item => {
+            return _item.date === date && _item.type === 'parent'
+          })
+          // 孩纸
+          const child = list.find(_item => {
+            return _item.date === date && _item.type === 'child'
+          })
+          // 普通会员
+          return {
+            date: date,
+            count: parent.count + child.count,
+            parent: parent.count,
+            child: child.count
+          }
+        })
+      }
+      if (type === 3 && showType === '日') {
+        return [...new Set(list.map(item => item.date))].map(date => {
+          // app
+          const app = list.find(_item => {
+            return _item.date === date && _item.type === 'app'
+          })
+          // 电信
+          const ctcc = list.find(_item => {
+            return _item.date === date && _item.type === 'ctcc'
+          })
+
+          return {
+            date: date,
+            count: Number(app.count) + Number(ctcc.count),
+            app: app.count,
+            ctcc: ctcc.count
+          }
+        })
+      }
+      const rangeDate = showType === '周' ? this.lineDateStyleList[1].date : this.lineDateStyleList[2].date
+      if (type === 0 && (showType === '周' || showType === '月')) {
+        // [{"date": "2020-12-07", "count": 32, "ctcc": 22, "app": 10}]
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // app 付费用户
+          let appCount = 0
+          // 电信付费用户
+          let ctccCount = 0
+          list.forEach(item => {
+            if (item.type === 'app') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                appCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: appCount + ctccCount,
+            ctcc: ctccCount,
+            app: appCount
+          })
+        })
+        return weekList
+      }
+      if (type === 2 && (showType === '周' || showType === '月')) {
+        // [{"date": "2020-12-07", "count": 32, "senior": 22, "ctcc": 22, "common": 10}]
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // 高级会员
+          let seniorCount = 0
+          // 电信会员
+          let ctccCount = 0
+          // 普通会员
+          let commonCount = 0
+          list.forEach(item => {
+            if (item.type === 'senior') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                seniorCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+            if (item.type === 'common') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                commonCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: seniorCount + ctccCount + commonCount,
+            senior: seniorCount,
+            ctcc: ctccCount,
+            common: commonCount
+          })
+        })
+        return weekList
+      }
+      if (type === 1 && (showType === '周' || showType === '月')) {
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // 家长
+          let parentCount = 0
+          // 孩纸
+          let childCount = 0
+          list.forEach(item => {
+            if (item.type === 'parent') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                parentCount += item.count
+              }
+            }
+            if (item.type === 'child') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                childCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: parentCount + childCount,
+            parent: parentCount,
+            child: childCount
+          })
+        })
+        return weekList
+      }
+      if (type === 3 && (showType === '周' || showType === '月')) {
+        const weekList = []
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          // app
+          let appCount = 0
+          // 电信
+          let ctccCount = 0
+          list.forEach(item => {
+            if (item.type === 'app') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                appCount += item.count
+              }
+            }
+            if (item.type === 'ctcc') {
+              // 是否在区间
+              if (weekRangeArray[0] <= item.date.replace(/-/g, '') && weekRangeArray[1] >= item.date.replace(/-/g, '')) {
+                ctccCount += item.count
+              }
+            }
+          })
+          weekList.push({
+            date: weekRange,
+            count: appCount + ctccCount,
+            app: appCount,
+            ctcc: ctccCount
+          })
+        })
+        return weekList
+      }
+    },
+    /**
+     * @description 生成查询 开始时间 和 结束时间 生成 日 周 月 的时间范围
+     * */
+    makeDateStyleList() {
+      const queryDateRange = this.getQuery()
+      this.lineDateStyleList = []
+      this.lineDateStyleList.push(
+        { type: '日', date: [], startDate: parseDateTime('y-m-d', queryDateRange.begin_time), endDate: parseDateTime('y-m-d', queryDateRange.end_time) }
+      )
+      // ///////////////
+      const weekDate = getWeekRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
+      this.lineDateStyleList.push(
+        { type: '周', date: weekDate.map(item => {
+          return item.startDate + '~' + item.endDate
+        }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
+      )
+      // 更改周的起止时间
+      this.lineDateStyleList[1].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[1].date[0].split('~')[1]
+      const weekLength = this.lineDateStyleList[1].date.length
+      this.lineDateStyleList[1].date[weekLength - 1] = this.lineDateStyleList[1].date[weekLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      // ///////////////
+      const monthDate = getMonthRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
+      this.lineDateStyleList.push(
+        { type: '月', date: monthDate.map(item => {
+          return item.startDate + '~' + item.endDate
+        }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
+      )
+      // 更改月的起止时间
+      this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
+      const monthLength = this.lineDateStyleList[2].date.length
+      this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
+      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+    },
+    /**
+     * @description 展开详细数据切换
+     * */
+    showLineTableShowChange(val) {
+    }
+  }
+}
+</script>
+<style lang="scss">
+.tips-dialog-custom-class{
+  .el-dialog__body{
+    padding: 12px 20px !important;
+    padding-bottom: 0 !important;
+  }
+  .el-dialog__footer{
+    padding-top: 0 !important;
+  }
+  .item{
+    //display: flex;
+    margin-bottom: 20px;
+  }
+  .label{
+    //width: 105px;
+    font-weight: bold;
+    //position: relative;
+    //top: 2px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    display: block;
+    font-size: 15px;
+  }
+  .content{
+    line-height: 1.5;
+    //max-width: calc(100% - 110px);
+  }
+}
+</style>
+<style scoped lang="scss">
+.card-box{
+  background-color: #ffffff;
+  padding: 24px;
+  box-shadow: 6px 4px 20px 5px #f1f1f1;
+  border-radius: 4px;
+  .title-area {
+    width: 100%;
+    padding: 0 0 30px 0;
+    display: flex;
+    align-items: center;
+    .title {
+      font-family: PingFangSC-Regular, 微软雅黑, serif;
+      font-size: 20px;
+      color: #454545;
+      font-weight: bold;
+    }
+  }
+}
+</style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+$border_line_color: #c7d5ee;
+$border_radius_size: 3px;
+$box_shadow_color: #3c3c3c;
+$radio_fair_color: rgba(0, 0, 0, 0.71);
+.gelei-content {
+  width: 100%;
+  height: 100%;
+  /*min-height: 480px;*/
+  padding: 20px 30px 36px 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+
+  .content-body {
+    /*border: 1px solid #c7d5ee;*/
+    height: 100%;
+    min-height: 100px;
+    min-width: 1260px;
+
+    .total-data-area {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #FFFFFF;
+      .summary-items-area {
+        width: 100%;
+        min-width: 1150px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 15px 0;
+        user-select: none;
+
+        .summary-item {
+          width: 260px;
+          height: 120px;
+          border-radius: $border_radius_size;
+          display: flex;
+          flex-direction: row;
+          padding: 22px 24px;
+          flex-basis: calc((100% - 80px) / 6);
+
+          .item-icon {
+            font-size: 48px;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+          }
+
+          .item-info {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: center;
+            color: white;
+            text-align: left;
+
+            .item-name {
+              font-family: PingFangSC-Regular, 微软雅黑, serif;
+              font-size: 16px;
+              color: #FFFFFF;
+            }
+
+            .item-value {
+              text-align: left;
+              font-size: 36px;
+              color: #FFFFFF;
+              margin-bottom: 4px;
+            }
+          }
+        }
+      }
+    }
+
+    .search-area {
+      .row-bg {
+        .col-bg {
+          padding: 5px 0;
+
+          &.col-right-button {
+            text-align: right;
+          }
+
+          .order-number-list {
+            height: 36px;
+            line-height: 36px;
+            white-space: nowrap;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 16px;
+            color: #454545;
+          }
+        }
+      }
+    }
+
+    .data-comparison-area {
+      width: 100%;
+      margin-bottom: 30px;
+
+      .new-user-and-amount-area {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 20px 0;
+
+        .data-item {
+          flex-basis: calc((100% - 40px) / 3);
+          min-width: 380px;
+          min-height: 220px;
+          display: flex;
+          flex-direction: column;
+          background: #FFFFFF;
+          border: 1px solid #EAEAEA;
+          border-radius: $border_radius_size;
+          padding: 20px 32px;
+
+          .item-title {
+            border-top-left-radius: $border_radius_size;
+            border-top-right-radius: $border_radius_size;
+            user-select: none;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 20px;
+            color: #454545;
+            height: 28px;
+            line-height: 28px;
+          }
+
+          .item-data-section {
+            display: flex;
+            flex-direction: column;
+            vertical-align: bottom;
+            align-items: flex-end;
+            margin-top: 21px;
+
+            .item-subscribe {
+              width: 100%;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+              justify-content: space-between;
+
+              span {
+                display: flex;
+                flex-direction: column;
+
+                .item-label {
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
+                  font-size: 14px;
+                  color: #454545;
+                }
+
+                .item-number {
+                  font-size: 12px;
+                  font-weight: 200;
+                }
+
+                .total-count {
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
+                  font-size: 28px;
+                  color: #454545;
+                  margin-bottom: 10px;
+                }
+
+                .upper {
+                  color: green;
+                }
+
+                .fair {
+                  color: $radio_fair_color;
+                }
+
+                .down {
+                  color: red;
+                }
+              }
+            }
+            .diviser {
+              height: 1px;
+              background-color: #EAEAEA;
+              width: 100%;
+            }
+
+            .ratio-data {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+
+              .ratio-name {
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 14px;
+                color: #454545;
+              }
+
+              .ratio-value {
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 20px;
+                color: #000000;
+                line-height: 20px;
+
+                &.green {
+                  color: #5EC821;
+                }
+
+                &.red {
+                  color: #F14F4F;
+                }
+
+                &.blue {
+                  color: #368EE0;
+                }
+              }
+            }
+          }
+
+          .item-reminder {
+            font-size: 12px;
+
+            span {
+              opacity: 0;
+            }
+          }
+        }
+      }
+
+      .ratio-with-chart-area {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 20px 0;
+
+        .data-item {
+          flex-basis: calc((100% - 40px) / 3);
+          min-width: 380px;
+          min-height: 300px;
+          display: flex;
+          flex-direction: column;
+          border-radius: $border_radius_size;
+          background: #FFFFFF;
+          border: 1px solid #EAEAEA;
+          padding: 20px 32px;
+          .item-title {
+            height: 28px;
+            line-height: 28px;
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 20px;
+            color: #454545;
+            margin-bottom: 33px;
+          }
+
+          .item-data-section {
+            display: flex;
+            flex-direction: row;
+            vertical-align: bottom;
+            align-items: flex-end;
+
+            .item-subscribe {
+              width: 100%;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+              height: 50px;
+              margin: 0;
+
+              span {
+                flex: 1;
+                text-align: left;
+                height: 50px;
+                line-height: 50px;
+
+                .item-label {
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
+                  font-size: 14px;
+                  color: #454545;
+                  font-weight: 400;
+                  vertical-align: bottom;
+                }
+
+                .ratio-value {
+                  font-family: PingFangSC-Regular, 微软雅黑, serif;
+                  font-size: 20px;
+                  color: #000000;
+                  line-height: 20px;
+
+                  &.green {
+                    color: #5EC821;
+                  }
+
+                  &.red {
+                    color: #F14F4F;
+                  }
+
+                  &.blue {
+                    color: #368EE0;
+                  }
+                }
+
+                .total-count {
+                  font-size: 36px;
+                  font-weight: bolder;
+                }
+              }
+            }
+
+            .item-data {
+              font-size: 28px;
+              font-weight: 600;
+              padding-right: 20px;
+            }
+
+            .item-data-compare {
+              font-size: 12px;
+
+              .upper {
+                color: green;
+              }
+
+              .fair {
+                color: $radio_fair_color;
+              }
+
+              .down {
+                color: red;
+              }
+            }
+          }
+
+          .item-chart-area {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+
+            .chart {
+              width: 100%;
+            }
+          }
+        }
+
+        .item-row-box {
+          width: 100%;
+          height: 58px;
+          margin: 16px auto;
+
+          .item-subscribe-line {
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+
+            div {
+              width: 50%;
+
+              .item-label {
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 12px;
+                color: #454545;
+                width: 46px;
+                display: inline-block;
+              }
+
+              .item-number {
+                font-size: 12px;
+                font-weight: 200;
+              }
+
+              .total-count {
+                padding-left: 7px;
+                font-family: PingFangSC-Regular, 微软雅黑, serif;
+                font-size: 14px;
+                color: #454545;
+                margin-bottom: 10px;
+              }
+
+              .upper {
+                color: green;
+              }
+
+              .fair {
+                color: $radio_fair_color;
+              }
+
+              .down {
+                color: red;
+              }
+            }
+          }
+        }
+        .diviser {
+          height: 1px;
+          background-color: #EAEAEA;
+          width: 100%;
+        }
+        .ratio-data {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+
+          .ratio-name {
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 14px;
+            color: #454545;
+          }
+
+          .ratio-value {
+            font-family: PingFangSC-Regular, 微软雅黑, serif;
+            font-size: 20px;
+            color: #000000;
+            line-height: 20px;
+
+            &.green {
+              color: #5EC821;
+            }
+
+            &.red {
+              color: #F14F4F;
+            }
+
+            &.blue {
+              color: #368EE0;
+            }
+          }
+        }
+      }
+    }
+
+    .data-line-chart-area {
+      width: 100%;
+      min-height: 400px;
+
+      .line-chart-area {
+        height: 400px;
+      }
+    }
+  }
+  .title-tips{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    color: #ababab;
+    font-size: 12px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+</style>
