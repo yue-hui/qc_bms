@@ -911,7 +911,7 @@ export default {
       // 订单总数
       orderCountData: {
         count: '-',
-        comparison: 1 // 较上一周
+        comparison: 0 // 较上一周
       },
       // 新增订单数
       newOrderCountData: {
@@ -978,6 +978,165 @@ export default {
     fetchOverallData() {
       get_homepage_overall_data().then(r => {
         if (r.status === 0) {
+          /* r.data = [
+            {
+              'category': '01',
+              'list': [
+                {
+                  'type': '01',
+                  'number': 600
+                },
+                {
+                  'type': '02',
+                  'number': 500
+                },
+                {
+                  'type': '03',
+                  'number': 400
+                },
+                {
+                  'type': '04',
+                  'number': 300
+                },
+                {
+                  'type': '05',
+                  'number': 200
+                },
+                {
+                  'type': '00',
+                  'number': 100
+                }
+              ]
+            },
+            {
+              'category': '02',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 100
+                },
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                }
+              ]
+            },
+            {
+              'category': '03',
+              'list': [
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                },
+                {
+                  'type': '06',
+                  'number': 600
+                },
+                {
+                  'type': '00',
+                  'number': 900
+                }
+              ]
+            },
+            {
+              'category': '04',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 2000
+                },
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                },
+                {
+                  'type': '06',
+                  'number': 600
+                },
+                {
+                  'type': '07',
+                  'number': 700
+                }
+              ]
+            },
+            {
+              'category': '05',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 6000
+                },
+                {
+                  'type': '01',
+                  'number': 1000
+                },
+                {
+                  'type': '02',
+                  'number': 2000
+                },
+                {
+                  'type': '03',
+                  'number': 3000
+                },
+                {
+                  'type': '04',
+                  'number': 4000
+                },
+                {
+                  'type': '05',
+                  'number': 5000
+                }
+              ]
+            }
+          ]*/
           const data = r.data
           this.overallOriginData = cloneDeep(data)
           // 付费会员数
