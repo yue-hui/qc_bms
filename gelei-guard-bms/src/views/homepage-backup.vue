@@ -910,26 +910,26 @@ export default {
       },
       // 订单总数
       orderCountData: {
-        count: '-1',
+        count: '-',
         comparison: 1 // 较上一周
       },
       // 新增订单数
       newOrderCountData: {
-        count: '-1',
-        ios: '-1', // 苹果
-        wechat: '-1', // 微信
-        aliPay: '-1', // 支付宝
-        ctcc: '-1', // 电信
-        comparison: 10 // 较上一周
+        count: '-',
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
       },
       // 复购订单数
       reOrderCountData: {
-        count: '-1',
-        ios: '-1', // 苹果
-        wechat: '-1', // 微信
-        aliPay: '-1', // 支付宝
-        ctcc: '-1', // 电信
-        comparison: 10 // 较上一周
+        count: '-',
+        ios: '-', // 苹果
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
       }
     }
   },
