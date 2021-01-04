@@ -82,7 +82,8 @@ export const asyncRoutes = [
     children: [
       {
         path: 'homepage',
-        component: () => import('@/views/homepage'),
+        // component: () => import('@/views/homepage'),
+        component: () => import('@/views/homepage-backup'),
         name: 'Homepage',
         meta: { title: '首页', icon: 'homepage', noCache: true, pid: '20001' }
       }
