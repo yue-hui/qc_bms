@@ -54,7 +54,11 @@
             </div>
           </div>
           <div style="width: 100%">
-            <ve-histogram :extend="overallDataChartExtend" :legend-visible="false" :colors="overallDataChartColor" :data="overallDataChartData"/>
+            <ve-histogram
+              :extend="overallDataChartExtend"
+              :legend-visible="false"
+              :colors="overallDataChartColor"
+              :data="overallDataChartData"/>
           </div>
         </div>
       </div>
@@ -646,6 +650,7 @@ export default {
       },
       overallDataChartColor: [],
       overallDataChartExtend: {
+        // metrics: ['总数'],
         label: {
           show: true,
           position: 'top'
@@ -1866,6 +1871,12 @@ export default {
             { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
             { name: '电信会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
+          // rows: [
+          //   { name: '苹果高级会员充值金额', 总数: '11' },
+          //   { name: '苹果普通会员充值金额', 总数: '12' },
+          //   { name: '安卓高级会员充值金额', 总数: '31' },
+          //   { name: '安卓高级会员充值金额', 总数: '41' }
+          // ]
         }
         this.overallDataChartColor = ['#ffa069']
       }
