@@ -645,6 +645,10 @@ export default {
         ]
       },
       overallDataChartExtend: {
+        label: {
+          show: true,
+          position: 'top'
+        },
         series(v) {
           v.forEach(i => {
             i.barWidth = 30
