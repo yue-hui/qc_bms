@@ -54,7 +54,7 @@
             </div>
           </div>
           <div style="width: 100%">
-            <ve-histogram :extend="overallDataChartExtend" :data="overallDataChartData"/>
+            <ve-histogram :extend="overallDataChartExtend" :legend-visible="false" :colors="overallDataChartColor" :data="overallDataChartData"/>
           </div>
         </div>
       </div>
@@ -644,6 +644,7 @@ export default {
           { name: '-', 总数: 0 }
         ]
       },
+      overallDataChartColor: [],
       overallDataChartExtend: {
         label: {
           show: true,
@@ -1804,63 +1805,69 @@ export default {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: 'iOS高级', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
-            { name: 'iOS普通', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
-            { name: '安卓高级', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
-            { name: '安卓普通', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
-            { name: '电信', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
+            { name: '苹果高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
+            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
+            { name: '苹果普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
+            { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
+            { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
           ]
         }
+        this.overallDataChartColor = ['#3ec0c6']
       }
       if (overallDataDetailIndex === 1) {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: 'iOS高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '01').number },
-            { name: 'iOS普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
+            { name: '苹果高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '01').number },
+            { name: '苹果普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
             { name: '安卓高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '03').number },
             { name: '安卓普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '04').number },
             { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number }
           ]
         }
+        this.overallDataChartColor = ['#fbb444']
       }
       if (overallDataDetailIndex === 2) {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: '安卓公版', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '01').number },
+            { name: '安卓公版设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '01').number },
             { name: '华为企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '02').number },
             { name: '小米企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '03').number },
             { name: '定制机', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '04').number },
             { name: 'iOS设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '05').number },
-            { name: 'PC', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number }
+            { name: 'PC设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number }
           ]
         }
+        this.overallDataChartColor = ['#8596f1']
       }
       if (overallDataDetailIndex === 3) {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: 'iOS家长', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
-            { name: '安卓家长', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
-            { name: '电信家长', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
-            { name: '第三方', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
-            { name: 'iOS孩子', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
-            { name: '安卓孩子', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number }
+            { name: '苹果家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
+            { name: '安卓家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
+            { name: '电信家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            { name: '第三方平台家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
+            { name: '苹果孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
+            { name: '安卓孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number },
+            { name: 'PC孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '07').number }
           ]
         }
+        this.overallDataChartColor = ['#d87fe2']
       }
       if (overallDataDetailIndex === 4) {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: 'iOS高级会员', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
-            { name: 'iOS普通会员', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
-            { name: '安卓高级会员', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
-            { name: '安卓普通会员', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
-            { name: '电信会员', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
+            { name: '苹果高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
+            { name: '苹果普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
+            { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
+            { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: '电信会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
         }
+        this.overallDataChartColor = ['#ffa069']
       }
       // this.overallDataChartData.rows = this.overallDataChartData.rows.sort((a, b) => {
       //   return b['总数'] - a['总数']
