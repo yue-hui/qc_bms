@@ -1,5 +1,5 @@
 <template>
-  <div class="gelei-content">
+  <div class="gelei-content" style="overflow-x: auto">
     <div class="content-body">
       <div class="card-box" style="margin-bottom: 30px">
         <div class="total-data-area">
@@ -34,16 +34,16 @@
                 <div class="item-name">订单成交量</div>
               </div>
             </div>
-            <div :style="'background-color: ' + theme_color[2]" :class="{ 'summary-items-active': overallDataDetailIndex === 2 }" class="summary-item" @click="parseOverallDataDetail(2)">
-              <div class="item-info">
-                <div class="item-value">{{ overallData.bind.count }}</div>
-                <div class="item-name">累计绑定设备</div>
-              </div>
-            </div>
             <div :style="'background-color: ' + theme_color[3]" :class="{ 'summary-items-active': overallDataDetailIndex === 3 }" class="summary-item" @click="parseOverallDataDetail(3)">
               <div class="item-info">
                 <div class="item-value">{{ overallData.register.count }}</div>
                 <div class="item-name">注册用户总数</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[2]" :class="{ 'summary-items-active': overallDataDetailIndex === 2 }" class="summary-item" @click="parseOverallDataDetail(2)">
+              <div class="item-info">
+                <div class="item-value">{{ overallData.bind.count }}</div>
+                <div class="item-name">累计绑定设备</div>
               </div>
             </div>
             <div :style="'background-color: ' + theme_color[4]" :class="{ 'summary-items-active': overallDataDetailIndex === 4 }" class="summary-item" @click="parseOverallDataDetail(4)">
@@ -107,179 +107,201 @@
         </div>
         <div class="data-comparison-area">
           <div class="new-user-and-amount-area">
-            <!-- 付费用户总数 ------------------------------------ -->
-            <div style="margin-right: 10px" class="data-item">
-              <div class="item-row item-title">付费用户总数</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <span class="total-count">{{ payUser.count }}</span>
-                    <label class="item-label">总数</label>
-                  </span>
-                </p>
-                <div class="diviser" />
-                <p class="ratio-data">
-                  <span v-if="isShowComparison">
-                    <span class="ratio-name">较上一周:</span>
-                    <span
-                      :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
-                      class="ratio-value">
-                      {{ payUser.comparison | abs }}%
-                      <template v-if="payUser.comparison > 0">↑</template>
-                      <template v-else-if="payUser.comparison === 0" />
-                      <template v-else>↓</template>
+            <div class="new-user-and-amount-area-2">
+              <!-- 付费用户总数 ------------------------------------ -->
+              <div style="margin-right: 10px;" class="data-item">
+                <div class="item-row item-title">付费用户总数</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ payUser.count }}</span>
+                      <label class="item-label">总数</label>
                     </span>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <!-- 新增付费用户 ------------------------------------ -->
-            <div style="margin-right: 10px" class="data-item">
-              <div class="item-row item-title">新增付费用户</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <span class="total-count">{{ increasedPayUserType.count }}</span>
-                    <label class="item-label">总数</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ increasedPayUserType.app }}</span>
-                    <label class="item-label">APP新增</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
-                    <label class="item-label">电信</label>
-                  </span>
-                </p>
-                <div class="diviser" />
-                <p class="ratio-data">
-                  <span v-if="isShowComparison">
-                    <span class="ratio-name">较上一周:</span>
-                    <span
-                      :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
-                      class="ratio-value">
-                      {{ increasedPayUserType.comparison | abs }}%
-                      <template v-if="increasedPayUserType.comparison > 0">↑</template>
-                      <template v-else-if="increasedPayUserType.comparison === 0" />
-                      <template v-else>↓</template>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
+                        class="ratio-value">
+                        {{ payUser.comparison | abs }}%
+                        <template v-if="payUser.comparison > 0">↑</template>
+                        <template v-else-if="payUser.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
                     </span>
-                  </span>
-                  <span>
-                    <span class="ratio-name">转化率:</span>
-                    <span
-                      :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
-                      class="ratio-value">
-                      {{ increasedPayUserType.conversion | abs }}%
-                      <template v-if="increasedPayUserType.conversion > 0">↑</template>
-                      <template v-else-if="increasedPayUserType.conversion === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <!-- 复购付费用户 ------------------------------------ -->
-            <div style="margin-right: 10px" class="data-item">
-              <div class="item-row item-title">复购付费用户</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <span class="total-count">{{ repurchaseUser.count }}</span>
-                    <label class="item-label">总数</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ repurchaseUser.app }}</span>
-                    <label class="item-label">APP复购</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ repurchaseUser.ctcc }}</span>
-                    <label class="item-label">电信复购</label>
-                  </span>
-                </p>
-                <div class="diviser" />
-                <p class="ratio-data">
-                  <span v-if="isShowComparison">
-                    <span class="ratio-name">较上一周:</span>
-                    <span
-                      :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
-                      class="ratio-value">
-                      {{ repurchaseUser.comparison | abs }}%
-                      <template v-if="repurchaseUser.comparison > 0">↑</template>
-                      <template v-else-if="repurchaseUser.comparison === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <!-- 充值金额 -->
-            <div class="data-item">
-              <div class="item-row item-title">充值金额</div>
-              <div class="item-row item-data-section">
-                <div class="item-row-box order-amount-2">
-                  <div class="item-subscribe-line">
-                    <div >
-                      <label class="item-label">总数: </label>
-                      <span class="total-count" style="font-size: 20px">
-                        {{ orderAmount2.count }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="item-subscribe-line">
-                    <div >
-                      <label class="item-label">微信: </label>
-                      <span class="total-count">
-                        {{ orderAmount2.wechat }}
-                      </span>
-                    </div>
-                    <div >
-                      <label class="item-label">IOS: </label>
-                      <span class="total-count">
-                        {{ orderAmount2.ios }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="item-subscribe-line">
-                    <div >
-                      <label class="item-label">支付宝: </label>
-                      <span class="total-count">
-                        {{ orderAmount2.aliPay }}
-                      </span>
-                    </div>
-                    <div >
-                      <label class="item-label">电信: </label>
-                      <span class="total-count">
-                        {{ orderAmount2.ctcc }}
-                      </span>
-                    </div>
-                  </div>
+                  </p>
                 </div>
-                <div class="diviser" />
-                <p class="ratio-data">
-                  <span v-if="isShowComparison">
-                    <span class="ratio-name">较上一周:</span>
-                    <span
-                      :class="{green: orderAmount2.comparison < 0, red: orderAmount2.comparison > 0, blue: orderAmount2.comparison === 0 }"
-                      class="ratio-value">
-                      {{ orderAmount2.comparison | abs }}%
-                      <template v-if="orderAmount2.comparison > 0">↑</template>
-                      <template v-else-if="orderAmount2.comparison === 0" />
-                      <template v-else>↓</template>
+              </div>
+              <div class="data-item-line" />
+              <!-- 新增付费用户 ------------------------------------ -->
+              <div style="margin-right: 10px;width: 50%" class="data-item">
+                <div class="item-row item-title">新增付费用户</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.count }}</span>
+                      <label class="item-label">总数</label>
                     </span>
-                  </span>
-                </p>
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.app }}</span>
+                      <label class="item-label">APP新增</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
+                      <label class="item-label">电信</label>
+                    </span>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
+                        class="ratio-value">
+                        {{ increasedPayUserType.comparison | abs }}%
+                        <template v-if="increasedPayUserType.comparison > 0">↑</template>
+                        <template v-else-if="increasedPayUserType.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                    <span>
+                      <span class="ratio-name">转化率:</span>
+                      <span
+                        :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
+                        class="ratio-value">
+                        {{ increasedPayUserType.conversion | abs }}%
+                        <template v-if="increasedPayUserType.conversion > 0">↑</template>
+                        <template v-else-if="increasedPayUserType.conversion === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="data-item-line" />
+              <!-- 复购付费用户 ------------------------------------ -->
+              <div style="margin-right: 10px;width: 50%" class="data-item">
+                <div class="item-row item-title">复购付费用户</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.count }}</span>
+                      <label class="item-label">总数</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.app }}</span>
+                      <label class="item-label">APP复购</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.ctcc }}</span>
+                      <label class="item-label">电信复购</label>
+                    </span>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
+                        class="ratio-value">
+                        {{ repurchaseUser.comparison | abs }}%
+                        <template v-if="repurchaseUser.comparison > 0">↑</template>
+                        <template v-else-if="repurchaseUser.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="new-user-and-amount-area-3">
+              <!-- 充值金额 -->
+              <div class="data-item">
+                <div class="item-row item-title">充值金额</div>
+                <div class="item-row item-data-section">
+                  <div class="item-row-box order-amount-2">
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">总数: </label>
+                        <span class="total-count" style="font-size: 20px">
+                          {{ orderAmount2.count }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">微信: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.wechat }}
+                        </span>
+                      </div>
+                      <div >
+                        <label class="item-label">IOS: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.ios }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">支付宝: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.aliPay }}
+                        </span>
+                      </div>
+                      <div >
+                        <label class="item-label">电信: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.ctcc }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: orderAmount2.comparison < 0, red: orderAmount2.comparison > 0, blue: orderAmount2.comparison === 0 }"
+                        class="ratio-value">
+                        {{ orderAmount2.comparison | abs }}%
+                        <template v-if="orderAmount2.comparison > 0">↑</template>
+                        <template v-else-if="orderAmount2.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="new-user-and-amount-area">
+          <div class="new-user-and-amount-area" style="border: 1px solid #EAEAEA">
             <!-- 订单总数 -->
-            <div class="data-item">
+            <div class="data-item" style="border: 0">
               <div class="item-row item-title">订单总数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
                     <span class="total-count">{{ orderCountData.count }}</span>
                     <label class="item-label">总数</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ newOrderCountData.ios + reOrderCountData.ios }}</span>
+                    <label class="item-label">IOS</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ newOrderCountData.wechat + reOrderCountData.wechat }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ newOrderCountData.aliPay + reOrderCountData.aliPay }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ newOrderCountData.ctcc + reOrderCountData.ctcc }}</span>
+                    <label class="item-label">电信</label>
                   </span>
                 </p>
                 <div class="diviser" />
@@ -298,8 +320,9 @@
                 </p>
               </div>
             </div>
+            <div class="data-item-line" />
             <!-- 新增订单数 -->
-            <div class="data-item">
+            <div class="data-item" style="border: 0">
               <div class="item-row item-title">新增订单数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
@@ -340,8 +363,9 @@
                 </p>
               </div>
             </div>
+            <div class="data-item-line" />
             <!-- 复购订单数 -->
-            <div class="data-item">
+            <div class="data-item" style="border: 0">
               <div class="item-row item-title">复购订单数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
@@ -461,9 +485,9 @@
                 </div>
               </div>
             </div>
-            <!-- 新增绑定设备及占比 ------------------------------------ -->
+            <!-- 新增绑定设备 ------------------------------------ -->
             <div class="data-item">
-              <div class="item-row item-title">孩子端-新增绑定设备及占比</div>
+              <div class="item-row item-title">孩子端-新增绑定设备</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
@@ -801,6 +825,10 @@ export default {
         ],
         list2: [
           {
+            label: '付费用户总数',
+            content: '统计筛选时间段内新增和复购用户的总数，若某个用户既是新增用户，又是复购用户，则只计算为1个付费用户（去重）'
+          },
+          {
             label: '新增付费用户',
             content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
           },
@@ -825,12 +853,12 @@ export default {
             content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
           },
           {
-            label: '孩子端-新增绑定设备及占比',
-            content: '筛选的时间段内新增绑定成功设备的类型，包括公版、定制机、企业模式和PC'
-          },
-          {
             label: '家长端-新增绑定用户',
             content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
+          },
+          {
+            label: '孩子端-新增绑定设备',
+            content: '筛选的时间段内新增绑定成功设备的类型，包括公版、定制机、企业模式和PC'
           }
         ]
       },
@@ -899,7 +927,7 @@ export default {
         ctcc: '-', // 电信
         comparison: 0 // 较上一周
       },
-      // 新增绑定设备及占比
+      // 新增绑定设备
       newBindDevice: {
         count: '-',
         comparison: 0, // 较上一周
@@ -1383,7 +1411,7 @@ export default {
           }
         })() }
       ]
-      // 新增绑定设备及占比
+      // 新增绑定设备
       this.newBindDevice.count = data.bind_device_sum
       this.newBindDevice.comparison = data.bind_device_conversion// || 0
       const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
@@ -1895,8 +1923,8 @@ export default {
           columns: ['name', '总数'],
           rows: [
             { name: '苹果高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
-            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
             { name: '苹果普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
+            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
             { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
             { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
           ]
@@ -2128,10 +2156,11 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         flex-direction: row;
         justify-content: space-between;
         margin: 20px 0;
-
+        align-items: center;
         .data-item {
-          flex-basis: calc((100% - 40px) / 3);
+          //flex-basis: calc((100% - 40px) / 3);
           min-width: 380px;
+          width: 33.33333%;
           min-height: 220px;
           display: flex;
           flex-direction: column;
@@ -2244,6 +2273,74 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
 
             span {
               opacity: 0;
+            }
+          }
+        }
+        .data-item-line{
+          height: 180px;
+          width: 1px;
+          background-color: #eaeaea;
+          max-width: 1px;
+          padding: 0 !important;
+        }
+        .new-user-and-amount-area-2{
+          display: flex;
+          border: 1px solid rgb(234, 234, 234);
+          margin-right: 10px;
+          align-items: center;
+          width: calc(100% - 430px);
+          > div{
+            border: 0;
+          }
+          div:nth-child(1) {
+            width: 300px;
+            min-width: auto;
+          }
+        }
+        .new-user-and-amount-area-3{
+          width: 430px;
+          > div{
+            width: 100%;
+          }
+        }
+        @media screen and (max-width: 1500px) {
+          .new-user-and-amount-area-2{
+            width: calc(100% - 300px);
+            > div{
+              padding: 20px;
+            }
+            div:nth-child(1) {
+              width: 170px;
+              .item-title{
+                padding: 0;
+              }
+            }
+            .data-item{
+              min-width: 282px;
+              .ratio-data{
+                span{
+                  span{
+                    display: block;
+                  }
+                }
+              }
+            }
+          }
+          .new-user-and-amount-area-3{
+            width: 300px;
+            > div{
+              min-width: auto;
+              padding: 20px;
+            }
+            .data-item{
+              min-width: 282px;
+              .ratio-data{
+                span{
+                  span{
+                    display: block;
+                  }
+                }
+              }
             }
           }
         }
