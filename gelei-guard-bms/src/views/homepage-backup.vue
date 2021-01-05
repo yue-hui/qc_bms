@@ -2303,7 +2303,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             width: 100%;
           }
         }
-        @media screen and (max-width: 1500px) {
+        @media screen and (max-width: 1900px) {
           .new-user-and-amount-area-2{
             width: calc(100% - 300px);
             > div{
@@ -2320,7 +2320,10 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               .ratio-data{
                 span{
                   span{
-                    display: block;
+                    //display: block;
+                  }
+                  span:last-child{
+                    margin-top: 6px;
                   }
                 }
               }
@@ -2337,7 +2340,10 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               .ratio-data{
                 span{
                   span{
-                    display: block;
+                    //display: block;
+                  }
+                  span:last-child{
+                    margin-top: 6px;
                   }
                 }
               }
