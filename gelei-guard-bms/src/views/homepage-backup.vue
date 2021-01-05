@@ -143,16 +143,8 @@
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.ios }}</span>
-                    <label class="item-label">IOS</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ increasedPayUserType.wechat }}</span>
-                    <label class="item-label">微信</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ increasedPayUserType.aliPay }}</span>
-                    <label class="item-label">支付宝</label>
+                    <span class="total-count">{{ increasedPayUserType.app }}</span>
+                    <label class="item-label">APP新增</label>
                   </span>
                   <span>
                     <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
@@ -196,20 +188,12 @@
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ repurchaseUser.ios }}</span>
-                    <label class="item-label">IOS</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ repurchaseUser.wechat }}</span>
-                    <label class="item-label">微信</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ repurchaseUser.aliPay }}</span>
-                    <label class="item-label">支付宝</label>
+                    <span class="total-count">{{ repurchaseUser.app }}</span>
+                    <label class="item-label">APP复购</label>
                   </span>
                   <span>
                     <span class="total-count">{{ repurchaseUser.ctcc }}</span>
-                    <label class="item-label">电信</label>
+                    <label class="item-label">电信复购</label>
                   </span>
                 </p>
                 <div class="diviser" />
@@ -232,28 +216,44 @@
             <div class="data-item">
               <div class="item-row item-title">充值金额</div>
               <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <span class="total-count">{{ orderAmount2.count }}</span>
-                    <label class="item-label">总数</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ orderAmount2.ios }}</span>
-                    <label class="item-label">IOS</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ orderAmount2.wechat }}</span>
-                    <label class="item-label">微信</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ orderAmount2.aliPay }}</span>
-                    <label class="item-label">支付宝</label>
-                  </span>
-                  <span>
-                    <span class="total-count">{{ orderAmount2.ctcc }}</span>
-                    <label class="item-label">电信</label>
-                  </span>
-                </p>
+                <div class="item-row-box order-amount-2">
+                  <div class="item-subscribe-line">
+                    <div >
+                      <label class="item-label">总数: </label>
+                      <span class="total-count" style="font-size: 20px">
+                        {{ orderAmount2.count }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="item-subscribe-line">
+                    <div >
+                      <label class="item-label">微信: </label>
+                      <span class="total-count">
+                        {{ orderAmount2.wechat }}
+                      </span>
+                    </div>
+                    <div >
+                      <label class="item-label">IOS: </label>
+                      <span class="total-count">
+                        {{ orderAmount2.ios }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="item-subscribe-line">
+                    <div >
+                      <label class="item-label">支付宝: </label>
+                      <span class="total-count">
+                        {{ orderAmount2.aliPay }}
+                      </span>
+                    </div>
+                    <div >
+                      <label class="item-label">电信: </label>
+                      <span class="total-count">
+                        {{ orderAmount2.ctcc }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
                 <div class="diviser" />
                 <p class="ratio-data">
                   <span v-if="isShowComparison">
@@ -843,9 +843,7 @@ export default {
       // 新增付费用户卡片
       increasedPayUserType: {
         count: '-', // 总数
-        ios: '-', // 苹果
-        wechat: '-', // 微信
-        aliPay: '-', // 支付宝
+        app: '-', // APP
         ctcc: '-', // 电信
         comparison: 0, // 较上一周
         conversion: 0 // 转化率
@@ -853,9 +851,7 @@ export default {
       // 复购付费用户卡片
       repurchaseUser: {
         count: '-', // 总数
-        ios: '-', // 苹果
-        wechat: '-', // 微信
-        aliPay: '-', // 支付宝
+        app: '-', // APP
         ctcc: '-', // 电信
         comparison: 0 // 较上一周
       },
@@ -979,7 +975,7 @@ export default {
   methods: {
     fetchPageData() {
       this.fetchOverallData()
-      // this.fetchGrowthData()
+      this.fetchGrowthData()
     },
     /**
      * @description 获取首页整体数据
@@ -1194,27 +1190,14 @@ export default {
     parseChatChart(data) {
       // 付费用户总数
       this.payUser.count = data.pay_user_count
-      this.payUser.comparison = data.pay_user_count_conversion || 0
+      this.payUser.comparison = data.pay_user_count_conversion// || 0
       // 新增付费用户
       this.increasedPayUserType.count = data.increased_pay_user_sum
-      this.increasedPayUserType.ios = (() => {
+      this.increasedPayUserType.app = (() => {
         try {
           return data.increased_pay_user_type.find(item => item.name === '04').count
         } catch (e) {
-          return 0
-        }
-      })()
-      this.increasedPayUserType.wechat = (() => {
-        try {
-          return data.increased_pay_user_type.find(item => item.name === '01').count
-        } catch (e) {
-          return 0
-        }
-      })()
-      this.increasedPayUserType.aliPay = (() => {
-        try {
-          return data.increased_pay_user_type.find(item => item.name === '02').count
-        } catch (e) {
+          console.log(1, e)
           return 0
         }
       })()
@@ -1222,52 +1205,150 @@ export default {
         try {
           return data.increased_pay_user_type.find(item => item.name === '06').count
         } catch (e) {
+          console.log(2, e)
           return 0
         }
       })()
-      this.increasedPayUserType.comparison = data.increased_pay_user_conversion || 0
-      this.increasedPayUserType.conversion = data.increased_pay_user_comparison || 0
+      this.increasedPayUserType.comparison = data.increased_pay_user_conversion// || 0
+      this.increasedPayUserType.conversion = data.increased_pay_user_comparison// || 0
       // 复购付费用户
       this.repurchaseUser.count = data.repurchase_user_count
-      this.repurchaseUser.ios = (() => {
+      this.repurchaseUser.comparison = data.repurchase_user_count_conversion// || 0
+      this.repurchaseUser.app = (() => {
         try {
-          return data.repurchase_user_count_type.find(item => item.payType === '04').pcount
+          return data.repurchase_user_count_type.find(item => item.name === '01').count
         } catch (e) {
-          return 0
-        }
-      })()
-      this.repurchaseUser.wechat = (() => {
-        try {
-          return data.repurchase_user_count_type.find(item => item.payType === '01').pcount
-        } catch (e) {
-          return 0
-        }
-      })()
-      this.repurchaseUser.aliPay = (() => {
-        try {
-          return data.repurchase_user_count_type.find(item => item.payType === '02').pcount
-        } catch (e) {
+          console.log(3, e)
           return 0
         }
       })()
       this.repurchaseUser.ctcc = (() => {
         try {
-          return data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+          return data.repurchase_user_count_type.find(item => item.name === '02').count
         } catch (e) {
+          console.log(4, e)
           return 0
         }
       })()
-      this.repurchaseUser.comparison = data.repurchase_user_count_conversion || 0
+      // 充值金额
+      this.orderAmount2.count = data.order_amount_sum// || 0
+      this.orderAmount2.ios = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(5, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.wechat = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(6, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.aliPay = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(7, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.ctcc = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(8, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.comparison = data.order_amount_conversion// || 0
+      // 订单总数
+      this.orderCountData.count = data.pay_order_count// || 0
+      this.orderCountData.comparison = data.pay_order_count_conversion// || 0
+      // 新增订单数
+      this.newOrderCountData.count = data.add_order_sum// || 0
+      this.newOrderCountData.comparison = data.add_order_conversion// || 0
+      this.newOrderCountData.ios = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(9, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.wechat = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(10, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.aliPay = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(11, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.ctcc = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(12, e)
+          return 0
+        }
+      })()
+      // 复购订单数
+      this.reOrderCountData.count = data.repurchase_order_type_count// || 0
+      this.reOrderCountData.comparison = data.repurchase_order_type_conversion// || 0
+      this.reOrderCountData.ios = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(13, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.wechat = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(14, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.aliPay = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(15, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.ctcc = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(16, e)
+          return 0
+        }
+      })()
       // 新增绑定用户
       this.newBindUser.count = data.bind_user_sum
-      this.newBindUser.comparison = data.bind_user_conversion || 0
-      this.newBindUser.conversion = data.bind_user_comparison || 0
+      this.newBindUser.comparison = data.bind_user_conversion// || 0
+      this.newBindUser.conversion = data.bind_user_comparison// || 0
       this.newBindUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: 'iOS', value: (() => {
           try {
             return data.bind_user_type.find(item => item.name === '02').count
           } catch (e) {
+            console.log(17, e)
             return 0
           }
         })() },
@@ -1275,19 +1356,21 @@ export default {
           try {
             return data.bind_user_type.find(item => item.name === '03').count
           } catch (e) {
+            console.log(18, e)
             return 0
           }
         })() }
       ]
       // 新增注册用户
       this.newRegisterUser.count = data.increased_reg_user_sum
-      this.newRegisterUser.comparison = data.increased_reg_user_conversion || 0
+      this.newRegisterUser.comparison = data.increased_reg_user_conversion// || 0
       this.newRegisterUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: '家长端', value: (() => {
           try {
             return data.increased_reg_user_type.find(item => item.name === '01').count
           } catch (e) {
+            console.log(19, e)
             return 0
           }
         })() },
@@ -1295,13 +1378,14 @@ export default {
           try {
             return data.increased_reg_user_type.find(item => item.name === '02').count
           } catch (e) {
+            console.log(20, e)
             return 0
           }
         })() }
       ]
       // 新增绑定设备及占比
       this.newBindDevice.count = data.bind_device_sum
-      this.newBindDevice.comparison = data.bind_device_conversion || 0
+      this.newBindDevice.comparison = data.bind_device_conversion// || 0
       const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
@@ -1797,7 +1881,7 @@ export default {
       this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
       const monthLength = this.lineDateStyleList[2].date.length
       this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
-      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+      // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
     },
     /**
      * @description 展开详细数据切换
@@ -1868,15 +1952,9 @@ export default {
             { name: '苹果高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
             { name: '苹果普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
             { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
-            { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: '安卓普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
             { name: '电信会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
-          // rows: [
-          //   { name: '苹果高级会员充值金额', 总数: '11' },
-          //   { name: '苹果普通会员充值金额', 总数: '12' },
-          //   { name: '安卓高级会员充值金额', 总数: '31' },
-          //   { name: '安卓高级会员充值金额', 总数: '41' }
-          // ]
         }
         this.overallDataChartColor = ['#ffa069']
       }
@@ -2395,6 +2473,24 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     margin-left: 10px;
     line-height: 1;
     cursor: pointer;
+  }
+}
+.order-amount-2{
+  width: 100%;
+  label{
+    font-family: PingFangSC-Regular,微软雅黑,serif;
+    font-size: 12px;
+    color: #454545;
+    width: 46px;
+    display: inline-block;
+  }
+  .item-subscribe-line{
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+    div{
+      width: 50%;
+    }
   }
 }
 </style>
