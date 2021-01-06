@@ -153,7 +153,7 @@
                     </span>
                     <span>
                       <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
-                      <label class="item-label">电信</label>
+                      <label class="item-label">电信新增</label>
                     </span>
                   </p>
                   <div class="diviser" />
@@ -2360,6 +2360,9 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               }
             }
           }
+          .ratio-with-chart-area{
+            .data-item{}
+          }
         }
       }
 
@@ -2403,9 +2406,8 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               flex-direction: row;
               height: 50px;
               margin: 0;
-
+              justify-content: space-between;
               span {
-                flex: 1;
                 text-align: left;
                 height: 50px;
                 line-height: 50px;

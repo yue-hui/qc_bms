@@ -350,6 +350,13 @@ export const asyncRoutes = [
       //   meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
       // },
       // {
+      //   path: 'invatationV2-action',
+      //   name: 'InvatationFriendsV2Action',
+      //   hidden: true,
+      //   component: () => import('@/views/activity/invatation-v2/invatation-v2-action.page'),
+      //   meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      // },
+      // {
       //   path: 'exchange',
       //   name: 'exchange-code',
       //   component: () => import('@/views/exchange/exchange.vue'),

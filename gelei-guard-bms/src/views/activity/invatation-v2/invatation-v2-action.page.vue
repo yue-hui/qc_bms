@@ -1,0 +1,711 @@
+<template>
+  <div class="invatationV2-action">
+    <div class="topic-save-title">
+      <span>邀请好友</span>
+    </div>
+    <div class="topic-save-page">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px" label-suffix=":">
+        <!------------------------------>
+        <el-form-item label="活动标题" prop="title">
+          <el-input v-model="form.title" placeholder="请输入活动标题，仅后台显示" size="mini" />
+        </el-form-item>
+        <el-form-item :required="true" label="活动时间" prop="time">
+          <el-date-picker
+            v-model="form.time"
+            type="datetimerange"
+            size="mini"
+            format="yyyy-MM-dd HH:mm"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="timeChange"/>
+        </el-form-item>
+        <div class="invatationV2-rules" style="">
+          <div class="rules-label">
+            <span><span style="color: #f56c6c;margin-right: 4px;">*</span>注册机制配置：</span>
+          </div>
+          <div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem1">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem1" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem2">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem2" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem1">
+                <el-select
+                  v-model="form.selectItem1"
+                  :remote-method="userSearchMemberPlanByPlanName"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem2', 'selectItem1')"
+                  @clear="clearMemberPlanList('inputItem2')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem3">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem3" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem4">
+                <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem4" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem5">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem5" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem2">
+                <el-select
+                  v-model="form.selectItem2"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem5', 'selectItem2')"
+                  @clear="clearMemberPlanList('inputItem5')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem6">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem6" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem7">
+                <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem7" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem8">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem8" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem3">
+                <el-select
+                  v-model="form.selectItem3"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem8', 'selectItem3')"
+                  @clear="clearMemberPlanList('inputItem8')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem9">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem9" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem10">
+                <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem10" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem4">
+                <el-select
+                  v-model="form.selectItem4"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem10', 'selectItem4')"
+                  @clear="clearMemberPlanList('inputItem10')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+        <div class="invatationV2-rules" style="">
+          <div class="rules-label">
+            <span><span style="color: #f56c6c;margin-right: 4px;">*</span>绑定机制配置：</span>
+          </div>
+          <div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem11">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem11" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem12">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem12" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem11">
+                <el-select
+                  v-model="form.selectItem11"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem12', 'selectItem11')"
+                  @clear="clearMemberPlanList('inputItem12')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem13">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem13" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem14">
+                <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem14" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem15">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem15" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem12">
+                <el-select
+                  v-model="form.selectItem12"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem15', 'selectItem12')"
+                  @clear="clearMemberPlanList('inputItem15')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem16">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem16" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem17">
+                <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem17" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="inputItem18">
+                <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem18" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem13">
+                <el-select
+                  v-model="form.selectItem13"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem18', 'selectItem13')"
+                  @clear="clearMemberPlanList('inputItem18')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="invatationV2-rules-item">
+              <el-form-item class="left-error-tips" prop="inputItem19">
+                <span>邀请</span>
+                <el-input v-model="form.inputItem19" type="number" style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item class="left-error-tips" prop="inputItem20">
+                <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
+                <el-input v-model="form.inputItem20" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem14">
+                <el-select
+                  v-model="form.selectItem14"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem20', 'selectItem14')"
+                  @clear="clearMemberPlanList('inputItem20')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+        <div class="invatationV2-rules" style="">
+          <div class="rules-label">
+            <span><span style="color: #f56c6c;margin-right: 4px;">*</span>好友注册可得：</span>
+          </div>
+          <div>
+            <div class="invatationV2-rules-item">
+              <el-form-item prop="inputItem21">
+                <el-input v-model="form.inputItem21" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem21">
+                <el-select
+                  v-model="form.selectItem21"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem21', 'selectItem21')"
+                  @clear="clearMemberPlanList('inputItem21')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+        <div class="invatationV2-rules" style="">
+          <div class="rules-label">
+            <span><span style="color: #f56c6c;margin-right: 4px;">*</span>好友绑定可得：</span>
+          </div>
+          <div>
+            <div class="invatationV2-rules-item">
+              <el-form-item prop="inputItem22">
+                <el-input v-model="form.inputItem22" disabled style="width: 80px" size="mini" />
+              </el-form-item>
+              <el-form-item prop="">
+                <span>&nbsp;&nbsp;天&nbsp;&nbsp;</span>
+              </el-form-item>
+              <el-form-item prop="selectItem22">
+                <el-select
+                  v-model="form.selectItem22"
+                  size="mini"
+                  filterable
+                  clearable
+                  remote
+                  class="plan-list-select"
+                  placeholder="请选择会员套餐"
+                  @change="memberPlanListChange('inputItem22', 'selectItem22')"
+                  @clear="clearMemberPlanList('inputItem22')">
+                  <el-option
+                    v-for="(membership, index) in membershipPackageList"
+                    :key="index"
+                    :label="membership.label"
+                    :value="membership.value"
+                    size="mini" />
+                </el-select>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+        <!------------------------------>
+        <el-form-item label="分享主标题" prop="shareMainTitle">
+          <el-input v-model="form.shareMainTitle" placeholder="请输入分享主标题" size="mini" />
+        </el-form-item>
+        <el-form-item label="分享副标题" prop="shareSecondaryTitle">
+          <el-input v-model="form.shareSecondaryTitle" placeholder="请输入分享副标题" size="mini" />
+        </el-form-item>
+        <el-form-item class="input-rule-desc" label="规则说明" prop="ruleDesc">
+          <el-input v-model="form.ruleDesc" rows="6" type="textarea" placeholder="请输入规则说明，支持换行输入多个规则" size="mini" />
+        </el-form-item>
+      </el-form>
+      <div class="button-block">
+        <el-button v-if="!isUpdate" type="primary" size="mini" @click="save">保 存</el-button>
+        <el-button v-if="isUpdate" type="primary" size="mini" @click="update">保 存</el-button>
+      </div>
+      <div>
+        <pre>
+          {{ form }}
+        </pre>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Tinymce from '@/components/Tinymce'
+import { get_all_member_plans, saveInvitationV2 } from '../../../api/interactive'
+
+export default {
+  components: {
+    Tinymce
+  },
+  props: {
+  },
+  data: function() {
+    return {
+      tinymce_content: '',
+      form: {
+        title: '', // 活动标题
+        time: null,
+        shareMainTitle: '', // 分享主标题
+        shareSecondaryTitle: '', // 分享副标题
+        ruleDesc: '', // 规则描述
+        startTime: '', // 开始时间
+        endTime: '', // 结束时间
+        // --
+        inputItem1: '', inputItem2: '',
+        inputItem3: '', inputItem4: '', inputItem5: '',
+        inputItem6: '', inputItem7: '', inputItem8: '',
+        inputItem9: '', inputItem10: '',
+        // --
+        inputItem11: '', inputItem12: '',
+        inputItem13: '', inputItem14: '', inputItem15: '',
+        inputItem16: '', inputItem17: '', inputItem18: '',
+        inputItem19: '', inputItem20: '',
+        // --
+        inputItem21: '', inputItem22: '',
+        // --
+        selectItem1: '',
+        selectItem2: '',
+        selectItem3: '',
+        selectItem4: '',
+        // --
+        selectItem11: '',
+        selectItem12: '',
+        selectItem13: '',
+        selectItem14: '',
+        // --
+        selectItem21: '',
+        selectItem22: ''
+      },
+      rules: {
+        title: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入活动标题' }
+        ],
+        time: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择活动时间' }
+        ],
+        shareMainTitle: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入分享主标题' }
+        ],
+        shareSecondaryTitle: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入分享副标题' }
+        ],
+        ruleDesc: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入规则描述' }
+        ],
+        selectItem1: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem2: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem3: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem4: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem11: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem12: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem13: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem14: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem21: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem22: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        inputItem1: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem3: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem4: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem6: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem7: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem9: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem11: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem13: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem14: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem16: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem17: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        inputItem19: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
+      },
+      isUpdate: false,
+      updateId: 0,
+      membershipPackageList: []
+    }
+  },
+  watch: {
+  },
+  mounted: function() {
+    this.isUpdate = Number(this.$route.query.update) === 1
+    this.updateId = Number(this.$route.query.topicId)
+    if (this.isUpdate) {
+      this.getDetail()
+    }
+    this.fetchMemberPlanList()
+  },
+  methods: {
+    /**
+     * @description 提交保存
+     * */
+    save() {
+      this.$refs.form.validate()
+        .then(() => {
+          const loading = this.$loading({
+            lock: true
+          })
+          saveInvitationV2()
+            .then((res) => {
+              if (res.status !== 0) throw res
+              console.log(res)
+            })
+            .catch((e) => {
+              this.$message.error(e.message)
+            })
+            .finally(() => {
+              loading.close()
+            })
+        })
+        .catch(() => {})
+    },
+    /**
+     * @description 提交更新
+     * */
+    update() {
+    },
+    /**
+     * @description 上线时间发生改变
+     * @param date {Date | Null}
+     * */
+    timeChange(date) {
+      console.log(date)
+      if (!date) {
+        this.form.startTime = ''
+        this.form.endTime = ''
+        return
+      }
+      this.form.startTime = date[0].getTime()
+      this.form.endTime = date[1].getTime()
+    },
+    fetchMemberPlanList(planName) {
+      return new Promise((resolve, reject) => {
+        const config = {
+          plan_type: '02',
+          is_listing: '1'
+        }
+        if (planName) {
+          config['plan_name'] = planName
+        }
+        get_all_member_plans(config).then(res => {
+          if (res.status === 0) {
+            const remote_data = res.data
+            this.membershipPackageList = remote_data.map(r => {
+              return {
+                value: r.plan_id,
+                label: r.plan_name,
+                validDays: r.valid_days
+              }
+            })
+            resolve()
+          } else {
+            this.$message.error(res.message)
+          }
+        }).finally(() => {
+        })
+      })
+    },
+    clearMemberPlanList(inputItem) {
+      setTimeout(() => {
+        this.form[inputItem] = ''
+      }, 100)
+    },
+    /**
+     * @description 套餐发生改变
+     * */
+    memberPlanListChange(inputItem, selectItem) {
+      setTimeout(() => {
+        try {
+          this.form[inputItem] = this.membershipPackageList.find(item => item.value === this.form[selectItem]).validDays
+        } catch (e) {
+          this.form[inputItem] = ''
+        }
+      }, 50)
+    },
+    userSearchMemberPlanByPlanName(planName) {
+      // this.fetchMemberPlanList(planName)
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.operate-list{
+  .operate-item{
+    width: 660px;
+    border: 1px solid #b1b1b1;
+    margin-left: 100px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+  }
+  .operate-item{
+    position: relative;
+    background-color: #fff;
+    .operate-item-close-icon{
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      right: -30px;
+      top: 2px;
+      cursor: pointer;
+    }
+  }
+}
+.topic-save-page{
+  background: #fff;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #EAEAEA;
+  margin-top:0
+}
+.topic-save-title{
+  height: 60px;
+  font-size: 18px;
+  color: #303133;
+  line-height: 60px;
+  padding: 0 22px;
+}
+.button-block{
+  display: flex;
+  justify-content: center;
+}
+.bubbles-item{
+  display: flex;
+  align-items: center;
+  svg{
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  .bubbles-action{
+    display: flex;
+    align-items: center;
+    span:nth-child(2) {
+      position: relative;
+      top: -2px;
+      svg{
+        font-size: 10px;
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+.invatationV2-rules{
+  display: flex;
+  .rules-label{
+    text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-weight: bold;
+    width: 120px;
+  }
+  .invatationV2-rules-item{
+    display: flex;
+    align-items: center;
+    .el-form-item__content{
+      margin-left: 0 !important;
+    }
+    .el-form-item{
+      margin-bottom: 10px;
+    }
+  }
+}
+.invatationV2-action{
+  .el-form-item__error{
+    top: 34px;
+  }
+  .input-rule-desc{
+    .el-form-item__error{
+      top: 99%;
+    }
+  }
+  .is-disabled.el-input{
+    input{
+      color: #888888;
+    }
+  }
+  .left-error-tips{
+    .el-form-item__error{
+      left: 29px;
+    }
+  }
+  input[type=number]{
+    padding-right: 0;
+  }
+}
+</style>

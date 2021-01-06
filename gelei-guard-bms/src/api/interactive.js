@@ -1365,4 +1365,38 @@ export function getInvitationV2List(data) {
     data
   })
 }
+/**
+ * @description 获取购买成功之后弹窗文案配置
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1475
+ * */
+export function getBuyConfig(data) {
+  return request({
+    url: '/greenguard/manager/invitation/ad',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 保存购买成功之后弹窗文案配置
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1474
+ * */
+export function saveBuyConfig(data) {
+  return request({
+    url: '/greenguard/manager/invitation/ad/save',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 保存活动
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1472
+ * */
+export function saveInvitationV2(data) {
+  return request({
+    url: '/greenguard/manager/invitation/save',
+    method: 'post',
+    data
+  })
+}
 

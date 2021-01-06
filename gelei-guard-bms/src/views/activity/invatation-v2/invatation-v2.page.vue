@@ -70,7 +70,7 @@
                   class="download details-tab"
                   size="mini"
                   type="success"
-                  @click="createTopic"
+                  @click="createInvatationV2"
                 >创建
                 </gl-button>
                 <gl-button
@@ -190,15 +190,15 @@
       custom-class="app-bug-config-dialog"
       width="500px"
     >
-      <el-form :model="appBuyConfigForm" label-width="60px" class="demo-ruleForm">
-        <el-form-item label="主标题" prop="name">
+      <el-form ref="buyConfigForm" :rules="buyConfigRules" :model="appBuyConfigForm" label-width="80px" class="demo-ruleForm">
+        <el-form-item label="主标题" prop="mainTitle">
           <el-input v-model="appBuyConfigForm.mainTitle" placeholder="请输入主标题" size="mini" />
         </el-form-item>
-        <el-form-item label="副标题" prop="name">
+        <el-form-item label="副标题" prop="secondaryTitle">
           <el-input v-model="appBuyConfigForm.secondaryTitle" placeholder="请输入副标题" size="mini" />
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary">确定</el-button>
+          <el-button size="small" type="primary" @click="submitBuyConfig">确定</el-button>
           <el-button size="small" @click="closeAppBuyConfig">取消</el-button>
         </el-form-item>
       </el-form>
@@ -212,7 +212,7 @@ import {
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
-import { getInvitationV2List } from '../../../api/interactive'
+import { getInvitationV2List, getBuyConfig, saveBuyConfig } from '../../../api/interactive'
 import { computePageNumber, parseDateTime } from '../../../utils'
 const JsBigDecimal = require('js-big-decimal')
 
@@ -224,7 +224,6 @@ export default {
       statusTypeList: [
         { name: '全部', value: '' },
         { name: '待上架', value: 2 },
-        { name: '已下架', value: 0 },
         { name: '进行中', value: 3 },
         { name: '已结束', value: 4 }
       ],
@@ -247,6 +246,14 @@ export default {
       appBuyConfigForm: {
         mainTitle: '',
         secondaryTitle: ''
+      },
+      buyConfigRules: {
+        mainTitle: [
+          { required: true, message: '请输入主标题', trigger: 'blur' }
+        ],
+        secondaryTitle: [
+          { required: true, message: '请输入副标题', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -271,20 +278,59 @@ export default {
      * @description 打开购买成功弹窗配置弹窗
      * */
     openAppBuyConfig() {
+      this.getBuyConfig()
       this.appBuyConfigDialog = true
     },
     /**
      * @description 关闭购买成功弹窗配置弹窗
      * */
     closeAppBuyConfig() {
+      this.$refs['buyConfigForm'].clearValidate()
+      this.$refs['buyConfigForm'].resetFields()
       this.appBuyConfigDialog = false
+    },
+    getBuyConfig() {
+      getBuyConfig()
+        .then(res => {
+          if (res.status !== 0) throw res
+          console.log(res)
+          this.appBuyConfigForm.mainTitle = res.data.mainTitle
+          this.appBuyConfigForm.secondaryTitle = res.data.secondaryTitle
+        })
+        .catch((e) => {
+          this.$message.error(e.message)
+        })
+    },
+    /**
+     * @description 更新购买成功弹窗配置
+     * */
+    submitBuyConfig() {
+      this.$refs['buyConfigForm'].validate()
+        .then(() => {
+          const loading = this.$loading({
+            lock: true
+          })
+          saveBuyConfig(this.appBuyConfigForm)
+            .then((res) => {
+              if (res.status !== 0) throw res
+              this.$message.success('保存成功')
+              this.closeAppBuyConfig()
+            })
+            .catch((e) => {
+              this.$message.error(e.message)
+            })
+            .finally(() => {
+              loading.close()
+            })
+        })
+        .catch(() => {})
     },
     /**
      * @description 跳转至话题创建
      * */
-    createTopic() {
+    createInvatationV2() {
       const options = {
-        name: 'activity-topic-action'
+        name: 'InvatationFriendsV2Action'
       }
       const { href } = this.$router.resolve(options)
       window.open(href, '_blank')
