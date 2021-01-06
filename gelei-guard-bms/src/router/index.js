@@ -349,6 +349,12 @@ export const asyncRoutes = [
       //   component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
       //   meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
       // },
+      // {
+      //   path: 'exchange',
+      //   name: 'exchange-code',
+      //   component: () => import('@/views/exchange/exchange.vue'),
+      //   meta: { title: '兑换码', icon: 'invatation', pid: '' }
+      // },
       {
         path: 'invatation/details',
         name: 'InvatationFriendsConfiguration',

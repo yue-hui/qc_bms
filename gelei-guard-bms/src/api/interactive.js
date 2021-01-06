@@ -1354,3 +1354,15 @@ export function getStoreListDetail(data) {
     data
   })
 }
+/**
+ * @description 获取邀请好友首页列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1468
+ * */
+export function getInvitationV2List(data) {
+  return request({
+    url: '/greenguard/manager/invitation/list',
+    method: 'post',
+    data
+  })
+}
+

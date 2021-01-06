@@ -106,7 +106,10 @@
           </el-row>
         </div>
         <div class="data-comparison-area">
-          <div class="new-user-and-amount-area">
+          <div class="new-user-and-amount-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>付费用户看板</span>
+            </div>
             <div class="new-user-and-amount-area-2">
               <!-- 付费用户总数 ------------------------------------ -->
               <div style="margin-right: 10px;" class="data-item">
@@ -182,7 +185,7 @@
               </div>
               <div class="data-item-line" />
               <!-- 复购付费用户 ------------------------------------ -->
-              <div style="margin-right: 10px;width: 50%" class="data-item">
+              <div style="width: 50%" class="data-item">
                 <div class="item-row item-title">复购付费用户</div>
                 <div class="item-row item-data-section">
                   <p class="item-subscribe">
@@ -277,9 +280,12 @@
               </div>
             </div>
           </div>
-          <div class="new-user-and-amount-area" style="border: 1px solid #EAEAEA">
+          <div class="new-user-and-amount-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>会员订单看板</span>
+            </div>
             <!-- 订单总数 -->
-            <div class="data-item" style="border: 0">
+            <div class="data-item" style="border: 0;margin-right: 10px">
               <div class="item-row item-title">订单总数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
@@ -322,7 +328,7 @@
             </div>
             <div class="data-item-line" />
             <!-- 新增订单数 -->
-            <div class="data-item" style="border: 0">
+            <div class="data-item" style="border: 0;margin-right: 10px">
               <div class="item-row item-title">新增订单数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
@@ -365,7 +371,7 @@
             </div>
             <div class="data-item-line" />
             <!-- 复购订单数 -->
-            <div class="data-item" style="border: 0">
+            <div class="data-item" style="border: 0;margin-right: 10px">
               <div class="item-row item-title">复购订单数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
@@ -407,7 +413,10 @@
               </div>
             </div>
           </div>
-          <div class="ratio-with-chart-area">
+          <div class="ratio-with-chart-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>注册用户和绑定数据看板</span>
+            </div>
             <!-- 新增注册用户 ------------------------------------ -->
             <div class="data-item">
               <div class="item-row item-title">新增注册用户</div>
@@ -2165,7 +2174,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           display: flex;
           flex-direction: column;
           background: #FFFFFF;
-          border: 1px solid #EAEAEA;
+          //border: 1px solid #EAEAEA;
           border-radius: $border_radius_size;
           padding: 20px 32px;
 
@@ -2282,13 +2291,15 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           background-color: #eaeaea;
           max-width: 1px;
           padding: 0 !important;
+          display: none;
         }
         .new-user-and-amount-area-2{
           display: flex;
-          border: 1px solid rgb(234, 234, 234);
+          //border: 1px solid rgb(234, 234, 234);
           margin-right: 10px;
           align-items: center;
           width: calc(100% - 430px);
+
           > div{
             border: 0;
           }
@@ -2367,7 +2378,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           flex-direction: column;
           border-radius: $border_radius_size;
           background: #FFFFFF;
-          border: 1px solid #EAEAEA;
+          //border: 1px solid #EAEAEA;
           padding: 20px 32px;
           .item-title {
             height: 28px;

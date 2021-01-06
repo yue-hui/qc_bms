@@ -6,14 +6,14 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">活动标题:</el-col>
-                <el-col :span="16">
+                <el-col :span="9" class="order-number-list">兑换码包名称:</el-col>
+                <el-col :span="15">
                   <el-input
                     v-model="requestData.title"
                     maxlength="11"
                     size="mini"
                     clearable
-                    placeholder="请输入活动标题"
+                    placeholder="请输入兑换码包名称"
                     @change="filterList"
                   />
                 </el-col>
@@ -23,8 +23,8 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">活动状态:</el-col>
-                <el-col :span="16">
+                <el-col :span="9" class="order-number-list">兑换码包状态:</el-col>
+                <el-col :span="15">
                   <el-select
                     v-model="requestData.status"
                     size="mini"
@@ -33,7 +33,7 @@
                     @change="filterList"
                   >
                     <el-option
-                      v-for="item in statusTypeList"
+                      v-for="item in topic_type_list"
                       :key="item.name"
                       :label="item.name"
                       :value="item.value" />
@@ -42,27 +42,24 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="12" :sm="12" :md="8" :lg="9" :xl="8" class="col-bg">
-            <div class="grid-content bg-purple">
+          <el-col :xs="12" :sm="8" :md="8" :lg="5" :xl="6" class="col-bg">
+            <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="4" class="order-number-list">开始时间:</el-col>
-                <el-col :span="20">
-                  <el-date-picker
-                    v-model="requestTime"
-                    end-placeholder="结束日期"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    type="daterange"
-                    clearable
+                <el-col :span="5" class="order-number-list">兑换码:</el-col>
+                <el-col :span="19">
+                  <el-input
+                    v-model="requestData.title"
+                    maxlength="11"
                     size="mini"
-                    unlink-panels
+                    clearable
+                    placeholder="请输入兑换码"
                     @change="filterList"
                   />
                 </el-col>
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="8" class="col-bg layout-right">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="10" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -98,65 +95,56 @@
             align="center"
             label="序号"
             prop="_id"
-            width="100"
           />
           <el-table-column
             align="center"
             label="标题"
-            prop="title" />
+            prop="voteNum" />
           <el-table-column
             align="center"
             label="邀请页UV"
-            prop="inviterUv" />
+            prop="onlookers" />
           <el-table-column
             align="center"
             label="被邀请页UV"
-            prop="inviteePv" />
+            prop="optionNum1" />
           <el-table-column
             align="center"
             label="分享次数"
-            prop="shareCount" />
+            prop="optionNum2" />
           <el-table-column
             align="center"
             label="注册成功人数"
-            prop="regCount"
+            prop="votePe"
             width="180" />
           <el-table-column
             align="center"
             label="绑定成功人数"
-            prop="bindCount"
-            width="100" />
+            prop="votePe"
+            width="180" />
           <el-table-column
             align="center"
             label="注册付费转化率"
-            prop="_registerPayConversion"
-            width="120" />
+            prop="votePe"
+            width="180" />
           <el-table-column
             align="center"
             label="绑定付费转化率"
-            prop="_bindPayConversion"
-            width="120" />
+            prop="votePe"
+            width="180" />
+          <el-table-column
+            align="center"
+            label="状态"
+            prop="votePe"
+            width="180" />
           <el-table-column
             align="center"
             label="开始时间"
-            width="180"
             prop="_startTime" />
           <el-table-column
             align="center"
             label="结束时间"
-            width="180"
             prop="_endTime" />
-          <el-table-column
-            align="center"
-            label="状态"
-            prop="_status"
-            width="60">
-            <template slot-scope="scope">
-              <span v-if="scope.row._status === 10">待上架</span>
-              <span v-if="scope.row._status === 20" style="color: #00c250">进行中</span>
-              <span v-if="scope.row._status === 30" style="color: red">已经结束</span>
-            </template>
-          </el-table-column>
           <el-table-column
             align="center"
             label="操作"
@@ -192,10 +180,10 @@
     >
       <el-form :model="appBuyConfigForm" label-width="60px" class="demo-ruleForm">
         <el-form-item label="主标题" prop="name">
-          <el-input v-model="appBuyConfigForm.mainTitle" placeholder="请输入主标题" size="mini" />
+          <el-input v-model="appBuyConfigForm.name" placeholder="请输入主标题" size="mini" />
         </el-form-item>
         <el-form-item label="副标题" prop="name">
-          <el-input v-model="appBuyConfigForm.secondaryTitle" placeholder="请输入副标题" size="mini" />
+          <el-input v-model="appBuyConfigForm.name" placeholder="请输入副标题" size="mini" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary">确定</el-button>
@@ -212,16 +200,13 @@ import {
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
-import { getInvitationV2List } from '../../../api/interactive'
-import { computePageNumber, parseDateTime } from '../../../utils'
-const JsBigDecimal = require('js-big-decimal')
 
 export default {
   data() {
     const page_size = getPagenationSize()
     return {
       loading: false,
-      statusTypeList: [
+      topic_type_list: [
         { name: '全部', value: '' },
         { name: '待上架', value: 2 },
         { name: '已下架', value: 0 },
@@ -245,8 +230,7 @@ export default {
       // 购买成功弹窗配置弹窗状态
       appBuyConfigDialog: false,
       appBuyConfigForm: {
-        mainTitle: '',
-        secondaryTitle: ''
+        name: ''
       }
     }
   },
@@ -254,7 +238,7 @@ export default {
     ...mapGetters(['is_agent'])
   },
   mounted() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     tableSizeChange: function(size) {
@@ -301,56 +285,6 @@ export default {
         this.requestData.endTime = ''
       }
       this.loading = true
-      getInvitationV2List(this.requestData)
-        .then((res) => {
-          if (res.status !== 0) throw res
-          console.log(res)
-          this.tableData = res.data.result.map((item, index) => {
-            item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
-            item._startTime = parseDateTime('y-m-d h:i', item.startTime)
-            item._endTime = parseDateTime('y-m-d h:i', item.endTime)
-            // 注册付费转化率
-            item._registerPayConversion = (() => {
-              if (item.regCount === 0) return '0%'
-              return new JsBigDecimal(item.regPayCount)
-                .divide(new JsBigDecimal(item.regCount), 2)
-                .multiply(new JsBigDecimal(100)).getValue() + '%'
-            })()
-            // 绑定付费转化率
-            item._bindPayConversion = (() => {
-              if (item.bindCount === 0) return '0%'
-              return new JsBigDecimal(item.bindPayCount)
-                .divide(new JsBigDecimal(item.bindCount), 2)
-                .multiply(new JsBigDecimal(100)).getValue() + '%'
-            })()
-            /* 状态
-            10 待上架
-            20 进行中
-            30 已结束
-            */
-            item._status = (() => {
-              // 在当前时间里面
-              if (item.startTime <= new Date().getTime() && item.endTime >= new Date().getTime()) {
-                return 20
-              }
-              // 当前时间小于开始时间
-              if (new Date().getTime() < item.startTime) {
-                return 10
-              }
-              // 当前时间已经超过结束时间
-              if (new Date().getTime() > item.endTime) {
-                return 30
-              }
-            })()
-            return item
-          })
-        })
-        .catch((e) => {
-          this.$message.error(e.message)
-        })
-        .finally(() => {
-          this.loading = false
-        })
     },
     /**
      * @description 筛选条件查询
