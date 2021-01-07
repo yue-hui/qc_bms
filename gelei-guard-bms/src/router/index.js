@@ -347,7 +347,7 @@ export const asyncRoutes = [
       {
         path: 'invatationV2',
         name: 'InvatationFriendsV2',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
         meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
       },
@@ -376,9 +376,9 @@ export const asyncRoutes = [
       {
         path: 'exchange',
         name: 'exchange-code',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/exchange/exchange.page'),
-        meta: { title: '兑换码', icon: 'invatation', pid: '' }
+        meta: { title: '兑换码', icon: 'exchange', pid: '' }
       },
       {
         path: 'exchange-detail',
@@ -405,7 +405,7 @@ export const asyncRoutes = [
         name: 'activity-topic',
         hidden: false, // 745
         component: () => import('@/views/activity/topic'),
-        meta: { title: '话题首页', icon: 'signed', pid: '21004' }
+        meta: { title: '话题首页', icon: 'topic', pid: '21004' }
       },
       {
         path: 'topic-action',

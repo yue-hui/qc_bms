@@ -1,33 +1,33 @@
 <template>
   <div class="gelei-content">
-    <div class="package-detail">
+    <div v-if="packageDetail.cdk_pack_name" class="package-detail">
       <div class="title">
-        <span>【兑换包名称】详情</span>
+        <span>【{{ packageDetail.cdk_pack_name }}】详情</span>
       </div>
       <div class="detail-list">
         <div class="item">
-          <div class="label">会员套餐</div>
-          <div class="value">签到送2个月会员</div>
+          <div class="label">会员套餐：</div>
+          <div class="value">{{ packageDetail.plan_name }}</div>
         </div>
         <div class="item">
-          <div class="label">联系人</div>
-          <div class="value">大白菜</div>
+          <div class="label">联系人：</div>
+          <div class="value">{{ packageDetail.contacter || '-' }}</div>
         </div>
         <div class="item">
-          <div class="label">联系方式</div>
-          <div class="value">13233333333</div>
+          <div class="label">联系方式：</div>
+          <div class="value">{{ packageDetail.contact_phone || '-' }}</div>
         </div>
         <div class="item">
-          <div class="label">有效期</div>
-          <div class="value">2020-10-01 - 2021-10-05</div>
+          <div class="label">有效期：</div>
+          <div class="value">{{ packageDetail._begin_time }} - {{ packageDetail._end_time }}</div>
         </div>
         <div class="item">
-          <div class="label">剩余库存</div>
-          <div class="value">2020-10-01 - 2021-10-05</div>
+          <div class="label">剩余库存：</div>
+          <div class="value">{{ packageDetail._end_num }}</div>
         </div>
         <div class="item">
-          <div class="label">描述</div>
-          <div class="value">2020-10-01 - 2021-10-05</div>
+          <div class="label">描述：</div>
+          <div class="value">{{ packageDetail.cdk_pack_desc || '-' }}</div>
         </div>
       </div>
     </div>
@@ -83,6 +83,15 @@
                   type="success"
                   @click="createPack"
                 >添加库存
+                </el-button>
+                <el-button
+                  :loading="downloadLoading"
+                  pid="21005"
+                  class="download details-tab"
+                  size="mini"
+                  type="success"
+                  @click="downloadPackageCode"
+                >导出
                 </el-button>
               </el-row>
             </div>
@@ -173,8 +182,11 @@
       width="500px"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="110px" class="demo-ruleForm">
-        <el-form-item label="库存" prop="num">
-          <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="number" size="mini" />
+        <el-form-item label="剩余库存" prop="">
+          <span>{{ packageDetail._end_num }}</span>
+        </el-form-item>
+        <el-form-item label="添加数量" prop="num">
+          <el-input v-model="form.num" max="999" min="1" placeholder="输入添加数量，每次最多999个" type="number" size="mini" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="submitPackage">确定</el-button>
@@ -192,7 +204,8 @@ import {
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import { packageCodeList, get_all_member_plans, updatePackageCodeRemark, packageAddCode, getPackageDetail } from '../../api/interactive'
-import { computePageNumber, parseDateTime } from '../../utils'
+import { computePageNumber, parseDateTime, cloneDeep } from '../../utils'
+const JsBigDecimal = require('js-big-decimal')
 
 export default {
   data() {
@@ -208,6 +221,7 @@ export default {
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
+      initTotal: 0,
       requestData: {
         cdk_pack_id: '',
         cdk: '',
@@ -227,13 +241,17 @@ export default {
         num: [
           { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为数字' },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-            return value > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+            return Number(value) > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+          } },
+          { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+            return Number(value) + this.initTotal > 9999 ? callback(new Error('兑换码包上限为9999个，无法添加更多兑换码')) : callback()
           } }
         ]
       },
       updateRemarkId: '',
       updateRemarkText: '',
-      packageDetail: {}
+      packageDetail: {},
+      downloadLoading: false
     }
   },
   computed: {
@@ -353,6 +371,7 @@ export default {
               this.requestData.page_no = 1
               this.getList()
               this.closeActionDialog()
+              this.getPackageDetail()
             })
             .catch((e) => {
               this.$message.error(e.message)
@@ -411,9 +430,61 @@ export default {
         .then(res => {
           if (res.status !== 0) throw res
           this.packageDetail = res.data
+          this.packageDetail._begin_time = parseDateTime('y-m-d h:i', res.data.begin_time)
+          this.packageDetail._end_time = parseDateTime('y-m-d h:i', res.data.end_time)
+          this.packageDetail._end_num = new JsBigDecimal(res.data.total_num).subtract(new JsBigDecimal(res.data.used_num)).getValue()
+          this.initTotal = res.data.total_num
         })
         .catch((e) => {
           this.$message.error(e.message)
+        })
+    },
+    downloadPackageCode() {
+      this.downloadLoading = true
+      const requestData = cloneDeep(this.requestData)
+      requestData.page_no = 1
+      requestData.page_num = this.total
+      packageCodeList(requestData)
+        .then((res) => {
+          if (res.status !== 0) throw res
+          this.total = res.total_count
+          const tableData = res.data.map((item, index) => {
+            item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
+            item._create_time = parseDateTime('y-m-d h:i', item.create_time)
+            item._used_time = item.used_time ? parseDateTime('y-m-d h:i', item.used_time) : '-'
+            item._user_phone = item.user_phone || '-'
+            item._user_name = item.user_name || '-'
+            item._update_remark_status = false
+            return item
+          })
+          // console.log(tableData)
+
+          import('@/utils/Export2Excel').then(excel => {
+            const header = ['序号', '兑换码', '创建时间', '状态', '兑换时间', '兑换人手机号', '兑换人昵称', '备注']
+            const data = tableData.map(item => {
+              return [item._id, item.cdk, item._create_time, item.cdk_status === 1 ? '未兑换' : '已兑换',
+                item._used_time, item._user_phone, item._user_name, item.remark || '-']
+            })
+            data.push([])
+            data.push([
+              '导出时间：',
+              parseDateTime('y-m-d h:i')
+            ])
+            const options = {
+              header,
+              data,
+              filename: this.packageDetail.cdk_pack_name + '_' + new Date().getTime(),
+              autoWidth: true,
+              bookType: 'xlsx'
+            }
+            excel.export_json_to_excel(options)
+          })
+        })
+        .catch((e) => {
+          this.$message.error(e.message)
+        })
+        .finally(() => {
+          this.downloadLoading = false
         })
     }
   }
@@ -486,6 +557,7 @@ $label_height: 28px;
 }
 .package-detail{
   padding: 20px;
+  padding-bottom: 4px;
   background: #fff;
   margin-bottom: 20px;
   border: 1px solid #EAEAEA;
@@ -500,8 +572,12 @@ $label_height: 28px;
       display: flex;
       margin-top: 20px;
       margin-bottom: 20px;
+      font-size: 14px;
       .label{
-        width: 100px;
+        width: 90px;
+      }
+      .value{
+        opacity: .8;
       }
     }
   }

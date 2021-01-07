@@ -135,7 +135,7 @@
             <template slot-scope="scope">
               <el-button pid="" size="small" style="text-decoration: underline;" type="text" @click="packageDetail(scope.row)">查看</el-button>
               <el-button pid="" size="small" style="text-decoration: underline;" type="text" @click="updatePackage(scope.row)">编辑</el-button>
-              <el-button v-if="[1, 2, 4].includes(scope.row.cdk_pack_status)" pid="" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</el-button>
+              <el-button :disabled="![1, 2].includes(scope.row.cdk_pack_status)" pid="" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -334,14 +334,17 @@ export default {
           this.tableData = res.data.map((item, index) => {
             item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
             // 兑换率
-            item._used_num = new JsBigDecimal(item.used_num).divide(new JsBigDecimal(item.total_num), 2)
-              .multiply(new JsBigDecimal(100)).getValue() + '%'
+            item._used_num = (() => {
+              if (item.total_num === 0) return '0%'
+              return new JsBigDecimal(item.used_num).divide(new JsBigDecimal(item.total_num), 4)
+                .multiply(new JsBigDecimal(100)).getValue() + '%'
+            })()
             // 创建时间
             item._create_time = parseDateTime('y-m-d h:i', item.create_time)
             // 兑换开始、结束时间
             item._begin_time = parseDateTime('y-m-d h:i', item.begin_time)
             item._end_time = parseDateTime('y-m-d h:i', item.end_time)
-            item._num = item.total_num + ' / ' + item.used_num
+            item._num = item.used_num + ' / ' + item.total_num
             return item
           })
         })
