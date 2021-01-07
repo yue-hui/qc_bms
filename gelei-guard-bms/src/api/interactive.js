@@ -1399,4 +1399,137 @@ export function saveInvitationV2(data) {
     data
   })
 }
+/**
+ * @description 查询活动详情
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1473
+ * */
+export function queryInvitationV2(data) {
+  return request({
+    url: '/greenguard/manager/invitation/query',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 邀请人列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1476
+ * */
+export function queryInvitationV2Inviters(data) {
+  return request({
+    url: '/greenguard/manager/invitation/inviters',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 被邀请人列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1477
+ * */
+export function queryInvitationV2Invitees(data) {
+  return request({
+    url: '/greenguard/manager/invitation/invitees',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 活动上架
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1470
+ * */
+export function invitationV2Listing(data) {
+  return request({
+    url: '/greenguard/manager/invitation/listing',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 获取兑换码包列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1496
+ * */
+export function getExchangeList(data) {
+  return request({
+    url: '/greenguard/manager/cdk_pack/list',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 使兑换码包失效
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1497
+ * */
+export function disableExchangePackage(data) {
+  return request({
+    url: '/greenguard/manager/cdk_pack/disable',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 保存兑换包
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1497
+ * */
+export function saveExchangePackage(data) {
+  return request({
+    url: '/greenguard/manager/cdk_pack/add',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 更新兑换包
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1495
+ * */
+export function updateExchangePackage(data) {
+  return request({
+    url: '/greenguard/manager/cdk_pack/edit',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 兑换码列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1499
+ * */
+export function packageCodeList(data) {
+  return request({
+    url: '/greenguard/manager/cdk/list',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 兑换码列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1499
+ * */
+export function updatePackageCodeRemark(data) {
+  return request({
+    url: '/greenguard/manager/cdk/remark',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 兑换码包添加库存
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1498
+ * */
+export function packageAddCode(data) {
+  return request({
+    url: '/greenguard/manager/cdk/add',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 兑换码包添加库存
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1505
+ * */
+export function getPackageDetail(data) {
+  return request({
+    url: '/greenguard/manager/cdk_pack/details',
+    method: 'post',
+    data
+  })
+}
 

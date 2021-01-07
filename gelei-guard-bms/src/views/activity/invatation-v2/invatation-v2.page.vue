@@ -103,7 +103,11 @@
           <el-table-column
             align="center"
             label="标题"
-            prop="title" />
+            prop="title">
+            <template slot-scope="scope">
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDetail(scope.row)">{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="邀请页UV"
@@ -120,12 +124,20 @@
             align="center"
             label="注册成功人数"
             prop="regCount"
-            width="180" />
+            width="180">
+            <template slot-scope="scope">
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.regCount }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="绑定成功人数"
             prop="bindCount"
-            width="100" />
+            width="100">
+            <template slot-scope="scope">
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.regCount }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="注册付费转化率"
@@ -154,7 +166,7 @@
             <template slot-scope="scope">
               <span v-if="scope.row._status === 10">待上架</span>
               <span v-if="scope.row._status === 20" style="color: #00c250">进行中</span>
-              <span v-if="scope.row._status === 30" style="color: red">已经结束</span>
+              <span v-if="scope.row._status === 30" style="color: red">已结束</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -163,13 +175,33 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <gl-button
+              <el-button
+                v-if="scope.row._status === 30"
                 pid=""
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
-              >删除
-              </gl-button>
+                @click="invitationV2Detail(scope.row.activityId)"
+              >查看
+              </el-button>
+              <el-button
+                v-if="[10].includes(scope.row._status)"
+                pid=""
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="invitationV2Listing(scope.row.activityId)"
+              >上架
+              </el-button>
+              <!--  v-if="[10, 20].includes(scope.row._status)"             -->
+              <el-button
+                pid=""
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="updateInvatationV2(scope.row.activityId)"
+              >编辑
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -212,7 +244,7 @@ import {
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
-import { getInvitationV2List, getBuyConfig, saveBuyConfig } from '../../../api/interactive'
+import { getInvitationV2List, getBuyConfig, saveBuyConfig, invitationV2Listing } from '../../../api/interactive'
 import { computePageNumber, parseDateTime } from '../../../utils'
 const JsBigDecimal = require('js-big-decimal')
 
@@ -254,7 +286,9 @@ export default {
         secondaryTitle: [
           { required: true, message: '请输入副标题', trigger: 'blur' }
         ]
-      }
+      },
+      // 是否有活动正在进行中
+      hasRunningActivity: false
     }
   },
   computed: {
@@ -336,6 +370,16 @@ export default {
       window.open(href, '_blank')
     },
     /**
+     * @description 跳转至话题创建
+     * */
+    updateInvatationV2(activityId) {
+      const options = {
+        name: 'InvatationFriendsV2Action'
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href + '?id=' + activityId + '&update=' + '1', '_blank')
+    },
+    /**
      * @description 获取列表
      * */
     getList() {
@@ -350,7 +394,8 @@ export default {
       getInvitationV2List(this.requestData)
         .then((res) => {
           if (res.status !== 0) throw res
-          console.log(res)
+          this.total = res.total_count
+          this.hasRunningActivity = res.data.hasRunningActivity
           this.tableData = res.data.result.map((item, index) => {
             item._id = computePageNumber(index, this.requestData.page_no, this.requestData.page_num)
             item._startTime = parseDateTime('y-m-d h:i', item.startTime)
@@ -404,6 +449,59 @@ export default {
     filterList() {
       this.requestData.page_no = 1
       this.getList()
+    },
+    joinDetail(row) {
+      const options = {
+        name: 'InvatationFriendsV2JoinDetail'
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href + '?id=' + row.activityId + '&title=' + row.title, '_blank')
+    },
+    joinDataDetail(row) {
+      const options = {
+        name: 'InvatationFriendsV2DataDetail'
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href + '?id=' + row.activityId + '&title=' + row.title, '_blank')
+    },
+    invitationV2Detail(activityId) {
+      const options = {
+        name: 'InvatationFriendsV2Action'
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href + '?id=' + activityId + '&detail=' + '1', '_blank')
+    },
+    invitationV2Listing(activityId) {
+      function listing() {
+        const loading = this.$loading({
+          lock: true
+        })
+        invitationV2Listing({
+          activityId: activityId
+        })
+          .then((res) => {
+            if (res.status !== 0) throw res
+            this.getList()
+          })
+          .catch((e) => {
+            this.$message.error(e.message)
+          })
+          .finally(() => {
+            loading.close()
+          })
+      }
+      if (this.hasRunningActivity) {
+        this.$confirm('有活动正在进行中，确定上架吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          listing.call(this)
+        }).catch(() => {
+        })
+      } else {
+        listing.call(this)
+      }
     }
   }
 }

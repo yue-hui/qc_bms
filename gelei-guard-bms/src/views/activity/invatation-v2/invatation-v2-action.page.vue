@@ -387,31 +387,23 @@
         </el-form-item>
       </el-form>
       <div class="button-block">
-        <el-button v-if="!isUpdate" type="primary" size="mini" @click="save">保 存</el-button>
-        <el-button v-if="isUpdate" type="primary" size="mini" @click="update">保 存</el-button>
-      </div>
-      <div>
-        <pre>
-          {{ form }}
-        </pre>
+        <el-button v-if="!isDetail" type="primary" size="mini" @click="save">保 存</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
-import { get_all_member_plans, saveInvitationV2 } from '../../../api/interactive'
+import { get_all_member_plans, saveInvitationV2, queryInvitationV2 } from '../../../api/interactive'
+import { cloneDeep } from '../../../utils'
 
 export default {
   components: {
-    Tinymce
   },
   props: {
   },
   data: function() {
     return {
-      tinymce_content: '',
       form: {
         title: '', // 活动标题
         time: null,
@@ -431,7 +423,8 @@ export default {
         inputItem16: '', inputItem17: '', inputItem18: '',
         inputItem19: '', inputItem20: '',
         // --
-        inputItem21: '', inputItem22: '',
+        inputItem21: '',
+        inputItem22: '',
         // --
         selectItem1: '',
         selectItem2: '',
@@ -486,6 +479,7 @@ export default {
         inputItem19: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
       },
       isUpdate: false,
+      isDetail: false,
       updateId: 0,
       membershipPackageList: []
     }
@@ -494,26 +488,109 @@ export default {
   },
   mounted: function() {
     this.isUpdate = Number(this.$route.query.update) === 1
-    this.updateId = Number(this.$route.query.topicId)
-    if (this.isUpdate) {
-      this.getDetail()
-    }
+    this.isDetail = Number(this.$route.query.detail) === 1
+    this.updateId = Number(this.$route.query.id)
     this.fetchMemberPlanList()
+      .then(() => {
+        if (this.isUpdate || this.isDetail) {
+          this.getDetail()
+        }
+      })
+      .catch(() => {})
   },
   methods: {
     /**
      * @description 提交保存
      * */
     save() {
+      // eslint-disable-next-line no-unreachable
       this.$refs.form.validate()
         .then(() => {
           const loading = this.$loading({
             lock: true
           })
-          saveInvitationV2()
+          const data = {
+            title: this.form.title,
+            startTime: this.form.time[0].getTime(),
+            endTime: this.form.time[1].getTime(),
+            ruleDesc: this.form.ruleDesc.split(/[\s\n]/).filter(item => item).map(item => encodeURIComponent(item)).join(','),
+            shareMainTitle: this.form.shareMainTitle,
+            shareSecondaryTitle: this.form.shareSecondaryTitle,
+            inviteeRules: [
+              {
+                type: 'reg', // 好友注册可得套餐
+                planCode: this.form.selectItem21
+              },
+              {
+                type: 'bind', // 好友绑定可得套餐
+                planCode: this.form.selectItem22
+              }
+            ],
+            inviterRules: [
+              // 注册机制
+              {
+                planCode: this.form.selectItem1,
+                rule: this.form.inputItem1,
+                ruleType: 'equals',
+                type: 'reg'
+              },
+              {
+                planCode: this.form.selectItem2,
+                rule: this.form.inputItem3 + ',' + this.form.inputItem4,
+                ruleType: 'range',
+                type: 'reg'
+              },
+              {
+                planCode: this.form.selectItem3,
+                rule: this.form.inputItem6 + ',' + this.form.inputItem7,
+                ruleType: 'range',
+                type: 'reg'
+              },
+              {
+                planCode: this.form.selectItem4,
+                rule: this.form.inputItem9,
+                ruleType: 'over',
+                type: 'reg'
+              },
+              // 绑定机制
+              {
+                planCode: this.form.selectItem11,
+                rule: this.form.inputItem11,
+                ruleType: 'equals',
+                type: 'bind'
+              },
+              {
+                planCode: this.form.selectItem12,
+                rule: this.form.inputItem13 + ',' + this.form.inputItem14,
+                ruleType: 'range',
+                type: 'bind'
+              },
+              {
+                planCode: this.form.selectItem13,
+                rule: this.form.inputItem16 + ',' + this.form.inputItem17,
+                ruleType: 'range',
+                type: 'bind'
+              },
+              {
+                planCode: this.form.selectItem14,
+                rule: this.form.inputItem19,
+                ruleType: 'over',
+                type: 'bind'
+              }
+            ]
+          }
+          // 更新操作
+          if (this.isUpdate) {
+            data.activityId = Number(this.updateId)
+          }
+          // eslint-disable-next-line no-unreachable
+          saveInvitationV2(data)
             .then((res) => {
               if (res.status !== 0) throw res
               console.log(res)
+              this.$router.replace({
+                name: 'InvatationFriendsV2'
+              })
             })
             .catch((e) => {
               this.$message.error(e.message)
@@ -557,7 +634,7 @@ export default {
             const remote_data = res.data
             this.membershipPackageList = remote_data.map(r => {
               return {
-                value: r.plan_id,
+                value: r.plan_code,
                 label: r.plan_name,
                 validDays: r.valid_days
               }
@@ -589,6 +666,118 @@ export default {
     },
     userSearchMemberPlanByPlanName(planName) {
       // this.fetchMemberPlanList(planName)
+    },
+    getDetail() {
+      queryInvitationV2({
+        activityId: this.updateId
+      })
+        .then((res) => {
+          if (res.status !== 0) throw res
+          const data = res.data
+          this.form.title = data.title
+          this.form.shareMainTitle = data.shareMainTitle
+          this.form.shareSecondaryTitle = data.shareSecondaryTitle
+          this.form.time = [new Date(data.startTime), new Date(data.endTime)]
+          this.form.ruleDesc = decodeURIComponent(data.ruleDesc.replace(/,/g, '\r\n'))
+          // 注册机制 - 套餐
+          const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').planCode
+          this.form.selectItem1 = selectItem1PlanCode
+          this.form.inputItem2 = this.getPlanValidDayForCode(selectItem1PlanCode)
+          // -
+          const selectItem2PlanCode = this.parseRulesTypeRangePlanCode(data.inviterRules, 'reg', 'min')
+          this.form.selectItem2 = selectItem2PlanCode
+          this.form.inputItem5 = this.getPlanValidDayForCode(selectItem2PlanCode)
+          // -
+          const selectItem3PlanCode = this.parseRulesTypeRangePlanCode(data.inviterRules, 'reg', 'max')
+          this.form.selectItem3 = selectItem3PlanCode
+          this.form.inputItem8 = this.getPlanValidDayForCode(selectItem3PlanCode)
+          // -
+          const selectItem10PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'over').planCode
+          this.form.selectItem4 = selectItem10PlanCode
+          this.form.inputItem10 = this.getPlanValidDayForCode(selectItem10PlanCode)
+
+          // 绑定机制 - 套餐
+          const selectItem11PlanCode = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'equals').planCode
+          this.form.selectItem11 = selectItem11PlanCode
+          this.form.inputItem12 = this.getPlanValidDayForCode(selectItem11PlanCode)
+          // -
+          const selectItem12PlanCode = this.parseRulesTypeRangePlanCode(data.inviterRules, 'bind', 'min')
+          this.form.selectItem12 = selectItem12PlanCode
+          this.form.inputItem15 = this.getPlanValidDayForCode(selectItem12PlanCode)
+          // -
+          const selectItem13PlanCode = this.parseRulesTypeRangePlanCode(data.inviterRules, 'bind', 'max')
+          this.form.selectItem13 = selectItem13PlanCode
+          this.form.inputItem18 = this.getPlanValidDayForCode(selectItem13PlanCode)
+          // -
+          const selectItem14PlanCode = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'over').planCode
+          this.form.selectItem14 = selectItem14PlanCode
+          this.form.inputItem20 = this.getPlanValidDayForCode(selectItem14PlanCode)
+          // 好友注册可得 - 套餐
+          const selectItem21PlanCode = data.inviteeRules.find(item => item.type === 'reg').planCode
+          this.form.selectItem21 = selectItem21PlanCode
+          this.form.inputItem21 = this.getPlanValidDayForCode(selectItem21PlanCode)
+          // 好友绑定可得 - 套餐
+          const selectItem22PlanCode = data.inviteeRules.find(item => item.type === 'bind').planCode
+          this.form.selectItem22 = selectItem22PlanCode
+          this.form.inputItem22 = this.getPlanValidDayForCode(selectItem22PlanCode)
+          // 注册机制配置 - 人数
+          this.form.inputItem1 = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').rule
+          this.form.inputItem3 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'min').split(',')[0]
+          this.form.inputItem4 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'min').split(',')[1]
+          this.form.inputItem6 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'max').split(',')[0]
+          this.form.inputItem7 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'max').split(',')[1]
+          this.form.inputItem9 = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'over').rule
+          // 绑定机制配置 - 人数
+          this.form.inputItem11 = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'equals').rule
+          this.form.inputItem13 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'min').split(',')[0]
+          this.form.inputItem14 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'min').split(',')[1]
+          this.form.inputItem16 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'max').split(',')[0]
+          this.form.inputItem17 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'max').split(',')[1]
+          this.form.inputItem19 = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'over').rule
+        })
+        .catch((e) => {
+          this.$message.error(e.message)
+        })
+    },
+    /**
+     * @description
+     * */
+    parseRulesTypeRangePlanCode(ruleList, type, range) {
+      ruleList = cloneDeep(ruleList)
+      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range').map(item => {
+        item.rule = Number(item.rule.replace(',', ''))
+        return item
+      }).sort((a, b) => {
+        if (range === 'min') {
+          return a.rule - b.rule
+        } else {
+          return b.rule - a.rule
+        }
+      })
+      return ruleList[0].planCode
+    },
+    /**
+     * @description
+     * */
+    parseRulesTypeRangeNumber(ruleList, type, range) {
+      ruleList = cloneDeep(ruleList)
+      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range').map(item => {
+        item._rule = Number(item.rule.replace(',', ''))
+        return item
+      }).sort((a, b) => {
+        if (range === 'min') {
+          return a._rule - b._rule
+        } else {
+          return b._rule - a._rule
+        }
+      })
+      return ruleList[0].rule
+    },
+    /**
+     * @description 根据套餐 Code 获取天数
+     * */
+    getPlanValidDayForCode(code) {
+      return this.membershipPackageList.find(item => item.value === code).validDays
     }
   }
 }
