@@ -637,17 +637,17 @@ export default {
       theme_color,
       pickerOptions: {
         // 限制仅选择近3650天
-        // disabledDate(time) {
-        //   let curDate = new Date()
-        //   curDate.setHours(0)
-        //   curDate.setMinutes(0)
-        //   curDate.setMilliseconds(0)
-        //   curDate.setSeconds(0)
-        //   curDate = new Date(curDate.getTime() - 1000)
-        //   const day = 3650 * 24 * 3600 * 1000
-        //   const dateRegion = curDate - day
-        //   return time.getTime() > curDate || time.getTime() < dateRegion
-        // }
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 3650 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
       },
       datetime_range: [new Date(pre_week), new Date(day)],
       defaultDateRange: [new Date(pre_week), new Date(day)],
@@ -813,11 +813,11 @@ export default {
         list: [
           {
             label: '付费用户数',
-            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
+            content: '累计在格雷盒子7付费买过会员的用户，包括iOS高级会员、安卓高级会员、iOS普通会员、安卓普通会员和电信会员'
           },
           {
             label: '订单成交量',
-            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
+            content: '累计在格雷盒子7付费成功的订单总量，包括iOS高级会员、iOS普通会员、安卓高级会员、安卓普通会员和电信会员'
           },
           {
             label: '注册用户总数',
@@ -825,11 +825,11 @@ export default {
           },
           {
             label: '累计绑定设备',
-            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
+            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、iOS设备和PC设备'
           },
           {
             label: '充值金额',
-            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+            content: '在格雷盒子7所有付费成功订单的总金额，包括iOS高级会员收入、iOS普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
           }
         ],
         list2: [
@@ -930,7 +930,7 @@ export default {
       // 充值金额卡片2
       orderAmount2: {
         count: '-',
-        ios: '-', // 苹果
+        ios: '-', // iOS
         wechat: '-', // 微信
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
@@ -959,7 +959,7 @@ export default {
       // 新增订单数
       newOrderCountData: {
         count: '-',
-        ios: '-', // 苹果
+        ios: '-', // iOS
         wechat: '-', // 微信
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
@@ -968,7 +968,7 @@ export default {
       // 复购订单数
       reOrderCountData: {
         count: '-',
-        ios: '-', // 苹果
+        ios: '-', // iOS
         wechat: '-', // 微信
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
@@ -1423,7 +1423,7 @@ export default {
       // 新增绑定设备
       this.newBindDevice.count = data.bind_device_sum
       this.newBindDevice.comparison = data.bind_device_conversion// || 0
-      const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
+      const newBindDeviceType = { '01': 'PC', '02': 'iOS', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
         return {
@@ -1931,8 +1931,8 @@ export default {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: '苹果高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
-            { name: '苹果普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
+            { name: 'iOS高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
+            { name: 'iOS普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
             { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
             { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
             { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
@@ -1944,8 +1944,8 @@ export default {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: '苹果高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '01').number },
-            { name: '苹果普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
+            { name: 'iOS高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '01').number },
+            { name: 'iOS普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
             { name: '安卓高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '03').number },
             { name: '安卓普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '04').number },
             { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number }
@@ -1971,11 +1971,11 @@ export default {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: '苹果家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
+            { name: 'iOS家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
             { name: '安卓家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
             { name: '电信家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
             { name: '第三方平台家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
-            { name: '苹果孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
+            { name: 'iOS孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
             { name: '安卓孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number },
             { name: 'PC孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '07').number }
           ]
@@ -1986,8 +1986,8 @@ export default {
         this.overallDataChartData = {
           columns: ['name', '总数'],
           rows: [
-            { name: '苹果高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
-            { name: '苹果普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
+            { name: 'iOS高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
+            { name: 'iOS普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
             { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
             { name: '安卓普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
             { name: '电信会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }

@@ -1,17 +1,37 @@
 <template>
   <div class="gelei-content">
-    <div class="content-body">
-      <div class="package-detail">
-        <div class="title">
-          <span>兑换包名称</span>
+    <div class="package-detail">
+      <div class="title">
+        <span>【兑换包名称】详情</span>
+      </div>
+      <div class="detail-list">
+        <div class="item">
+          <div class="label">会员套餐</div>
+          <div class="value">签到送2个月会员</div>
         </div>
-        <div class="detail-list">
-          <div class="item">
-            <div class="label">联系人</div>
-            <div class="value">13233333333</div>
-          </div>
+        <div class="item">
+          <div class="label">联系人</div>
+          <div class="value">大白菜</div>
+        </div>
+        <div class="item">
+          <div class="label">联系方式</div>
+          <div class="value">13233333333</div>
+        </div>
+        <div class="item">
+          <div class="label">有效期</div>
+          <div class="value">2020-10-01 - 2021-10-05</div>
+        </div>
+        <div class="item">
+          <div class="label">剩余库存</div>
+          <div class="value">2020-10-01 - 2021-10-05</div>
+        </div>
+        <div class="item">
+          <div class="label">描述</div>
+          <div class="value">2020-10-01 - 2021-10-05</div>
         </div>
       </div>
+    </div>
+    <div class="content-body">
       <div class="search-area">
         <el-row :gutter="10" class="row-bg">
           <el-col :xs="12" :sm="8" :md="8" :lg="5" :xl="6" class="col-bg">
@@ -464,7 +484,28 @@ $label_height: 28px;
     }
   }
 }
+.package-detail{
+  padding: 20px;
+  background: #fff;
+  margin-bottom: 20px;
+  border: 1px solid #EAEAEA;
+  .title{
+    font-size: 20px;
+    position: relative;
+    left: -10px;
+  }
+  .detail-list{
 
+    .item{
+      display: flex;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      .label{
+        width: 100px;
+      }
+    }
+  }
+}
 </style>
 <style lang="scss">
 .app-bug-config-dialog{

@@ -18,7 +18,8 @@ module.exports = {
           '^/': '/'
         }
       },
-      /*'/gelei-guard-bms/api': { // 这里是公共部分，在调用接口时后面接不相同的部分
+      /*
+      '/gelei-guard-bms/api': { // 这里是公共部分，在调用接口时后面接不相同的部分
         target: 'http://192.168.2.84:53006', // 本地开发
         changeOrigin: true,
         ws: false,
@@ -26,7 +27,8 @@ module.exports = {
         pathRewrite: { // 重命名
           '^/gelei-guard-bms/api/greenguard': '/'
         }
-      }*/
+      }
+      */
       '/gelei-guard-bms/api': { // 这里是公共部分，在调用接口时后面接不相同的部分
         target: 'http://localhost:4004', // 本地开发
         changeOrigin: true,
