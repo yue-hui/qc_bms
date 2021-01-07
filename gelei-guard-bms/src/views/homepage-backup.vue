@@ -1423,7 +1423,13 @@ export default {
       // 新增绑定设备
       this.newBindDevice.count = data.bind_device_sum
       this.newBindDevice.comparison = data.bind_device_conversion// || 0
-      const newBindDeviceType = { '01': 'PC', '02': 'iOS', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
+      const newBindDeviceType = {
+        '03': '安卓公版',
+        '02': 'iOS',
+        '04': '企业模式',
+        '05': '定制机',
+        '01': 'PC'
+      }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
         return {
