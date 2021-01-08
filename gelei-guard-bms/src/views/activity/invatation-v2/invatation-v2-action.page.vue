@@ -429,22 +429,22 @@ export default {
         selectItem22: ''
       },
       rules: {
-        title: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入活动标题' }
+        title: [{ required: true, trigger: ['blur', 'change'], message: '请输入活动标题' }],
+        time: [{ required: true, trigger: ['blur', 'change'], message: '请选择活动时间' }],
+        shareMainTitle: [{ required: true, trigger: ['blur', 'change'], message: '请输入分享主标题' }],
+        shareSecondaryTitle: [{ required: true, trigger: ['blur', 'change'], message: '请输入分享副标题' }],
+        ruleDesc: [{ required: true, trigger: ['blur', 'change'], message: '请输入规则描述' }],
+        selectItem1: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              this.planCodesIsVipType(
+                [this.selectItem1, this.selectItem2, this.selectItem3, this.selectItem4]
+              )
+              callback(new Error('sss'))
+            }
+          }
         ],
-        time: [
-          { required: true, trigger: ['blur', 'change'], message: '请选择活动时间' }
-        ],
-        shareMainTitle: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入分享主标题' }
-        ],
-        shareSecondaryTitle: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入分享副标题' }
-        ],
-        ruleDesc: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入规则描述' }
-        ],
-        selectItem1: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         selectItem2: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         selectItem3: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         selectItem4: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
@@ -455,9 +455,9 @@ export default {
         selectItem21: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         selectItem22: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         inputItem1: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem3: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem3: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
         inputItem4: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem6: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem6: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
         inputItem7: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
         inputItem9: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
         // inputItem11: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
@@ -793,6 +793,12 @@ export default {
      * */
     getPlanValidDayForCode(code) {
       return this.membershipPackageList.find(item => item.value === code).validDays
+    },
+    /**
+     * @description 根据一批套餐 code 判断是否是同一种会员类型
+     * */
+    planCodesIsVipType(codes) {
+      console.log(codes)
     }
   }
 }

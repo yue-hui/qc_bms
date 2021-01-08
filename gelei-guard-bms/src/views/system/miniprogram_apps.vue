@@ -174,8 +174,8 @@ export default {
     get_condition_with_pagination() {
       const query_sets = this.query_sets
       let condition = {}
-      condition['page_no'] = this.page
-      condition['page_num'] = this.page_size
+      condition['page_no'] = Number(this.page)
+      condition['page_num'] = Number(this.page_size)
       condition['miniprogram_name'] = query_sets.miniprogram_name
       condition['bundle_id'] = query_sets.bundle_id
       condition['soft_name'] = query_sets.soft_name
@@ -193,9 +193,11 @@ export default {
     table_size_change: function(size) {
       this.page_size = size
       setPagenationSize(size)
+      this.query()
     },
     change_current: function(page) {
       this.page = page
+      this.query()
     },
     create_miniprogram_app: function() {
       this.is_create = 1
