@@ -376,7 +376,7 @@ export const asyncRoutes = [
       {
         path: 'exchange',
         name: 'exchange-code',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/exchange/exchange.page'),
         meta: { title: '兑换码', icon: 'exchange', pid: '21011' }
       },
