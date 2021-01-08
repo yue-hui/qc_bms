@@ -3,7 +3,7 @@
     <div class="content-body">
       <div class="search-area">
         <div class="topic-title">
-          【{{ topicTitle }}】参与详情
+          【{{ title }}】参与详情
         </div>
         <el-row :gutter="10" class="row-bg">
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
@@ -89,24 +89,28 @@
           <el-table-column
             align="center"
             width="132"
-            label="投票时间"
+            label="分享次数"
             prop="_createTime" />
           <el-table-column
             align="center"
-            label="投票项"
+            label="注册成功人数"
             prop="option" />
           <el-table-column
             align="center"
-            label="参与话题数"
+            label="绑定成功人数"
             prop="voteNum" />
           <el-table-column
             align="center"
-            label="会员类型"
+            label="奖励会员天数"
             prop="_memberType"
             width="220" />
           <el-table-column
             align="center"
-            label="会员有效天数"
+            label="会员类型"
+            prop="_validDaysLabel" />
+          <el-table-column
+            align="center"
+            label="参与活动次数"
             prop="_validDaysLabel" />
         </el-table>
         <el-pagination
@@ -156,15 +160,15 @@ export default {
         page_num: page_size
       },
       tableData: [],
-      topicTitle: ''
+      title: ''
     }
   },
   computed: {
     ...mapGetters(['is_agent'])
   },
   mounted: function() {
-    this.topicTitle = this.$route.query.title
-    this.requestData.activityId = Number(this.$route.query.activityId)
+    this.title = this.$route.query.title
+    this.requestData.activityId = Number(this.$route.query.id)
     this.getList()
   },
   methods: {

@@ -347,7 +347,7 @@ export const asyncRoutes = [
       {
         path: 'invatationV2',
         name: 'InvatationFriendsV2',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
         meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
       },
@@ -376,7 +376,7 @@ export const asyncRoutes = [
       {
         path: 'exchange',
         name: 'exchange-code',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/exchange/exchange.page'),
         meta: { title: '兑换码', icon: 'exchange', pid: '' }
       },

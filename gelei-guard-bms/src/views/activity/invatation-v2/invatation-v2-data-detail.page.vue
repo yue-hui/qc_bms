@@ -3,7 +3,7 @@
     <div class="content-body">
       <div class="search-area">
         <div class="topic-title">
-          【{{ topicTitle }}】参与详情
+          【{{ title }}】参与详情
         </div>
         <el-row :gutter="10" class="row-bg">
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
@@ -43,17 +43,39 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">完成行为:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="requestData.action"
+                    size="mini"
+                    placeholder="请选择完成行为"
+                    clearable
+                    @change="filterList"
+                  >
+                    <el-option
+                      v-for="item in actionTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">会员类型:</el-col>
                 <el-col :span="16">
                   <el-select
-                    v-model="requestData.memberType"
+                    v-model="requestData.isPay"
                     size="mini"
                     placeholder="请选择会员类型"
                     clearable
                     @change="filterList"
                   >
                     <el-option
-                      v-for="item in memberTypeList"
+                      v-for="item in payTypeList"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value" />
@@ -88,17 +110,24 @@
             prop="phone" />
           <el-table-column
             align="center"
-            width="132"
-            label="投票时间"
+            width="180"
+            label="完成行为"
             prop="_createTime" />
           <el-table-column
             align="center"
-            label="投票项"
+            label="奖励会员天数"
+            width="140"
             prop="option" />
           <el-table-column
             align="center"
-            label="参与话题数"
+            label="注册时间"
+            width="140"
             prop="voteNum" />
+          <el-table-column
+            align="center"
+            label="绑定时间"
+            prop="_memberType"
+            width="140" />
           <el-table-column
             align="center"
             label="会员类型"
@@ -106,7 +135,18 @@
             width="220" />
           <el-table-column
             align="center"
-            label="会员有效天数"
+            label="是否付费"
+            width="100"
+            prop="_validDaysLabel" />
+          <el-table-column
+            align="center"
+            label="来源"
+            width="100"
+            prop="_validDaysLabel" />
+          <el-table-column
+            align="center"
+            label="操作"
+            width="100"
             prop="_validDaysLabel" />
         </el-table>
         <el-pagination
@@ -130,7 +170,6 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import { queryInvitationV2Invitees } from '../../../api/interactive'
 import { cloneDeep, computePageNumber, parseDateTime } from '../../../utils'
-import { PATRIARCH_MEMBER_TYPES } from '../../../utils/constant'
 
 export default {
   components: {
@@ -139,9 +178,15 @@ export default {
     const page_size = getPagenationSize()
     return {
       loading: false,
-      memberTypeList: [
+      actionTypeList: [
         { label: '全部', value: '' },
-        ...PATRIARCH_MEMBER_TYPES
+        { label: '注册', value: 1 },
+        { label: '注册+绑定', value: 2 }
+      ],
+      payTypeList: [
+        { label: '全部', value: '' },
+        { label: '是', value: 1 },
+        { label: '否', value: 0 }
       ],
       page: 1,
       page_size,
@@ -150,21 +195,22 @@ export default {
       requestData: {
         nickName: '',
         phone: '',
-        memberType: '',
+        action: '',
+        isPay: '',
         activityId: '',
         page_no: 1,
         page_num: page_size
       },
       tableData: [],
-      topicTitle: ''
+      title: ''
     }
   },
   computed: {
     ...mapGetters(['is_agent'])
   },
   mounted: function() {
-    this.topicTitle = this.$route.query.title
-    this.requestData.activityId = Number(this.$route.query.activityId)
+    this.title = this.$route.query.title
+    this.requestData.activityId = Number(this.$route.query.id)
     this.getList()
   },
   methods: {

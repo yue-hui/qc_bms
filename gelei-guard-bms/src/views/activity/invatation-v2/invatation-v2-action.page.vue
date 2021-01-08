@@ -40,11 +40,9 @@
               <el-form-item prop="selectItem1">
                 <el-select
                   v-model="form.selectItem1"
-                  :remote-method="userSearchMemberPlanByPlanName"
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem2', 'selectItem1')"
@@ -61,7 +59,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem3">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem3" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem3" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem4">
                 <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
@@ -80,7 +78,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem5', 'selectItem2')"
@@ -97,7 +94,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem6">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem6" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem6" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem7">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
@@ -116,7 +113,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem8', 'selectItem3')"
@@ -148,7 +144,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem10', 'selectItem4')"
@@ -172,7 +167,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem11">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem11" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem11" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem12">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -187,7 +182,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem12', 'selectItem11')"
@@ -204,11 +198,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem13">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem13" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem13" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem14">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem14" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem14" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem15">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -223,7 +217,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem15', 'selectItem12')"
@@ -240,11 +233,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem16">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem16" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem16" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem17">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem17" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem17" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem18">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -259,7 +252,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem18', 'selectItem13')"
@@ -276,7 +268,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem19">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem19" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem19" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem20">
                 <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
@@ -291,7 +283,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem20', 'selectItem14')"
@@ -325,7 +316,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem21', 'selectItem21')"
@@ -359,7 +349,6 @@
                   size="mini"
                   filterable
                   clearable
-                  remote
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem22', 'selectItem22')"
@@ -470,13 +459,13 @@ export default {
         inputItem4: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
         inputItem6: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
         inputItem7: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem9: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem11: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem13: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem14: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem16: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem17: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
-        inputItem19: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
+        inputItem9: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
+        // inputItem11: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem13: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem14: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem16: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem17: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
+        // inputItem19: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }]
       },
       isUpdate: false,
       isDetail: false,
@@ -485,6 +474,33 @@ export default {
     }
   },
   watch: {
+    'form.inputItem1'(val) {
+      this.form.inputItem11 = val
+      if (Number.isInteger(Number(val))) {
+        this.form.inputItem3 = Number(val) + 1
+      }
+    },
+    'form.inputItem3'(val) {
+      this.form.inputItem13 = val
+    },
+    'form.inputItem4'(val) {
+      this.form.inputItem14 = val
+      if (Number.isInteger(Number(val))) {
+        this.form.inputItem6 = Number(val) + 1
+      }
+    },
+    'form.inputItem6'(val) {
+      this.form.inputItem16 = val
+    },
+    'form.inputItem7'(val) {
+      this.form.inputItem17 = val
+      if (Number.isInteger(Number(val))) {
+        this.form.inputItem9 = Number(val) + 1
+      }
+    },
+    'form.inputItem9'(val) {
+      this.form.inputItem19 = val
+    }
   },
   mounted: function() {
     this.isUpdate = Number(this.$route.query.update) === 1
@@ -636,9 +652,11 @@ export default {
               return {
                 value: r.plan_code,
                 label: r.plan_name,
-                validDays: r.valid_days
+                validDays: r.valid_days,
+                memberType: r.member_type
               }
             })
+            console.log(this.membershipPackageList)
             resolve()
           } else {
             this.$message.error(res.message)
@@ -663,9 +681,6 @@ export default {
           this.form[inputItem] = ''
         }
       }, 50)
-    },
-    userSearchMemberPlanByPlanName(planName) {
-      // this.fetchMemberPlanList(planName)
     },
     getDetail() {
       queryInvitationV2({

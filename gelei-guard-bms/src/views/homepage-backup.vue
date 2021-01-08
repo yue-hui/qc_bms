@@ -1938,8 +1938,8 @@ export default {
           columns: ['name', '总数'],
           rows: [
             { name: 'iOS高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
-            { name: 'iOS普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
-            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
+            { name: 'iOS普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
+            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
             { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
             { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
           ]
