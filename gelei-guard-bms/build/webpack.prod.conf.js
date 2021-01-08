@@ -132,9 +132,9 @@ const webpackConfig = merge(baseWebpackConfig, {
           },
           compress: {
             warnings: false,
-            drop_console: true,
+            drop_console: false,
             drop_debugger: true,
-            pure_funcs: ['console.log']  // 移除console
+            // pure_funcs: ['console.log']  // 移除console
           }
         },
         sourceMap: config.build.productionSourceMap,

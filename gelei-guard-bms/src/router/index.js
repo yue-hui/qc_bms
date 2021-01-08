@@ -82,7 +82,8 @@ export const asyncRoutes = [
     children: [
       {
         path: 'homepage',
-        component: () => import('@/views/homepage'),
+        // component: () => import('@/views/homepage'),
+        component: () => import('@/views/homepage-backup'),
         name: 'Homepage',
         meta: { title: '首页', icon: 'homepage', noCache: true, pid: '20001' }
       }
@@ -342,12 +343,50 @@ export const asyncRoutes = [
         component: () => import('@/views/activity/invatation'),
         meta: { title: '邀请好友', icon: 'invatation', pid: '20037' }
       },
-      // {
-      //   path: 'invatationV2',
-      //   name: 'InvatationFriendsV2',
-      //   component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
-      //   meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
-      // },
+      // 列表
+      {
+        path: 'invatationV2',
+        name: 'InvatationFriendsV2',
+        hidden: false,
+        component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      },
+      {
+        path: 'invatationV2-join-detail',
+        name: 'InvatationFriendsV2JoinDetail',
+        hidden: true,
+        component: () => import('@/views/activity/invatation-v2/invatation-v2-join-detail.page'),
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      },
+      {
+        path: 'invatationV2-data-detail',
+        name: 'InvatationFriendsV2DataDetail',
+        hidden: true,
+        component: () => import('@/views/activity/invatation-v2/invatation-v2-data-detail.page'),
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      },
+      {
+        path: 'invatationV2-action',
+        name: 'InvatationFriendsV2Action',
+        hidden: true,
+        component: () => import('@/views/activity/invatation-v2/invatation-v2-action.page'),
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      },
+      // 列表
+      {
+        path: 'exchange',
+        name: 'exchange-code',
+        hidden: false,
+        component: () => import('@/views/exchange/exchange.page'),
+        meta: { title: '兑换码', icon: 'exchange', pid: '21011' }
+      },
+      {
+        path: 'exchange-detail',
+        name: 'exchange-detail',
+        hidden: true,
+        component: () => import('@/views/exchange/exchange-detail.page'),
+        meta: { title: '兑换码', icon: 'invatation', pid: '' }
+      },
       {
         path: 'invatation/details',
         name: 'InvatationFriendsConfiguration',
@@ -366,7 +405,7 @@ export const asyncRoutes = [
         name: 'activity-topic',
         hidden: false, // 745
         component: () => import('@/views/activity/topic'),
-        meta: { title: '话题首页', icon: 'signed', pid: '21004' }
+        meta: { title: '话题首页', icon: 'topic', pid: '21004' }
       },
       {
         path: 'topic-action',

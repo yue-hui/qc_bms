@@ -14,7 +14,7 @@
             clearable
             remote
             class="plan-list-select"
-            placeholder="请选择活动区域"
+            placeholder="请选择会员套餐"
             @change="member_plan_list_change"
             @clear="clear_member_plan_list">
             <el-option

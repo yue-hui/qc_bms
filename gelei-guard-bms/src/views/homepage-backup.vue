@@ -1,5 +1,5 @@
 <template>
-  <div class="gelei-content">
+  <div class="gelei-content" style="overflow-x: auto">
     <div class="content-body">
       <div class="card-box" style="margin-bottom: 30px">
         <div class="total-data-area">
@@ -10,7 +10,7 @@
               title=""
               width="500"
               trigger="hover"
-              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+              content="">
               <div class="item-list tips-dialog-custom-class">
                 <h3>整体数据说明</h3>
                 <div v-for="item in tipsDialog.list" :key="item.label" class="item">
@@ -22,42 +22,43 @@
             </el-popover>
           </div>
           <div class="summary-items-area">
-            <div :style="'background-color: ' + theme_color[0]" class="summary-item">
+            <div :style="'background-color: ' + theme_color[0]" :class="{ 'summary-items-active': overallDataDetailIndex === 0 }" class="summary-item" @click="parseOverallDataDetail(0)">
               <div class="item-info">
-                <div class="item-value">{{ overall_data.pay_member_count }}</div>
-                <div class="item-name">付费用户数</div>
+                <div class="item-value">{{ overallData.payUser.count }}</div>
+                <div class="item-name">付费会员数</div>
               </div>
             </div>
-            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
+            <div :style="'background-color: ' + theme_color[1]" :class="{ 'summary-items-active': overallDataDetailIndex === 1 }" class="summary-item" @click="parseOverallDataDetail(1)">
               <div class="item-info">
-                <div class="item-value">{{ overall_data.experience_member_count }}</div>
-                <div class="item-name">体验用户数</div>
-              </div>
-            </div>
-            <div :style="'background-color: ' + theme_color[1]" class="summary-item">
-              <div class="item-info">
-                <div class="item-value">{{ overall_data.telecom_count || '--' }}</div>
-                <div class="item-name">电信付费用户数</div>
-              </div>
-            </div>
-            <div :style="'background-color: ' + theme_color[2]" class="summary-item">
-              <div class="item-info">
-                <div class="item-value">{{ overall_data.due_soon_member_count }}</div>
-                <div class="item-name">即将到期会员</div>
-              </div>
-            </div>
-            <div :style="'background-color: ' + theme_color[3]" class="summary-item">
-              <div class="item-info">
-                <div class="item-value">{{ overall_data.order_count }}</div>
+                <div class="item-value">{{ overallData.order.count }}</div>
                 <div class="item-name">订单成交量</div>
               </div>
             </div>
-            <div :style="'background-color: ' + theme_color[4]" class="summary-item">
+            <div :style="'background-color: ' + theme_color[3]" :class="{ 'summary-items-active': overallDataDetailIndex === 3 }" class="summary-item" @click="parseOverallDataDetail(3)">
               <div class="item-info">
-                <div class="item-value">¥{{ overall_data.order_amount }}</div>
+                <div class="item-value">{{ overallData.register.count }}</div>
+                <div class="item-name">注册用户总数</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[2]" :class="{ 'summary-items-active': overallDataDetailIndex === 2 }" class="summary-item" @click="parseOverallDataDetail(2)">
+              <div class="item-info">
+                <div class="item-value">{{ overallData.bind.count }}</div>
+                <div class="item-name">累计绑定设备</div>
+              </div>
+            </div>
+            <div :style="'background-color: ' + theme_color[4]" :class="{ 'summary-items-active': overallDataDetailIndex === 4 }" class="summary-item" @click="parseOverallDataDetail(4)">
+              <div class="item-info">
+                <div class="item-value">¥{{ overallData.amount.count }}</div>
                 <div class="item-name">充值金额</div>
               </div>
             </div>
+          </div>
+          <div style="width: 100%">
+            <ve-histogram
+              :extend="overallDataChartExtend"
+              :legend-visible="false"
+              :colors="overallDataChartColor"
+              :data="overallDataChartData"/>
           </div>
         </div>
       </div>
@@ -105,56 +106,207 @@
           </el-row>
         </div>
         <div class="data-comparison-area">
-          <div class="new-user-and-amount-area">
-            <!-- 付费用户总数 ------------------------------------ -->
-            <div class="data-item">
-              <div class="item-row item-title">付费用户总数</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <span class="total-count">{{ payUser.count }}</span>
-                    <label class="item-label">总数</label>
-                  </span>
-                </p>
-                <div class="diviser" />
-                <p class="ratio-data">
-                  <span v-if="isShowComparison">
-                    <span class="ratio-name">较上一周:</span>
-                    <span
-                      :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
-                      class="ratio-value">
-                      {{ payUser.comparison | abs }}%
-                      <template v-if="payUser.comparison > 0">↑</template>
-                      <template v-else-if="payUser.comparison === 0" />
-                      <template v-else>↓</template>
+          <div class="new-user-and-amount-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>付费用户看板</span>
+            </div>
+            <div class="new-user-and-amount-area-2">
+              <!-- 付费用户总数 ------------------------------------ -->
+              <div style="margin-right: 10px;" class="data-item">
+                <div class="item-row item-title">付费用户总数</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ payUser.count }}</span>
+                      <label class="item-label">总数</label>
                     </span>
-                  </span>
-                </p>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: payUser.comparison < 0, red: payUser.comparison > 0, blue: payUser.comparison === 0 }"
+                        class="ratio-value">
+                        {{ payUser.comparison | abs }}%
+                        <template v-if="payUser.comparison > 0">↑</template>
+                        <template v-else-if="payUser.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="data-item-line" />
+              <!-- 新增付费用户 ------------------------------------ -->
+              <div style="margin-right: 10px;width: 50%" class="data-item">
+                <div class="item-row item-title">新增付费用户</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.count }}</span>
+                      <label class="item-label">总数</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.app }}</span>
+                      <label class="item-label">APP新增</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
+                      <label class="item-label">电信新增</label>
+                    </span>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
+                        class="ratio-value">
+                        {{ increasedPayUserType.comparison | abs }}%
+                        <template v-if="increasedPayUserType.comparison > 0">↑</template>
+                        <template v-else-if="increasedPayUserType.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                    <span>
+                      <span class="ratio-name">转化率:</span>
+                      <span
+                        :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
+                        class="ratio-value">
+                        {{ increasedPayUserType.conversion | abs }}%
+                        <template v-if="increasedPayUserType.conversion > 0">↑</template>
+                        <template v-else-if="increasedPayUserType.conversion === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="data-item-line" />
+              <!-- 复购付费用户 ------------------------------------ -->
+              <div style="width: 50%" class="data-item">
+                <div class="item-row item-title">复购付费用户</div>
+                <div class="item-row item-data-section">
+                  <p class="item-subscribe">
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.count }}</span>
+                      <label class="item-label">总数</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.app }}</span>
+                      <label class="item-label">APP复购</label>
+                    </span>
+                    <span>
+                      <span class="total-count">{{ repurchaseUser.ctcc }}</span>
+                      <label class="item-label">电信复购</label>
+                    </span>
+                  </p>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
+                        class="ratio-value">
+                        {{ repurchaseUser.comparison | abs }}%
+                        <template v-if="repurchaseUser.comparison > 0">↑</template>
+                        <template v-else-if="repurchaseUser.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
-            <!-- 新增付费用户 ------------------------------------ -->
-            <div class="data-item">
-              <div class="item-row item-title">新增付费用户</div>
+            <div class="new-user-and-amount-area-3">
+              <!-- 充值金额 -->
+              <div class="data-item">
+                <div class="item-row item-title">充值金额</div>
+                <div class="item-row item-data-section">
+                  <div class="item-row-box order-amount-2">
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">总数: </label>
+                        <span class="total-count" style="font-size: 20px">
+                          {{ orderAmount2.count }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">微信: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.wechat }}
+                        </span>
+                      </div>
+                      <div >
+                        <label class="item-label">IOS: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.ios }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item-subscribe-line">
+                      <div >
+                        <label class="item-label">支付宝: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.aliPay }}
+                        </span>
+                      </div>
+                      <div >
+                        <label class="item-label">电信: </label>
+                        <span class="total-count">
+                          {{ orderAmount2.ctcc }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="diviser" />
+                  <p class="ratio-data">
+                    <span v-if="isShowComparison">
+                      <span class="ratio-name">较上一周:</span>
+                      <span
+                        :class="{green: orderAmount2.comparison < 0, red: orderAmount2.comparison > 0, blue: orderAmount2.comparison === 0 }"
+                        class="ratio-value">
+                        {{ orderAmount2.comparison | abs }}%
+                        <template v-if="orderAmount2.comparison > 0">↑</template>
+                        <template v-else-if="orderAmount2.comparison === 0" />
+                        <template v-else>↓</template>
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="new-user-and-amount-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>会员订单看板</span>
+            </div>
+            <!-- 订单总数 -->
+            <div class="data-item" style="border: 0;margin-right: 10px">
+              <div class="item-row item-title">订单总数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.count }}</span>
+                    <span class="total-count">{{ orderCountData.count }}</span>
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.ios }}</span>
+                    <span class="total-count">{{ newOrderCountData.ios + reOrderCountData.ios }}</span>
                     <label class="item-label">IOS</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.wechat }}</span>
+                    <span class="total-count">{{ newOrderCountData.wechat + reOrderCountData.wechat }}</span>
                     <label class="item-label">微信</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.aliPay }}</span>
+                    <span class="total-count">{{ newOrderCountData.aliPay + reOrderCountData.aliPay }}</span>
                     <label class="item-label">支付宝</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ increasedPayUserType.ctcc }}</span>
+                    <span class="total-count">{{ newOrderCountData.ctcc + reOrderCountData.ctcc }}</span>
                     <label class="item-label">电信</label>
                   </span>
                 </p>
@@ -163,51 +315,41 @@
                   <span v-if="isShowComparison">
                     <span class="ratio-name">较上一周:</span>
                     <span
-                      :class="{green: increasedPayUserType.comparison < 0, red: increasedPayUserType.comparison > 0, blue: increasedPayUserType.comparison === 0 }"
+                      :class="{green: orderCountData.comparison < 0, red: orderCountData.comparison > 0, blue: orderCountData.comparison === 0 }"
                       class="ratio-value">
-                      {{ increasedPayUserType.comparison | abs }}%
-                      <template v-if="increasedPayUserType.comparison > 0">↑</template>
-                      <template v-else-if="increasedPayUserType.comparison === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                  <span>
-                    <span class="ratio-name">转化率:</span>
-                    <span
-                      :class="{green: increasedPayUserType.conversion < 0, red: increasedPayUserType.conversion > 0, blue: increasedPayUserType.conversion === 0 }"
-                      class="ratio-value">
-                      {{ increasedPayUserType.conversion | abs }}%
-                      <template v-if="increasedPayUserType.conversion > 0">↑</template>
-                      <template v-else-if="increasedPayUserType.conversion === 0" />
+                      {{ orderCountData.comparison | abs }}%
+                      <template v-if="orderCountData.comparison > 0">↑</template>
+                      <template v-else-if="orderCountData.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
                 </p>
               </div>
             </div>
-            <!-- 复购付费用户 ------------------------------------ -->
-            <div class="data-item">
-              <div class="item-row item-title">复购付费用户</div>
+            <div class="data-item-line" />
+            <!-- 新增订单数 -->
+            <div class="data-item" style="border: 0;margin-right: 10px">
+              <div class="item-row item-title">新增订单数</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
-                    <span class="total-count">{{ repurchaseUser.count }}</span>
+                    <span class="total-count">{{ newOrderCountData.count }}</span>
                     <label class="item-label">总数</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ repurchaseUser.ios }}</span>
+                    <span class="total-count">{{ newOrderCountData.ios }}</span>
                     <label class="item-label">IOS</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ repurchaseUser.wechat }}</span>
+                    <span class="total-count">{{ newOrderCountData.wechat }}</span>
                     <label class="item-label">微信</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ repurchaseUser.aliPay }}</span>
+                    <span class="total-count">{{ newOrderCountData.aliPay }}</span>
                     <label class="item-label">支付宝</label>
                   </span>
                   <span>
-                    <span class="total-count">{{ repurchaseUser.ctcc }}</span>
+                    <span class="total-count">{{ newOrderCountData.ctcc }}</span>
                     <label class="item-label">电信</label>
                   </span>
                 </p>
@@ -216,11 +358,54 @@
                   <span v-if="isShowComparison">
                     <span class="ratio-name">较上一周:</span>
                     <span
-                      :class="{green: repurchaseUser.comparison < 0, red: repurchaseUser.comparison > 0, blue: repurchaseUser.comparison === 0 }"
+                      :class="{green: newOrderCountData.comparison < 0, red: newOrderCountData.comparison > 0, blue: newOrderCountData.comparison === 0 }"
                       class="ratio-value">
-                      {{ repurchaseUser.comparison | abs }}%
-                      <template v-if="repurchaseUser.comparison > 0">↑</template>
-                      <template v-else-if="repurchaseUser.comparison === 0" />
+                      {{ newOrderCountData.comparison | abs }}%
+                      <template v-if="newOrderCountData.comparison > 0">↑</template>
+                      <template v-else-if="newOrderCountData.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="data-item-line" />
+            <!-- 复购订单数 -->
+            <div class="data-item" style="border: 0;margin-right: 10px">
+              <div class="item-row item-title">复购订单数</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <span class="total-count">{{ reOrderCountData.count }}</span>
+                    <label class="item-label">总数</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ reOrderCountData.ios }}</span>
+                    <label class="item-label">IOS</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ reOrderCountData.wechat }}</span>
+                    <label class="item-label">微信</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ reOrderCountData.aliPay }}</span>
+                    <label class="item-label">支付宝</label>
+                  </span>
+                  <span>
+                    <span class="total-count">{{ reOrderCountData.ctcc }}</span>
+                    <label class="item-label">电信</label>
+                  </span>
+                </p>
+                <div class="diviser" />
+                <p class="ratio-data">
+                  <span v-if="isShowComparison">
+                    <span class="ratio-name">较上一周:</span>
+                    <span
+                      :class="{green: reOrderCountData.comparison < 0, red: reOrderCountData.comparison > 0, blue: reOrderCountData.comparison === 0 }"
+                      class="ratio-value">
+                      {{ reOrderCountData.comparison | abs }}%
+                      <template v-if="reOrderCountData.comparison > 0">↑</template>
+                      <template v-else-if="reOrderCountData.comparison === 0" />
                       <template v-else>↓</template>
                     </span>
                   </span>
@@ -228,10 +413,46 @@
               </div>
             </div>
           </div>
-          <div class="ratio-with-chart-area">
-            <!-- 新增绑定用户 ------------------------------------ -->
+          <div class="ratio-with-chart-area" style="background: #f9f9f9; padding: 20px;position: relative;padding-top: 50px;">
+            <div style="position: absolute;top: 0;margin-top: 14px;font-size: 18px;font-weight: bold;opacity: .7">
+              <span>注册用户和绑定数据看板</span>
+            </div>
+            <!-- 新增注册用户 ------------------------------------ -->
             <div class="data-item">
-              <div class="item-row item-title">新增绑定用户</div>
+              <div class="item-row item-title">新增注册用户</div>
+              <div class="item-row item-data-section">
+                <p class="item-subscribe">
+                  <span>
+                    <label class="item-label">总数: </label>
+                    <span class="total-count">{{ newRegisterUser.count }}</span>
+                  </span>
+                  <span v-if="isShowComparison">
+                    <span class="item-label">较上一周: </span>
+                    <span
+                      :class="{green: newRegisterUser.comparison < 0, red: newRegisterUser.comparison > 0, blue: newRegisterUser.comparison === 0 }"
+                      class="ratio-value">
+                      {{ newRegisterUser.comparison | abs }}%
+                      <template v-if="newRegisterUser.comparison > 0">↑</template>
+                      <template v-else-if="newRegisterUser.comparison === 0" />
+                      <template v-else>↓</template>
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="item-row item-chart-area">
+                <div class="chart">
+                  <ve-ring
+                    :data="newRegisterUser.chartData"
+                    :legend-visible="true"
+                    :extend="chart_extend"
+                    :settings="chart_settings"
+                    height="205px" />
+                </div>
+              </div>
+            </div>
+            <!-- 家长端新增绑定用户 ------------------------------------ -->
+            <div class="data-item">
+              <div class="item-row item-title">家长端-新增绑定用户</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
@@ -273,80 +494,9 @@
                 </div>
               </div>
             </div>
-
-            <!-- 新增注册用户 ------------------------------------ -->
+            <!-- 新增绑定设备 ------------------------------------ -->
             <div class="data-item">
-              <div class="item-row item-title">新增注册用户</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <label class="item-label">总数: </label>
-                    <span class="total-count">{{ newRegisterUser.count }}</span>
-                  </span>
-                  <span v-if="isShowComparison">
-                    <span class="item-label">较上一周: </span>
-                    <span
-                      :class="{green: newRegisterUser.comparison < 0, red: newRegisterUser.comparison > 0, blue: newRegisterUser.comparison === 0 }"
-                      class="ratio-value">
-                      {{ newRegisterUser.comparison | abs }}%
-                      <template v-if="newRegisterUser.comparison > 0">↑</template>
-                      <template v-else-if="newRegisterUser.comparison === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                </p>
-              </div>
-              <div class="item-row item-chart-area">
-                <div class="chart">
-                  <ve-ring
-                    :data="newRegisterUser.chartData"
-                    :legend-visible="true"
-                    :extend="chart_extend"
-                    :settings="chart_settings"
-                    height="205px" />
-                </div>
-              </div>
-            </div>
-            <!-- 充值金额 ------------------------------------ -->
-            <div class="data-item">
-              <div class="item-row item-title">充值金额</div>
-              <div class="item-row item-data-section" style="min-width: 418px;">
-                <p class="item-subscribe">
-                  <span>
-                    <label class="item-label">总数: </label>
-                    <span class="total-count">
-                      ¥{{ orderAmount.count }}
-                    </span>
-                  </span>
-                  <span v-if="isShowComparison">
-                    <span class="item-label">较上一周: </span>
-                    <span
-                      :class="{green: orderAmount.comparison < 0, red: orderAmount.comparison > 0, blue: orderAmount.comparison === 0 }"
-                      class="ratio-value">
-                      {{ orderAmount.comparison | abs }}%
-                      <template v-if="orderAmount.comparison > 0">↑</template>
-                      <template v-else-if="orderAmount.comparison === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                </p>
-              </div>
-              <div class="item-row item-chart-area">
-                <div class="chart">
-                  <ve-ring
-                    :data="orderAmount.chartData"
-                    :legend-visible="true"
-                    :extend="chart_extend"
-                    :settings="chart_settings"
-                    height="205px" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="ratio-with-chart-area" style="justify-content: flex-start;">
-            <!-- 新增绑定设备及占比 ------------------------------------ -->
-            <div class="data-item">
-              <div class="item-row item-title">新增绑定设备及占比</div>
+              <div class="item-row item-title">孩子端-新增绑定设备</div>
               <div class="item-row item-data-section">
                 <p class="item-subscribe">
                   <span>
@@ -373,39 +523,6 @@
                     :legend-visible="true"
                     :extend="chart_extend"
                     :settings="chart_settings"
-                    height="205px" />
-                </div>
-              </div>
-            </div>
-            <!-- 订单类型及支付渠道占比 ------------------------------------ -->
-            <div class="data-item" style="margin-left: 20px;">
-              <div class="item-row item-title">订单类型及支付渠道占比</div>
-              <div class="item-row item-data-section">
-                <p class="item-subscribe">
-                  <span>
-                    <label class="item-label">总数: </label>
-                    <span class="total-count">{{ orderTypePay.count }}</span>
-                  </span>
-                  <span v-if="isShowComparison">
-                    <label class="item-label">较上一周: </label>
-                    <span
-                      :class="{green: orderTypePay.comparison < 0, red: orderTypePay.comparison > 0, blue: orderTypePay.comparison === 0 }"
-                      class="ratio-value">
-                      {{ orderTypePay.comparison | abs }}%
-                      <template v-if="orderTypePay.comparison > 0">↑</template>
-                      <template v-else-if="orderTypePay.comparison === 0" />
-                      <template v-else>↓</template>
-                    </span>
-                  </span>
-                </p>
-              </div>
-              <div class="item-row item-chart-area">
-                <div class="chart">
-                  <ve-pie
-                    :data="orderTypePay.chartData"
-                    :legend-visible="false"
-                    :extend="order_chart_extend"
-                    :settings="chart_settings_array"
                     height="205px" />
                 </div>
               </div>
@@ -499,6 +616,7 @@ const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
 const echart_colors = [
   '#338DE8', '#ED6060', '#EFAE3E', '#3CE5D5', '#92CC52'
 ]
+const JsBigDecimal = require('js-big-decimal')
 
 export default {
   filters: {
@@ -519,28 +637,69 @@ export default {
       theme_color,
       pickerOptions: {
         // 限制仅选择近3650天
-        // disabledDate(time) {
-        //   let curDate = new Date()
-        //   curDate.setHours(0)
-        //   curDate.setMinutes(0)
-        //   curDate.setMilliseconds(0)
-        //   curDate.setSeconds(0)
-        //   curDate = new Date(curDate.getTime() - 1000)
-        //   const day = 3650 * 24 * 3600 * 1000
-        //   const dateRegion = curDate - day
-        //   return time.getTime() > curDate || time.getTime() < dateRegion
-        // }
+        disabledDate(time) {
+          let curDate = new Date()
+          curDate.setHours(0)
+          curDate.setMinutes(0)
+          curDate.setMilliseconds(0)
+          curDate.setSeconds(0)
+          curDate = new Date(curDate.getTime() - 1000)
+          const day = 3650 * 24 * 3600 * 1000
+          const dateRegion = curDate - day
+          return time.getTime() > curDate || time.getTime() < dateRegion
+        }
       },
       datetime_range: [new Date(pre_week), new Date(day)],
       defaultDateRange: [new Date(pre_week), new Date(day)],
       query_sets: {},
-      overall_data: {
-        pay_member_count: '-',
-        experience_member_count: '-',
-        due_soon_member_count: '-',
-        order_count: '-',
-        order_amount: '-'
+      // 整体数据
+      overallOriginData: [],
+      overallData: {
+        payUser: {
+          count: '-'
+        },
+        order: {
+          count: '-'
+        },
+        bind: {
+          count: '-'
+        },
+        register: {
+          count: '-'
+        },
+        amount: {
+          count: '-'
+        }
       },
+      overallDataChartData: {
+        columns: ['name', '总数'],
+        rows: [
+          { name: '-', 总数: 0 },
+          { name: '-', 总数: 0 },
+          { name: '-', 总数: 0 },
+          { name: '-', 总数: 0 },
+          { name: '-', 总数: 0 }
+        ]
+      },
+      overallDataChartColor: [],
+      overallDataChartExtend: {
+        // metrics: ['总数'],
+        label: {
+          show: true,
+          position: 'top'
+        },
+        series(v) {
+          v.forEach(i => {
+            i.barWidth = 30
+          })
+          return v
+        },
+        tooltip(v) {
+          // v.trigger = 'none'
+          return v
+        }
+      },
+      overallDataDetailIndex: 0,
       growth_data: {},
       chart_settings: {
         hoverAnimation: false,
@@ -654,11 +813,11 @@ export default {
         list: [
           {
             label: '付费用户数',
-            content: '累计在格雷盒子7付费买过会员的用户，包括苹果高级会员、安卓高级会员、苹果普通会员、安卓普通会员和电信会员'
+            content: '累计在格雷盒子7付费买过会员的用户，包括iOS高级会员、安卓高级会员、iOS普通会员、安卓普通会员和电信会员'
           },
           {
             label: '订单成交量',
-            content: '累计在格雷盒子7付费成功的订单总量，包括苹果高级会员、苹果普通会员、安卓高级会员、安卓普通会员和电信会员'
+            content: '累计在格雷盒子7付费成功的订单总量，包括iOS高级会员、iOS普通会员、安卓高级会员、安卓普通会员和电信会员'
           },
           {
             label: '注册用户总数',
@@ -666,21 +825,21 @@ export default {
           },
           {
             label: '累计绑定设备',
-            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、苹果设备和PC设备'
+            content: '累计在格雷盒子7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、iOS设备和PC设备'
           },
           {
             label: '充值金额',
-            content: '在格雷盒子7所有付费成功订单的总金额，包括苹果高级会员收入、苹果普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+            content: '在格雷盒子7所有付费成功订单的总金额，包括iOS高级会员收入、iOS普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
           }
         ],
         list2: [
           {
-            label: '新增绑定用户',
-            content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增绑定用户数/新增注册用户数'
+            label: '付费用户总数',
+            content: '统计筛选时间段内新增和复购用户的总数，若某个用户既是新增用户，又是复购用户，则只计算为1个付费用户（去重）'
           },
           {
             label: '新增付费用户',
-            content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增付费用户数/新增注册用户数'
+            content: '筛选的时间段内第一次付费成功的用户数（包含电信会员），支持查询更多时间段的数据，转化率=新增家长端付费用户数/新增家长端注册用户数'
           },
           {
             label: '复购付费用户',
@@ -691,16 +850,24 @@ export default {
             content: '筛选的时间段内付费成功订单的总金额，支持查询更多时间段的数据'
           },
           {
+            label: '新增订单数',
+            content: '筛选时间段内第一次付费成功用户的订单（包含电信订单），支持查询更多时间段的数据'
+          },
+          {
+            label: '复购订单数',
+            content: '以前付费成功过任意会员套餐的用户再次下单成功的订单，即为复购订单'
+          },
+          {
             label: '新增注册用户数',
             content: '筛选的时间段内注册成功的家长和孩子用户数，支持查询更多时间段的数据'
           },
           {
-            label: '新增绑定设备及占比',
-            content: '筛选的时间段内新增绑定成功设备的类型，包括公版和定制机'
+            label: '家长端-新增绑定用户',
+            content: '筛选的时间段内第一次成功绑定设备的家长用户数，支持查询更多时间段的数据，转化率=新增家长端绑定用户数/新增家长端注册用户数'
           },
           {
-            label: '订单类型及支付渠道占比',
-            content: '筛选的时间段内新增付费成功订单的类型以及支付渠道的占比'
+            label: '孩子端-新增绑定设备',
+            content: '筛选的时间段内新增绑定成功设备的类型，包括公版、定制机、企业模式和PC'
           }
         ]
       },
@@ -713,9 +880,7 @@ export default {
       // 新增付费用户卡片
       increasedPayUserType: {
         count: '-', // 总数
-        ios: '-', // 苹果
-        wechat: '-', // 微信
-        aliPay: '-', // 支付宝
+        app: '-', // APP
         ctcc: '-', // 电信
         comparison: 0, // 较上一周
         conversion: 0 // 转化率
@@ -723,9 +888,7 @@ export default {
       // 复购付费用户卡片
       repurchaseUser: {
         count: '-', // 总数
-        ios: '-', // 苹果
-        wechat: '-', // 微信
-        aliPay: '-', // 支付宝
+        app: '-', // APP
         ctcc: '-', // 电信
         comparison: 0 // 较上一周
       },
@@ -744,40 +907,36 @@ export default {
             '50%'
           ],
           rows: [
-            // { 'name': 'iOS', 'value': 0 },
-            // { 'name': '安卓', 'value': 0 }
+            // ###
+            { 'name': 'iOS', 'value': 0 },
+            { 'name': '安卓', 'value': 0 }
           ]
         }
       },
       // 新增注册用户卡片
       newRegisterUser: {
         count: '-', // 总数
-        comparison: 2020, // 较上一周
-        chartData: {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            // { name: '家长端', value: 2020 },
-            // { name: '孩子端', value: 2020 }
-          ]
-        }
-      },
-      // 充值金额卡片
-      orderAmount: {
-        count: '-',
         comparison: 0, // 较上一周
         chartData: {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            // { name: '微信', value: 2020 },
-            // { name: '支付宝', value: 2020 },
-            // { name: 'iOS', value: 2020 },
-            // { name: '电信', value: 2020 }
+            // ###
+            { name: '家长端', value: 2020 },
+            { name: '孩子端', value: 2020 }
           ]
         }
       },
-      // 新增绑定设备及占比
+      // 充值金额卡片2
+      orderAmount2: {
+        count: '-',
+        ios: '-', // iOS
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
+      },
+      // 新增绑定设备
       newBindDevice: {
         count: '-',
         comparison: 0, // 较上一周
@@ -785,28 +944,35 @@ export default {
           columns: ['name', 'value'],
           center: ['50%', '50%'],
           rows: [
-            // { name: 'VIVO', value: 2020 },
-            // { name: 'OPPO', value: 2020 },
-            // { name: '公版', value: 2020 }
+            // ###
+            { name: 'VIVO', value: 2020 },
+            { name: 'OPPO', value: 2020 },
+            { name: '公版', value: 2020 }
           ]
         }
       },
-      // 订单类型及支付渠道占比
-      orderTypePay: {
+      // 订单总数
+      orderCountData: {
         count: '-',
-        comparison: 0, // 较上一周
-        chartData: {
-          columns: ['name', 'value'],
-          center: ['50%', '50%'],
-          rows: [
-            // { name: '普通会员', value: 2020 },
-            // { name: '高级会员', value: 2020 },
-            // { name: 'IOS', value: 2020 },
-            // { name: '微信', value: 2020 },
-            // { name: '支付宝', value: 2020 },
-            // { name: '电信', value: 2020 }
-          ]
-        }
+        comparison: 0 // 较上一周
+      },
+      // 新增订单数
+      newOrderCountData: {
+        count: '-',
+        ios: '-', // iOS
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
+      },
+      // 复购订单数
+      reOrderCountData: {
+        count: '-',
+        ios: '-', // iOS
+        wechat: '-', // 微信
+        aliPay: '-', // 支付宝
+        ctcc: '-', // 电信
+        comparison: 0 // 较上一周
       }
     }
   },
@@ -855,8 +1021,178 @@ export default {
     fetchOverallData() {
       get_homepage_overall_data().then(r => {
         if (r.status === 0) {
-          this.overall_data = r.data
-          // this.$message.success(r.message)
+          /* r.data = [
+            {
+              'category': '01',
+              'list': [
+                {
+                  'type': '01',
+                  'number': 600
+                },
+                {
+                  'type': '02',
+                  'number': 500
+                },
+                {
+                  'type': '03',
+                  'number': 400
+                },
+                {
+                  'type': '04',
+                  'number': 300
+                },
+                {
+                  'type': '05',
+                  'number': 200
+                },
+                {
+                  'type': '00',
+                  'number': 100
+                }
+              ]
+            },
+            {
+              'category': '02',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 100
+                },
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                }
+              ]
+            },
+            {
+              'category': '03',
+              'list': [
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                },
+                {
+                  'type': '06',
+                  'number': 600
+                },
+                {
+                  'type': '00',
+                  'number': 900
+                }
+              ]
+            },
+            {
+              'category': '04',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 2000
+                },
+                {
+                  'type': '01',
+                  'number': 100
+                },
+                {
+                  'type': '02',
+                  'number': 200
+                },
+                {
+                  'type': '03',
+                  'number': 300
+                },
+                {
+                  'type': '04',
+                  'number': 400
+                },
+                {
+                  'type': '05',
+                  'number': 500
+                },
+                {
+                  'type': '06',
+                  'number': 600
+                },
+                {
+                  'type': '07',
+                  'number': 700
+                }
+              ]
+            },
+            {
+              'category': '05',
+              'list': [
+                {
+                  'type': '00',
+                  'number': 6000
+                },
+                {
+                  'type': '01',
+                  'number': 1000
+                },
+                {
+                  'type': '02',
+                  'number': 2000
+                },
+                {
+                  'type': '03',
+                  'number': 3000
+                },
+                {
+                  'type': '04',
+                  'number': 4000
+                },
+                {
+                  'type': '05',
+                  'number': 5000
+                }
+              ]
+            }
+          ]*/
+          const data = r.data
+          this.overallOriginData = cloneDeep(data)
+          // 付费会员数
+          this.overallData.payUser.count = data.find(item => item.category === '01').list.find(item => item.type === '00').number
+          // 订单成交量
+          this.overallData.order.count = data.find(item => item.category === '02').list.find(item => item.type === '00').number
+          // 累计绑定设备
+          this.overallData.bind.count = data.find(item => item.category === '03').list.find(item => item.type === '00').number
+          // 注册用户总数
+          this.overallData.register.count = data.find(item => item.category === '04').list.find(item => item.type === '00').number
+          // 充值金额
+          this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
+          this.parseOverallDataDetail(this.overallDataDetailIndex)
         } else {
           this.$message.error(r.message)
         }
@@ -891,27 +1227,14 @@ export default {
     parseChatChart(data) {
       // 付费用户总数
       this.payUser.count = data.pay_user_count
-      this.payUser.comparison = data.pay_user_count_conversion || 0
+      this.payUser.comparison = data.pay_user_count_conversion// || 0
       // 新增付费用户
       this.increasedPayUserType.count = data.increased_pay_user_sum
-      this.increasedPayUserType.ios = (() => {
+      this.increasedPayUserType.app = (() => {
         try {
           return data.increased_pay_user_type.find(item => item.name === '04').count
         } catch (e) {
-          return 0
-        }
-      })()
-      this.increasedPayUserType.wechat = (() => {
-        try {
-          return data.increased_pay_user_type.find(item => item.name === '01').count
-        } catch (e) {
-          return 0
-        }
-      })()
-      this.increasedPayUserType.aliPay = (() => {
-        try {
-          return data.increased_pay_user_type.find(item => item.name === '02').count
-        } catch (e) {
+          console.log(1, e)
           return 0
         }
       })()
@@ -919,52 +1242,150 @@ export default {
         try {
           return data.increased_pay_user_type.find(item => item.name === '06').count
         } catch (e) {
+          console.log(2, e)
           return 0
         }
       })()
-      this.increasedPayUserType.comparison = data.increased_pay_user_conversion || 0
-      this.increasedPayUserType.conversion = data.increased_pay_user_comparison || 0
+      this.increasedPayUserType.comparison = data.increased_pay_user_conversion// || 0
+      this.increasedPayUserType.conversion = data.increased_pay_user_comparison// || 0
       // 复购付费用户
       this.repurchaseUser.count = data.repurchase_user_count
-      this.repurchaseUser.ios = (() => {
+      this.repurchaseUser.comparison = data.repurchase_user_count_conversion// || 0
+      this.repurchaseUser.app = (() => {
         try {
-          return data.repurchase_user_count_type.find(item => item.payType === '04').pcount
+          return data.repurchase_user_count_type.find(item => item.name === '01').count
         } catch (e) {
-          return 0
-        }
-      })()
-      this.repurchaseUser.wechat = (() => {
-        try {
-          return data.repurchase_user_count_type.find(item => item.payType === '01').pcount
-        } catch (e) {
-          return 0
-        }
-      })()
-      this.repurchaseUser.aliPay = (() => {
-        try {
-          return data.repurchase_user_count_type.find(item => item.payType === '02').pcount
-        } catch (e) {
+          console.log(3, e)
           return 0
         }
       })()
       this.repurchaseUser.ctcc = (() => {
         try {
-          return data.repurchase_user_count_type.find(item => item.payType === '06').pcount
+          return data.repurchase_user_count_type.find(item => item.name === '02').count
         } catch (e) {
+          console.log(4, e)
           return 0
         }
       })()
-      this.repurchaseUser.comparison = data.repurchase_user_count_conversion || 0
+      // 充值金额
+      this.orderAmount2.count = data.order_amount_sum// || 0
+      this.orderAmount2.ios = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(5, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.wechat = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(6, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.aliPay = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(7, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.ctcc = (() => {
+        try {
+          return data.order_amount_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(8, e)
+          return 0
+        }
+      })()
+      this.orderAmount2.comparison = data.order_amount_conversion// || 0
+      // 订单总数
+      this.orderCountData.count = data.pay_order_count// || 0
+      this.orderCountData.comparison = data.pay_order_count_conversion// || 0
+      // 新增订单数
+      this.newOrderCountData.count = data.add_order_sum// || 0
+      this.newOrderCountData.comparison = data.add_order_conversion// || 0
+      this.newOrderCountData.ios = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(9, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.wechat = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(10, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.aliPay = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(11, e)
+          return 0
+        }
+      })()
+      this.newOrderCountData.ctcc = (() => {
+        try {
+          return data.add_order_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(12, e)
+          return 0
+        }
+      })()
+      // 复购订单数
+      this.reOrderCountData.count = data.repurchase_order_type_count// || 0
+      this.reOrderCountData.comparison = data.repurchase_order_type_conversion// || 0
+      this.reOrderCountData.ios = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '04').count
+        } catch (e) {
+          console.log(13, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.wechat = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '01').count
+        } catch (e) {
+          console.log(14, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.aliPay = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '02').count
+        } catch (e) {
+          console.log(15, e)
+          return 0
+        }
+      })()
+      this.reOrderCountData.ctcc = (() => {
+        try {
+          return data.repurchase_order_type.find(item => item.name === '06').count
+        } catch (e) {
+          console.log(16, e)
+          return 0
+        }
+      })()
       // 新增绑定用户
       this.newBindUser.count = data.bind_user_sum
-      this.newBindUser.comparison = data.bind_user_conversion || 0
-      this.newBindUser.conversion = data.bind_user_comparison || 0
+      this.newBindUser.comparison = data.bind_user_conversion// || 0
+      this.newBindUser.conversion = data.bind_user_comparison// || 0
       this.newBindUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: 'iOS', value: (() => {
           try {
             return data.bind_user_type.find(item => item.name === '02').count
           } catch (e) {
+            console.log(17, e)
             return 0
           }
         })() },
@@ -972,19 +1393,21 @@ export default {
           try {
             return data.bind_user_type.find(item => item.name === '03').count
           } catch (e) {
+            console.log(18, e)
             return 0
           }
         })() }
       ]
       // 新增注册用户
       this.newRegisterUser.count = data.increased_reg_user_sum
-      this.newRegisterUser.comparison = data.increased_reg_user_conversion || 0
+      this.newRegisterUser.comparison = data.increased_reg_user_conversion// || 0
       this.newRegisterUser.chartData.rows = [
         // { 'name': 'iOS', 'value': 0 },
         { name: '家长端', value: (() => {
           try {
             return data.increased_reg_user_type.find(item => item.name === '01').count
           } catch (e) {
+            console.log(19, e)
             return 0
           }
         })() },
@@ -992,83 +1415,27 @@ export default {
           try {
             return data.increased_reg_user_type.find(item => item.name === '02').count
           } catch (e) {
+            console.log(20, e)
             return 0
           }
         })() }
       ]
-      // 充值金额
-      this.orderAmount.count = data.order_amount_sum
-      this.orderAmount.comparison = data.order_amount_conversion || 0
-      const orderAmountType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
-      this.orderAmount.chartData.rows = Object.keys(orderAmountType).map(key => {
-        const value = data.order_amount_type.find(item => item.name === key)
-        return {
-          name: orderAmountType[key],
-          value: value ? value.count : 0
-        }
-      })
-      // 新增绑定设备及占比
+      // 新增绑定设备
       this.newBindDevice.count = data.bind_device_sum
-      this.newBindDevice.comparison = data.bind_device_conversion || 0
-      const newBindDeviceType = { '01': 'PC', '02': 'iOS公版', '03': '安卓公版', '04': '企业模式', '05': '定制机' }
+      this.newBindDevice.comparison = data.bind_device_conversion// || 0
+      const newBindDeviceType = {
+        '03': '安卓公版',
+        '02': 'iOS',
+        '04': '企业模式',
+        '05': '定制机',
+        '01': 'PC'
+      }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
         return {
           name: newBindDeviceType[key],
           value: value ? value.count : 0
         }
-      })
-      // 订单类型及支付渠道占比
-      this.orderTypePay.count = data.order_channel_count
-      this.orderTypePay.comparison = data.order_channel_count_conversion || 0
-      const orderTypePayType = { '02': '高级会员', '03': '普通会员' }
-      // 电信会员
-      const ctccType = data.order_channel_member_type.find(item => item.name === '04')
-
-      this.orderTypePay.chartData.rows = Object.keys(orderTypePayType).map(key => {
-        const value = data.order_channel_member_type.find(item => item.name === key)
-        return {
-          name: orderTypePayType[key],
-          value: (value ? value.count : 0) + (() => {
-            // 加上电信会员
-            if (key === '03') {
-              return ctccType ? ctccType.count : 0
-            }
-            return 0
-          })()
-        }
-      })
-      const orderChannelPayType = { '01': '微信', '02': '支付宝', '04': 'iOS', '06': '电信' }
-      Object.keys(orderChannelPayType).forEach(key => {
-        const item = { name: orderChannelPayType[key], value: 0 }
-        try {
-          item.value = data.order_channel_pay_type.find(item => item.name === key).count
-          // eslint-disable-next-line no-empty
-        } catch (e) {
-        }
-        this.orderTypePay.chartData.rows.push(item)
-        let x1 = 180
-        let x2 = 260
-        if (window.innerWidth > 1640) {
-          x1 = 244
-          x2 = 350
-        }
-        this.order_chart_extend.legend = [
-          {
-            orient: 'vertical',
-            icon: 'circle',
-            x: x1,
-            y: 'center',
-            data: Object.values(orderTypePayType)
-          },
-          {
-            orient: 'vertical',
-            icon: 'circle',
-            x: x2,
-            y: 'center',
-            data: Object.values(orderChannelPayType)
-          }
-        ]
       })
     },
     /**
@@ -1557,12 +1924,89 @@ export default {
       this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
       const monthLength = this.lineDateStyleList[2].date.length
       this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
-      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
+      // console.log(JSON.stringify(this.lineDateStyleList, null, 2))
     },
     /**
      * @description 展开详细数据切换
      * */
     showLineTableShowChange(val) {
+    },
+    parseOverallDataDetail(overallDataDetailIndex) {
+      this.overallDataDetailIndex = overallDataDetailIndex
+      if (overallDataDetailIndex === 0) {
+        this.overallDataChartData = {
+          columns: ['name', '总数'],
+          rows: [
+            { name: 'iOS高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '01').number },
+            { name: 'iOS普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
+            { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
+            { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
+            { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
+          ]
+        }
+        this.overallDataChartColor = ['#3ec0c6']
+      }
+      if (overallDataDetailIndex === 1) {
+        this.overallDataChartData = {
+          columns: ['name', '总数'],
+          rows: [
+            { name: 'iOS高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '01').number },
+            { name: 'iOS普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
+            { name: '安卓高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '03').number },
+            { name: '安卓普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '04').number },
+            { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number }
+          ]
+        }
+        this.overallDataChartColor = ['#fbb444']
+      }
+      if (overallDataDetailIndex === 2) {
+        this.overallDataChartData = {
+          columns: ['name', '总数'],
+          rows: [
+            { name: '安卓公版设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '01').number },
+            { name: '华为企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '02').number },
+            { name: '小米企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '03').number },
+            { name: '定制机', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '04').number },
+            { name: 'iOS设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '05').number },
+            { name: 'PC设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number }
+          ]
+        }
+        this.overallDataChartColor = ['#8596f1']
+      }
+      if (overallDataDetailIndex === 3) {
+        this.overallDataChartData = {
+          columns: ['name', '总数'],
+          rows: [
+            { name: 'iOS家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
+            { name: '安卓家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
+            { name: '电信家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            { name: '第三方平台家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
+            { name: 'iOS孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
+            { name: '安卓孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number },
+            { name: 'PC孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '07').number }
+          ]
+        }
+        this.overallDataChartColor = ['#d87fe2']
+      }
+      if (overallDataDetailIndex === 4) {
+        this.overallDataChartData = {
+          columns: ['name', '总数'],
+          rows: [
+            { name: 'iOS高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '01').number) },
+            { name: 'iOS普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
+            { name: '安卓高级会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
+            { name: '安卓普通会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: '电信会员充值金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
+          ]
+        }
+        this.overallDataChartColor = ['#ffa069']
+      }
+      // this.overallDataChartData.rows = this.overallDataChartData.rows.sort((a, b) => {
+      //   return b['总数'] - a['总数']
+      // })
+    },
+    transformRMB(number) {
+      return new JsBigDecimal(number).divide(new JsBigDecimal(100), 2).getValue()
     }
   }
 }
@@ -1589,6 +2033,7 @@ export default {
     margin-bottom: 6px;
     display: block;
     font-size: 15px;
+    color: #409eff;
   }
   .content{
     line-height: 1.5;
@@ -1650,7 +2095,10 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         justify-content: space-between;
         padding: 0 0 15px 0;
         user-select: none;
-
+        .summary-items-active{
+          transform: scale(1.05);
+          box-shadow: 6px 4px 20px 5px #c7c7c7;
+        }
         .summary-item {
           width: 260px;
           height: 120px;
@@ -1659,7 +2107,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           flex-direction: row;
           padding: 22px 24px;
           flex-basis: calc((100% - 80px) / 6);
-
+          cursor: pointer;
           .item-icon {
             font-size: 48px;
             color: #FFF;
@@ -1723,15 +2171,16 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
         flex-direction: row;
         justify-content: space-between;
         margin: 20px 0;
-
+        align-items: center;
         .data-item {
-          flex-basis: calc((100% - 40px) / 3);
+          //flex-basis: calc((100% - 40px) / 3);
           min-width: 380px;
+          width: 33.33333%;
           min-height: 220px;
           display: flex;
           flex-direction: column;
           background: #FFFFFF;
-          border: 1px solid #EAEAEA;
+          //border: 1px solid #EAEAEA;
           border-radius: $border_radius_size;
           padding: 20px 32px;
 
@@ -1842,6 +2291,85 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
             }
           }
         }
+        .data-item-line{
+          height: 180px;
+          width: 1px;
+          background-color: #eaeaea;
+          max-width: 1px;
+          padding: 0 !important;
+          display: none;
+        }
+        .new-user-and-amount-area-2{
+          display: flex;
+          //border: 1px solid rgb(234, 234, 234);
+          margin-right: 10px;
+          align-items: center;
+          width: calc(100% - 430px);
+
+          > div{
+            border: 0;
+          }
+          div:nth-child(1) {
+            width: 300px;
+            min-width: auto;
+          }
+        }
+        .new-user-and-amount-area-3{
+          width: 430px;
+          > div{
+            width: 100%;
+          }
+        }
+        @media screen and (max-width: 1900px) {
+          .new-user-and-amount-area-2{
+            width: calc(100% - 300px);
+            > div{
+              padding: 20px;
+            }
+            div:nth-child(1) {
+              width: 170px;
+              .item-title{
+                padding: 0;
+              }
+            }
+            .data-item{
+              min-width: 282px;
+              .ratio-data{
+                span{
+                  span{
+                    //display: block;
+                  }
+                  span:last-child{
+                    margin-top: 6px;
+                  }
+                }
+              }
+            }
+          }
+          .new-user-and-amount-area-3{
+            width: 300px;
+            > div{
+              min-width: auto;
+              padding: 20px;
+            }
+            .data-item{
+              min-width: 282px;
+              .ratio-data{
+                span{
+                  span{
+                    //display: block;
+                  }
+                  span:last-child{
+                    margin-top: 6px;
+                  }
+                }
+              }
+            }
+          }
+          .ratio-with-chart-area{
+            .data-item{}
+          }
+        }
       }
 
       .ratio-with-chart-area {
@@ -1859,7 +2387,7 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
           flex-direction: column;
           border-radius: $border_radius_size;
           background: #FFFFFF;
-          border: 1px solid #EAEAEA;
+          //border: 1px solid #EAEAEA;
           padding: 20px 32px;
           .item-title {
             height: 28px;
@@ -1884,9 +2412,8 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               flex-direction: row;
               height: 50px;
               margin: 0;
-
+              justify-content: space-between;
               span {
-                flex: 1;
                 text-align: left;
                 height: 50px;
                 line-height: 50px;
@@ -2068,6 +2595,24 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
     margin-left: 10px;
     line-height: 1;
     cursor: pointer;
+  }
+}
+.order-amount-2{
+  width: 100%;
+  label{
+    font-family: PingFangSC-Regular,微软雅黑,serif;
+    font-size: 12px;
+    color: #454545;
+    width: 46px;
+    display: inline-block;
+  }
+  .item-subscribe-line{
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+    div{
+      width: 50%;
+    }
   }
 }
 </style>
