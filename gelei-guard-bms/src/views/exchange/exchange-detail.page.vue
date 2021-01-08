@@ -76,14 +76,14 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="14" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
-                  pid="21005"
+                <gl-button
+                  pid="21015"
                   class="download details-tab"
                   size="mini"
                   type="success"
                   @click="createPack"
                 >添加库存
-                </el-button>
+                </gl-button>
                 <el-button
                   :loading="downloadLoading"
                   pid="21005"
@@ -158,9 +158,9 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button v-if="!scope.row._update_remark_status" pid="" size="small" style="text-decoration: underline;" type="text" @click="updateRemark(scope.row)">备注</el-button>
-              <el-button v-if="scope.row._update_remark_status" pid="" size="small" style="text-decoration: underline;" type="text" @click="saveRemark(scope.row)">保存</el-button>
-              <el-button v-if="scope.row._update_remark_status" pid="" size="small" style="text-decoration: underline;" type="text" @click="closeAllUpdateRemark(scope.row)">取消</el-button>
+              <gl-button v-if="!scope.row._update_remark_status" pid="21017" size="small" style="text-decoration: underline;" type="text" @click="updateRemark(scope.row)">备注</gl-button>
+              <gl-button v-if="scope.row._update_remark_status" pid="21017" size="small" style="text-decoration: underline;" type="text" @click="saveRemark(scope.row)">保存</gl-button>
+              <gl-button v-if="scope.row._update_remark_status" pid="21017" size="small" style="text-decoration: underline;" type="text" @click="closeAllUpdateRemark(scope.row)">取消</gl-button>
             </template>
           </el-table-column>
         </el-table>

@@ -438,20 +438,114 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-              this.planCodesIsVipType(
-                [this.selectItem1, this.selectItem2, this.selectItem3, this.selectItem4]
-              )
-              callback(new Error('sss'))
+              if (this.planCodesIsVipType([
+                this.form.selectItem1, this.form.selectItem2,
+                this.form.selectItem3, this.form.selectItem4
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
             }
           }
         ],
-        selectItem2: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem3: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem4: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem11: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem12: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem13: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
-        selectItem14: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
+        selectItem2: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem1, this.form.selectItem2,
+                this.form.selectItem3, this.form.selectItem4
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem3: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem1, this.form.selectItem2,
+                this.form.selectItem3, this.form.selectItem4
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem4: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem1, this.form.selectItem2,
+                this.form.selectItem3, this.form.selectItem4
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem11: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem11, this.form.selectItem12,
+                this.form.selectItem13, this.form.selectItem14
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem12: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem11, this.form.selectItem12,
+                this.form.selectItem13, this.form.selectItem14
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem13: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem11, this.form.selectItem12,
+                this.form.selectItem13, this.form.selectItem14
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
+        selectItem14: [
+          { required: true, trigger: ['blur', 'change'], message: '请选择此项' },
+          {
+            trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (this.planCodesIsVipType([
+                this.form.selectItem11, this.form.selectItem12,
+                this.form.selectItem13, this.form.selectItem14
+              ])) {
+                return callback()
+              }
+              callback(new Error('会员类型不一致'))
+            }
+          }
+        ],
         selectItem21: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         selectItem22: [{ required: true, trigger: ['blur', 'change'], message: '请选择此项' }],
         inputItem1: [{ required: true, trigger: ['blur', 'change'], message: '请填写此项' }],
@@ -603,7 +697,6 @@ export default {
           saveInvitationV2(data)
             .then((res) => {
               if (res.status !== 0) throw res
-              console.log(res)
               this.$router.replace({
                 name: 'InvatationFriendsV2'
               })
@@ -627,7 +720,6 @@ export default {
      * @param date {Date | Null}
      * */
     timeChange(date) {
-      console.log(date)
       if (!date) {
         this.form.startTime = ''
         this.form.endTime = ''
@@ -656,7 +748,6 @@ export default {
                 memberType: r.member_type
               }
             })
-            console.log(this.membershipPackageList)
             resolve()
           } else {
             this.$message.error(res.message)
@@ -798,7 +889,11 @@ export default {
      * @description 根据一批套餐 code 判断是否是同一种会员类型
      * */
     planCodesIsVipType(codes) {
-      console.log(codes)
+      codes = codes.filter(item => item)
+      const types = codes.map((code) => {
+        return this.membershipPackageList.find(item => item.value === code).memberType
+      })
+      return Array.from(new Set(types)).length === 1
     }
   }
 }

@@ -61,14 +61,14 @@
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="10" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-button
-                  pid="21005"
+                <gl-button
+                  pid="21012"
                   class="download details-tab"
                   size="mini"
                   type="success"
                   @click="createPack"
                 >创建
-                </el-button>
+                </gl-button>
               </el-row>
             </div>
           </el-col>
@@ -133,9 +133,9 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button pid="" size="small" style="text-decoration: underline;" type="text" @click="packageDetail(scope.row)">查看</el-button>
-              <el-button pid="" size="small" style="text-decoration: underline;" type="text" @click="updatePackage(scope.row)">编辑</el-button>
-              <el-button :disabled="![1, 2].includes(scope.row.cdk_pack_status)" pid="" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</el-button>
+              <gl-button pid="21016" size="small" style="text-decoration: underline;" type="text" @click="packageDetail(scope.row)">查看</gl-button>
+              <gl-button pid="21013" size="small" style="text-decoration: underline;" type="text" @click="updatePackage(scope.row)">编辑</gl-button>
+              <gl-button v-if="[1, 2].includes(scope.row.cdk_pack_status)" pid="21014" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -219,7 +219,7 @@ import {
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import { getExchangeList, disableExchangePackage, get_all_member_plans, saveExchangePackage, updateExchangePackage } from '../../api/interactive'
-import { computePageNumber, parseDateTime } from '../../utils'
+import { cloneDeep, computePageNumber, parseDateTime } from '../../utils'
 const JsBigDecimal = require('js-big-decimal')
 
 export default {
@@ -466,7 +466,9 @@ export default {
           const loading = this.$loading({ lock: true })
           this.form.begin_time = this.form.exchangeTime[0].getTime()
           this.form.end_time = this.form.exchangeTime[1].getTime()
-          saveExchangePackage(this.form)
+          const form = cloneDeep(this.form)
+          delete form.exchangeTime
+          saveExchangePackage(form)
             .then((res) => {
               if (res.status !== 0) throw res
               this.requestData.page_no = 1
