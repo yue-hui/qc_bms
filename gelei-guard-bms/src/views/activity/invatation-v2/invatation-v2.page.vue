@@ -132,10 +132,10 @@
           <el-table-column
             align="center"
             label="绑定成功人数"
-            prop="bindCount"
+            prop=""
             width="100">
             <template slot-scope="scope">
-              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.regCount }}</span>
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.bindCount }}</span>
             </template>
           </el-table-column>
           <el-table-column
