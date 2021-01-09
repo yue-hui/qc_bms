@@ -90,28 +90,28 @@
             align="center"
             width="132"
             label="分享次数"
-            prop="_createTime" />
+            prop="shareCount" />
           <el-table-column
             align="center"
             label="注册成功人数"
-            prop="option" />
+            prop="regCount" />
           <el-table-column
             align="center"
             label="绑定成功人数"
-            prop="voteNum" />
+            prop="bindCount" />
           <el-table-column
             align="center"
             label="奖励会员天数"
-            prop="_memberType"
+            prop="rewordDays"
             width="220" />
           <el-table-column
             align="center"
-            label="会员类型"
-            prop="_validDaysLabel" />
+            label="参与活动次数"
+            prop="invitationCount" />
           <el-table-column
             align="center"
-            label="参与活动次数"
-            prop="_validDaysLabel" />
+            label="会员类型"
+            prop="_memberType" />
         </el-table>
         <el-pagination
           :current-page="page"
@@ -184,6 +184,7 @@ export default {
     },
     getList() {
       const requestData = cloneDeep(this.requestData)
+      this.loading = true
       queryInvitationV2Inviters(requestData)
         .then(res => {
           if (res.status !== 0) throw res
@@ -210,7 +211,10 @@ export default {
           })
         })
         .catch((e) => {
-          console.log(e)
+          this.$message.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     /**

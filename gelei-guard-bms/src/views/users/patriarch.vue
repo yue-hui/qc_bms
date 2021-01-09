@@ -405,6 +405,17 @@ export default {
     ...mapGetters(['is_agent'])
   },
   mounted: function() {
+    // 存在其他来源
+    /**
+     * 1.showOrderRecord 从好友邀请/被邀请人列表进入
+     * */
+    if (this.$route.query.behavior && this.$route.query.behavior === 'showOrderRecord') {
+      this.query_set.phone = this.$route.query.phone
+      this.refresh_data()
+      this.view_recharge_dialog({
+        user_id: this.$route.query.userId
+      })
+    }
     this.init()
   },
   methods: {

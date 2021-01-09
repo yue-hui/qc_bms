@@ -3,7 +3,7 @@
     <div class="content-body">
       <div class="search-area">
         <div class="topic-title">
-          【{{ title }}】参与详情
+          【{{ title }}】注册/邀请绑定详情
         </div>
         <el-row :gutter="10" class="row-bg">
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
@@ -65,7 +65,7 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
-                <el-col :span="8" class="order-number-list">会员类型:</el-col>
+                <el-col :span="8" class="order-number-list">是否付费:</el-col>
                 <el-col :span="16">
                   <el-select
                     v-model="requestData.isPay"
@@ -112,22 +112,19 @@
             align="center"
             width="180"
             label="完成行为"
-            prop="_createTime" />
+            prop="_behavior" />
           <el-table-column
             align="center"
             label="奖励会员天数"
-            width="140"
-            prop="option" />
+            prop="rewordDays" />
           <el-table-column
             align="center"
             label="注册时间"
-            width="140"
-            prop="voteNum" />
+            prop="_regTime" />
           <el-table-column
             align="center"
             label="绑定时间"
-            prop="_memberType"
-            width="140" />
+            prop="_bindTime" />
           <el-table-column
             align="center"
             label="会员类型"
@@ -137,17 +134,21 @@
             align="center"
             label="是否付费"
             width="100"
-            prop="_validDaysLabel" />
+            prop="_isPay" />
           <el-table-column
             align="center"
             label="来源"
             width="100"
-            prop="_validDaysLabel" />
+            prop="_channel" />
           <el-table-column
             align="center"
             label="操作"
             width="100"
-            prop="_validDaysLabel" />
+            prop="">
+            <template slot-scope="scope">
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="showOrderRecord(scope.row)">交易记录</span>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           :current-page="page"
@@ -170,6 +171,7 @@ import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import { queryInvitationV2Invitees } from '../../../api/interactive'
 import { cloneDeep, computePageNumber, parseDateTime } from '../../../utils'
+import { PATRIARCH_MEMBER_TYPES } from '../../../utils/constant'
 
 export default {
   components: {
@@ -178,6 +180,10 @@ export default {
     const page_size = getPagenationSize()
     return {
       loading: false,
+      memberTypeList: [
+        { label: '全部', value: '' },
+        ...PATRIARCH_MEMBER_TYPES
+      ],
       actionTypeList: [
         { label: '全部', value: '' },
         { label: '注册', value: 1 },
@@ -197,6 +203,8 @@ export default {
         phone: '',
         action: '',
         isPay: '',
+        isReg: '',
+        isBind: '',
         activityId: '',
         page_no: 1,
         page_num: page_size
@@ -226,6 +234,18 @@ export default {
     },
     getList() {
       const requestData = cloneDeep(this.requestData)
+      this.loading = true
+      if (requestData.action) {
+        if (requestData.action === 1) {
+          requestData.isReg = 1
+        } else {
+          requestData.isReg = 1
+          requestData.isBind = 1
+        }
+      } else {
+        requestData.isBind = ''
+        requestData.isReg = ''
+      }
       queryInvitationV2Invitees(requestData)
         .then(res => {
           if (res.status !== 0) throw res
@@ -247,12 +267,41 @@ export default {
                 return '未知'
               }
             })()
+            // 完成行为
+            item._behavior = (() => {
+              if (item.isReg === 1 && item.isBind === 1) {
+                return '注册+绑定'
+              }
+              if (item.isReg === 1) {
+                return '注册'
+              }
+              if (item.isBind === 1) {
+                return '绑定'
+              }
+            })()
+            // 注册时间
+            item._regTime = parseDateTime('y-m-d h:i', item.regTime)
+            // 绑定时间
+            item._bindTime = parseDateTime('y-m-d h:i', item.bindTime)
+            // 是否付费
+            item._isPay = item.isPay === 1 ? '是' : '否'
+            // 来源
+            item._channel = (() => {
+              if (item.channel === '01') return '微信'
+              if (item.channel === '03') return 'QQ'
+              if (item.channel === '04') return '生成图片'
+              if (item.channel === '05') return '面对面'
+              return '未知'
+            })()
             item._validDaysLabel = item.validDays + '天'
             return item
           })
         })
         .catch((e) => {
-          console.log(e)
+          this.$message.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     /**
@@ -261,6 +310,16 @@ export default {
     filterList() {
       this.requestData.page_no = 1
       this.getList()
+    },
+    /**
+     * @description 跳转至用户中心查看会员记录
+     * */
+    showOrderRecord(row) {
+      const options = {
+        name: 'UserManagement'
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href + '?phone=' + row.phone + '&behavior=showOrderRecord&userId=' + row.userId, '_blank')
     }
   }
 }

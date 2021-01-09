@@ -176,7 +176,6 @@
             prop="control">
             <template slot-scope="scope">
               <el-button
-                v-if="scope.row._status === 30"
                 pid=""
                 size="small"
                 style="text-decoration: underline;"
@@ -193,8 +192,8 @@
                 @click="invitationV2Listing(scope.row.activityId)"
               >上架
               </el-button>
-              <!--  v-if="[10, 20].includes(scope.row._status)"             -->
               <el-button
+                v-if="[10, 20].includes(scope.row._status)"
                 pid=""
                 size="small"
                 style="text-decoration: underline;"
