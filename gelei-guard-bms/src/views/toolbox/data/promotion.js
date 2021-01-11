@@ -139,7 +139,7 @@ export const bms_platform_classification = [
         },
         {
           value: 'B2',
-          label: 'VIVO定制机Y51S'
+          label: 'VIVO定制机Y52S'
         }
       ],
       update_models: [
@@ -209,7 +209,7 @@ export const bms_platform_classification = [
         },
         {
           value: 'B3',
-          label: 'VIVO定制机Y51S中间件'
+          label: 'VIVO定制机Y52S中间件'
         }
       ],
       update_models: [
@@ -334,7 +334,7 @@ export const platforms = [
   },
   {
     value: 'B2',
-    label: 'VIVO定制机Y51S'
+    label: 'VIVO定制机Y52S'
   },
   {
     value: '93',
@@ -346,7 +346,7 @@ export const platforms = [
   },
   {
     value: 'B3',
-    label: 'VIVO定制机Y51S中间件'
+    label: 'VIVO定制机Y52S中间件'
   }
 ]
 
@@ -431,7 +431,7 @@ export const platform_version_instructions = [
   },
   {
     value: 'B2',
-    label: 'VIVO定制机Y51S',
+    label: 'VIVO定制机Y52S',
     type: 2
   },
   /** 中间件***************************/
@@ -486,7 +486,7 @@ export const platform_version_instructions = [
   },
   {
     value: 'B3',
-    label: 'VIVO定制机Y51S中间件',
+    label: 'VIVO定制机Y52S中间件',
     type: 3
   }
 ]
