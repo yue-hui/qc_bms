@@ -66,7 +66,7 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
-                  pid="21005"
+                  pid="21023"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -74,7 +74,7 @@
                 >创建
                 </gl-button>
                 <gl-button
-                  pid="21005"
+                  pid="21019"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -175,32 +175,32 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button
-                pid=""
+              <gl-button
+                pid="21025"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="invitationV2Detail(scope.row.activityId)"
               >查看
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
                 v-if="[10].includes(scope.row._status)"
-                pid=""
+                pid="21020"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="invitationV2Listing(scope.row.activityId)"
               >上架
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
                 v-if="[10, 20].includes(scope.row._status)"
-                pid=""
+                pid="21024"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="updateInvatationV2(scope.row.activityId)"
               >编辑
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -450,6 +450,9 @@ export default {
       this.getList()
     },
     joinDetail(row) {
+      if (!this.$store.getters.auths.includes('21021')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       const options = {
         name: 'InvatationFriendsV2JoinDetail'
       }
@@ -457,6 +460,9 @@ export default {
       window.open(href + '?id=' + row.activityId + '&title=' + row.title, '_blank')
     },
     joinDataDetail(row) {
+      if (!this.$store.getters.auths.includes('21022')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       const options = {
         name: 'InvatationFriendsV2DataDetail'
       }

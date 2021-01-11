@@ -349,7 +349,7 @@ export const asyncRoutes = [
         name: 'InvatationFriendsV2',
         hidden: false,
         component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '21018' }
       },
       {
         path: 'invatationV2-join-detail',

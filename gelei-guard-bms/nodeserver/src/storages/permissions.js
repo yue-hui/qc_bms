@@ -744,6 +744,30 @@ const PERMISSION_DATA = [
         ]
       },
       {
+        name: '邀请好友V2',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 21018,
+        children: [
+          { name: '购买成功文案', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21019, children: [] },
+          { name: '上架', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21020, children: [] },
+          { name: '参与详情', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21021, children: [] },
+          { name: '被邀请详情', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21022, children: [] },
+          { name: '创建', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21023, children: [] },
+          { name: '编辑', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21024, children: [] },
+          { name: '查看', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21025, children: [] }
+        ]
+      },
+      {
         name: '兑换码',
         checked: false,
         width: FUNCTION_PAGE_WIDTH,

@@ -146,7 +146,8 @@
             width="100"
             prop="">
             <template slot-scope="scope">
-              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="showOrderRecord(scope.row)">交易记录</span>
+              <span v-if="scope.row.isPay === 1" style="color: rgb(64, 158, 255); cursor: pointer;" @click="showOrderRecord(scope.row)">交易记录</span>
+              <span v-if="scope.row.isPay !== 1" style="">-</span>
             </template>
           </el-table-column>
         </el-table>
@@ -282,7 +283,8 @@ export default {
             // 注册时间
             item._regTime = parseDateTime('y-m-d h:i', item.regTime)
             // 绑定时间
-            item._bindTime = parseDateTime('y-m-d h:i', item.bindTime)
+            item._bindTime = item.bindTime ? parseDateTime('y-m-d h:i', item.bindTime) : '-'
+            item.rewordDays = item.rewordDays || '-'
             // 是否付费
             item._isPay = item.isPay === 1 ? '是' : '否'
             // 来源
