@@ -135,7 +135,7 @@
             <template slot-scope="scope">
               <gl-button pid="21016" size="small" style="text-decoration: underline;" type="text" @click="packageDetail(scope.row)">查看</gl-button>
               <gl-button pid="21013" size="small" style="text-decoration: underline;" type="text" @click="updatePackage(scope.row)">编辑</gl-button>
-              <gl-button v-if="[1, 2].includes(scope.row.cdk_pack_status)" pid="21014" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</gl-button>
+              <gl-button :disabled="![1, 2].includes(scope.row.cdk_pack_status)" pid="21014" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -158,7 +158,7 @@
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="110px" class="demo-ruleForm">
         <el-form-item label="兑换码包名称" prop="cdk_pack_name">
-          <el-input v-model="form.cdk_pack_name" :disabled="updateStatus" placeholder="请输入兑换码包名称" size="mini" />
+          <el-input v-model="form.cdk_pack_name" :disabled="updateStatus" maxlength="20" placeholder="请输入兑换码包名称" size="mini" />
         </el-form-item>
         <el-form-item label="描述" prop="">
           <el-input v-model="form.cdk_pack_desc" placeholder="请输入描述" size="mini" />

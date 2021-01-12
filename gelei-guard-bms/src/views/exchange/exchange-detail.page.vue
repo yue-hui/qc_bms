@@ -10,6 +10,10 @@
           <div class="value">{{ packageDetail.plan_name }}</div>
         </div>
         <div class="item">
+          <div class="label">描述：</div>
+          <div class="value">{{ packageDetail.cdk_pack_desc || '-' }}</div>
+        </div>
+        <div class="item">
           <div class="label">联系人：</div>
           <div class="value">{{ packageDetail.contacter || '-' }}</div>
         </div>
@@ -24,10 +28,6 @@
         <div class="item">
           <div class="label">剩余库存：</div>
           <div class="value">{{ packageDetail._end_num }}</div>
-        </div>
-        <div class="item">
-          <div class="label">描述：</div>
-          <div class="value">{{ packageDetail.cdk_pack_desc || '-' }}</div>
         </div>
       </div>
     </div>

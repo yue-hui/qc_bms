@@ -114,7 +114,7 @@
             prop="inviterUv" />
           <el-table-column
             align="center"
-            label="被邀请页UV"
+            label="被邀请页PV"
             prop="inviteePv" />
           <el-table-column
             align="center"
