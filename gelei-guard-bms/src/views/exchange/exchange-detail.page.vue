@@ -29,6 +29,15 @@
           <div class="label">剩余库存：</div>
           <div class="value">{{ packageDetail._end_num }}</div>
         </div>
+        <div class="item">
+          <div class="label">状态：</div>
+          <div class="value">
+            <span v-if="packageDetail.cdk_pack_status === 2" style="color: #00c250">生效中</span>
+            <span v-if="packageDetail.cdk_pack_status === 1">待生效</span>
+            <span v-if="packageDetail.cdk_pack_status === 3" style="color: red">已失效</span>
+            <span v-if="packageDetail.cdk_pack_status === 4" style="color: #e6a23c">已过期</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="content-body">
@@ -574,7 +583,9 @@ $label_height: 28px;
       margin-bottom: 20px;
       font-size: 14px;
       .label{
-        width: 90px;
+        width: 72px;
+        //text-align: right;
+        margin-right: 10px;
       }
       .value{
         opacity: .8;

@@ -93,6 +93,10 @@
             prop="cdk_pack_name" />
           <el-table-column
             align="center"
+            label="会员套餐"
+            prop="_plan_name" />
+          <el-table-column
+            align="center"
             label="数量"
             prop="_num" />
           <el-table-column
@@ -347,6 +351,7 @@ export default {
             item._num = item.used_num + ' / ' + item.total_num
             return item
           })
+          this.ParsePlanName()
         })
         .catch((e) => {
           this.$message.error(e.message)
@@ -431,6 +436,7 @@ export default {
                 validDays: r.valid_days
               }
             })
+            this.ParsePlanName()
             resolve()
           } else {
             this.$message.error(res.message)
@@ -495,6 +501,20 @@ export default {
         begin_time: '',
         end_time: '',
         exchangeTime: null
+      }
+    },
+    ParsePlanName() {
+      if (this.tableData.length > 0 && this.membershipPackageList.length > 0) {
+        this.tableData = this.tableData.map(item => {
+          try {
+            item._plan_name = this.membershipPackageList.find(plan => {
+              return plan.value === item.plan_id
+            }).label
+          } catch (e) {
+            item._plan_name = '未知'
+          }
+          return item
+        })
       }
     }
   }
