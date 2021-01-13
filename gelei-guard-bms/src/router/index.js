@@ -349,35 +349,35 @@ export const asyncRoutes = [
         name: 'InvatationFriendsV2',
         hidden: false,
         component: () => import('@/views/activity/invatation-v2/invatation-v2.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '21018' }
+        meta: { title: '邀请好友-新版', icon: 'invatation', pid: '21018' }
       },
       {
         path: 'invatationV2-join-detail',
         name: 'InvatationFriendsV2JoinDetail',
         hidden: true,
         component: () => import('@/views/activity/invatation-v2/invatation-v2-join-detail.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+        meta: { title: '邀请好友-新版', icon: 'invatation', pid: '' }
       },
       {
         path: 'invatationV2-data-detail',
         name: 'InvatationFriendsV2DataDetail',
         hidden: true,
         component: () => import('@/views/activity/invatation-v2/invatation-v2-data-detail.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+        meta: { title: '邀请好友-新版', icon: 'invatation', pid: '' }
       },
       {
         path: 'invatationV2-action',
         name: 'InvatationFriendsV2Action',
         hidden: true,
         component: () => import('@/views/activity/invatation-v2/invatation-v2-action.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+        meta: { title: '邀请好友-新版', icon: 'invatation', pid: '' }
       },
       {
         path: 'invatationV2-detail',
         name: 'InvatationFriendsV2Detail',
         hidden: true,
         component: () => import('@/views/activity/invatation-v2/invatation-v2-detail.page'),
-        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+        meta: { title: '邀请好友-新版', icon: 'invatation', pid: '' }
       },
       // 列表
       {

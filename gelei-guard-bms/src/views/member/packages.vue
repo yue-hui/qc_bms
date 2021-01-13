@@ -392,7 +392,12 @@ export default {
         is_listing
       if (row.is_listing === '1') {
         // 已上架
-        confirm_text = '你确定要下架该套餐吗?'
+        confirm_text = (() => {
+          if (row.plan_type === '02') {
+            return '下架非公开套餐将影响正在使用该套餐的项目，请谨慎操作！'
+          }
+          return '你确定要下架该套餐吗?'
+        })()
         is_listing = '0'
       } else if (row.is_listing === '0') {
         // 已下架
@@ -445,7 +450,7 @@ export default {
         this.$message.warning(warngin_message)
         return
       }
-      const confirm_text = '你确定要删除该套餐吗？'
+      const confirm_text = row.plan_type === '02' ? '删除非公开套餐将影响正在使用该套餐的项目，请谨慎操作！' : '你确定要删除该套餐吗？'
       this.$confirm(confirm_text, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
