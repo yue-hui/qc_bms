@@ -372,6 +372,13 @@ export const asyncRoutes = [
         component: () => import('@/views/activity/invatation-v2/invatation-v2-action.page'),
         meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
       },
+      {
+        path: 'invatationV2-detail',
+        name: 'InvatationFriendsV2Detail',
+        hidden: true,
+        component: () => import('@/views/activity/invatation-v2/invatation-v2-detail.page'),
+        meta: { title: '邀请好友V2', icon: 'invatation', pid: '' }
+      },
       // 列表
       {
         path: 'exchange',

@@ -471,7 +471,7 @@ export default {
     },
     invitationV2Detail(activityId) {
       const options = {
-        name: 'InvatationFriendsV2Action'
+        name: 'InvatationFriendsV2Detail'
       }
       const { href } = this.$router.resolve(options)
       window.open(href + '?id=' + activityId + '&detail=' + '1', '_blank')
