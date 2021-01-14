@@ -198,6 +198,7 @@
         <el-form-item v-show="!updateStatus" label="兑换时间" prop="exchangeTime">
           <el-date-picker
             v-model="form.exchangeTime"
+            :picker-options="pickerOptions"
             style="width: 100%"
             type="datetimerange"
             size="mini"
@@ -265,6 +266,12 @@ export default {
         exchangeTime: null
       },
       updateStatus: false,
+      pickerOptions: {
+        disabledDate(time) {
+          const curDate = new Date()
+          return time.getTime() < curDate.getTime() - 3600 * 24 * 1000
+        }
+      },
       membershipPackageList: [],
       rules: {
         cdk_pack_name: [
