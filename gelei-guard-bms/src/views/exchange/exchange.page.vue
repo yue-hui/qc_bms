@@ -174,7 +174,7 @@
           <el-input v-model="form.contact_phone" placeholder="请输入联系方式" size="mini" />
         </el-form-item>
         <el-form-item v-show="!updateStatus" label="库存" prop="num">
-          <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="number" size="mini" />
+          <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="text" size="mini" />
         </el-form-item>
         <el-form-item label="会员套餐" prop="plan_id">
           <el-select
@@ -271,9 +271,12 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请输入兑换码包名称' }
         ],
         num: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为数字' },
+          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为正整数' },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-            return value > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+            return !/^\d{1,9}$/.test(value) || /^0{1,9}/.test(value) ? callback(new Error('库存数量必须为正整数')) : callback()
+          } },
+          { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+            return value > 999 || value < 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
           } }
         ],
         plan_id: [

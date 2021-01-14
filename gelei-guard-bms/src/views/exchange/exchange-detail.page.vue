@@ -195,7 +195,7 @@
           <span>{{ packageDetail._end_num }}</span>
         </el-form-item>
         <el-form-item label="添加数量" prop="num">
-          <el-input v-model="form.num" max="999" min="1" placeholder="输入添加数量，每次最多999个" type="number" size="mini" />
+          <el-input v-model="form.num" max="999" min="1" placeholder="输入添加数量，每次最多999个" type="text" size="mini" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="submitPackage">确定</el-button>
@@ -248,9 +248,13 @@ export default {
       membershipPackageList: [],
       rules: {
         num: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为数字' },
+          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为正整数' },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
             return Number(value) > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+          } },
+          { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+            console.log(value)
+            return !/^\d{1,9}$/.test(value) || /^0{1,9}/.test(value) ? callback(new Error('库存数量必须为正整数')) : callback()
           } },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
             return Number(value) + this.initTotal > 9999 ? callback(new Error('兑换码包上限为9999个，无法添加更多兑换码')) : callback()
