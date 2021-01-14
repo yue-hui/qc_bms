@@ -384,19 +384,19 @@
         </el-form-item>
         <el-form-item class="input-rule-desc" label="规则说明" prop="ruleDesc">
           <div>
-            <pre style="position: relative;top: -13px">{{ form.ruleDesc }}</pre>
+            <div v-for="(item, index) in form.ruleDesc" :key="index" style="word-break: break-all;line-height: 1.6;margin-top: 10px">
+              <span>{{ index + 1 }}、{{ item }}</span>
+            </div>
           </div>
         </el-form-item>
       </el-form>
-      <div class="button-block">
-        <el-button v-if="!isDetail" type="primary" size="mini" @click="save">保 存</el-button>
-      </div>
+      <div class="button-block"/>
     </div>
   </div>
 </template>
 
 <script>
-import { get_all_member_plans, saveInvitationV2, queryInvitationV2 } from '../../../api/interactive'
+import { get_all_member_plans, queryInvitationV2 } from '../../../api/interactive'
 import { cloneDeep } from '../../../utils'
 
 export default {
@@ -699,107 +699,6 @@ export default {
   },
   methods: {
     /**
-     * @description 提交保存
-     * */
-    save() {
-      // eslint-disable-next-line no-unreachable
-      this.$refs.form.validate()
-        .then(() => {
-          const loading = this.$loading({
-            lock: true
-          })
-          const data = {
-            title: this.form.title,
-            startTime: this.form.time[0].getTime(),
-            endTime: this.form.time[1].getTime(),
-            ruleDesc: this.form.ruleDesc.split(/[\s\n]/).filter(item => item).map(item => encodeURIComponent(item)).join(','),
-            shareMainTitle: this.form.shareMainTitle,
-            shareSecondaryTitle: this.form.shareSecondaryTitle,
-            inviteeRules: [
-              {
-                type: 'reg', // 好友注册可得套餐
-                planCode: this.form.selectItem21
-              },
-              {
-                type: 'bind', // 好友绑定可得套餐
-                planCode: this.form.selectItem22
-              }
-            ],
-            inviterRules: [
-              // 注册机制
-              {
-                planCode: this.form.selectItem1,
-                rule: this.form.inputItem1,
-                ruleType: 'equals',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem2,
-                rule: this.form.inputItem3 + ',' + this.form.inputItem4,
-                ruleType: 'range',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem3,
-                rule: this.form.inputItem6 + ',' + this.form.inputItem7,
-                ruleType: 'range',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem4,
-                rule: this.form.inputItem9,
-                ruleType: 'over',
-                type: 'reg'
-              },
-              // 绑定机制
-              {
-                planCode: this.form.selectItem11,
-                rule: this.form.inputItem11,
-                ruleType: 'equals',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem12,
-                rule: this.form.inputItem13 + ',' + this.form.inputItem14,
-                ruleType: 'range',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem13,
-                rule: this.form.inputItem16 + ',' + this.form.inputItem17,
-                ruleType: 'range',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem14,
-                rule: this.form.inputItem19,
-                ruleType: 'over',
-                type: 'bind'
-              }
-            ]
-          }
-          // 更新操作
-          if (this.isUpdate) {
-            data.activityId = Number(this.updateId)
-          }
-          // eslint-disable-next-line no-unreachable
-          saveInvitationV2(data)
-            .then((res) => {
-              if (res.status !== 0) throw res
-              this.$router.replace({
-                name: 'InvatationFriendsV2'
-              })
-            })
-            .catch((e) => {
-              this.$message.error(e.message)
-            })
-            .finally(() => {
-              loading.close()
-            })
-        })
-        .catch(() => {})
-    },
-    /**
      * @description 提交更新
      * */
     update() {
@@ -873,7 +772,7 @@ export default {
           this.form.shareMainTitle = data.shareMainTitle
           this.form.shareSecondaryTitle = data.shareSecondaryTitle
           this.form.time = [new Date(data.startTime), new Date(data.endTime)]
-          this.form.ruleDesc = data.ruleDesc.replace(/@##@/g, '\r\n')
+          this.form.ruleDesc = data.ruleDesc.split(/@##@/g)
           // 注册机制 - 套餐
           const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').planCode
           this.form.selectItem1 = selectItem1PlanCode
