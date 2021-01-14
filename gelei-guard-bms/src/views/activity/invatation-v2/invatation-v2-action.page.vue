@@ -699,7 +699,7 @@ export default {
             title: this.form.title,
             startTime: this.form.time[0].getTime(),
             endTime: this.form.time[1].getTime(),
-            ruleDesc: this.form.ruleDesc.split(/[\s\n]/).filter(item => item).map(item => encodeURIComponent(item)).join(','),
+            ruleDesc: this.form.ruleDesc.split(/[\s\n]/).filter(item => item).join('@##@'),
             shareMainTitle: this.form.shareMainTitle,
             shareSecondaryTitle: this.form.shareSecondaryTitle,
             inviteeRules: [
@@ -860,7 +860,7 @@ export default {
           this.form.shareMainTitle = data.shareMainTitle
           this.form.shareSecondaryTitle = data.shareSecondaryTitle
           this.form.time = [new Date(data.startTime), new Date(data.endTime)]
-          this.form.ruleDesc = decodeURIComponent(data.ruleDesc.replace(/,/g, '\r\n'))
+          this.form.ruleDesc = data.ruleDesc.replace(/@##@/g, '\r\n')
           // 注册机制 - 套餐
           const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').planCode
           this.form.selectItem1 = selectItem1PlanCode
