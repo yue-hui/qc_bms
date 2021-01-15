@@ -28,7 +28,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem1">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem1" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem1" type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem2">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -59,11 +59,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem3">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem3" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem3" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem4">
                 <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem4" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem4" type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem5">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -94,11 +94,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem6">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem6" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem6" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem7">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem7" type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem7" type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem8">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -129,7 +129,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem9">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem9" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem9" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem10">
                 <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
@@ -167,7 +167,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem11">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem11" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem11" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem12">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -198,11 +198,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem13">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem13" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem13" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem14">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem14" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem14" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem15">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -233,11 +233,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem16">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem16" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem16" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem17">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem17" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem17" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem18">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -268,7 +268,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem19">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem19" disabled type="number" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem19" disabled type="text" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem20">
                 <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
@@ -592,6 +592,9 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
+                return callback(new Error('填写错误'))
+              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
@@ -604,6 +607,9 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
+                return callback(new Error('填写错误'))
+              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
@@ -619,6 +625,9 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
+                return callback(new Error('填写错误'))
+              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
