@@ -774,7 +774,7 @@ export default {
           this.form.time = [new Date(data.startTime), new Date(data.endTime)]
           this.form.ruleDesc = data.ruleDesc.split(/@##@/g)
           // 注册机制 - 套餐
-          const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').planCode
+          const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'range' && /^0/.test(item.rule)).planCode
           this.form.selectItem1 = selectItem1PlanCode
           this.form.inputItem2 = this.getPlanValidDayForCode(selectItem1PlanCode)
           // -
@@ -791,7 +791,7 @@ export default {
           this.form.inputItem10 = this.getPlanValidDayForCode(selectItem10PlanCode)
 
           // 绑定机制 - 套餐
-          const selectItem11PlanCode = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'equals').planCode
+          const selectItem11PlanCode = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'range' && /^0/.test(item.rule)).planCode
           this.form.selectItem11 = selectItem11PlanCode
           this.form.inputItem12 = this.getPlanValidDayForCode(selectItem11PlanCode)
           // -
@@ -815,14 +815,14 @@ export default {
           this.form.selectItem22 = selectItem22PlanCode
           this.form.inputItem22 = this.getPlanValidDayForCode(selectItem22PlanCode)
           // 注册机制配置 - 人数
-          this.form.inputItem1 = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'equals').rule
+          this.form.inputItem1 = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'range' && /^0/.test(item.rule)).rule.split(',')[1]
           this.form.inputItem3 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'min').split(',')[0]
           this.form.inputItem4 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'min').split(',')[1]
           this.form.inputItem6 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'max').split(',')[0]
           this.form.inputItem7 = this.parseRulesTypeRangeNumber(data.inviterRules, 'reg', 'max').split(',')[1]
           this.form.inputItem9 = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'over').rule
           // 绑定机制配置 - 人数
-          this.form.inputItem11 = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'equals').rule
+          this.form.inputItem11 = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'range' && /^0/.test(item.rule)).rule.split(',')[1]
           this.form.inputItem13 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'min').split(',')[0]
           this.form.inputItem14 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'min').split(',')[1]
           this.form.inputItem16 = this.parseRulesTypeRangeNumber(data.inviterRules, 'bind', 'max').split(',')[0]
@@ -830,6 +830,7 @@ export default {
           this.form.inputItem19 = data.inviterRules.find(item => item.type === 'bind' && item.ruleType === 'over').rule
         })
         .catch((e) => {
+          console.log(e)
           this.$message.error(e.message)
         })
     },
@@ -838,7 +839,7 @@ export default {
      * */
     parseRulesTypeRangePlanCode(ruleList, type, range) {
       ruleList = cloneDeep(ruleList)
-      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range').map(item => {
+      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range' && !/^0/.test(item.rule)).map(item => {
         item.rule = Number(item.rule.replace(',', ''))
         return item
       }).sort((a, b) => {
@@ -855,7 +856,7 @@ export default {
      * */
     parseRulesTypeRangeNumber(ruleList, type, range) {
       ruleList = cloneDeep(ruleList)
-      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range').map(item => {
+      ruleList = ruleList.filter(item => item.type === type && item.ruleType === 'range' && !/^0/.test(item.rule)).map(item => {
         item._rule = Number(item.rule.replace(',', ''))
         return item
       }).sort((a, b) => {
