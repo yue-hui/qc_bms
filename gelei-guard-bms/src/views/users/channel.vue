@@ -368,12 +368,12 @@ export default {
             // 累计注册用户
             item.regUserTotal = (() => {
               if (regUserTotal === 0) return `${item.regUserTotal}(0%)`
-              return `${item.regUserTotal}(${new JsBigDecimal(item.regUserTotal).divide(new JsBigDecimal(regUserTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
+              return `${item.regUserTotal}(${new JsBigDecimal(item.regUserTotal).divide(new JsBigDecimal(regUserTotal), 4).multiply(new JsBigDecimal(100)).getValue()}%)`
             })()
             // 累计充值金额
             item.payAmountTotal = (() => {
               if (payAmountTotal === 0) return `${item.payAmountTotal}(0%)`
-              return `${item.payAmountTotal}(${new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(payAmountTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
+              return `${item.payAmountTotal}(${new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(payAmountTotal), 4).multiply(new JsBigDecimal(100)).getValue()}%)`
             })()
             return item
           })

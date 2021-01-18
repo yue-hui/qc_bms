@@ -403,14 +403,14 @@ export default {
             item._registerPayConversion = (() => {
               if (item.regCount === 0) return '0%'
               return new JsBigDecimal(item.regPayCount)
-                .divide(new JsBigDecimal(item.regCount), 2)
+                .divide(new JsBigDecimal(item.regCount), 4)
                 .multiply(new JsBigDecimal(100)).getValue() + '%'
             })()
             // 绑定付费转化率
             item._bindPayConversion = (() => {
               if (item.bindCount === 0) return '0%'
               return new JsBigDecimal(item.bindPayCount)
-                .divide(new JsBigDecimal(item.bindCount), 2)
+                .divide(new JsBigDecimal(item.bindCount), 4)
                 .multiply(new JsBigDecimal(100)).getValue() + '%'
             })()
             /* 状态
