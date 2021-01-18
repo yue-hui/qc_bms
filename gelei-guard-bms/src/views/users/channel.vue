@@ -97,14 +97,13 @@
         </div>
       </div>
       <el-table :data="channelTableData" stripe size="mini" style="width: 100%" @sort-change="sortFilter">
-        <el-table-column align="center" label="渠道名称" prop="tagName" />
-        <!--<el-table-column align="center" label="渠道名称" prop="tagName">
+        <el-table-column align="center" label="渠道名称" prop="tagName">
           <template slot-scope="scope">
             <div>
               <span style="color: #409EFF;cursor: pointer" @click="channelDetail(scope.row)">{{ scope.row.tagName }}</span>
             </div>
           </template>
-        </el-table-column>-->
+        </el-table-column>
         <el-table-column sortable="custom" align="center" label="新增注册用户" prop="incrRegUser" />
         <el-table-column sortable="custom" align="center" label="新增绑定用户" prop="incrBindUser" />
         <el-table-column sortable="custom" align="center" label="绑定转化率" prop="bindConversion" />

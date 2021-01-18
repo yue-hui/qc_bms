@@ -84,6 +84,21 @@
     width: 98vw !important;
     margin-left: 1vw !important;
   }
+  .device-rule{
+
+    .card-box{
+      padding-bottom: 20px !important;
+      .filter{
+        display: block;
+        .input{
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
 }
 
 

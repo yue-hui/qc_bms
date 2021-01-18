@@ -34,7 +34,7 @@
           />
         </div>
         <div class="input">
-          <el-button size="small" type="primary" @click="getFilter">查询</el-button>
+          <el-button size="mini" type="primary" @click="getFilter">查询</el-button>
         </div>
         <el-radio-group v-model="showLineDayType" style="position: absolute;right: 0;" size="small" @change="lineDayTypeShowChange">
           <el-radio-button label="日"/>

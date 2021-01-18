@@ -513,13 +513,13 @@ export const asyncRoutes = [
             name: 'AppletControl',
             component: () => import('@/views/system/miniprogram_apps'),
             meta: { title: '小程序管控', icon: 'mini_program_apps', pid: '20086' }
+          },
+          {
+            path: 'device-rule',
+            name: 'deviceRule',
+            component: () => import('@/views/toolbox/device-rule/device-rule.vue'),
+            meta: { title: '设备权限管理', icon: 'device-rule', pid: '' }
           }
-          // {
-          //   path: 'miniprogram-apps',
-          //   name: '小程序管控',
-          //   component: () => import('@/views/system/miniprogram_apps'),
-          //   meta: { title: '小程序管控', icon: 'mini_program_apps' }
-          // }
         ]
       },
       {
