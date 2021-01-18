@@ -180,6 +180,13 @@ export const asyncRoutes = [
         name: 'UserChannel',
         component: () => import('@/views/users/channel'),
         meta: { title: '渠道数据', hide: true, icon: 'form', pid: '21010' }
+      },
+      {
+        path: 'user/channel/detail',
+        name: 'UserChannelDetail',
+        hidden: true,
+        component: () => import('@/views/users/channel-detail'),
+        meta: { title: '渠道明细', hide: true, icon: 'form', pid: '' }
       }
     ]
   },
