@@ -58,35 +58,19 @@
     <el-dialog
       :visible.sync="actionDialog"
       :before-close="closeActionDialog"
-      :title="updateStatus ? form.cdk_pack_name : '新建设备权限'"
+      :title="updateStatus ? form.ruleType : '新建设备权限'"
       custom-class="app-bug-config-dialog"
       width="800px"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="170px" class="demo-ruleForm">
-        <el-form-item label="rule_group（组名）" prop="plan_id">
-          <el-select
-            v-model="form.plan_id"
-            :disabled="updateStatus"
-            size="mini"
-            filterable
-            clearable
-            remote
-            style="width: 100%"
-            class="plan-list-select"
-            placeholder="请选择rule_group（组名）">
-            <el-option
-              v-for="(item, index) in ruleGroupList"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-              size="mini" />
-          </el-select>
+        <el-form-item label="rule_group（组名）" prop="ruleGroup">
+          <el-input v-model="form.ruleGroup" placeholder="请输入请选择rule_group（组名）" size="mini" />
         </el-form-item>
-        <el-form-item label="rule_type（类型）" prop="cdk_pack_name">
-          <el-input v-model="form.cdk_pack_name" placeholder="请输入rule_type（类型）" size="mini" />
+        <el-form-item label="rule_type（类型）" prop="ruleType">
+          <el-input v-model="form.ruleType" placeholder="请输入rule_type（类型）" size="mini" />
         </el-form-item>
-        <el-form-item label="rule_content（内容）" prop="">
-          <el-input v-model="form.cdk_pack_desc" rows="10" placeholder="请输入rule_content（内容）" type="textarea" size="mini" />
+        <el-form-item label="rule_content（内容）" prop="ruleContent">
+          <el-input v-model="form.ruleContent" rows="10" placeholder="请输入rule_content（内容）" type="textarea" size="mini" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="save">确定</el-button>
@@ -102,6 +86,7 @@ import {
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { deviceRuleConfigAdd } from '../../../api/interactive'
 
 export default {
   data() {
@@ -114,14 +99,21 @@ export default {
       page: 1,
       actionDialog: false,
       form: {
-        cdk_pack_name: ''
+        ruleGroup: '',
+        ruleType: '',
+        ruleContent: ''
       },
-      rules: {},
-      ruleGroupList: [
-        { value: '001', label: '001' },
-        { value: '002', label: '002' },
-        { value: '003', label: '003' }
-      ],
+      rules: {
+        ruleGroup: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入请选择rule_group（组名）' }
+        ],
+        ruleType: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入rule_type（类型）' }
+        ],
+        ruleContent: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入rule_content（内容）' }
+        ]
+      },
       updateStatus: false,
       TableData: [
         {
@@ -149,11 +141,35 @@ export default {
     /**
      * @description
      * */
-    closeActionDialog() {
+    async closeActionDialog() {
+      this.form.ruleGroup = ''
+      this.form.ruleType = ''
+      this.form.ruleContent = ''
+      await this.$nextTick()
+      this.$refs.form.clearValidate()
+      await this.$nextTick()
       this.updateStatus = false
       this.actionDialog = false
     },
     save() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          const loading = this.$loading({ lock: true })
+          deviceRuleConfigAdd(this.form)
+            .then(res => {
+              if (res.status !== 0) throw res
+              // this.p
+            })
+            .catch(e => {
+              this.$message.error(e.message)
+            })
+            .finally(() => {
+              loading.close()
+            })
+        } else {
+          return false
+        }
+      })
     },
     update() {
       this.openActionDialog()

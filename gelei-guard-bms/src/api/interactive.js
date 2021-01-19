@@ -1532,4 +1532,14 @@ export function getPackageDetail(data) {
     data
   })
 }
-
+/**
+ * @description 设备权限管理-添加
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1518
+ * */
+export function deviceRuleConfigAdd(data) {
+  return request({
+    url: '/greenguard/manager/guard/config/add',
+    method: 'post',
+    data
+  })
+}
