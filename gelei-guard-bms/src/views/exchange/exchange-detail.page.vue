@@ -174,7 +174,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          :current-page="page"
+          :current-page="requestData.page_no"
           :page-size="page_size"
           :page-sizes="page_sizes"
           :total="total"
