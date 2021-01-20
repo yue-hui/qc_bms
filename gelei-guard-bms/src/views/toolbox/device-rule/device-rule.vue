@@ -6,49 +6,55 @@
           <span>权限组名称：</span>
         </div>
         <div class="input">
-          <el-input placeholder="请输入权限组名称" size="mini" />
+          <el-input v-model="requestData.ruleGroup" clearable placeholder="请输入权限组名称" size="mini" @change="filterList" />
         </div>
         <div class="label">
           <span>权限类别：</span>
         </div>
         <div class="input">
-          <el-input placeholder="请输入权限类别" size="mini" />
+          <el-input v-model="requestData.ruleType" clearable placeholder="请输入权限类别" size="mini" @change="filterList" />
         </div>
         <div class="create" style="position: absolute;right: 0;">
-          <el-button
-            pid=""
+          <gl-button
+            pid="21027"
             class="details-tab"
             size="mini"
             type="success"
-            @click="openActionDialog"
+            @click="add"
           >新建
-          </el-button>
+          </gl-button>
         </div>
       </div>
     </div>
     <div class="table-content table-block">
-      <el-table :data="TableData" stripe size="mini" style="width: 100%">
-        <el-table-column align="center" label="权限组" width="180" prop="name" />
-        <el-table-column align="center" label="权限类型" width="180" prop="name" />
-        <el-table-column align="center" label="权限内容" prop="name" />
+      <el-table v-loading="loading" :data="tableData" stripe size="mini" style="width: 100%">
+        <el-table-column align="center" label="权限组" width="250" prop="ruleGroup" />
+        <el-table-column align="center" label="权限类型" width="300" prop="ruleType" />
+        <el-table-column align="center" label="权限内容" prop="_ruleContent">
+          <template slot-scope="scope">
+            <div>
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="showDetail(scope.row)">{{ scope.row._ruleContent }}</span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column align="center" width="180" label="操作">
           <template slot-scope="scope">
             <div>
-              <el-button
-                pid=""
+              <gl-button
+                pid="21028"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
-                @click="update"
+                @click="update(scope.row)"
               >编辑
-              </el-button>
+              </gl-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-        :current-page="page"
-        :page-size="page_size"
+        :current-page="requestData.page_no"
+        :page-size="requestData.page_num"
         :page-sizes="page_sizes"
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
@@ -58,7 +64,7 @@
     <el-dialog
       :visible.sync="actionDialog"
       :before-close="closeActionDialog"
-      :title="updateStatus ? form.ruleType : '新建设备权限'"
+      :title="updateStatus ? '更新设备权限' : '新建设备权限'"
       custom-class="app-bug-config-dialog"
       width="800px"
     >
@@ -78,6 +84,21 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog
+      :visible.sync="detailDialogVisible"
+      :before-close="closeDetailDialogHandle"
+      :close-on-click-modal="false"
+      title="提示"
+      width="600px">
+      <div v-if="detailDialogVisible" style="overflow: auto;max-height: 60vh">
+        <pre style="word-wrap: break-word;white-space: pre-wrap;">
+{{ detailDialogContent }}
+        </pre>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="closeDetailDialogHandle">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,7 +107,8 @@ import {
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
-import { deviceRuleConfigAdd } from '../../../api/interactive'
+import { deviceRuleConfigAdd, deviceRuleConfigList, deviceRuleConfigUpdate } from '../../../api/interactive'
+import { cloneDeep } from '../../../utils'
 
 export default {
   data() {
@@ -97,8 +119,15 @@ export default {
       page_sizes: TABLE_PAGE_SIEZS_LIST,
       total: 0,
       page: 1,
+      requestData: {
+        ruleGroup: '',
+        ruleType: '',
+        page_no: 1,
+        page_num: page_size
+      },
       actionDialog: false,
       form: {
+        id: '',
         ruleGroup: '',
         ruleType: '',
         ruleContent: ''
@@ -115,22 +144,25 @@ export default {
         ]
       },
       updateStatus: false,
-      TableData: [
-        {
-          name: '测试测试测试'
-        }
-      ]
+      tableData: [],
+      detailDialogVisible: false,
+      detailDialogContent: ''
     }
   },
   mounted() {
+    this.getDeviceRuleConfigList()
   },
   methods: {
     table_size_change: function(size) {
       this.page_size = size
       setPagenationSize(size)
+      this.requestData.page_no = 1
+      this.requestData.page_num = size
+      this.getDeviceRuleConfigList()
     },
     change_current: function(page) {
-      this.page = page
+      this.requestData.page_no = page
+      this.getDeviceRuleConfigList()
     },
     /**
      * @description
@@ -155,10 +187,35 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           const loading = this.$loading({ lock: true })
-          deviceRuleConfigAdd(this.form)
+          const form = cloneDeep(this.form)
+          /* form.ruleContent = isJsonString(form.ruleContent.replace(/\\r/g, '').replace(/\\n/g, ''))
+            ? JSON.stringify(JSON.parse(form.ruleContent.replace(/\\r/g, '').replace(/\\n/g, ''))) : form.ruleContent
+          console.log(form.ruleContent)*/
+          if (this.updateStatus) {
+            delete form.ruleDesc
+            delete form._ruleContent
+            delete form.updateTime
+            deviceRuleConfigUpdate(form)
+              .then(res => {
+                if (res.status !== 0) throw res
+                this.getDeviceRuleConfigList()
+                this.closeActionDialog()
+              })
+              .catch(e => {
+                this.$message.error(e.message)
+              })
+              .finally(() => {
+                loading.close()
+              })
+            return
+          }
+          delete form.id
+          deviceRuleConfigAdd(form)
             .then(res => {
               if (res.status !== 0) throw res
-              // this.p
+              this.requestData.page_no = 1
+              this.getDeviceRuleConfigList()
+              this.closeActionDialog()
             })
             .catch(e => {
               this.$message.error(e.message)
@@ -171,9 +228,53 @@ export default {
         }
       })
     },
-    update() {
+    add() {
+      this.form.ruleGroup = 'childinit'
+      this.openActionDialog()
+      this.updateStatus = false
+    },
+    update(row) {
+      this.form = cloneDeep(row)
       this.openActionDialog()
       this.updateStatus = true
+    },
+    /**
+     * @description 获取列表
+     * */
+    getDeviceRuleConfigList() {
+      this.loading = true
+      deviceRuleConfigList(this.requestData)
+        .then((res) => {
+          if (res.status !== 0) throw res
+          this.total = res.total_count
+          this.tableData = res.data.map(item => {
+            item._ruleContent = item.ruleContent.length > 80 ? (item.ruleContent.slice(0, 80) + '...') : item.ruleContent
+            return item
+          })
+        })
+        .catch((e) => {
+          this.$message.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    /**
+     * @description 弹出权限详情
+     * */
+    showDetail(row) {
+      this.detailDialogContent = this.tableData.find(item => item.id === row.id).ruleContent
+      this.openDetailDialogHandle()
+    },
+    closeDetailDialogHandle() {
+      this.detailDialogVisible = false
+    },
+    openDetailDialogHandle() {
+      this.detailDialogVisible = true
+    },
+    filterList() {
+      this.requestData.page_no = 1
+      this.getDeviceRuleConfigList()
     }
   }
 }

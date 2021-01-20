@@ -503,7 +503,7 @@ export const asyncRoutes = [
             path: 'device-rule',
             name: 'deviceRule',
             component: () => import('@/views/toolbox/device-rule/device-rule.vue'),
-            meta: { title: '设备权限管理', icon: 'device-rule', pid: '' }
+            meta: { title: '设备权限管理', icon: 'device-rule', pid: '21026' }
           }
         ]
       },

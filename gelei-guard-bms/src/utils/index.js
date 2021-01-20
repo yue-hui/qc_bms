@@ -259,3 +259,10 @@ export function getMonthRangeTime(startTime, endTime, list = []) {
   }
   return list
 }
+export function isJsonString(str) {
+  try {
+    return typeof JSON.parse(str) === 'object'
+  } catch (e) {
+    return false
+  }
+}
