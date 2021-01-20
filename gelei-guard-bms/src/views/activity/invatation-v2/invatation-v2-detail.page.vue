@@ -1,5 +1,5 @@
 <template>
-  <div class="invatationV2-action">
+  <div class="invatationV2-action invatationV2-action-detail">
     <div class="topic-save-title">
       <span>邀请好友</span>
     </div>
@@ -7,12 +7,13 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="120px" label-suffix=":">
         <!------------------------------>
         <el-form-item label="活动标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入活动标题，仅后台显示" size="mini" />
+          <el-input v-model="form.title" disabled placeholder="请输入活动标题，仅后台显示" size="mini" />
         </el-form-item>
         <el-form-item :required="true" label="活动时间" prop="time">
           <el-date-picker
             v-model="form.time"
             type="datetimerange"
+            disabled
             size="mini"
             format="yyyy-MM-dd HH:mm"
             range-separator="至"
@@ -28,7 +29,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem1">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem1" type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem1" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem2">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -43,6 +44,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem2', 'selectItem1')"
@@ -59,11 +61,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem3">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem3" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem3" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem4">
                 <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem4" type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem4" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem5">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -77,6 +79,7 @@
                   v-model="form.selectItem2"
                   size="mini"
                   filterable
+                  disabled
                   clearable
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
@@ -94,11 +97,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem6">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem6" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem6" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem7">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem7" type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem7" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem8">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -113,6 +116,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem8', 'selectItem3')"
@@ -129,7 +133,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem9">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem9" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem9" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem10">
                 <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
@@ -143,6 +147,7 @@
                   v-model="form.selectItem4"
                   size="mini"
                   filterable
+                  disabled
                   clearable
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
@@ -167,7 +172,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem11">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem11" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem11" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem12">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -182,6 +187,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem12', 'selectItem11')"
@@ -198,11 +204,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem13">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem13" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem13" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem14">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem14" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem14" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem15">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -215,6 +221,7 @@
                 <el-select
                   v-model="form.selectItem12"
                   size="mini"
+                  disabled
                   filterable
                   clearable
                   class="plan-list-select"
@@ -233,11 +240,11 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem16">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem16" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem16" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem17">
                 <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                <el-input v-model="form.inputItem17" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem17" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item prop="inputItem18">
                 <span>&nbsp;&nbsp;人可得&nbsp;&nbsp;</span>
@@ -252,6 +259,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem18', 'selectItem13')"
@@ -268,7 +276,7 @@
             <div class="invatationV2-rules-item">
               <el-form-item class="left-error-tips" prop="inputItem19">
                 <span>邀请</span>
-                <el-input v-model="form.inputItem19" disabled type="text" style="width: 80px" size="mini" />
+                <el-input v-model="form.inputItem19" disabled type="number" style="width: 80px" size="mini" />
               </el-form-item>
               <el-form-item class="left-error-tips" prop="inputItem20">
                 <span>&nbsp;&nbsp;人及以上可得&nbsp;&nbsp;</span>
@@ -283,6 +291,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem20', 'selectItem14')"
@@ -317,6 +326,7 @@
                   filterable
                   clearable
                   class="plan-list-select"
+                  disabled
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem21', 'selectItem21')"
                   @clear="clearMemberPlanList('inputItem21')">
@@ -349,6 +359,7 @@
                   size="mini"
                   filterable
                   clearable
+                  disabled
                   class="plan-list-select"
                   placeholder="请选择会员套餐"
                   @change="memberPlanListChange('inputItem22', 'selectItem22')"
@@ -366,24 +377,26 @@
         </div>
         <!------------------------------>
         <el-form-item label="分享主标题" prop="shareMainTitle">
-          <el-input v-model="form.shareMainTitle" placeholder="请输入分享主标题" size="mini" />
+          <el-input v-model="form.shareMainTitle" disabled placeholder="请输入分享主标题" size="mini" />
         </el-form-item>
         <el-form-item label="分享副标题" prop="shareSecondaryTitle">
-          <el-input v-model="form.shareSecondaryTitle" placeholder="请输入分享副标题" size="mini" />
+          <el-input v-model="form.shareSecondaryTitle" disabled placeholder="请输入分享副标题" size="mini" />
         </el-form-item>
         <el-form-item class="input-rule-desc" label="规则说明" prop="ruleDesc">
-          <el-input v-model="form.ruleDesc" rows="6" type="textarea" placeholder="请输入规则说明，支持换行输入多个规则" size="mini" />
+          <div>
+            <div v-for="(item, index) in form.ruleDesc" :key="index" style="word-break: break-all;line-height: 1.6;margin-top: 10px">
+              <span>{{ index + 1 }}、{{ item }}</span>
+            </div>
+          </div>
         </el-form-item>
       </el-form>
-      <div class="button-block">
-        <el-button v-if="!isDetail" type="primary" size="mini" @click="save">保 存</el-button>
-      </div>
+      <div class="button-block"/>
     </div>
   </div>
 </template>
 
 <script>
-import { get_all_member_plans, saveInvitationV2, queryInvitationV2 } from '../../../api/interactive'
+import { get_all_member_plans, queryInvitationV2 } from '../../../api/interactive'
 import { cloneDeep } from '../../../utils'
 
 export default {
@@ -592,9 +605,6 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
-                return callback(new Error('填写错误'))
-              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
@@ -607,9 +617,6 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
-                return callback(new Error('填写错误'))
-              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
@@ -625,9 +632,6 @@ export default {
           { required: true, trigger: ['blur', 'change'], message: '请填写此项' },
           {
             trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-              if (!/^\d+$/.test(value) || /^0+/.test(value)) {
-                return callback(new Error('填写错误'))
-              }
               if (Number(value) < 1) {
                 return callback(new Error('此项需大于0'))
               }
@@ -694,107 +698,6 @@ export default {
       .catch(() => {})
   },
   methods: {
-    /**
-     * @description 提交保存
-     * */
-    save() {
-      // eslint-disable-next-line no-unreachable
-      this.$refs.form.validate()
-        .then(() => {
-          const loading = this.$loading({
-            lock: true
-          })
-          const data = {
-            title: this.form.title,
-            startTime: this.form.time[0].getTime(),
-            endTime: this.form.time[1].getTime(),
-            ruleDesc: this.form.ruleDesc.split(/[\s\n]/).filter(item => item).join('@##@'),
-            shareMainTitle: this.form.shareMainTitle,
-            shareSecondaryTitle: this.form.shareSecondaryTitle,
-            inviteeRules: [
-              {
-                type: 'reg', // 好友注册可得套餐
-                planCode: this.form.selectItem21
-              },
-              {
-                type: 'bind', // 好友绑定可得套餐
-                planCode: this.form.selectItem22
-              }
-            ],
-            inviterRules: [
-              // 注册机制
-              {
-                planCode: this.form.selectItem1,
-                rule: '0' + ',' + this.form.inputItem1,
-                ruleType: 'range',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem2,
-                rule: this.form.inputItem3 + ',' + this.form.inputItem4,
-                ruleType: 'range',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem3,
-                rule: this.form.inputItem6 + ',' + this.form.inputItem7,
-                ruleType: 'range',
-                type: 'reg'
-              },
-              {
-                planCode: this.form.selectItem4,
-                rule: this.form.inputItem9,
-                ruleType: 'over',
-                type: 'reg'
-              },
-              // 绑定机制
-              {
-                planCode: this.form.selectItem11,
-                rule: '0' + ',' + this.form.inputItem11,
-                ruleType: 'range',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem12,
-                rule: this.form.inputItem13 + ',' + this.form.inputItem14,
-                ruleType: 'range',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem13,
-                rule: this.form.inputItem16 + ',' + this.form.inputItem17,
-                ruleType: 'range',
-                type: 'bind'
-              },
-              {
-                planCode: this.form.selectItem14,
-                rule: this.form.inputItem19,
-                ruleType: 'over',
-                type: 'bind'
-              }
-            ]
-          }
-          // 更新操作
-          if (this.isUpdate) {
-            data.activityId = Number(this.updateId)
-          }
-          // eslint-disable-next-line no-unreachable
-          saveInvitationV2(data)
-            .then((res) => {
-              if (res.status !== 0) throw res
-              this.$router.replace({
-                name: 'InvatationFriendsV2'
-              })
-            })
-            .catch((e) => {
-              this.$message.error(e.message)
-            })
-            .finally(() => {
-              loading.close()
-            })
-        })
-        .catch(() => {})
-    },
     /**
      * @description 提交更新
      * */
@@ -869,7 +772,7 @@ export default {
           this.form.shareMainTitle = data.shareMainTitle
           this.form.shareSecondaryTitle = data.shareSecondaryTitle
           this.form.time = [new Date(data.startTime), new Date(data.endTime)]
-          this.form.ruleDesc = data.ruleDesc.replace(/@##@/g, '\r\n')
+          this.form.ruleDesc = data.ruleDesc.split(/@##@/g)
           // 注册机制 - 套餐
           const selectItem1PlanCode = data.inviterRules.find(item => item.type === 'reg' && item.ruleType === 'range' && /^0/.test(item.rule)).planCode
           this.form.selectItem1 = selectItem1PlanCode
@@ -1097,6 +1000,20 @@ export default {
   }
   input[type=number]{
     padding-right: 0;
+  }
+}
+</style>
+<style lang="scss">
+.invatationV2-action-detail{
+  .is-disabled.el-input input{
+    color: #3c3c3c;
+    //border: 0;
+    border-color: #f5f5f5;
+  }
+  .el-range-editor.is-disabled, .el-input.is-disabled .el-input__inner, .el-range-editor.is-disabled input{
+    background-color: #ffffff;
+    color: #3c3c3c;
+
   }
 }
 </style>

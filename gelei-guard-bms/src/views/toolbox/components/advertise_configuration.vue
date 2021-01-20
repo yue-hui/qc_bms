@@ -51,7 +51,7 @@
                 list-type="picture">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
-              <div class="upload-file-to-server">备注: 只能上传jpg/png文件, 图片尺寸为690x240，且不超过500kb.</div>
+              <div class="upload-file-to-server">备注: 只能上传jpg/png/gif文件, 图片尺寸为690x240，且不超过500kb.</div>
             </el-form-item>
           </el-form>
 

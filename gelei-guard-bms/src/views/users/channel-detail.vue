@@ -1,34 +1,24 @@
 <template>
   <div class="page gelei-content">
-    <div class="card-box">
-      <div class="title-area"><span class="title">前五渠道数据</span></div>
-      <div class="channel-line">
-        <el-row :gutter="12">
-          <el-col v-for="item in top5Data" :key="item.title" :md="8" :sm="12" :lg="8">
-            <div class="box">
-              <div class="title">
-                <span>{{ item.title }}</span>
-              </div>
-              <div class="line">
-                <div v-for="countItem in item.list" :key="countItem.index" class="line-item">
-                  <span v-if="['绑定转化率', '付费转化率'].includes(item.title)" class="count-text">{{ countItem.number }}%</span>
-                  <span v-if="!['绑定转化率', '付费转化率'].includes(item.title)" class="count-text">{{ countItem.number }}</span>
-                  <span class="line-bo">
-                    <span :style="{ height: countItem.number / item.max * 100 + '%' }" />
-                  </span>
-                  <span class="text">
-                    {{ countItem.tag | getTagName }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-    </div>
-    <div v-loading="loading" class="card-box">
-      <div class="title-area"><span class="title">渠道趋势对比</span></div>
-      <div class="filter">
+    <div class="card-box" style="background: none;box-shadow: none;padding-left: 0;padding-right: 0;padding-top: 6px;padding-bottom: 1px">
+      <div class="filter" style="position: relative;">
+        <div class="label">
+          <span>渠道选择：</span>
+        </div>
+        <div class="input">
+          <el-select
+            v-model="channelValue"
+            size="small"
+            collapse-tags
+            placeholder="请选择">
+            <el-option
+              v-for="item in channelOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
         <div class="label">
           <span>查询时间：</span>
         </div>
@@ -43,48 +33,19 @@
             end-placeholder="结束日期"
           />
         </div>
-        <div class="label">
-          <span>渠道选择：</span>
-        </div>
         <div class="input">
-          <el-select
-            v-model="channelValue"
-            multiple
-            size="small"
-            collapse-tags
-            placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <el-button size="mini" type="primary" @click="getFilter">查询</el-button>
         </div>
-        <div class="input">
-          <el-button size="small" type="primary" @click="getFilter">查询</el-button>
-        </div>
+        <el-radio-group v-model="showLineDayType" style="position: absolute;right: 0;" size="small" @change="lineDayTypeShowChange">
+          <el-radio-button label="日"/>
+          <el-radio-button :disabled="disabledWeekFilter" label="周"/>
+          <el-radio-button :disabled="disabledMonthFilter" label="月"/>
+        </el-radio-group>
       </div>
-      <div class="tabs">
-        <el-tabs v-model="activeName" @tab-click="tabHandleClick">
-          <el-tab-pane label="新增注册用户" name="0" />
-          <el-tab-pane label="新增绑定用户" name="1" />
-          <el-tab-pane label="新增付费用户" name="2" />
-          <el-tab-pane label="充值金额" name="3" />
-        </el-tabs>
-        <div class="input">
-          <el-radio-group v-model="showLineDayType" size="small" @change="lineDayTypeShowChange">
-            <el-radio-button label="日"/>
-            <el-radio-button :disabled="disabledWeekFilter" label="周"/>
-            <el-radio-button :disabled="disabledMonthFilter" label="月"/>
-          </el-radio-group>
-        </div>
-      </div>
-      <ve-line :rel="1" :data="chartData" :settings="chartSettings"/>
     </div>
     <div v-loading="loading" class="card-box" style="padding-bottom: 24px">
       <div class="title-area">
-        <span class="title">所有渠道数据</span>
+        <span class="title">明细数据</span>
         <div class="download">
           <el-button
             pid=""
@@ -98,13 +59,6 @@
       </div>
       <el-table :data="channelTableData" stripe size="mini" style="width: 100%" @sort-change="sortFilter">
         <el-table-column align="center" label="渠道名称" prop="tagName" />
-        <!--<el-table-column align="center" label="渠道名称" prop="tagName">
-          <template slot-scope="scope">
-            <div>
-              <span style="color: #409EFF;cursor: pointer" @click="channelDetail(scope.row)">{{ scope.row.tagName }}</span>
-            </div>
-          </template>
-        </el-table-column>-->
         <el-table-column sortable="custom" align="center" label="新增注册用户" prop="incrRegUser" />
         <el-table-column sortable="custom" align="center" label="新增绑定用户" prop="incrBindUser" />
         <el-table-column sortable="custom" align="center" label="绑定转化率" prop="bindConversion" />
@@ -119,7 +73,7 @@
 </template>
 
 <script>
-import { getStoreAllTags, getStoreTagTypeTop5, getStoreDetail, getStoreListDetail } from '../../api/interactive'
+import { getStoreAllTags, getStoreDetail } from '../../api/interactive'
 import { parseDateTime, cloneDeep, getWeekRangeTime, getMonthRangeTime } from '../../utils/index'
 const JsBigDecimal = require('js-big-decimal')
 let channelOptions = []
@@ -151,66 +105,10 @@ export default {
           return time.getTime() > curDate || time.getTime() < dateRegion
         }
       },
-      top5Data: [
-        {
-          title: '注册用户总数',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        },
-        {
-          title: '绑定用户总数',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        },
-        {
-          title: '绑定转化率',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        },
-        {
-          title: '付费用户总数',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        },
-        {
-          title: '付费转化率',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        },
-        {
-          title: '充值金额（元）',
-          max: 0,
-          list: [
-            { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }, { number: 0, tag: '-' }
-          ]
-        }
-      ],
-      activeName: '0',
       datePickerValue: null,
       showLineDayType: '日',
-      channelValue: [],
+      channelValue: '',
       channelOptions: [],
-      chartData: {
-        columns: ['date'],
-        rows: [
-          // { 'date': '2020-01-01', OPPO: 500, VIVO: 600, HUAWEI: 700, XIAOMI: 800, APPSTORE: 900 }
-        ]
-      },
-      chartSettings: {
-        labelMap: {
-          date: '日期'
-        }
-      },
       channelTableData: [],
       originChannelTableData: [],
       originStoreDetailList: []
@@ -229,6 +127,7 @@ export default {
     }
   },
   mounted() {
+    this.channelValue = this.$route.query.tag
     this.setDatePickerDefaultValue()
     this.makeDateStyleList()
     this.init()
@@ -244,7 +143,6 @@ export default {
      * @description 条形统计图切换 日 周 月
      * */
     lineDayTypeShowChange(e) {
-      this.parseStoreListDetail(cloneDeep(this.originStoreDetailList))
     },
     /**
      * @description 获取所有标签
@@ -259,68 +157,11 @@ export default {
               value: item.tag
             }
           })
-          this.getStoreTagTypeTop5()
           this.getStoreDetail()
           this.getStoreListDetail()
         })
         .catch(() => {})
         .finally(() => {})
-    },
-    /**
-     * @description 获取前五渠道总体数据
-     * */
-    getStoreTagTypeTop5() {
-      getStoreTagTypeTop5()
-        .then(res => {
-          if (res.status !== 0) throw res
-          function getMax(list) {
-            const arr = []
-            list.forEach(item => {
-              arr.push(item.number)
-            })
-            return Math.max.apply(null, arr)
-          }
-          const data = res.data
-          data.payAmountTop5 = data.payAmountTop5.map(item => {
-            if (item.number !== 0) {
-              item.number = Number(new JsBigDecimal(item.number).divide(new JsBigDecimal(100), 2).getValue())
-            }
-            return item
-          })
-          this.top5Data = [
-            {
-              title: '注册用户总数',
-              max: getMax(data.regUserTop5),
-              list: data.regUserTop5
-            },
-            {
-              title: '绑定用户总数',
-              max: getMax(data.bindUserTop5),
-              list: data.bindUserTop5
-            },
-            {
-              title: '绑定转化率',
-              max: getMax(data.bindRateTop5),
-              list: data.bindRateTop5
-            },
-            {
-              title: '付费用户总数',
-              max: getMax(data.payUserTop5),
-              list: data.payUserTop5
-            },
-            {
-              title: '付费转化率',
-              max: getMax(data.payRateTop5),
-              list: data.payRateTop5
-            },
-            {
-              title: '充值金额（元）',
-              max: getMax(data.payAmountTop5),
-              list: data.payAmountTop5
-            }
-          ]
-        })
-        .catch(() => {})
     },
     /**
      * @description 获取所有渠道数据及占比
@@ -369,12 +210,12 @@ export default {
             // 累计注册用户
             item.regUserTotal = (() => {
               if (regUserTotal === 0) return `${item.regUserTotal}(0%)`
-              return `${item.regUserTotal}(${new JsBigDecimal(item.regUserTotal).divide(new JsBigDecimal(regUserTotal), 4).multiply(new JsBigDecimal(100)).getValue()}%)`
+              return `${item.regUserTotal}(${new JsBigDecimal(item.regUserTotal).divide(new JsBigDecimal(regUserTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
             })()
             // 累计充值金额
             item.payAmountTotal = (() => {
               if (payAmountTotal === 0) return `${item.payAmountTotal}(0%)`
-              return `${item.payAmountTotal}(${new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(payAmountTotal), 4).multiply(new JsBigDecimal(100)).getValue()}%)`
+              return `${item.payAmountTotal}(${new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(payAmountTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
             })()
             return item
           })
@@ -417,107 +258,6 @@ export default {
       this.showLineDayType = '日'
       this.makeDateStyleList()
       this.getStoreDetail()
-      this.getStoreListDetail()
-    },
-    /**
-     * @description 获取渠道列表
-     * */
-    getStoreListDetail() {
-      this.loading = true
-      getStoreListDetail(Object.assign(this.getRequestTime(), {
-        storeTagList: this.channelValue,
-        type: '0' + (Number(this.activeName) + 1)
-      }))
-        .then(res => {
-          if (res.status !== 0) throw res
-          /* eslint-disable */
-          // 所有渠道标签
-          const data = res.data.map(item => {
-            if (this.activeName === '3') {
-              // 充值金额 分 =》 元
-              item.list.map(item => {
-                item.number = Number(new JsBigDecimal(item.number).divide(new JsBigDecimal(100), 2).getValue())
-                return item
-              })
-            }
-            return item
-          })
-          this.originStoreDetailList = cloneDeep(data)
-
-          const allStore = data[0].list.map(item => {
-            return item.tag
-          })
-          this.chartData.columns = ['date']
-          this.chartData.columns = this.chartData.columns.concat(allStore)
-          allStore.forEach(tag => {
-            this.chartSettings.labelMap[tag] = this.channelOptions.find(item => item.value === tag).label
-          })
-          // 渠道数据
-          this.parseStoreListDetail(cloneDeep(data))
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    parseStoreListDetail(data) {
-      this.chartData.rows = []
-      if (this.showLineDayType === '日') {
-        data.forEach(item => {
-          // { 'date': '2020-01-01', OPPO: 500, VIVO: 600, HUAWEI: 700, XIAOMI: 800, APPSTORE: 900 }
-          const row = {
-            date: item.dateStr
-          }
-          item.list.forEach(tag => {
-            row[tag.tag] = tag.number
-          })
-          this.chartData.rows.push(row)
-        })
-      } else if (this.showLineDayType === '周' || this.showLineDayType === '月') {
-        const dayArray = []
-        data.forEach(item => {
-          const row = {
-            date: item.dateStr
-          }
-          item.list.forEach(tag => {
-            row[tag.tag] = tag.number
-          })
-          dayArray.push(row)
-        })
-        const weekList = []
-        const rangeDate = this.showLineDayType === '周' ? this.lineDateStyleList[1].date : this.lineDateStyleList[2].date
-        rangeDate.forEach(weekRange => {
-          const weekRangeArray = weekRange.split('~')
-          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
-          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
-          // console.log(weekRangeArray) // ["20201213", "20201219"]
-          let item = {
-            date: weekRange
-          }
-          item = Object.assign(cloneDeep(dayArray[0]), item) // {date: "2020-12-20~2020-12-26", ios_storte: 1, Huawei: 0, Oppo: 0}
-          // 重置为 0
-          Object.keys(item).forEach(key => {
-            if (key !== 'date') {
-              item[key] = 0
-            }
-          }) // {date: "2020-12-20~2020-12-26", ios_storte: 0, Huawei: 0, Oppo: 0}
-          dayArray.forEach((_item, index) => {
-            // console.log(_item) //
-            // 是否在区间
-            if (weekRangeArray[0] <= _item.date.replace(/-/g, '') && weekRangeArray[1] >= _item.date.replace(/-/g, '')) {
-              Object.keys(item).forEach(key => {
-                if (key !== 'date') {
-                  item[key] = _item[key] + item[key]
-                }
-              })
-            }
-          })
-          weekList.push(item)
-        })
-        this.chartData.rows = weekList
-      }
     },
     /**
      * @description 生成查询 开始时间 和 结束时间 生成 日 周 月 的时间范围
@@ -582,34 +322,8 @@ export default {
      * @description 导出
      * */
     download() {
-      import('@/utils/Export2Excel').then(excel => {
-        const header = ['渠道名称', '新增注册用户', '新增绑定用户', '绑定转化率', '新增付费用户', '付费转化率', '充值金额（元）', '累计注册用户', '累计充值金额（元）']
-        const data = this.channelTableData.map(item => {
-          return [item.tagName, item.incrRegUser, item.incrBindUser, item.bindConversion,
-            item.incrPayUser, item.payConversion, item.incrPayAmount, item.regUserTotal, item.payAmountTotal]
-        })
-        const time = this.getRequestTime()
-        data.push([])
-        data.push([
-          '数据统计时间：',
-          time.beginTime + ' 至 ' + time.endTime
-        ])
-        data.push([
-          '导出时间：',
-          parseDateTime('y-m-d h:i')
-        ])
-        const options = {
-          header,
-          data,
-          filename: `所有渠道数据_${time.beginTime}_${time.endTime}`,
-          autoWidth: true,
-          bookType: 'xlsx'
-        }
-        excel.export_json_to_excel(options)
-      })
     },
     sortFilter({ column, prop, order }) {
-      console.log(order)
       if (prop) {
         this.channelTableData = this.channelTableData.sort((a, b) => {
           return order === 'descending'
@@ -619,16 +333,6 @@ export default {
       } else {
         this.channelTableData = cloneDeep(this.originChannelTableData)
       }
-    },
-    /**
-     * @description 跳转至渠道明细
-     * */
-    channelDetail(row) {
-      const options = {
-        name: 'UserChannelDetail'
-      }
-      const { href } = this.$router.resolve(options)
-      window.open(href + '?tag=' + row.tag, '_blank')
     }
   }
 }

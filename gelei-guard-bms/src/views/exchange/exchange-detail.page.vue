@@ -10,6 +10,10 @@
           <div class="value">{{ packageDetail.plan_name }}</div>
         </div>
         <div class="item">
+          <div class="label">描述：</div>
+          <div class="value">{{ packageDetail.cdk_pack_desc || '-' }}</div>
+        </div>
+        <div class="item">
           <div class="label">联系人：</div>
           <div class="value">{{ packageDetail.contacter || '-' }}</div>
         </div>
@@ -26,8 +30,13 @@
           <div class="value">{{ packageDetail._end_num }}</div>
         </div>
         <div class="item">
-          <div class="label">描述：</div>
-          <div class="value">{{ packageDetail.cdk_pack_desc || '-' }}</div>
+          <div class="label">状态：</div>
+          <div class="value">
+            <span v-if="packageDetail.cdk_pack_status === 2" style="color: #00c250">生效中</span>
+            <span v-if="packageDetail.cdk_pack_status === 1">待生效</span>
+            <span v-if="packageDetail.cdk_pack_status === 3" style="color: red">已失效</span>
+            <span v-if="packageDetail.cdk_pack_status === 4" style="color: #e6a23c">已过期</span>
+          </div>
         </div>
       </div>
     </div>
@@ -165,7 +174,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          :current-page="page"
+          :current-page="requestData.page_no"
           :page-size="page_size"
           :page-sizes="page_sizes"
           :total="total"
@@ -186,7 +195,7 @@
           <span>{{ packageDetail._end_num }}</span>
         </el-form-item>
         <el-form-item label="添加数量" prop="num">
-          <el-input v-model="form.num" max="999" min="1" placeholder="输入添加数量，每次最多999个" type="number" size="mini" />
+          <el-input v-model="form.num" max="999" min="1" placeholder="输入添加数量，每次最多999个" type="text" size="mini" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="submitPackage">确定</el-button>
@@ -239,9 +248,13 @@ export default {
       membershipPackageList: [],
       rules: {
         num: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为数字' },
+          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为正整数' },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
             return Number(value) > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+          } },
+          { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+            console.log(value)
+            return !/^\d{1,9}$/.test(value) || /^0{1,9}/.test(value) ? callback(new Error('库存数量必须为正整数')) : callback()
           } },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
             return Number(value) + this.initTotal > 9999 ? callback(new Error('兑换码包上限为9999个，无法添加更多兑换码')) : callback()
@@ -574,7 +587,9 @@ $label_height: 28px;
       margin-bottom: 20px;
       font-size: 14px;
       .label{
-        width: 90px;
+        width: 72px;
+        //text-align: right;
+        margin-right: 10px;
       }
       .value{
         opacity: .8;

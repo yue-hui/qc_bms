@@ -66,7 +66,7 @@
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
-                  pid="21005"
+                  pid="21023"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -74,7 +74,7 @@
                 >创建
                 </gl-button>
                 <gl-button
-                  pid="21005"
+                  pid="21019"
                   class="download details-tab"
                   size="mini"
                   type="success"
@@ -114,7 +114,7 @@
             prop="inviterUv" />
           <el-table-column
             align="center"
-            label="被邀请页UV"
+            label="被邀请页PV"
             prop="inviteePv" />
           <el-table-column
             align="center"
@@ -132,10 +132,10 @@
           <el-table-column
             align="center"
             label="绑定成功人数"
-            prop="bindCount"
+            prop=""
             width="100">
             <template slot-scope="scope">
-              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.regCount }}</span>
+              <span style="color: rgb(64, 158, 255); cursor: pointer;" @click="joinDataDetail(scope.row)">{{ scope.row.bindCount }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -175,38 +175,37 @@
             width="174"
             prop="control">
             <template slot-scope="scope">
-              <el-button
-                v-if="scope.row._status === 30"
-                pid=""
+              <gl-button
+                pid="21025"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="invitationV2Detail(scope.row.activityId)"
               >查看
-              </el-button>
-              <el-button
+              </gl-button>
+              <gl-button
                 v-if="[10].includes(scope.row._status)"
-                pid=""
+                pid="21020"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="invitationV2Listing(scope.row.activityId)"
               >上架
-              </el-button>
-              <!--  v-if="[10, 20].includes(scope.row._status)"             -->
-              <el-button
-                pid=""
+              </gl-button>
+              <gl-button
+                v-if="[10, 20].includes(scope.row._status)"
+                pid="21024"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
                 @click="updateInvatationV2(scope.row.activityId)"
               >编辑
-              </el-button>
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination
-          :current-page="page"
+          :current-page="requestData.page_no"
           :page-size="page_size"
           :page-sizes="page_sizes"
           :total="total"
@@ -404,14 +403,14 @@ export default {
             item._registerPayConversion = (() => {
               if (item.regCount === 0) return '0%'
               return new JsBigDecimal(item.regPayCount)
-                .divide(new JsBigDecimal(item.regCount), 2)
+                .divide(new JsBigDecimal(item.regCount), 4)
                 .multiply(new JsBigDecimal(100)).getValue() + '%'
             })()
             // 绑定付费转化率
             item._bindPayConversion = (() => {
               if (item.bindCount === 0) return '0%'
               return new JsBigDecimal(item.bindPayCount)
-                .divide(new JsBigDecimal(item.bindCount), 2)
+                .divide(new JsBigDecimal(item.bindCount), 4)
                 .multiply(new JsBigDecimal(100)).getValue() + '%'
             })()
             /* 状态
@@ -451,6 +450,9 @@ export default {
       this.getList()
     },
     joinDetail(row) {
+      if (!this.$store.getters.auths.includes('21021')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       const options = {
         name: 'InvatationFriendsV2JoinDetail'
       }
@@ -458,6 +460,9 @@ export default {
       window.open(href + '?id=' + row.activityId + '&title=' + row.title, '_blank')
     },
     joinDataDetail(row) {
+      if (!this.$store.getters.auths.includes('21022')) {
+        return this.$message.info('你暂未开通该权限，请联系管理员开通')
+      }
       const options = {
         name: 'InvatationFriendsV2DataDetail'
       }
@@ -466,7 +471,7 @@ export default {
     },
     invitationV2Detail(activityId) {
       const options = {
-        name: 'InvatationFriendsV2Action'
+        name: 'InvatationFriendsV2Detail'
       }
       const { href } = this.$router.resolve(options)
       window.open(href + '?id=' + activityId + '&detail=' + '1', '_blank')

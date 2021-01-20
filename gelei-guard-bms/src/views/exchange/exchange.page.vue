@@ -93,6 +93,10 @@
             prop="cdk_pack_name" />
           <el-table-column
             align="center"
+            label="会员套餐"
+            prop="_plan_name" />
+          <el-table-column
+            align="center"
             label="数量"
             prop="_num" />
           <el-table-column
@@ -135,12 +139,12 @@
             <template slot-scope="scope">
               <gl-button pid="21016" size="small" style="text-decoration: underline;" type="text" @click="packageDetail(scope.row)">查看</gl-button>
               <gl-button pid="21013" size="small" style="text-decoration: underline;" type="text" @click="updatePackage(scope.row)">编辑</gl-button>
-              <gl-button v-if="[1, 2].includes(scope.row.cdk_pack_status)" pid="21014" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</gl-button>
+              <gl-button :disabled="![1, 2].includes(scope.row.cdk_pack_status)" pid="21014" size="small" style="text-decoration: underline;" type="text" @click="disableExchangePackage(scope.row)">使失效</gl-button>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination
-          :current-page="page"
+          :current-page="requestData.page_no"
           :page-size="page_size"
           :page-sizes="page_sizes"
           :total="total"
@@ -158,7 +162,7 @@
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="110px" class="demo-ruleForm">
         <el-form-item label="兑换码包名称" prop="cdk_pack_name">
-          <el-input v-model="form.cdk_pack_name" :disabled="updateStatus" placeholder="请输入兑换码包名称" size="mini" />
+          <el-input v-model="form.cdk_pack_name" :disabled="updateStatus" maxlength="20" placeholder="请输入兑换码包名称" size="mini" />
         </el-form-item>
         <el-form-item label="描述" prop="">
           <el-input v-model="form.cdk_pack_desc" placeholder="请输入描述" size="mini" />
@@ -170,7 +174,7 @@
           <el-input v-model="form.contact_phone" placeholder="请输入联系方式" size="mini" />
         </el-form-item>
         <el-form-item v-show="!updateStatus" label="库存" prop="num">
-          <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="number" size="mini" />
+          <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="text" size="mini" />
         </el-form-item>
         <el-form-item label="会员套餐" prop="plan_id">
           <el-select
@@ -194,6 +198,7 @@
         <el-form-item v-show="!updateStatus" label="兑换时间" prop="exchangeTime">
           <el-date-picker
             v-model="form.exchangeTime"
+            :picker-options="pickerOptions"
             style="width: 100%"
             type="datetimerange"
             size="mini"
@@ -261,15 +266,24 @@ export default {
         exchangeTime: null
       },
       updateStatus: false,
+      pickerOptions: {
+        disabledDate(time) {
+          const curDate = new Date()
+          return time.getTime() < curDate.getTime() - 3600 * 24 * 1000
+        }
+      },
       membershipPackageList: [],
       rules: {
         cdk_pack_name: [
           { required: true, trigger: ['blur', 'change'], message: '请输入兑换码包名称' }
         ],
         num: [
-          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为数字' },
+          { required: true, trigger: ['blur', 'change'], message: '请输入库存数量，必须为正整数' },
           { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
-            return value > 999 || value <= 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
+            return !/^\d{1,9}$/.test(value) || /^0{1,9}/.test(value) ? callback(new Error('库存数量必须为正整数')) : callback()
+          } },
+          { trigger: ['blur', 'change'], validator: (rule, value, callback) => {
+            return value > 999 || value < 0 ? callback(new Error('库存不能超过999或者小于1')) : callback()
           } }
         ],
         plan_id: [
@@ -347,6 +361,7 @@ export default {
             item._num = item.used_num + ' / ' + item.total_num
             return item
           })
+          this.ParsePlanName()
         })
         .catch((e) => {
           this.$message.error(e.message)
@@ -431,6 +446,7 @@ export default {
                 validDays: r.valid_days
               }
             })
+            this.ParsePlanName()
             resolve()
           } else {
             this.$message.error(res.message)
@@ -495,6 +511,20 @@ export default {
         begin_time: '',
         end_time: '',
         exchangeTime: null
+      }
+    },
+    ParsePlanName() {
+      if (this.tableData.length > 0 && this.membershipPackageList.length > 0) {
+        this.tableData = this.tableData.map(item => {
+          try {
+            item._plan_name = this.membershipPackageList.find(plan => {
+              return plan.value === item.plan_id
+            }).label
+          } catch (e) {
+            item._plan_name = '未知'
+          }
+          return item
+        })
       }
     }
   }
