@@ -1344,6 +1344,17 @@ export function getStoreDetail(data) {
   })
 }
 /**
+ * @description 获取渠道详情数据 - 明细列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1448
+ * */
+export function getStoreDetailList(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/details/list',
+    method: 'post',
+    data
+  })
+}
+/**
  * @description 获取渠道列表
  * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1450
  * */
