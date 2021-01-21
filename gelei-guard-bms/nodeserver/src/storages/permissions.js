@@ -766,28 +766,6 @@ const PERMISSION_DATA = [
           { name: '查看', checked: false, width: BUTTON_OPERATION_WIDTH,
             layout: 'vertical', c_layout: 'vertical', code: 21025, children: [] }
         ]
-      },
-      {
-        name: '兑换码',
-        checked: false,
-        width: FUNCTION_PAGE_WIDTH,
-        layout: 'horizotal',
-        c_layout: 'horizotal',
-        code: 21011,
-        children: [
-          { name: '创建', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21012, children: [] },
-          { name: '编辑', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21013, children: [] },
-          { name: '使失效', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21014, children: [] },
-          { name: '添加库存', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21015, children: [] },
-          { name: '查看', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21016, children: [] },
-          { name: '兑换码备注', checked: false, width: BUTTON_OPERATION_WIDTH,
-            layout: 'vertical', c_layout: 'vertical', code: 21017, children: [] }
-        ]
       }
     ]
   },
@@ -1069,6 +1047,34 @@ const PERMISSION_DATA = [
         ]
       },
       {
+        name: '设备权限管理',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 21026,
+        children: [
+          {
+            name: '新建',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 21027,
+            children: []
+          },
+          {
+            name: '编辑',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 21028,
+            children: []
+          }
+        ]
+      },
+      {
         name: '商务合作注册页',
         checked: false,
         width: FUNCTION_PAGE_WIDTH,
@@ -1131,6 +1137,28 @@ const PERMISSION_DATA = [
             code: 21003,
             children: []
           }
+        ]
+      },
+      {
+        name: '兑换码',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'horizotal',
+        code: 21011,
+        children: [
+          { name: '创建', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21012, children: [] },
+          { name: '编辑', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21013, children: [] },
+          { name: '使失效', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21014, children: [] },
+          { name: '添加库存', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21015, children: [] },
+          { name: '查看', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21016, children: [] },
+          { name: '兑换码备注', checked: false, width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical', c_layout: 'vertical', code: 21017, children: [] }
         ]
       }
     ]

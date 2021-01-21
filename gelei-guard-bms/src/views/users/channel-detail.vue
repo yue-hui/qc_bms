@@ -57,23 +57,27 @@
           </el-button>
         </div>
       </div>
-      <el-table :data="channelTableData" stripe size="mini" style="width: 100%" @sort-change="sortFilter">
-        <el-table-column align="center" label="渠道名称" prop="tagName" />
-        <el-table-column sortable="custom" align="center" label="新增注册用户" prop="incrRegUser" />
-        <el-table-column sortable="custom" align="center" label="新增绑定用户" prop="incrBindUser" />
-        <el-table-column sortable="custom" align="center" label="绑定转化率" prop="bindConversion" />
-        <el-table-column sortable="custom" align="center" label="新增付费用户" prop="incrPayUser" />
-        <el-table-column sortable="custom" align="center" label="付费转化率" prop="payConversion" />
-        <el-table-column sortable="custom" align="center" label="充值金额（元）" prop="incrPayAmount" />
-        <el-table-column sortable="custom" align="center" label="累计注册用户" prop="regUserTotal" />
-        <el-table-column sortable="custom" align="center" label="累计充值金额（元）" prop="payAmountTotal" />
-      </el-table>
+      <div class="table-content table-block">
+        <el-table :data="channelTableData" stripe size="mini" style="width: 100%">
+          <el-table-column align="center" label="时间" prop="dateTime" />
+          <el-table-column align="center" label="新增注册用户" prop="incrRegUser" />
+          <el-table-column align="center" label="新增绑定用户" prop="incrBindUser" />
+          <el-table-column align="center" label="绑定转化率" prop="bindConversion" />
+          <el-table-column align="center" label="新增付费用户" prop="incrPayUser" />
+          <el-table-column align="center" label="付费转化率" prop="payConversion" />
+          <el-table-column align="center" label="充值金额（元）" prop="incrPayAmount" />
+          <el-table-column align="center" label="累计注册用户" prop="regUserTotal" />
+          <el-table-column align="center" label="累计绑定用户" prop="bindUserTotal" />
+          <el-table-column align="center" label="累计付费用户" prop="payUserTotal" />
+          <el-table-column align="center" label="累计充值金额（元）" prop="payAmountTotal" />
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getStoreAllTags, getStoreDetail } from '../../api/interactive'
+import { getStoreAllTags, getStoreDetailList } from '../../api/interactive'
 import { parseDateTime, cloneDeep, getWeekRangeTime, getMonthRangeTime } from '../../utils/index'
 const JsBigDecimal = require('js-big-decimal')
 let channelOptions = []
@@ -110,8 +114,7 @@ export default {
       channelValue: '',
       channelOptions: [],
       channelTableData: [],
-      originChannelTableData: [],
-      originStoreDetailList: []
+      originChannelTableData: []
     }
   },
   computed: {
@@ -134,15 +137,10 @@ export default {
   },
   methods: {
     /**
-     * @description 渠道趋势对比折线图类型切换
-     * */
-    tabHandleClick(tab) {
-      this.getStoreListDetail()
-    },
-    /**
      * @description 条形统计图切换 日 周 月
      * */
     lineDayTypeShowChange(e) {
+      this.parseStoreListDetail(cloneDeep(this.originChannelTableData))
     },
     /**
      * @description 获取所有标签
@@ -157,8 +155,7 @@ export default {
               value: item.tag
             }
           })
-          this.getStoreDetail()
-          this.getStoreListDetail()
+          this.getStoreDetailList()
         })
         .catch(() => {})
         .finally(() => {})
@@ -166,27 +163,16 @@ export default {
     /**
      * @description 获取所有渠道数据及占比
      * */
-    getStoreDetail() {
+    getStoreDetailList() {
       this.loading = true
-      getStoreDetail(this.getRequestTime())
+      getStoreDetailList(Object.assign({
+        storeTag: this.channelValue
+      }, this.getRequestTime(), {
+        // beginTime: this.getRequestTime()._beginTime,
+        // endTime: this.getRequestTime()._endTime
+      }))
         .then(res => {
           if (res.status !== 0) throw res
-          // 全部渠道注册用户总数
-          const regUserTotal = (() => {
-            let count = 0
-            res.data.forEach(item => {
-              count += Number(item.regUserTotal)
-            })
-            return count
-          })()
-          // 全部渠道累计充值金额
-          const payAmountTotal = (() => {
-            let count = 0
-            res.data.forEach(item => {
-              count += Number(new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(100), 2).getValue())
-            })
-            return count
-          })()
           this.channelTableData = res.data.map(item => {
             // 绑定转化率 = 新增绑定 / 新增注册
             item.bindConversion = (() => {
@@ -205,25 +191,13 @@ export default {
             // 金额 分 =》 元
             item.payAmountTotal = new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(100), 2).getValue()
             item.incrPayAmount = new JsBigDecimal(item.incrPayAmount).divide(new JsBigDecimal(100), 2).getValue()
-            // 渠道名称
-            item.tagName = channelOptions.find(tag => tag.value === item.tag).label
-            // 累计注册用户
-            item.regUserTotal = (() => {
-              if (regUserTotal === 0) return `${item.regUserTotal}(0%)`
-              return `${item.regUserTotal}(${new JsBigDecimal(item.regUserTotal).divide(new JsBigDecimal(regUserTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
-            })()
-            // 累计充值金额
-            item.payAmountTotal = (() => {
-              if (payAmountTotal === 0) return `${item.payAmountTotal}(0%)`
-              return `${item.payAmountTotal}(${new JsBigDecimal(item.payAmountTotal).divide(new JsBigDecimal(payAmountTotal), 2).multiply(new JsBigDecimal(100)).getValue()}%)`
-            })()
             return item
           })
+          this.channelTableData = this.channelTableData.reverse()
           this.originChannelTableData = cloneDeep(this.channelTableData)
-          /* eslint-disable */
         })
         .catch((e) => {
-          console.log(e)
+          this.$message.error(e.message)
         })
         .finally(() => {
           this.loading = false
@@ -257,17 +231,17 @@ export default {
     getFilter() {
       this.showLineDayType = '日'
       this.makeDateStyleList()
-      this.getStoreDetail()
+      this.getStoreDetailList()
     },
     /**
      * @description 生成查询 开始时间 和 结束时间 生成 日 周 月 的时间范围
      * */
     makeDateStyleList() {
-      let queryDateRange = {
+      const queryDateRange = {
         begin_time: this.getRequestTime().beginTime,
         end_time: this.getRequestTime().endTime
       }
-      let begin_time = new Date()
+      const begin_time = new Date()
       const begin_timeArr = queryDateRange.begin_time.split('-')
       begin_time.setFullYear(begin_timeArr[0])
       begin_time.setMonth(begin_timeArr[1] - 1)
@@ -278,7 +252,7 @@ export default {
       begin_time.setMilliseconds(0)
       queryDateRange.begin_time = begin_time.getTime()
       //
-      let end_time = new Date()
+      const end_time = new Date()
       const end_timeArr = queryDateRange.end_time.split('-')
       end_time.setFullYear(end_timeArr[0])
       end_time.setMonth(end_timeArr[1] - 1)
@@ -298,8 +272,8 @@ export default {
       const weekDate = getWeekRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '周', date: weekDate.map(item => {
-            return item.startDate + '~' + item.endDate
-          }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
+          return item.startDate + '~' + item.endDate
+        }), startDate: weekDate[0].startDate, endDate: weekDate[weekDate.length - 1].endDate }
       )
       // 更改周的起止时间
       this.lineDateStyleList[1].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[1].date[0].split('~')[1]
@@ -309,29 +283,107 @@ export default {
       const monthDate = getMonthRangeTime(queryDateRange.begin_time, queryDateRange.end_time)
       this.lineDateStyleList.push(
         { type: '月', date: monthDate.map(item => {
-            return item.startDate + '~' + item.endDate
-          }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
+          return item.startDate + '~' + item.endDate
+        }), startDate: monthDate[0].startDate, endDate: monthDate[monthDate.length - 1].endDate }
       )
       // 更改月的起止时间
       this.lineDateStyleList[2].date[0] = parseDateTime('y-m-d', queryDateRange.begin_time) + '~' + this.lineDateStyleList[2].date[0].split('~')[1]
       const monthLength = this.lineDateStyleList[2].date.length
       this.lineDateStyleList[2].date[monthLength - 1] = this.lineDateStyleList[2].date[monthLength - 1].split('~')[0] + '~' + parseDateTime('y-m-d', queryDateRange.end_time)
-      console.log(JSON.stringify(this.lineDateStyleList, null, 2))
     },
     /**
      * @description 导出
      * */
     download() {
-    },
-    sortFilter({ column, prop, order }) {
-      if (prop) {
-        this.channelTableData = this.channelTableData.sort((a, b) => {
-          return order === 'descending'
-            ? Number.parseFloat(a[prop]) - Number.parseFloat(b[prop])
-            : Number.parseFloat(b[prop]) - Number.parseFloat(a[prop])
+      import('@/utils/Export2Excel').then(excel => {
+        const header = [
+          '时间', '新增注册用户', '新增绑定用户',
+          '绑定转化率', '新增付费用户', '付费转化率', '充值金额（元）',
+          '累计注册用户', '累计绑定用户', '累计付费用户', '累计充值金额（元）']
+        const data = this.channelTableData.map(item => {
+          return [item.dateTime,
+            item.incrRegUser,
+            item.incrBindUser,
+            item.bindConversion,
+            item.incrPayUser,
+            item.payConversion,
+            item.incrPayAmount,
+            item.regUserTotal,
+            item.bindUserTotal,
+            item.payUserTotal,
+            item.payAmountTotal]
         })
-      } else {
+        const time = this.getRequestTime()
+        data.push([])
+        const channelName = this.channelOptions.find(item => item.value === this.channelValue).label
+        data.push([
+          '数据统计渠道：',
+          channelName
+        ])
+        data.push([
+          '数据统计时间：',
+          time.beginTime + ' 至 ' + time.endTime
+        ])
+        data.push([
+          '导出时间：',
+          parseDateTime('y-m-d h:i')
+        ])
+        const options = {
+          header,
+          data,
+          filename: channelName + `_渠道明细数据_${time.beginTime}_${time.endTime}`,
+          autoWidth: true,
+          bookType: 'xlsx'
+        }
+        excel.export_json_to_excel(options)
+      })
+    },
+    parseStoreListDetail(data) {
+      this.channelTableData = []
+      if (this.showLineDayType === '日') {
         this.channelTableData = cloneDeep(this.originChannelTableData)
+      } else if (this.showLineDayType === '周' || this.showLineDayType === '月') {
+        const weekList = []
+        const rangeDate = this.showLineDayType === '周' ? this.lineDateStyleList[1].date : this.lineDateStyleList[2].date
+        rangeDate.forEach(weekRange => {
+          const weekRangeArray = weekRange.split('~')
+          weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
+          weekRangeArray[1] = weekRangeArray[1].replace(/-/g, '')
+          const item = Object.assign(cloneDeep(data[0]), { dateTime: weekRange })
+          // 重置为 0
+          Object.keys(item).forEach(key => {
+            if (!['dateTime', 'bindConversion', 'payConversion'].includes(key)) {
+              item[key] = 0
+            }
+          })
+          data.forEach((_item, index) => {
+            // console.log(_item) //
+            // 是否在区间
+            if (weekRangeArray[0] <= _item.dateTime.replace(/-/g, '') && weekRangeArray[1] >= _item.dateTime.replace(/-/g, '')) {
+              Object.keys(item).forEach(key => {
+                if (!['dateTime', 'bindConversion', 'payConversion'].includes(key)) {
+                  item[key] = new JsBigDecimal(_item[key]).add(new JsBigDecimal(item[key])).getValue()
+                }
+              })
+            }
+          })
+          // 绑定转化率 = 新增绑定 / 新增注册
+          item.bindConversion = (() => {
+            if (Number(item.incrRegUser) === 0) return '0%'
+            return new JsBigDecimal(item.incrBindUser)
+              .divide(new JsBigDecimal(item.incrRegUser), 4)
+              .multiply(new JsBigDecimal(100)).getValue() + '%'
+          })()
+          // 付费转化率 = 新增付费 / 新增注册
+          item.payConversion = (() => {
+            if (Number(item.incrRegUser) === 0) return '0%'
+            return new JsBigDecimal(item.incrPayUser)
+              .divide(new JsBigDecimal(item.incrRegUser), 4)
+              .multiply(new JsBigDecimal(100)).getValue() + '%'
+          })()
+          weekList.push(item)
+        })
+        this.channelTableData = weekList
       }
     }
   }

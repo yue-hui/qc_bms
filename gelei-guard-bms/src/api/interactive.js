@@ -1344,6 +1344,17 @@ export function getStoreDetail(data) {
   })
 }
 /**
+ * @description 获取渠道详情数据 - 明细列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1448
+ * */
+export function getStoreDetailList(data) {
+  return request({
+    url: '/greenguard/manager/store/tag/details/list',
+    method: 'post',
+    data
+  })
+}
+/**
  * @description 获取渠道列表
  * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1450
  * */
@@ -1532,4 +1543,36 @@ export function getPackageDetail(data) {
     data
   })
 }
-
+/**
+ * @description 设备权限管理-列表
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1518
+ * */
+export function deviceRuleConfigList(data) {
+  return request({
+    url: '/greenguard/manager/guard/config/list',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 设备权限管理-添加
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1518
+ * */
+export function deviceRuleConfigAdd(data) {
+  return request({
+    url: '/greenguard/manager/guard/config/add',
+    method: 'post',
+    data
+  })
+}
+/**
+ * @description 设备权限管理-修改
+ * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=1519
+ * */
+export function deviceRuleConfigUpdate(data) {
+  return request({
+    url: '/greenguard/manager/guard/config/edit',
+    method: 'post',
+    data
+  })
+}
