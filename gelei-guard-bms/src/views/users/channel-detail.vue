@@ -193,7 +193,7 @@ export default {
             item.incrPayAmount = new JsBigDecimal(item.incrPayAmount).divide(new JsBigDecimal(100), 2).getValue()
             return item
           })
-          this.channelTableData = this.channelTableData.reverse()
+          // this.channelTableData = this.channelTableData.reverse()
           this.originChannelTableData = cloneDeep(this.channelTableData)
         })
         .catch((e) => {
@@ -344,7 +344,8 @@ export default {
         this.channelTableData = cloneDeep(this.originChannelTableData)
       } else if (this.showLineDayType === '周' || this.showLineDayType === '月') {
         const weekList = []
-        const rangeDate = this.showLineDayType === '周' ? this.lineDateStyleList[1].date : this.lineDateStyleList[2].date
+        let rangeDate = this.showLineDayType === '周' ? cloneDeep(this.lineDateStyleList[1].date) : cloneDeep(this.lineDateStyleList[2].date)
+        rangeDate = rangeDate.reverse()
         rangeDate.forEach(weekRange => {
           const weekRangeArray = weekRange.split('~')
           weekRangeArray[0] = weekRangeArray[0].replace(/-/g, '')
