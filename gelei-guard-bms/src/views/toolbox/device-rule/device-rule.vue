@@ -9,10 +9,10 @@
           <el-input v-model="requestData.ruleGroup" clearable placeholder="请输入权限组名称" size="mini" @change="filterList" />
         </div>
         <div class="label">
-          <span>权限类别：</span>
+          <span>权限类型：</span>
         </div>
         <div class="input">
-          <el-input v-model="requestData.ruleType" clearable placeholder="请输入权限类别" size="mini" @change="filterList" />
+          <el-input v-model="requestData.ruleType" clearable placeholder="请输入权限类型" size="mini" @change="filterList" />
         </div>
         <div class="create" style="position: absolute;right: 0;">
           <gl-button
