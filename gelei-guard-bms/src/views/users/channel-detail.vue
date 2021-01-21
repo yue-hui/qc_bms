@@ -382,6 +382,44 @@ export default {
               .divide(new JsBigDecimal(item.incrRegUser), 4)
               .multiply(new JsBigDecimal(100)).getValue() + '%'
           })()
+          // 以下四个字段在周、月维度时获取区间最后一天的数据
+          // 累计注册用户
+          item.regUserTotal = (() => {
+            for (let i = 0; i < data.length; i++) {
+              if (weekRange.split('~')[1] === data[i].dateTime) {
+                return data[i].regUserTotal
+              }
+            }
+            return '-'
+          })()
+          // 累计绑定用户
+          item.bindUserTotal = (() => {
+            for (let i = 0; i < data.length; i++) {
+              if (weekRange.split('~')[1] === data[i].dateTime) {
+                return data[i].bindUserTotal
+              }
+            }
+            return '-'
+          })()
+          // 累计付费用户
+          item.payUserTotal = (() => {
+            for (let i = 0; i < data.length; i++) {
+              if (weekRange.split('~')[1] === data[i].dateTime) {
+                return data[i].payUserTotal
+              }
+            }
+            return '-'
+          })()
+          // 累计充值金额（元）
+          item.payAmountTotal = (() => {
+            for (let i = 0; i < data.length; i++) {
+              if (weekRange.split('~')[1] === data[i].dateTime) {
+                return data[i].payAmountTotal
+              }
+            }
+            return '-'
+          })()
+          console.log()
           weekList.push(item)
         })
         this.channelTableData = weekList
