@@ -332,8 +332,8 @@ export default {
       },
       rules: {
         plan_name: [
-          { required: true, message: '请输入套餐名称, 20字以内', trigger: 'blur' },
-          { min: 1, max: 20, message: '文字长度不能超过20个字', trigger: 'blur' }
+          { required: true, message: '请输入套餐名称, 50字以内', trigger: 'blur' },
+          { min: 1, max: 50, message: '文字长度不能超过50个字', trigger: 'blur' }
         ],
         plan_type: [
           { required: true, message: '套餐类型为必选项', trigger: 'blur' }
