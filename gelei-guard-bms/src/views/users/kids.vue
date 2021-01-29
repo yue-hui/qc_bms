@@ -208,8 +208,8 @@ import {
   GRADE_LIST,
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
-import { device_type_list } from '@/views/toolbox/data/promotion'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
+import { cloneDeep } from '../../utils/index'
 // import dayjs from 'dayjs'
 
 export default {
@@ -219,12 +219,32 @@ export default {
     GRADE_LIST.forEach(c => {
       grade_name_array[c.val] = c.name
     })
-    const grade_list = GRADE_LIST
-    // const begin_time = new Date(dayjs().subtract(30, 'days'))
-    // const end_time = new Date(dayjs().subtract(1, 'days'))
+    const grade_list = cloneDeep(GRADE_LIST)
+    // 添加七年级默认
+    grade_list.splice(7, 0, {
+      name: '七年级(系统默认)',
+      val: '-1'
+    })
     return {
       loading: false,
-      device_type_list,
+      device_type_list: [
+        {
+          value: '00',
+          label: '不限'
+        },
+        {
+          value: '01',
+          label: 'PC'
+        },
+        {
+          value: '02',
+          label: 'IOS'
+        },
+        {
+          value: '03',
+          label: 'Android'
+        }
+      ],
       grade_name_array,
       grade_list,
       page: 1,
@@ -236,7 +256,7 @@ export default {
         phone: '',
         nick_name: '',
         patriarch_phone: '',
-        device_type: '',
+        device_type: '00',
         grade: ''
       },
       table_data: [],
@@ -283,6 +303,8 @@ export default {
       }
       if (this.query_set.device_type) {
         config['device_type'] = this.query_set.device_type
+      } else {
+        config['device_type'] = '00'
       }
       if (this.query_set.nick_name) {
         config['nick_name'] = this.query_set.nick_name
@@ -320,7 +342,13 @@ export default {
         const base_index = (config.page_no - 1) * config.page_num + 1
         // 会员信息
         res.data.forEach((r, i, _a) => {
-          const grade_label = this.grade_name_array[r.grade]
+          const grade_label = (() => {
+            if (String(r.grade) === '7' && r.setting_grade_flag === 'N') {
+              return '七年级(系统默认)'
+            }
+            return this.grade_name_array[r.grade]
+          })()
+          r.phone = r.phone || '-'
           const item = {
             ...r,
             grade_label,
