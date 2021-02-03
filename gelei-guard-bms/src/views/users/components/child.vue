@@ -116,7 +116,12 @@ export default {
   watch: {
     child: {
       handler(new_child, old_child) {
-        const grade_name = get_value_from_map_list('' + new_child.grade, GRADE_LIST, '-', '2')
+        const grade_name = (() => {
+          if (String(new_child.grade) === '7' && new_child.setting_grade_flag === 'N') {
+            return '七年级(系统默认)'
+          }
+          return get_value_from_map_list('' + new_child.grade, GRADE_LIST, '-', '2')
+        })()
         this.child_new = {
           ...new_child,
           grade_name
