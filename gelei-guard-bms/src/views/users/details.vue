@@ -6,7 +6,7 @@
           <span>个人信息</span>
           <div v-if="information.hasAppLock">
             <img style="width:24px;height:24px" src="../../assets/imgs/zhiwen.png" alt="">
-            <el-button style="float: right; padding: 3px 0" type="text" @click="clearAppLock">删除应用锁</el-button>
+            <gl-button style="float: right; padding: 3px 0" type="text" pid="20118" @click="clearAppLock">删除应用锁</gl-button>
           </div>
         </div>
         <div class="card-block-body">

@@ -193,6 +193,15 @@ const PERMISSION_DATA = [
         c_layout: 'vertical',
         code: 20112,
         children: []
+      },
+      {
+        name: '清除应用锁',
+        checked: false,
+        width: FUNCTION_PAGE_WIDTH,
+        layout: 'horizotal',
+        c_layout: 'vertical',
+        code: 20118,
+        children: []
       }
     ]
   },
