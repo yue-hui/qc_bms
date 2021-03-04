@@ -2,9 +2,12 @@
   <div class="content users-detail">
     <div v-loading="loading" class="content-body">
       <el-card class="box-card parent-card-block gg-user-details-with-all">
-        <div slot="header" class="clearfix">
+        <div slot="header" class="clearfix-header" style="display: flex;justify-content: space-between">
           <span>个人信息</span>
-          <!--<el-button style="float: right; padding: 3px 0" type="text">修改</el-button>-->
+          <div v-if="information.hasAppLock">
+            <img style="width:24px;height:24px" src="../../assets/imgs/zhiwen.png" alt="">
+            <gl-button style="float: right; padding: 3px 0" type="text" pid="20118" @click="clearAppLock">删除应用锁</gl-button>
+          </div>
         </div>
         <div class="card-block-body">
           <el-form ref="form" label-suffix=":" label-width="140px">
@@ -195,7 +198,7 @@
 // import { parent_info } from '@/views/users/data'
 import child from './components/child'
 import memberUnsubscribeRecord from './components/member_unsubscribe_record'
-import { get_parent_details, monthlyplan_unsubscribe_ctccsp } from '../../api/interactive'
+import { get_parent_details, monthlyplan_unsubscribe_ctccsp, clearAppLock } from '../../api/interactive'
 import { date_formatter, get_value_from_map_list } from '@/utils/common'
 import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT, ORDERED_MEMBER_STATUS_LABEL } from '../../utils/constant'
 import { mapGetters } from 'vuex'
@@ -301,6 +304,23 @@ export default {
         })
         .catch(_ => {
           this.$message.success('用户取消操作')
+        })
+    },
+    clearAppLock() {
+      this.$confirm('你确定要删除该用户的应用锁吗？')
+        .then(_ => {
+          clearAppLock({
+            user_id: this.information.user_id
+          }).then(res => {
+            if (res.status !== 0) throw res
+            this.$message.success('删除成功')
+            this.information.hasAppLock = false
+          })
+            .catch(e => {
+              this.$message.error(e.message)
+            })
+        })
+        .catch(e => {
         })
     }
   }

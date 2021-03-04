@@ -1576,3 +1576,14 @@ export function deviceRuleConfigUpdate(data) {
     data
   })
 }
+/**
+ * @description 清除 APP 锁
+ * @doc https://showdoc.qcg.cc:9999/web/#/1?page_id=1554
+ * */
+export function clearAppLock(data) {
+  return request({
+    url: '/greenguard/manager/user/applock/clear',
+    method: 'post',
+    data
+  })
+}
