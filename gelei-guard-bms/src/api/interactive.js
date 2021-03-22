@@ -72,7 +72,7 @@ export function get_homepage_growth_data(data) {
 // 获取用户来源列表
 export function get_user_reg_from_list(data) {
   return request({
-    url: '/greenguard/common/user/reg_from/list',
+    url: '/greenguard/common/user/regFrom/list',
     method: 'post',
     data
   })
