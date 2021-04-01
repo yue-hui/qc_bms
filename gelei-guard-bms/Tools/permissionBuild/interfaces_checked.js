@@ -12,7 +12,7 @@ const PAGE_PERMISSION = [
   },
   {
     name: '获取用户来源列表',
-    path: 'common/user/reg_from/list',
+    path: 'common/user/regFrom/list',
     code: '40005'
   },
   {
@@ -727,7 +727,7 @@ const PAGE_PERMISSION = [
 /* 公共接口 */
 const PLUBIC_INTERFACE = [
   'common/get/verify/code',
-  'common/user/reg_from/list',
+  'common/user/regFrom/list',
   'common/order/type/list',
   'common/order/status/list',
   'common/order/paytype/list',

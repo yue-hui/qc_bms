@@ -12,7 +12,7 @@ export const PAGE_PERMISSION = [
   },
   {
     name: '获取用户来源列表',
-    path: 'common/user/reg_from/list',
+    path: 'common/user/regFrom/list',
     code: '40005'
   },
   {

@@ -1,6 +1,6 @@
 <template>
   <div class="component-card-with-dialog">
-    <div class="component-card">
+    <div class="component-card" style="overflow: auto;">
       <div :style="{'max-height': visiable_height}" class="dialog">
         <div class="head-area">
           <div class="title">运行日志记录</div>

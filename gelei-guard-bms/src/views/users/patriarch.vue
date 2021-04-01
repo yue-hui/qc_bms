@@ -129,6 +129,28 @@
           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
+                <el-col :span="8" class="order-number-list">会员订阅周期:</el-col>
+                <el-col :span="16">
+                  <el-select
+                    v-model="query_set.plan_days"
+                    :disabled="is_agent"
+                    size="mini"
+                    placeholder="用户来源"
+                    clearable
+                    @change="search">
+                    <el-option
+                      v-for="item in renewTypes"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
                 <el-col :span="8" class="order-number-list">来源渠道:</el-col>
                 <el-col :span="16">
                   <el-input
@@ -209,7 +231,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="4" :md="16" :lg="24" :xl="4" class="col-bg layout-right">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -381,7 +403,8 @@ export default {
         end_valid_days: '',
         datetime_range: [],
         auto_type: '',
-        renew_org: ''
+        renew_org: '',
+        plan_days: ''
       },
       auto_type_list: [
         { label: '全部', value: '' },
@@ -398,7 +421,8 @@ export default {
       current_uid: '',
       recharge_dialog_visible: false,
       member_dialog_visible: false,
-      download_loading: false
+      download_loading: false,
+      renewTypes: []
     }
   },
   computed: {
@@ -500,6 +524,9 @@ export default {
       if (this.query_set.renew_org) {
         config['renew_org'] = this.query_set.renew_org
       }
+      if (this.query_set.plan_days) {
+        config['plan_days'] = this.query_set.plan_days
+      }
       return config
     },
     view_details: function(row) {
@@ -530,7 +557,7 @@ export default {
       get_user_reg_from_list().then(res => {
         // 获取用户注册来源
         if (res.status === 0) {
-          let user_sources = res.data.map(r => {
+          let user_sources = res.data.regFrom.map(r => {
             return {
               label: r.reg_from_label,
               value: r.reg_from
@@ -541,6 +568,11 @@ export default {
             this.query_set.reg_from = '07'
           }
           this.user_sources = user_sources
+          // 会员订阅周期
+          this.renewTypes = res.data.planDay.map(item => {
+            item.value = Number(item.value)
+            return item
+          })
         } else {
           this.user_sources = []
           this.$message.error(res.message)
