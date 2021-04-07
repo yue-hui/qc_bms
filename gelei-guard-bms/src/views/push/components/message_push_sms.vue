@@ -50,9 +50,7 @@
 </template>
 
 <script>
-import {
-  get_manager_sms_list
-} from '@/api/interactive'
+import { get_manager_sms_list } from '@/api/interactive'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { push_platform, push_status, TABLE_PAGE_SIEZS_LIST } from '@/utils/constant'
 
@@ -87,6 +85,8 @@ export default {
   methods: {
     table_size_change(size) {
       setPagenationSize(size)
+      this.page = 1
+      this.page_size = size
       this.reload()
     },
     change_current(page) {
@@ -94,24 +94,23 @@ export default {
         this.pos = 0
         this.offset = 0
       } else {
-        this.pos = page * 10 - 10
-        this.offset = page * 10 - 10
+        this.pos = page * this.page_size - this.page_size
+        this.offset = page * this.page_size - this.page_size
       }
 
       this.reload()
     },
     get_pagination_config() {
-      const pagination = {
+      return {
         page: this.page,
         order: 'asc',
-        limit: 10,
+        limit: this.page_size,
         offset: this.offset,
         pos: this.pos,
         source: '',
         phone: '',
         content: ''
       }
-      return pagination
     },
     reset_pagination_and_load_data() {
       this.page = 1
