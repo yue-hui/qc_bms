@@ -9,7 +9,7 @@
         <div class="body-area">
           <el-form ref="header_form" :model="form" :rules="rules" label-width="120px" label-suffix=":">
             <el-form-item label="广告名称" prop="ad_name">
-              <el-input v-model="form.ad_name" :disabled="action === 2" size="mini" />
+              <el-input v-model="form.ad_name" size="mini" />
             </el-form-item>
             <el-form-item label="广告平台" prop="ad_type">
               <el-radio-group v-model="form.platform" size="mini">
