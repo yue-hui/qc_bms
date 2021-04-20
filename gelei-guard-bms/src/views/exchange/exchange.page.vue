@@ -368,7 +368,7 @@ export default {
             item._num = item.used_num + ' / ' + item.total_num
             return item
           })
-          this.ParsePlanName()
+          this.parsePlanName()
         })
         .catch((e) => {
           this.$message.error(e.message)
@@ -420,6 +420,7 @@ export default {
           this.form.cdk_pack_name = row.cdk_pack_name
           this.form.contact_phone = row.contact_phone
           this.form.plan_id = row.plan_id
+          this.form.exchange_num = row.exchange_num
         })
     },
     packageDetail(row) {
@@ -453,7 +454,7 @@ export default {
                 validDays: r.valid_days
               }
             })
-            this.ParsePlanName()
+            this.parsePlanName()
             resolve()
           } else {
             this.$message.error(res.message)
@@ -521,7 +522,7 @@ export default {
         exchange_num: 1
       }
     },
-    ParsePlanName() {
+    parsePlanName() {
       if (this.tableData.length > 0 && this.membershipPackageList.length > 0) {
         this.tableData = this.tableData.map(item => {
           try {
