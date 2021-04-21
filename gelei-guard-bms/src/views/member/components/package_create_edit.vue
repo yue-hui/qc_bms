@@ -33,7 +33,7 @@
 
           <!--公开套餐 - 非自动续费 begin-->
           <el-form
-            v-if="form.plan_type === '01' && public_form.renew_type === 1"
+            v-if="public_form.renew_type === 1"
             ref="public_form"
             :model="public_form"
             :rules="public_rules"
@@ -111,7 +111,7 @@
 
           <!--公开套餐 - 自动续费 begin-->
           <el-form
-            v-if="form.plan_type === '01' && public_form.renew_type === 2"
+            v-if="public_form.renew_type === 2"
             ref="public_form"
             :model="public_form"
             :rules="public_rules"
@@ -192,47 +192,6 @@
             </el-form-item>
           </el-form>
           <!--公开套餐 - 自动续费 end-->
-          <!--不公开套餐 begin-->
-          <el-form
-            v-show="form.plan_type === '02'"
-            ref="un_public_form"
-            :model="un_public_form"
-            :rules="un_public_rules"
-            label-width="120px"
-            label-suffix=":">
-            <el-form-item label="设备类型" prop="device_type">
-              <el-select
-                :disabled="action === 2"
-                v-model="un_public_form.device_type"
-                style="width: 100%;"
-                size="mini"
-                placeholder="请选择设备类型"
-                @change="change_un_pub_device_type">
-                <el-option
-                  v-for="item in device_type_items"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="套餐时长" prop="valid_days">
-              <el-input v-model.number="un_public_form.valid_days" size="mini" type="number">
-                <template slot="append">天</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="套餐原价" prop="original_price">
-              <el-input v-model.number="un_public_form.original_price" :disabled="form.plan_type === '02'" size="mini">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="套餐活动价" prop="discount_price">
-              <el-input v-model.number="un_public_form.discount_price" :disabled="form.plan_type === '02'" size="mini">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-          </el-form>
-          <!--不公开套餐 end-->
-
           <el-form label-width="120px" label-suffix=":">
             <el-form-item>
               <div class="action-area">
@@ -427,6 +386,13 @@ export default {
         this.save_btn_label = save_btn_label
       },
       immediate: true
+    },
+    'public_form.renew_type'() {
+      try {
+        this.$refs.public_form.clearValidate()
+        // eslint-disable-next-line no-empty
+      } catch (e) {
+      }
     }
   },
   mounted: function() {
@@ -547,7 +513,12 @@ export default {
       return true
     },
     async check_all_submit_field() {
+      const validate_form = await this.check_form()
+      const validate_public_form = await this.check_public_form()
+      const validate_discount_price = this.check_discount_price()
+      return validate_form && validate_public_form && validate_discount_price
       /* 校验字段值 */
+      // eslint-disable-next-line no-unreachable
       const plan_type = this.form.plan_type
       if (plan_type === '02') {
         const validate_form = await this.check_form()
@@ -578,7 +549,8 @@ export default {
         plan_type,
         member_type: this.form.member_type
       }
-      if (plan_type === '01' && this.public_form.renew_type === 1) {
+      //  按月购买
+      if (this.public_form.renew_type === 1) {
         options['is_member'] = this.public_form.is_member
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
@@ -594,7 +566,8 @@ export default {
           options['discount_start_time'] = new Date(date_range[0]).getTime()
           options['discount_end_time'] = new Date(date_range[1]).getTime()
         }
-      } else if (plan_type === '01' && this.public_form.renew_type === 2) {
+        // 自动续费
+      } else if (this.public_form.renew_type === 2) {
         options['is_member'] = this.public_form.is_member
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
@@ -613,11 +586,6 @@ export default {
           options['discount_start_time'] = new Date(date_range[0]).getTime()
           options['discount_end_time'] = new Date(date_range[1]).getTime()
         }
-      } else if (plan_type === '02') {
-        options['device_type'] = this.un_public_form.device_type
-        options['valid_days'] = this.un_public_form.valid_days
-        options['original_price'] = this.un_public_form.original_price
-        options['discount_price'] = this.un_public_form.discount_price
       }
       return options
     },
