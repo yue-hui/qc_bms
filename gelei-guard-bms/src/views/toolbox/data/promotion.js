@@ -103,11 +103,11 @@ export const bms_platform_classification = [
       update_platforms: [
         {
           value: '12',
-          label: 'VIVO孩子端'
+          label: 'VIVO Y95孩子端'
         },
         {
           value: '22',
-          label: 'OPPO孩子端'
+          label: 'OPPO A5孩子端'
         },
         {
           value: '42',
@@ -266,11 +266,11 @@ export const platforms = [
   },
   {
     value: '12',
-    label: 'vivo孩子端'
+    label: 'VIVO Y95孩子端'
   },
   {
     value: '22',
-    label: 'oppo孩子端'
+    label: 'OPPO A5孩子端'
   },
   // {
   //   value: '32',
@@ -286,7 +286,7 @@ export const platforms = [
   },
   {
     value: '62',
-    label: 'vivo Y3孩子端'
+    label: 'VIVO Y3孩子端'
   },
   {
     value: '72',
@@ -298,11 +298,11 @@ export const platforms = [
   },
   {
     value: '13',
-    label: 'vivo中间件'
+    label: 'VIVO中间件'
   },
   {
     value: '23',
-    label: 'oppo中间件'
+    label: 'OPPO中间件'
   },
   // {
   //   value: '33',
@@ -318,7 +318,7 @@ export const platforms = [
   },
   {
     value: '63',
-    label: 'vivo Y3中间件'
+    label: 'VIVO Y3中间件'
   },
   {
     value: '73',
@@ -398,12 +398,12 @@ export const platform_version_instructions = [
   /** 定制机孩子端***********************/
   {
     value: '12',
-    label: 'vivo孩子端',
+    label: 'VIVO Y95孩子端',
     type: 2
   },
   {
     value: '22',
-    label: 'oppo安卓孩子端',
+    label: 'OPPO A5孩子端',
     type: 2
   },
   // {
@@ -422,7 +422,7 @@ export const platform_version_instructions = [
   },
   {
     value: '62',
-    label: 'vivo Y3孩子端',
+    label: 'VIVO Y3孩子端',
     type: 2
   },
   {
@@ -458,12 +458,12 @@ export const platform_version_instructions = [
   /** 中间件***************************/
   {
     value: '13',
-    label: '孩子端+vivo中间件',
+    label: '孩子端+VIVO中间件',
     type: 3
   },
   {
     value: '23',
-    label: '孩子端+oppo中间件',
+    label: '孩子端+OPPO中间件',
     type: 3
   },
   // {
@@ -482,7 +482,7 @@ export const platform_version_instructions = [
   },
   {
     value: '63',
-    label: 'vivo Y3中间件',
+    label: 'VIVO Y3中间件',
     type: 3
   },
   {

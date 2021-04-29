@@ -176,6 +176,9 @@
         <el-form-item v-show="!updateStatus" label="库存" prop="num">
           <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="text" size="mini" />
         </el-form-item>
+        <el-form-item label="可兑换码数" prop="exchange_num">
+          <el-input-number v-model="form.exchange_num" :disabled="updateStatus" :min="1" :max="3" size="mini" label="" />
+        </el-form-item>
         <el-form-item label="会员套餐" prop="plan_id">
           <el-select
             v-model="form.plan_id"
@@ -263,7 +266,8 @@ export default {
         plan_id: '',
         begin_time: '',
         end_time: '',
-        exchangeTime: null
+        exchangeTime: null,
+        exchange_num: 0
       },
       updateStatus: false,
       pickerOptions: {
@@ -288,6 +292,9 @@ export default {
         ],
         plan_id: [
           { required: true, trigger: ['blur', 'change'], message: '请选择兑换码匹配的会员套餐' }
+        ],
+        exchange_num: [
+          { required: true, trigger: ['blur', 'change'], message: '请输入可兑换码数' }
         ],
         exchangeTime: [
           { required: true, trigger: ['blur', 'change'], message: '请选择兑换开始时间和结束时间' }
@@ -361,7 +368,7 @@ export default {
             item._num = item.used_num + ' / ' + item.total_num
             return item
           })
-          this.ParsePlanName()
+          this.parsePlanName()
         })
         .catch((e) => {
           this.$message.error(e.message)
@@ -413,6 +420,7 @@ export default {
           this.form.cdk_pack_name = row.cdk_pack_name
           this.form.contact_phone = row.contact_phone
           this.form.plan_id = row.plan_id
+          this.form.exchange_num = row.exchange_num
         })
     },
     packageDetail(row) {
@@ -446,7 +454,7 @@ export default {
                 validDays: r.valid_days
               }
             })
-            this.ParsePlanName()
+            this.parsePlanName()
             resolve()
           } else {
             this.$message.error(res.message)
@@ -510,10 +518,11 @@ export default {
         plan_id: '',
         begin_time: '',
         end_time: '',
-        exchangeTime: null
+        exchangeTime: null,
+        exchange_num: 1
       }
     },
-    ParsePlanName() {
+    parsePlanName() {
       if (this.tableData.length > 0 && this.membershipPackageList.length > 0) {
         this.tableData = this.tableData.map(item => {
           try {

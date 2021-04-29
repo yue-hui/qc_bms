@@ -103,7 +103,7 @@ export default {
           curDate.setMinutes(0)
           curDate.setMilliseconds(0)
           curDate.setSeconds(0)
-          curDate = new Date(curDate.getTime() - 1000)
+          curDate = new Date(curDate.getTime())
           const day = 3650 * 24 * 3600 * 1000
           const dateRegion = curDate - day
           return time.getTime() > curDate || time.getTime() < dateRegion
@@ -210,7 +210,7 @@ export default {
       this.datePickerValue = this.getDatePickerDefaultValue()
     },
     getDatePickerDefaultValue() {
-      return [new Date(new Date().getTime() - 31 * 3600 * 24 * 1000), new Date(new Date().getTime() - 3600 * 24 * 1000)]
+      return [new Date(new Date().getTime() - 31 * 3600 * 24 * 1000), new Date(new Date().getTime())]
     },
     getRequestTime() {
       if (this.datePickerValue) {
