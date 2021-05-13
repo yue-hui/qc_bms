@@ -144,6 +144,10 @@ export const bms_platform_classification = [
         {
           value: 'C2',
           label: '联想X605FC'
+        },
+        {
+          value: 'D2',
+          label: 'VIVO定制机Y3S'
         }
       ],
       update_models: [
@@ -218,6 +222,10 @@ export const bms_platform_classification = [
         {
           value: 'C3',
           label: '联想X605FC中间件'
+        },
+        {
+          value: 'D3',
+          label: 'VIVO定制机Y3S中间件'
         }
       ],
       update_models: [
@@ -363,6 +371,14 @@ export const platforms = [
   {
     value: 'C3',
     label: '联想X605FC中间件'
+  },
+  {
+    value: 'D2',
+    label: 'VIVO定制机Y3S'
+  },
+  {
+    value: 'D3',
+    label: 'VIVO定制机Y3S中间件'
   }
 ]
 
@@ -455,6 +471,11 @@ export const platform_version_instructions = [
     label: '联想X605FC',
     type: 2
   },
+  {
+    value: 'D2',
+    label: 'VIVO定制机Y3S',
+    type: 2
+  },
   /** 中间件***************************/
   {
     value: '13',
@@ -513,6 +534,11 @@ export const platform_version_instructions = [
   {
     value: 'C3',
     label: '联想X605FC中间件',
+    type: 3
+  },
+  {
+    value: 'D3',
+    label: 'VIVO定制机Y3S中间件',
     type: 3
   }
 ]
