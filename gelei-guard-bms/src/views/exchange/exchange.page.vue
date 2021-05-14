@@ -177,7 +177,7 @@
           <el-input v-model="form.num" max="999" min="1" placeholder="请输入库存" type="text" size="mini" />
         </el-form-item>
         <el-form-item label="可兑换码数" prop="exchange_num">
-          <el-input-number v-model="form.exchange_num" :disabled="updateStatus" :min="1" :max="3" size="mini" label="" />
+          <el-input-number v-model="form.exchange_num" :disabled="updateStatus" :min="1" :max="100" size="mini" label="" />
         </el-form-item>
         <el-form-item label="会员套餐" prop="plan_id">
           <el-select
