@@ -383,6 +383,10 @@ export const platforms = [
   {
     value: 'D3',
     label: 'VIVO定制机Y3S中间件'
+  },
+  {
+    value: 'H2',
+    label: '荣耀企业模式'
   }
 ]
 
@@ -478,6 +482,11 @@ export const platform_version_instructions = [
   {
     value: 'D2',
     label: 'VIVO定制机Y3S',
+    type: 2
+  },
+  {
+    value: 'H2',
+    label: '荣耀企业模式',
     type: 2
   },
   /** 中间件***************************/
