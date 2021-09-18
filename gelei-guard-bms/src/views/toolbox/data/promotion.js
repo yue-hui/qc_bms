@@ -148,6 +148,10 @@ export const bms_platform_classification = [
         {
           value: 'D2',
           label: 'VIVO定制机Y3S'
+        },
+        {
+          value: 'H2',
+          label: '荣耀企业模式'
         }
       ],
       update_models: [
