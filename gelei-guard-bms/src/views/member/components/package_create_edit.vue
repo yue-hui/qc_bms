@@ -314,7 +314,19 @@ export default {
         ],
         original_price: [
           { required: true, message: '套餐原价不能为空', trigger: 'blur' },
-          { type: 'number', min: 0.01, message: '套餐原价不能少于1分钱', trigger: 'blur' }
+          {
+            validator: (rule, value, callback) => {
+              if (this.form.plan_type === '02' && value >= 0) {
+                return callback()
+              }
+              if (this.form.plan_type === '02' && value < 0) {
+                return callback(new Error('套餐原价不能小于0'))
+              }
+              if (value < 0.01) return callback(new Error('套餐原价不能少于1分钱'))
+              callback()
+            }, trigger: 'blur'
+          }
+          // { type: 'number', min: 0.01, message: '套餐原价不能少于1分钱', trigger: 'blur' }
         ],
         discount_price: [
           { required: true, message: '套餐活动价不能为空', trigger: 'blur' },
@@ -498,6 +510,7 @@ export default {
       // 校验
       if (this.public_form.discount_price !== '') {
         const discount_price = parseFloat(this.public_form.discount_price)
+        if (this.form.plan_type === '02') return true
         if (discount_price <= 0) {
           this.$message.warning('套餐活动价值必须大于0')
           return false
