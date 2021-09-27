@@ -455,7 +455,10 @@ export default {
         plan_type: current.plan_type,
         member_type: current.member_type
       }
-      const date_range = [new Date(current.discount_start_time), new Date(current.discount_end_time)]
+      let date_range = null
+      if (current.discount_start_time && current.discount_end_time) {
+        date_range = [new Date(current.discount_start_time), new Date(current.discount_end_time)]
+      }
       this.public_form = {
         is_member: current.is_member,
         valid_days: current.valid_days,
@@ -607,6 +610,12 @@ export default {
       // 创建
       this.is_busy = true
       const options = this.get_options()
+      if (isNaN(options.discount_start_time)) {
+        options.discount_start_time = 0
+      }
+      if (isNaN(options.discount_end_time)) {
+        options.discount_end_time = 0
+      }
       // return console.log(options)
       add_member_plan(options).then(res => {
         if (res.status === 0) {
