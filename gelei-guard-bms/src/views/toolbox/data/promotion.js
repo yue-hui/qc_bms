@@ -152,6 +152,10 @@ export const bms_platform_classification = [
         {
           value: 'H2',
           label: '荣耀企业模式'
+        },
+        {
+          value: 'I2',
+          label: 'OPPO定制机A55'
         }
       ],
       update_models: [
@@ -230,6 +234,10 @@ export const bms_platform_classification = [
         {
           value: 'D3',
           label: 'VIVO定制机Y3S中间件'
+        },
+        {
+          value: 'I3',
+          label: 'OPPO定制机A55中间件'
         }
       ],
       update_models: [
@@ -387,6 +395,14 @@ export const platforms = [
   {
     value: 'H2',
     label: '荣耀企业模式'
+  },
+  {
+    value: 'I2',
+    label: 'OPPO定制机A55'
+  },
+  {
+    value: 'I3',
+    label: 'OPPO定制机A55中间件'
   }
 ]
 
@@ -489,6 +505,11 @@ export const platform_version_instructions = [
     label: '荣耀企业模式',
     type: 2
   },
+  {
+    value: 'I2',
+    label: 'OPPO定制机A55',
+    type: 2
+  },
   /** 中间件***************************/
   {
     value: '13',
@@ -552,6 +573,11 @@ export const platform_version_instructions = [
   {
     value: 'D3',
     label: 'VIVO定制机Y3S中间件',
+    type: 3
+  },
+  {
+    value: 'I3',
+    label: 'OPPO定制机A55中间件',
     type: 3
   }
 ]
