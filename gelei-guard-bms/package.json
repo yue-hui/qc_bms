@@ -8,11 +8,6 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "cross-env NODE_BUILD=prod node  build/build.js",
-    "build:dev": "cross-env NODE_BUILD=dev node  build/build.js",
-    "build:prod": "cross-env NODE_BUILD=prod node  build/build.js",
-    "build:test": "cross-env NODE_BUILD=test node build/build.js",
-    "stag": "node build/build.js",
-    "build:report": "npm_config_report=true npm run build",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
