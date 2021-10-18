@@ -5,39 +5,20 @@
 ## Build Setup
 
 ```bash
-# Clone project
-git clone git@172.168.50.230:lwtx/bms.git
-
-# 增加cross-env工具
-npm install -g cross-env
-
 # Install dependencies
 npm install
 
 # Serve with hot reload at localhost:9528
 npm run dev
 
-### 依赖环境打包
-#  开发环境 
-# Build for development with minification
-npm run build:dev
-
-# 测试环境
-# Build for test with minification
-npm run build:test
-
-# 生产环境
+### 打包
 # Build for production with minification
-npm run build:prod
+npm run build
 
 # 发布包在nodeserver文件夹下面
 # 直接拷贝nodeserver布曙到对应的环境即可
 cd nodeserver
 npm run dev
-
-# Build for production and view the bundle analyzer report
-npm run build --report
-
 # 
 ```
 
