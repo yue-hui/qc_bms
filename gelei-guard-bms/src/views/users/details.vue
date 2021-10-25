@@ -160,7 +160,7 @@
               <td>{{ member.nextTime | formatter_date_string }}</td>
               <td>{{ member._status }}</td>
               <td>
-                <template v-if="member.renewOrg !== 2 && !is_agent">
+                <template v-if="member.renewOrg !== 2 && member.renewOrg !== 3 && !is_agent">
                   <gl-button
                     pid="10079"
                     size="small"
@@ -273,7 +273,11 @@ export default {
           this.auto_plan_list = res.data.auto_plan_list.filter(item => {
             return String(item.status) !== '02'
           }).map(item => {
-            item._renewOrg = String(item.renewOrg) === '1' ? '电信' : '苹果'
+            item._renewOrg = (() => {
+              if (String(item.renewOrg) === '1') return '电信'
+              if (String(item.renewOrg) === '2') return '苹果'
+              if (String(item.renewOrg) === '3') return '支付宝'
+            })()
             item._memberLevel = String(item.memberLevel) === '001' ? '高级会员' : '普通会员'
             item._status = (() => {
               const status = String(item.status)

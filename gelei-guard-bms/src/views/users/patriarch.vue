@@ -415,7 +415,8 @@ export default {
       renew_org_list: [
         { label: '全部', value: '' },
         { label: '电信', value: 1 },
-        { label: '苹果', value: 2 }
+        { label: '苹果', value: 2 },
+        { label: '支付宝', value: 3 }
       ],
       table_data: [],
       current_uid: '',
