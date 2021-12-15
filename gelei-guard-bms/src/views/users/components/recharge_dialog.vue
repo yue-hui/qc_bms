@@ -50,7 +50,7 @@
         align="center"
         label="支付方式"
         prop="pay_type"
-        width="100" />
+        width="120" />
       <el-table-column
         align="center"
         label="会员订阅方式"
