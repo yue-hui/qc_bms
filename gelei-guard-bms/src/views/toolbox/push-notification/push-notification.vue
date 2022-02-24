@@ -89,6 +89,14 @@
                   pid="21002"
                   class="download details-tab"
                   size="mini"
+                  type="primary"
+                  @click="dialogOpenHandle('accurate')"
+                >创建精准推送
+                </gl-button>
+                <gl-button
+                  pid="21002"
+                  class="download details-tab"
+                  size="mini"
                   type="success"
                   @click="dialogOpenHandle"
                 >创建家长端通知
@@ -232,7 +240,7 @@
       custom-class="operate-statistics-component"
       width="800px"
     >
-      <push-notification-action-component v-if="dialogVisible" :visible.sync="dialogVisible" @reload-list="reloadList" />
+      <push-notification-action-component v-if="dialogVisible" :visible.sync="dialogVisible" :type="type" @reload-list="reloadList" />
     </el-dialog>
   </div>
 </template>
@@ -256,6 +264,7 @@ export default {
     const page_size = getPagenationSize()
     return {
       loading: false,
+      type: null,
       platformList: [
         { name: '全部', value: '' },
         { name: 'IOS家长端', value: '02' },
@@ -352,7 +361,12 @@ export default {
     dialogCloseHandle() {
       this.dialogVisible = false
     },
-    dialogOpenHandle() {
+    dialogOpenHandle(type) {
+      if (type == 'accurate') {
+        this.type = true
+      } else {
+        this.type = false
+      }
       this.dialogVisible = true
     },
     /**

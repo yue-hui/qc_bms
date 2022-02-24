@@ -11,11 +11,15 @@
           <el-input v-model="form.content" maxlength="100" placeholder="请输入通知内容" size="mini" />
         </el-form-item>
         <!------------------------------>
-        <el-form-item required label="目标平台" prop="platformList">
+        <el-form-item required label="目标平台" prop="platformList" v-if="!type">
           <el-checkbox-group v-model="form.platformList">
             <el-checkbox label="02">IOS家长端</el-checkbox>
             <el-checkbox label="03">安卓家长端</el-checkbox>
           </el-checkbox-group>
+        </el-form-item>
+        <!------------------------------>
+        <el-form-item  label="通知用户" prop="phoneArr">
+          <el-input  v-model="form.phoneArr" placeholder="请输入用户手机号(多个用逗号隔开)" size="mini" />
         </el-form-item>
         <!------------------------------>
         <el-form-item required label="跳转目标" prop="target">
@@ -62,6 +66,7 @@
         <div class="send-push-view-list">
           <div><span>通知标题：</span><span>{{ form.title }}</span></div>
           <div><span>通知内容：</span><span>{{ form.content }}</span></div>
+          <div v-if="type"><span>通知用户：</span><span>{{ form.phoneArr }}</span></div>
           <div><span>目标平台：</span><span>{{ sendPlatform }}</span></div>
           <div><span>跳转目标：</span><span>{{ sendTarget }}</span></div>
           <div style="word-break: break-all;"><span>跳转参数：</span><span>{{ form.parameter || '无' }}</span></div>
@@ -87,6 +92,9 @@ export default {
   components: {
   },
   props: {
+    type: {
+      default: false
+    }
   },
   data: function() {
     return {
@@ -97,7 +105,9 @@ export default {
         target: '01', // 跳转目标 01:App原生页,02:H5,03:微信小程序,00:无
         parameter: '', // 跳转参数
         type: '01', // 发送类型
-        sendTime: ''
+        sendTime: '',
+        phoneList:[],
+        phoneArr:''
       },
       platformList: [
         { name: 'IOS家长端', value: '02' },
@@ -151,6 +161,16 @@ export default {
               callback(new Error('请选择发送时间'))
             },
             trigger: 'blur'
+          }
+        ],
+        phoneArr: [
+           {
+            validator: (rule, value, callback) => {
+              if (value) return callback()
+              callback(new Error('请输入通知用户手机号'))
+            },
+            trigger: ['blur', 'change'],
+            required: true
           }
         ]
       },
@@ -219,6 +239,14 @@ export default {
     save() {
       if (this.requestLoading) return
       this.requestLoading = true
+      if (this.type) {
+        let phoneList= this.form.phoneArr.split(',')
+        this.form.phoneList=phoneList
+      }
+      delete this.form.phoneArr
+      if (this.form.type=='01') {
+        this.form.sendTime=new Date().getTime()
+      }
       addPushNotification(this.form)
         .then(res => {
           if (res.status !== 0) throw res
@@ -228,6 +256,8 @@ export default {
         })
         .catch(error => {
           this.$message.error(error.message)
+          this.requestLoading = false
+          this.$emit('update:visible', false)
         })
         .finally(() => {
           this.requestLoading = false
