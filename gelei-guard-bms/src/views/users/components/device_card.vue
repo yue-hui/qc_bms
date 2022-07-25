@@ -96,6 +96,15 @@
                     </el-form-item>
                   </div>
                 </el-col>
+                <el-col :span="8" v-if="device.device_type=='PC'">
+                  <div class="grid-content bg-purple">
+                    <el-form-item label="切换家长模式密码">
+                      <el-form-item prop="date1">
+                        <span>{{ device.patriarchLoginPwd}}</span>
+                      </el-form-item>
+                    </el-form-item>
+                  </div>
+                </el-col>
               </el-row>
             </el-form>
           </div>
