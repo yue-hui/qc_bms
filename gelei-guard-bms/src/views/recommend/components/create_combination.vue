@@ -250,16 +250,22 @@ export default {
     },
     rsync_application(app) {
       // 异步同步表格选择数据
-      const checked = app.checked
-      if (checked) {
-        const tag = {
-          name: app.soft_name,
-          record_id: app.record_id
-        }
-        this.combination_form.applications.push(tag)
-      } else {
-        this.combination_form.applications = this.combination_form.applications.filter(r => r.record_id !== app.record_id)
-      }
+      this.combination_form.applications=app.map(item=>{
+         item.checked=true
+         item.name= item.soft_name,
+         item.record_id=item.record_id
+         return item
+      })
+      // const checked = app.checked
+      // if (checked) {
+      //   const tag = {
+      //     name: app.soft_name,
+      //     record_id: app.record_id
+      //   }
+      //   this.combination_form.applications.push(tag)
+      // } else {
+      //   this.combination_form.applications = this.combination_form.applications.filter(r => r.record_id !== app.record_id)
+      // }
     },
     close_tags(app) {
       // close app tags

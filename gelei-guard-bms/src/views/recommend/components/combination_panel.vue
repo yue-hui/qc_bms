@@ -1,17 +1,20 @@
 <template>
   <div class="component-card">
     <el-table
+      @selection-change="handleSelectionChange"
       :data="data_list"
+      ref="multipleTable"
       :stripe="true"
       size="mini">
-      <el-table-column
+       <el-table-column type="selection"  align="center"  width="55" fixed="left"/>
+      <!-- <el-table-column
         align="center"
         label=""
         width="60">
         <template slot-scope="scope">
           <el-checkbox v-model="scope.row.checked" @change="change_check_box(scope.row)" />
-        </template>
-      </el-table-column>
+        </template> -->
+      <!-- </el-table-column> -->
       <el-table-column
         align="left"
         label="应用名称"
@@ -83,6 +86,7 @@ export default {
     const page_size = getPagenationSize()
     return {
       data_list: [],
+      multipleTableList:[],
       page: 1,
       page_size,
       page_sizes: TABLE_PAGE_SIEZS_LIST,
@@ -99,6 +103,9 @@ export default {
     }
   },
   methods: {
+    handleSelectionChange(rows) {
+     this.$emit('rsync_app', rows)
+    },
     check_if_in_selection(res) {
       const check_box = this.applications.filter(r => r.record_id === res.record_id)
       return !!check_box.length
@@ -126,6 +133,11 @@ export default {
             sex_label: get_sex_label(r.sex)
           }
         })
+        this.data_list.forEach((item, index) => {
+         this.$nextTick(i=>{
+          this.$refs.multipleTable.toggleRowSelection(item,item.checked)
+         })
+      })
         this.total = res.total_count
       })
     },

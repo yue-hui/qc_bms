@@ -42,6 +42,7 @@
           </el-form-item>
 
           <el-form-item label="适用年级:" prop="grade_list">
+            <el-checkbox v-model="allGrades" @change="allGradesChange">全选</el-checkbox>
             <el-checkbox-group
               v-model="ruleForm.grade_list">
               <el-row :span="24">
@@ -55,6 +56,7 @@
           </el-form-item>
 
           <el-form-item label="适用学科:" prop="subject_list">
+            <el-checkbox v-model="allSubject" @change="allSubjectChange">全选</el-checkbox>
             <el-checkbox-group
               v-model="ruleForm.subject_list">
               <el-row :span="24">
@@ -189,6 +191,8 @@ export default {
   data: function() {
     return {
       is_busy: false,
+      allGrades:false,
+      allSubject:false,
       app_tags: [],
       app_list: [],
       grades: GRADE_LIST,
@@ -250,6 +254,12 @@ export default {
           this.initital_with_row(this.current)
         }
       }
+    },
+    "ruleForm.grade_list"(newVal,oldVal){
+      this.allGrades=newVal.length==this.grades.length?true:false
+    },
+     "ruleForm.subject_list"(newVal,oldVal){
+      this.allSubject=newVal.length==this.subjects.length?true:false
     }
   },
   mounted: function() {
@@ -257,6 +267,8 @@ export default {
   },
   methods: {
     initital_with_none() {
+      this.allSubject=false
+      this.allGrades=false
       this.ruleForm = {
         rec_bundle_id: '',
         soft_name: '',
@@ -277,7 +289,6 @@ export default {
       } else {
         current = modified
       }
-
       this.ruleForm = {
         record_id: current.record_id,
         rec_bundle_id: current.rec_bundle_id,
@@ -291,6 +302,12 @@ export default {
         rec_phrase: current.rec_phrase,
         rec_desc: current.rec_desc
       }
+     if (this.ruleForm.grade_list&&this.ruleForm.grade_list.length==this.grades.length) {
+         this.allGrades=true
+      }
+      if (this.ruleForm.grade_list&&this.ruleForm.subject_list.length==this.subjects.length) {
+         this.allSubject=true
+      }
       if (current.rec_bundle_id && current.soft_name) {
         this.app_list = [
           {
@@ -303,6 +320,8 @@ export default {
     handle_close(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
+          this.allGrades=false
+          this.allSubject=false
           this.$emit('receive', false)
         })
         .catch(_ => {
@@ -328,11 +347,15 @@ export default {
       return config
     },
     cancel() {
+      this.allGrades=false
+      this.allSubject=false
       this.$emit('receive', false)
     },
     emmit_application() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
+          this.allGrades=false
+          this.allSubject=false
           const config = this.get_application_config()
           if (this.isCreate) {
             this.create(config)
@@ -399,7 +422,25 @@ export default {
       }).catch(() => {
         this.app_list = []
       })
-    }
+    },
+    allGradesChange(e){
+      if (e) {
+        this.ruleForm.grade_list=this.grades.map(item=>{
+          return item.val
+        })
+      }else{
+         this.ruleForm.grade_list=[]
+      }
+    },
+    allSubjectChange(e){
+      if (e) {
+        this.ruleForm.subject_list=this.subjects.map(item=>{
+          return item.name
+        })
+      }else{
+         this.ruleForm.subject_list=[]
+      }
+    },
   }
 }
 </script>
