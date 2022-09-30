@@ -105,6 +105,15 @@
                     </el-form-item>
                   </div>
                 </el-col>
+                   <el-col :span="8" >
+                  <div class="grid-content bg-purple">
+                    <el-form-item label="设备别名">
+                      <el-form-item prop="date1">
+                        <span>{{ device.device_cname}}</span>
+                      </el-form-item>
+                    </el-form-item>
+                  </div>
+                </el-col>
               </el-row>
             </el-form>
           </div>
