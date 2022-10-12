@@ -250,6 +250,11 @@ export default {
     },
     rsync_application(app) {
       // 异步同步表格选择数据
+      app.forEach(i => {
+        if (!i.soft_name) {
+          i.soft_name=i.name
+        }
+      });
       this.combination_form.applications=app.map(item=>{
          item.checked=true
          item.name= item.soft_name,

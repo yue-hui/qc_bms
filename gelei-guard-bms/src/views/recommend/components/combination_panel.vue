@@ -1,6 +1,8 @@
 <template>
   <div class="component-card">
     <el-table
+      @select="select"
+      @select-all="selectAll"
       @selection-change="handleSelectionChange"
       :data="data_list"
       ref="multipleTable"
@@ -86,6 +88,7 @@ export default {
     const page_size = getPagenationSize()
     return {
       data_list: [],
+      page_list: [],
       multipleTableList:[],
       page: 1,
       page_size,
@@ -103,8 +106,34 @@ export default {
     }
   },
   methods: {
+    select(selection,row){
+      console.log(selection,row)
+     let list=selection.filter(item=>{
+       return item.record_id==row.record_id
+     })
+     if (list.length==0) {
+       let index= this.applications.findIndex(item=>{
+         return item.record_id==row.record_id
+       })
+       this.applications.splice(index,1)
+       this.$emit('rsync_app',  this.applications)
+     }
+    },
+    selectAll(selection){
+      if (selection.length==0) {
+         this.data_list.forEach((item,i)=>{
+            this.applications.forEach((jtem,j)=>{
+                if (item.record_id==jtem.record_id) {
+                   this.applications.splice(j,1)
+                  this.$emit('rsync_app',  this.applications)
+                }
+            })
+         })
+      }
+    },
     handleSelectionChange(rows) {
-     this.$emit('rsync_app', rows)
+     let list=this.arraySet(this.applications.concat(rows))
+     this.$emit('rsync_app', list)
     },
     check_if_in_selection(res) {
       const check_box = this.applications.filter(r => r.record_id === res.record_id)
@@ -159,7 +188,18 @@ export default {
       this.data_list.forEach((r, i, _a) => {
         r.checked = this.check_if_in_selection(r)
       })
-    }
+    },
+  arraySet(tempArr) {
+    for (let i = 0; i < tempArr.length; i++) {
+        for (let j = i + 1; j < tempArr.length; j++) {
+            if (tempArr[i].record_id == tempArr[j].record_id) {
+                tempArr.splice(j, 1);
+                j--;
+            };
+        };
+    };
+    return tempArr;
+},
   }
 }
 </script>
