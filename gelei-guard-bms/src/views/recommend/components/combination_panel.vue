@@ -107,7 +107,6 @@ export default {
   },
   methods: {
     select(selection,row){
-      console.log(selection,row)
      let list=selection.filter(item=>{
        return item.record_id==row.record_id
      })
