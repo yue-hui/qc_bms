@@ -88,9 +88,9 @@ export default {
     is_agent: {
       handler: function(val) {
         if (val === true) {
-          this.title = '格雷盒子后台管理系统-代理商'
+          this.title = '青葱守护后台管理系统-代理商'
         } else {
-          this.title = '格雷盒子后台管理系统'
+          this.title = '青葱守护后台管理系统'
         }
       },
       immediate: true

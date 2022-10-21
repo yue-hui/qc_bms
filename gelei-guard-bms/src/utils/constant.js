@@ -7,8 +7,8 @@ export const SIGN_DELTA_TIME = 24 * 60 * 60 * 1000
 
 /* 系统常量配置 */
 export const SYSTEM_CONSTANT = {
-  'name': '格雷盒子 - 后台管理系统',
-  'title': '格雷盒子'
+  'name': '青葱守护 - 后台管理系统',
+  'title': '青葱守护'
 }
 
 /* 后台消息同步时间设置 */
@@ -379,11 +379,11 @@ export const MEMBER_ACTIVITY_TYPES = [
 export const ADVERTISE_PLATFORM_TYPES = [
   {
     value: '01',
-    label: '格雷盒子家长端'
+    label: '青葱守护家长端'
   },
   {
     value: '02',
-    label: '格雷盒子孩子端'
+    label: '青葱守护孩子端'
   }
 ]
 
@@ -538,7 +538,7 @@ export function push_platform(value) {
     case '01':
       return '格雷守护'
     case '02':
-      return '格雷盒子'
+      return '青葱守护'
     case '03':
       return '智习客'
     case '04':

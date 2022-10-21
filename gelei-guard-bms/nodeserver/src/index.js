@@ -46,7 +46,7 @@ var upload = multer({ storage })
 /* 用户权限APP */
 app.use('/gelei-guard-bms/api/ns-permission', permission_router)
 
-/* 格雷盒子后台 */
+/* 青葱守护后台 */
 app.use('/gelei-guard-bms/api/', upload.any(), function(req, res) {
   // Proxy Request Header
   var reqConType = req.headers['content-type']

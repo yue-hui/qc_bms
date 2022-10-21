@@ -1,6 +1,6 @@
 <template>
   <div class="navigation-page">
-    <h1 class="title">欢迎使用格雷盒子后台管理系统</h1>
+    <h1 class="title">欢迎使用青葱守护后台管理系统</h1>
     <div class="nav-boxes">
       <router-link v-for="(nav, index) in navs" v-if="nav.visible" :key="index" :to="{name: nav.name}">
         <svg-icon icon-class="finger" />
