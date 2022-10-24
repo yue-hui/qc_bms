@@ -18,7 +18,7 @@ export const promotion_status = [
 export const bms_platform_classification = [
   {
     value: '1',
-    label: '格雷盒子家长端',
+    label: '青葱守护家长端',
     select_item: {
       update_platforms: [
         {
@@ -56,7 +56,7 @@ export const bms_platform_classification = [
   },
   {
     value: '2',
-    label: '格雷盒子孩子端',
+    label: '青葱守护孩子端',
     select_item: {
       update_platforms: [
         {
@@ -111,7 +111,7 @@ export const bms_platform_classification = [
         },
         {
           value: '42',
-          label: '小格雷定制机'
+          label: '青葱守护定制机'
         },
         {
           value: '52',
@@ -197,7 +197,7 @@ export const bms_platform_classification = [
         },
         {
           value: '43',
-          label: '小格雷中间件'
+          label: '青葱守护中间件'
         },
         {
           value: '53',
@@ -298,7 +298,7 @@ export const platforms = [
   // },
   {
     value: '42',
-    label: '小格雷定制机'
+    label: '青葱守护定制机'
   },
   {
     value: '52',
@@ -330,7 +330,7 @@ export const platforms = [
   // }
   {
     value: '43',
-    label: '小格雷中间件'
+    label: '青葱守护中间件'
   },
   {
     value: '53',
@@ -408,7 +408,7 @@ export const platforms = [
 
 // 升级方式
 export const platform_version_instructions = [
-  /** 格雷盒子家长端***********************/
+  /** 青葱守护家长端***********************/
   {
     value: '01',
     label: 'IOS家长端',
@@ -419,7 +419,7 @@ export const platform_version_instructions = [
     label: '安卓家长端',
     type: 0
   },
-  /** 格雷盒子孩子端***********************/
+  /** 青葱守护孩子端***********************/
   {
     value: '02',
     label: 'IOS孩子端',
@@ -452,7 +452,7 @@ export const platform_version_instructions = [
   // },
   {
     value: '42',
-    label: '小格雷定制机',
+    label: '青葱守护定制机',
     type: 2
   },
   {
@@ -527,7 +527,7 @@ export const platform_version_instructions = [
   // }
   {
     value: '43',
-    label: '孩子端+小格雷中间件',
+    label: '孩子端+青葱守护中间件',
     type: 3
   },
   {
@@ -583,8 +583,8 @@ export const platform_version_instructions = [
 ]
 // 升级方式分类
 export const platform_version_instruction_type = [
-  { label: '格雷盒子家长端', value: 0 },
-  { label: '格雷盒子孩子端', value: 1 },
+  { label: '青葱守护家长端', value: 0 },
+  { label: '青葱守护孩子端', value: 1 },
   { label: '定制机孩子端', value: 2 },
   { label: '中间件', value: 3 }
 ]

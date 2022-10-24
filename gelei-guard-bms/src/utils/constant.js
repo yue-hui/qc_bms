@@ -245,15 +245,15 @@ export const COMMODITY_TYPE = [
   },
   {
     value: 2,
-    label: '格雷守护会员月卡'
+    label: '青葱守护会员月卡'
   },
   {
     value: 3,
-    label: '格雷守护会员季卡'
+    label: '青葱守护会员季卡'
   },
   {
     value: 4,
-    label: '格雷守护会员年卡'
+    label: '青葱守护会员年卡'
   }
 ]
 
@@ -536,13 +536,13 @@ export function push_status(value) {
 export function push_platform(value) {
   switch (value) {
     case '01':
-      return '格雷守护'
+      return '青葱守护'
     case '02':
       return '青葱守护'
     case '03':
       return '智习客'
     case '04':
-      return '格雷优选'
+      return '青葱守护优选'
   }
 }
 

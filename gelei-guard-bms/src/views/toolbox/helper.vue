@@ -151,7 +151,7 @@ export default {
     return {
       loading: false,
       help_question_status,
-      content: '格雷为您守护！',
+      content: '青葱为您守护！',
       init: '',
       questions: [],
       page: 1,
