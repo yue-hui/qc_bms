@@ -116,6 +116,13 @@ export const asyncRoutes = [
         meta: { title: '用户详细信息', hide: true, icon: 'form', pid: '20074' }
       },
       {
+        path: 'control/:pid',
+        name: 'controlRules',
+        hidden: true,
+        component: () => import('@/views/users/control_rules'),
+        meta: { title: '管控规则', hide: true, icon: 'form', pid: '20074' }
+      },
+      {
         path: 'order-list',
         name: 'OrderManagement',
         component: () => import('@/views/users/order_list'),

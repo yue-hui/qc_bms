@@ -182,6 +182,13 @@
                 type="text"
                 @click="view_details(scope.row)">查看
               </gl-button>
+               <gl-button
+                pid="20099"
+                size="small"
+                style="text-decoration: underline;"
+                type="text"
+                @click="toControlRules(scope.row)">管控规则
+              </gl-button>
             </template>
           </el-table-column>
         </el-table>
@@ -210,6 +217,7 @@ import {
 } from '@/utils/constant'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
 import { cloneDeep } from '../../utils/index'
+import { floor } from 'js-big-decimal'
 // import dayjs from 'dayjs'
 
 export default {
@@ -323,6 +331,16 @@ export default {
         name: 'UserDetails',
         params: {
           pid: row.patriarch_id
+        }
+      }
+      const { href } = this.$router.resolve(options)
+      window.open(href, '_blank')
+    },
+    toControlRules: function(row) {
+       const options = {
+        name: 'controlRules',
+        params: {
+          pid: row.patriarch_id+'&'+row.user_id
         }
       }
       const { href } = this.$router.resolve(options)

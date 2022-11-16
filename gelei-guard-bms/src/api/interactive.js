@@ -1587,3 +1587,15 @@ export function clearAppLock(data) {
     data
   })
 }
+
+/**
+ * @description 查看设备规则
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000654
+ * */
+ export function deviceRules(data) {
+  return request({
+    url: '/greenguard/manager/device/ruleInfo',
+    method: 'post',
+    data
+  })
+}
