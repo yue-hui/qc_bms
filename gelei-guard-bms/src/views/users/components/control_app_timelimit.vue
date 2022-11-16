@@ -314,43 +314,6 @@ export default {
     })
    this.timeH=time_h+obj.restH
    this.timeM=time_m+obj.restM
-   if(this.nowIndex==this.activeIndex){
-      let used_time=this.time.day_of_week_used_time[this.activeIndex-1]
-      let has_timeH=this.timeH>0?Number(this.timeH)*3600:0
-      let has_timeM=this.timeM>0?Number(this.timeM)*60:0
-      let has_time=has_timeH+has_timeM-used_time
-      if (has_time<60) {
-        if (has_time==0) {
-           this.timeH=0
-           this.timeM=0
-        }else{
-           this.timeH=0
-           this.timeM=1
-        }
-      }else{
-        let min_total=Math.floor(has_time/60) //分钟
-        let sec =Math.floor(has_time%60) //余秒
-        if (min_total<60) {
-           this.timeH=0
-           this.timeM=min_total
-        }else{
-          let hour_total=Math.floor(min_total/60) //小时
-          let min=Math.floor(min_total%60) //余分
-          if(hour_total>0&&min==0&&sec==0){
-             this.timeH=hour_total
-             this.timeM=0
-          }else{
-            if(sec>0){
-             this.timeH=hour_total
-             this.timeM=min+1
-            }else{
-             this.timeH=hour_total
-             this.timeM=min
-            }
-          }
-        }
-      }
-     }
     }
    }else{
       this.notimePlan=this.showTime(this.deviceUseInfo.surplus_used_time)
@@ -575,9 +538,6 @@ export default {
     display: flex;
     justify-content: space-between;
     margin: 20px 0;
-    div {
-      // margin-right: 180px;
-    }
     span {
       font-size: 16px;
       margin-left: 10px;
