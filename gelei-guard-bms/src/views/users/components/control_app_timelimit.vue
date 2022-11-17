@@ -11,7 +11,7 @@
           <span>{{ item }}</span>
         </div>
       </div>
-      <div class="day-time" style="width: 800px" v-if="time.rule_time&&time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length==0">
+      <div class="day-time" style="width: 800px" v-if="time.rule_time.length==0||time.rule_time&&time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length==0">
           <div style="margin-bottom: 10px; margin-right: 9px" class="item">
                <span>00:00-24:00</span>
           </div>
@@ -31,7 +31,6 @@
       <el-table-column label="应用图标" prop="soft_icon" align="center" width="80px">
          <template slot-scope="scoped">
            <div class="app_icon">
-              <!-- <div> 测试 {{getNowHMS_app(scoped.row.soft_fragments)?'true':'false'}}</div> -->
              <img v-if="scoped.row.soft_icon" :src="scoped.row.soft_icon" alt="">
              <img v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
              <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)" >
@@ -314,6 +313,45 @@ export default {
     })
    this.timeH=time_h+obj.restH
    this.timeM=time_m+obj.restM
+   if(this.nowIndex==this.activeIndex&&this.getDayTime(this.time.rule_time,this.activeIndex).length>0){
+      let has_timeH=this.timeH>0?Number(this.timeH)*3600:0
+      let has_timeM=this.timeM>0?Number(this.timeM)*60:0
+      let has_time=has_timeH+has_timeM
+      let val=this.getDayTime(this.time.rule_time,this.activeIndex)[0].enabled_time
+      if (has_time>val) {
+         if (val<60) {
+        if (val==0) {
+         this.timeH=0
+         this.timeM=0
+        }else{
+         this.timeH=0
+         this.timeM=1
+        }
+      }else{
+        let min_total=Math.floor(val/60) //分钟
+        let sec =Math.floor(val%60) //余秒
+        if (min_total<60) {
+         this.timeH=0
+         this.timeM=min_total
+        }else{
+          let hour_total=Math.floor(min_total/60) //小时
+          let min=Math.floor(min_total%60) //余分
+          if(hour_total>0&&min==0&&sec==0){
+             this.timeH=hour_total
+             this.timeM=0
+          }else{
+            if(sec>0){
+             this.timeH=hour_total
+             this.timeM=min+1
+            }else{
+             this.timeH=hour_total
+             this.timeM=min
+            }
+          }
+        }
+      }
+      }
+     }
     }
    }else{
       this.notimePlan=this.showTime(this.deviceUseInfo.surplus_used_time)

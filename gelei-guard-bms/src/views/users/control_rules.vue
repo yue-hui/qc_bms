@@ -29,7 +29,7 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="查看设备">
-                     <el-select v-model="device_id" size="mini" placeholder="请选择设备" clearable @change="getDeviceId">
+                     <el-select v-model="device_id" size="mini" placeholder="请选择设备"  @change="getDeviceId">
                        <el-option v-for="item in device_list":key="item.device_id":label="item.device_name":value="item.device_id" />
                      </el-select>
                   </el-form-item>
@@ -38,7 +38,7 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="守护等级">
-                     <el-select v-model="mode_type" size="mini" placeholder="请选择设备" clearable disabled>
+                     <el-select v-model="mode_type" size="mini" placeholder="请选择设备" disabled>
                        <el-option v-for="(value,key,i)  in modeList" :key="i" :label="value"  :value="key" />
                      </el-select>
                   </el-form-item>
@@ -142,13 +142,15 @@
                       <div class="tab" :class="tab_index==2?'active':''" @click="changeTab(2)">禁止使用</div>
                       <div class="tab" :class="tab_index==3?'active':''" @click="changeTab(3)">始终可用</div>
                       <div class="tab" v-if="device_type!='PC'" :class="tab_index==4?'active':''" @click="changeTab(4)">未计划</div>
+                      <div class="tab"  :class="tab_index==5?'active':''" @click="changeTab(5)">待审批</div>
                    </div>
                    <div>
-                     <controlTime :device_type='device_type' :time='rule_info.rule_time_list' :ruleTimePlanB='rule_info.ruleTimePlanB' v-if="tab_index==0"></controlTime>
+                     <controlTime :device_type='device_type' :time='rule_info.rule_time_list' :ruleTimePlanB='rule_info.ruleTimePlanB' :deviceUseInfo='rule_info.deviceUseInfo' v-if="tab_index==0"></controlTime>
                      <controlAppTimelimit :limited_soft_list="rule_info.limited_soft_list" :rule_usable_temp="rule_info.rule_usable_temp" :deviceUseInfo='rule_info.deviceUseInfo' :time="rule_info.rule_time_list" v-if="tab_index==1" :type='mode_type'></controlAppTimelimit>
                      <controlAppList :list="rule_info.forbidden_soft_list" v-if="tab_index==2"></controlAppList>
                      <controlAppList :list="rule_info.free_soft_list" v-if="tab_index==3"></controlAppList>
                      <controlAppList :list="rule_info.default_soft_list" v-if="tab_index==4"></controlAppList>
+                     <controlAppList :list="rule_info.pending_soft_list" v-if="tab_index==5"></controlAppList>
                    </div>
               </el-col>
             </el-row>
