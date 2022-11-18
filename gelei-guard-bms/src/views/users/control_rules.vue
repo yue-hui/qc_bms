@@ -64,7 +64,7 @@
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="8" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==1">
+              <el-col :span="8" v-if="timeDifference&&rule_info.rule_usable_temp.mode==1">
                 <div class="grid-content bg-purple">
                   <el-form-item label="锁屏时间">
                     <span>{{timeDifference}}</span>
