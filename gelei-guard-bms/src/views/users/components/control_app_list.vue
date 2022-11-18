@@ -54,6 +54,7 @@ export default {
      border: 1px solid #ebeef5;
      min-height: 400px;
      display: flex;
+     align-content:flex-start;
      flex-wrap: wrap;
      padding: 20px 0;
      .item{
@@ -61,6 +62,7 @@ export default {
        height: 50px;
        width: 120px;
        margin:0 20px;
+       margin-bottom: 20px;
        img{
          margin-right: 10px;
          width: 50px;
