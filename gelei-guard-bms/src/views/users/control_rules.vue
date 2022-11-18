@@ -91,11 +91,11 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="临时可用">
-                    <span >{{rule_info.rule_usable_temp&&timeDifference&&rule_info.rule_usable_temp.mode==0?'已启用':'未启用'}}</span>
+                    <span >{{rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0?'已启用':'未启用'}}</span>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="8" v-if="timeDifference&&rule_info.rule_usable_temp.mode==0&&timeDifference">
+              <el-col :span="8" v-if="timeDifference&&rule_info.rule_usable_temp.mode==0">
                 <div class="grid-content bg-purple">
                   <el-form-item label="可用时间">
                     <span>{{timeDifference}}</span>
@@ -103,7 +103,7 @@
                 </div>
               </el-col>
            </el-row>
-          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0&&timeDifference">
+          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0">
               <el-col :span="20">
                 <div class="grid-content bg-purple">
                   <el-form-item label="可用应用">
