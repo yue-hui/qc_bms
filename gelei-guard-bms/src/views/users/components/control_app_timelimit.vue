@@ -147,7 +147,9 @@ export default {
    
    },
   mounted() {
+    if (this.type!=3) {
     this.getNowHMS()
+    }
   },
   methods: {
     changeActiveDay(item){

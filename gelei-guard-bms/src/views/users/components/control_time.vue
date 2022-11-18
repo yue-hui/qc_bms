@@ -97,6 +97,7 @@ export default {
       default: ''
     },
    time: {},
+   type:'',
    device_type:'',
    ruleTimePlanB:[],
    deviceUseInfo:{},
@@ -243,7 +244,9 @@ export default {
            this.copyToTime=[]
        }
     }
-    this.getNowHMS()
+    if (this.type!=3) {
+     this.getNowHMS()
+    }
     this.setBlockWhiteTextColor()
   },
   methods: {
