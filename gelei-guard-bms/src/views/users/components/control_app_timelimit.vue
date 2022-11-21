@@ -26,6 +26,7 @@
         <div class="time_item">今日屏幕可用 <span>{{time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length>0?showTime(getDayTime(time.rule_time,activeIndex)[0].enabled_time):'24小时'}}</span></div>
       </div>
       <div class="tip" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'">下列应用暂不可用：还未到屏幕使用时间</div>
+      <div class="tip" v-if="type==4&&nowIndex==activeIndex">下列应用已用时间总计：{{showTime(limitedTime)}}</div>
     </div>
     <el-table :data="limited_soft_list.single_soft_list" style="width: 900px;" border stripe class="tableLimited">
       <el-table-column label="应用图标" prop="soft_icon" align="center" width="80px">
@@ -53,7 +54,8 @@
       <el-table-column label="可用时间" prop="timeLimits" align="center" :formatter="timerFormat"> </el-table-column>
       <el-table-column label="已用时间" prop="used_time" align="center">
          <template slot-scope="scoped">
-             <div v-if="scoped.row.timeLimits">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
+             <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
+             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
              <div v-else> - </div>
         </template>
       </el-table-column>
@@ -84,6 +86,7 @@
       <el-table-column label="已用时间" prop="used_time" align="center">
         <template slot-scope="scoped">
              <div v-if="scoped.row.timeLimits">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
+             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
              <div v-else> - </div>
         </template>
       </el-table-column>
@@ -130,7 +133,8 @@ export default {
           index=7
          }
          return index
-      })()
+      })(),
+       limitedTime:0
     };
   },
   props: {
@@ -149,6 +153,22 @@ export default {
   mounted() {
     if (this.type!=3) {
     this.getNowHMS()
+    }
+    if (this.limited_soft_list.single_soft_list.length>0) {
+       let list=this.limited_soft_list.single_soft_list.map(item=>{
+         return item.timeLimits
+       })
+       list.forEach(item=>{
+       this.limitedTime+= this.timerFormatHMS_s(item)
+       })
+    }
+     if (this.limited_soft_list.group_soft_list.length>0) {
+       let list=this.limited_soft_list.group_soft_list.map(item=>{
+         return item.timeLimits
+       })
+       list.forEach(item=>{
+       this.limitedTime+=this.timerFormatHMS_s(item)
+       })
     }
   },
   methods: {
@@ -210,6 +230,17 @@ export default {
          return item.whatDay==index
        })
       return this.showTime(Number(list[0].usedTime),true)
+    },
+    // 根据星期-秒数换算-秒数
+    timerFormatHMS_s(time){
+       let index = new Date().getDay()
+       if(index==0){
+         index=7
+       }
+       let list=time.filter(item=>{
+         return item.whatDay==index
+       })
+      return Number(list[0].usedTime)
     },
       // 时间换算
     showTime(val,ms=false){
