@@ -47,7 +47,7 @@
         <div class="time_item" v-if="nowIndex>activeIndex">当天剩余可用 <span>0分钟</span></div>
         <div class="time_item" v-if="nowIndex<activeIndex">当天剩余可用 <span>{{time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length>0?showTime(getDayTime(time.rule_time,activeIndex)[0].enabled_time):'24小时'}}</span></div>
         <div class="time_item">当天已用 <span>{{nowIndex==activeIndex?showTime(time.day_of_week_used_time[idx],true):showTime(time.day_of_week_used_time[activeIndex-1],true)}}</span></div>
-        <div class="time_item">今日设备可用 <span>{{time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length>0?showTime(getDayTime(time.rule_time,activeIndex)[0].enabled_time):'24小时'}}</span></div>
+        <div class="time_item">今日屏幕可用 <span>{{time.rule_time.length>0&&getDayTime(time.rule_time,activeIndex).length>0?showTime(getDayTime(time.rule_time,activeIndex)[0].enabled_time):'24小时'}}</span></div>
     </div>
     </div>
   <div  v-if="ruleTimePlanB&&ruleTimePlanB.length>0&&device_type!='PC'">
@@ -62,7 +62,7 @@
          <template slot-scope="props">
           <div class="item" v-for="(item,index) in props.row.batch_list">
                <div class="week">{{day[item.what_day-1]}} </div>
-               <div class="day">{{item.enabled_time/3600}}小时/天</div> 
+               <div class="day">{{showTime(item.enabled_time)}}/天</div> 
                <div class="time" v-for="(time,i) in changeTimeTab(item.rule_time_fragment)">{{time}}</div> 
           </div>
          </template>
@@ -322,8 +322,8 @@ export default {
      * @description 时间转换
      * */
     timerFormat(_,__, time) { 
-       const times=Number(time)/3600
-       return times+'小时'
+      const val= this.showTime(time)
+      return val
     },
     changeActiveDay(item){
       this.activeDay=item
