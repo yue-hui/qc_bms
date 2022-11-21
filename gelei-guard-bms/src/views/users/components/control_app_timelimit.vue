@@ -34,7 +34,7 @@
            <div class="app_icon">
              <img v-if="scoped.row.soft_icon" :src="scoped.row.soft_icon" alt="">
              <img v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
-             <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)" >
+             <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)||timerFormat(scoped.row.timeLimits)==timerFormatHMS(scoped.row.timeLimits)" >
                <span>不可用</span>
              </div>
            </div>
@@ -62,20 +62,20 @@
     </el-table>
     <div class="title">分组应用：</div>
     <el-table :data="limited_soft_list.group_soft_list" style="width: 900px;" border stripe class="tableLimited">
-      <el-table-column label="应用图标" prop="id" align="center" width='80'> 
+      <el-table-column label="分组图标" prop="id" align="center" width='80'> 
           <template slot-scope="scoped">
               <div class="softList">
                  <div v-for="(item,index) in scoped.row.soft_list">
                     <img  v-if="item.soft_icon" :src="item.soft_icon" alt="">
                     <img  v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
-                    <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'" >
+                    <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||getNowHMS_app(scoped.row.group_fragment)||timerFormat(scoped.row.timeLimits)==timerFormatHMS(scoped.row.timeLimits)" >
                       <span>不可用</span>
                     </div>
                  </div>
               </div>
         </template>
       </el-table-column>
-      <el-table-column label="应用名称" prop="soft_group_name" align="center"> </el-table-column>
+      <el-table-column label="分组名称" prop="soft_group_name" align="center"> </el-table-column>
       <el-table-column label="应用" prop="soft_list" align="center" show-overflow-tooltip  width='220px' :formatter="setGroupapp"></el-table-column>
       <el-table-column label="使用时间段"  prop="group_fragment" align="center">
         <template slot-scope="scoped">
