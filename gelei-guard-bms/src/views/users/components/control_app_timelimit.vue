@@ -218,7 +218,7 @@ export default {
        let list=time.filter(item=>{
          return item.whatDay==index
        })
-      return Number(list[0].timeLimit)/3600+'小时'
+      return this.showTime(Number(list[0].timeLimit))
     },
      // 根据星期-秒数换算-时分秒
     timerFormatHMS(time){
