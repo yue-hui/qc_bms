@@ -37,6 +37,7 @@
              <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)||gethasTime(scoped.row.timeLimits)" >
                <span>不可用</span>
              </div>
+             <span class="imgBg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)||gethasTime(scoped.row.timeLimits)"></span>
            </div>
         </template>
       </el-table-column>
@@ -67,7 +68,7 @@
               <div class="softList">
                  <div v-for="(item,index) in scoped.row.soft_list">
                     <img  v-if="item.soft_icon" :src="item.soft_icon" alt="">
-                    <img  v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
+                    <img v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
                     <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||getNowHMS_app(scoped.row.group_fragment)||gethasTime(scoped.row.timeLimits)" >
                       <span>不可用</span>
                     </div>
@@ -441,7 +442,7 @@ export default {
     });
     times=index===''?times:times.slice(index+1)
     let timeMap=times[0]||{}
-     if (timeMap) {
+     if (times.length>0&&JSON.stringify(timeMap)!={}) {
     let end_time_h=timeMap.end_time.slice(0,2)
      end_time_h=end_time_h.slice(0,1)==0?end_time_h.slice(1,2):end_time_h
     let end_time_m=timeMap.end_time.slice(3,5)
@@ -462,6 +463,8 @@ export default {
      }else{
        return true
      }
+     }else{
+       return true
      }
    }
   }, 
@@ -482,12 +485,23 @@ export default {
 .app_icon{
   position: relative;
   width: 40px;
+  height: 40px;
   margin: 0 auto;
   text-align: center;
   img{
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
   }
+  .imgBg{
+   position: absolute;
+   width: 40px;
+   left: 0px;
+   top: -4px;
+   background-color: rgba(0,0,0,.2);
+   height: 30px;
+ }
   .bg{
    position: absolute;
    width: 100%;
@@ -496,10 +510,10 @@ export default {
    bottom: 0;
    left: 0;
    color: #fff;
-   height: 15px;
+   height: 14px;
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
-   background-color: rgba(0,0,0,.4);
+   background-color: rgba(0,0,0,.5);
    span{
      font-size: 12px;
      margin-top: -4px;
@@ -533,7 +547,7 @@ export default {
    height: 15px;
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
-   background-color: rgba(0,0,0,.4);
+   background-color: rgba(0,0,0,.3);
    span{
      font-size: 12px;
      margin-top: -4px;
