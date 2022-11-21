@@ -34,7 +34,7 @@
            <div class="app_icon">
              <img v-if="scoped.row.soft_icon" :src="scoped.row.soft_icon" alt="">
              <img v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
-             <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)||timerFormat(scoped.row.timeLimits)==timerFormatHMS(scoped.row.timeLimits)" >
+             <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||(rule_usable_temp&&!rule_usable_temp.bundle_ids.includes(scoped.row.bundle_id))||getNowHMS_app(scoped.row.soft_fragments)||gethasTime(scoped.row.timeLimits)" >
                <span>不可用</span>
              </div>
            </div>
@@ -68,7 +68,7 @@
                  <div v-for="(item,index) in scoped.row.soft_list">
                     <img  v-if="item.soft_icon" :src="item.soft_icon" alt="">
                     <img  v-else src="../../../assets/imgs/bg_icon_no.png" alt="">
-                    <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||getNowHMS_app(scoped.row.group_fragment)||timerFormat(scoped.row.timeLimits)==timerFormatHMS(scoped.row.timeLimits)" >
+                    <div class="bg" v-if="nowIndex!=activeIndex||deviceUseInfo.rule_time_flag!='Y'||getNowHMS_app(scoped.row.group_fragment)||gethasTime(scoped.row.timeLimits)" >
                       <span>不可用</span>
                     </div>
                  </div>
@@ -219,6 +219,21 @@ export default {
          return item.whatDay==index
        })
       return this.showTime(Number(list[0].timeLimit))
+    },
+    // 可用时间和已用时间比较
+    gethasTime(time){
+       let index = new Date().getDay()
+       if(index==0){
+         index=7
+       }
+       let list=time.filter(item=>{
+         return item.whatDay==index
+       })
+       if (list[0].usedTime==list[0].timeLimit) {
+         return true
+       }else{
+         return false
+       }
     },
      // 根据星期-秒数换算-时分秒
     timerFormatHMS(time){
