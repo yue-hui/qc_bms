@@ -220,21 +220,6 @@ export default {
        })
       return this.showTime(Number(list[0].timeLimit))
     },
-    // 可用时间和已用时间比较
-    gethasTime(time){
-       let index = new Date().getDay()
-       if(index==0){
-         index=7
-       }
-       let list=time.filter(item=>{
-         return item.whatDay==index
-       })
-       if (list[0].usedTime==list[0].timeLimit) {
-         return true
-       }else{
-         return false
-       }
-    },
      // 根据星期-秒数换算-时分秒
     timerFormatHMS(time){
        let index = new Date().getDay()
@@ -257,7 +242,22 @@ export default {
        })
       return Number(list[0].usedTime)
     },
-      // 时间换算
+     // 可用时间和已用时间比较
+    gethasTime(time){
+       let index = new Date().getDay()
+       if(index==0){
+         index=7
+       }
+       let list=time.filter(item=>{
+         return item.whatDay==index
+       })
+       if (list[0].usedTime>=list[0].timeLimit) {
+         return true
+       }else{
+         return false
+       }
+    },
+    // 时间换算
     showTime(val,ms=false){
       if (val===null) { return 0 }
       if (val<60) {
