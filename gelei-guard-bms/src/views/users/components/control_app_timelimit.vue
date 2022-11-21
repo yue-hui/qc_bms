@@ -259,8 +259,8 @@ export default {
        }
         return index
     });
-    time=index==''?time:time.slice(index+1)
-    let timeMap=time[0]||{}
+    let timeSlice=index===''? time:time.slice(index+1)
+    let timeMap=timeSlice[0]||{}
      if (timeMap) {
     let end_time_h=timeMap.end_time.slice(0,2)
      end_time_h=end_time_h.slice(0,1)==0?end_time_h.slice(1,2):end_time_h
@@ -282,7 +282,7 @@ export default {
      }else if (h==end_time_h) { 
        time_h=0
        time_m=0
-     } else if (h>begin_time_h&&h<end_time_h) {
+     } else if (h>begin_time_h&&h<end_time_h) {  
        time_h=(end_time_h==0?24:end_time_h)-h-1
        time_m=(end_time_m==0?60:end_time_m)-m
      }else if(h>end_time_h){
@@ -292,8 +292,8 @@ export default {
       time_h=(end_time_h==0?24:end_time_h)-h
       time_m=(end_time_m==0?60:end_time_m)-m
      }
-     time=time.slice(1)
-      let timeRest= time.map((item,index) => {
+    let timeSliceAll=timeSlice.slice(1)
+      let timeRest= timeSliceAll.map((item,index) => {
       let end_time_h=item.end_time.slice(0,2)
       end_time_h=end_time_h.slice(0,1)==0?end_time_h.slice(1,2):end_time_h
       
@@ -320,6 +320,7 @@ export default {
     })
    this.timeH=time_h+obj.restH
    this.timeM=time_m+obj.restM
+  //  console.log(this.timeH,this.timeM)
    if(this.nowIndex==this.activeIndex&&this.getDayTime(this.time.rule_time,this.activeIndex).length>0){
       let has_timeH=this.timeH>0?Number(this.timeH)*3600:0
       let has_timeM=this.timeM>0?Number(this.timeM)*60:0

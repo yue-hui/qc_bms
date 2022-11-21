@@ -346,7 +346,7 @@ export default {
        }
         return index
     });
-    time=index==''?time:time.slice(index+1)
+    time=index===''?time:time.slice(index+1)
     let timeMap=time[0]||{}
      if (timeMap) {
     let end_time_h=timeMap.end_time.slice(0,2)
