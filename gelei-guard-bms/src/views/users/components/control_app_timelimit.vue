@@ -518,7 +518,7 @@ export default {
    height: 15px;
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
-   background-color: rgba(0,0,0,.1);
+   background-color: rgba(0,0,0,.4);
    span{
      font-size: 12px;
      margin-top: -4px;
