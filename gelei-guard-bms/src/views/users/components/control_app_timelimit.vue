@@ -261,7 +261,7 @@ export default {
     });
     let timeSlice=index===''? time:time.slice(index+1)
     let timeMap=timeSlice[0]||{}
-     if (timeMap) {
+     if (timeSlice.length>0&&JSON.stringify(timeMap)!={}) {
     let end_time_h=timeMap.end_time.slice(0,2)
      end_time_h=end_time_h.slice(0,1)==0?end_time_h.slice(1,2):end_time_h
     let end_time_m=timeMap.end_time.slice(3,5)
