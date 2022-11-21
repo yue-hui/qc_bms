@@ -64,7 +64,7 @@
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="8" v-if="timeDifference&&rule_info.rule_usable_temp.mode==1">
+              <el-col :span="8" v-if="rule_info.rule_usable_temp&&timeDifference&&rule_info.rule_usable_temp.mode==1">
                 <div class="grid-content bg-purple">
                   <el-form-item label="锁屏时间">
                     <span>{{timeDifference}}</span>
@@ -95,7 +95,7 @@
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="8" v-if="timeDifference&&rule_info.rule_usable_temp.mode==0">
+              <el-col :span="8" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0">
                 <div class="grid-content bg-purple">
                   <el-form-item label="可用时间">
                     <span>{{timeDifference}}</span>
@@ -266,13 +266,13 @@ export default {
         this.tab_index=0
         this.rule_info=item.data
         this.mode_type=String(item.data.mode)
-        if (this.rule_info.rule_usable_temp) {
+        if (this.rule_info.rule_usable_temp&&JSON.stringify(this.rule_info.rule_usable_temp)!=null) {
           this.app_list= this.rule_info.rule_usable_temp.softs
           this.timer=setInterval(()=>{
           let end=this.rule_info.rule_usable_temp.usable_end_time
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time
           let nowTime=new Date().getTime()
-          let difTime=Math.floor((end-nowTime+3000)/1000)
+          let difTime=Math.floor((end-nowTime+5000)/1000)
           // let difTime=Math.floor((end-begin)/1000)
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
