@@ -214,6 +214,10 @@ export default {
     this.patriarch_id=this.$route.params.pid.split('&')[0]
     this.fetch_details()
   },
+  beforeDestroy(){
+    this.timer=null
+    sessionStorage.removeItem('device_id')
+  },
   methods: {
     fetch_details() {
       const config = {
