@@ -210,6 +210,8 @@ export default {
     ])
   },
   mounted: function() {
+    window.clearInterval(this.timer)
+    this.timer=null
     this.user_id=this.$route.params.pid.split('&')[1]
     this.patriarch_id=this.$route.params.pid.split('&')[0]
     this.fetch_details()
@@ -233,7 +235,11 @@ export default {
           this.device_list=this.chlid_info.device_list.filter(item=>{
             return item.bind_type==1
           })
-          if(sessionStorage.getItem("device_id")){
+           const device_id=sessionStorage.getItem("device_id")
+            let list=this.device_list.filter(item=>{
+            return item.device_id==device_id
+           })
+          if(list.length>0){
             this.device_id=sessionStorage.getItem("device_id")
             let list=this.device_list.filter(item=>{
             return item.device_id==this.device_id
@@ -276,7 +282,7 @@ export default {
           let end=this.rule_info.rule_usable_temp.usable_end_time
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time
           let nowTime=new Date().getTime()
-          let difTime=Math.floor((end-nowTime+2000)/1000)
+          let difTime=Math.floor((end-nowTime+2500)/1000)
           // let difTime=Math.floor((end-begin)/1000)
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
