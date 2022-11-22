@@ -72,7 +72,7 @@
                 </div>
               </el-col>
            </el-row>
-          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==1">
+          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==1&&device_type!='PC'">
               <el-col :span="20">
                 <div class="grid-content bg-purple">
                   <el-form-item label="锁屏应用">
@@ -103,7 +103,7 @@
                 </div>
               </el-col>
            </el-row>
-          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0">
+          <el-row :gutter="24" v-if="rule_info.rule_usable_temp&&rule_info.rule_usable_temp.mode==0&&device_type!='PC'">
               <el-col :span="20">
                 <div class="grid-content bg-purple">
                   <el-form-item label="可用应用">
