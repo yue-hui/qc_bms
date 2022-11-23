@@ -49,7 +49,8 @@
       </el-table-column>
       <el-table-column label="使用时间段"  prop="soft_fragments" align="center">
           <template slot-scope="scoped">
-             <div v-if="scoped.row.soft_fragments"><div v-for="(item,index) in changeTimeTab(scoped.row.soft_fragments)">{{item}}</div></div>
+             <div v-if="scoped.row.soft_fragments&&changeTimeTab(scoped.row.soft_fragments).length>0"><div v-for="(item,index) in changeTimeTab(scoped.row.soft_fragments)">{{item}}</div></div>
+             <div v-else>-</div>
         </template>
       </el-table-column>
       <el-table-column label="可用时间" prop="timeLimits" align="center" :formatter="timerFormat"> </el-table-column>
@@ -291,6 +292,7 @@ export default {
   //当前时间-判断是否在当前时间段-获取剩余时分秒
   getNowHMS(){
    let time= this.getDayTime(this.time.rule_time,this.nowIndex)[0]
+   time=time?time:{rule_time_fragment:[{begin_time:"00:00",end_time: "24:00"}]}
    if (time) {
     time=time.rule_time_fragment
     let date=new Date()
@@ -365,9 +367,8 @@ export default {
        obj.restM+=item.m
        return obj 
     })
-   this.timeH=time_h+obj.restH
-   this.timeM=time_m+obj.restM
-  //  console.log(this.timeH,this.timeM)
+    this.timeH=time_h+obj.restH
+    this.timeM=time_m+obj.restM
    if(this.nowIndex==this.activeIndex&&this.getDayTime(this.time.rule_time,this.activeIndex).length>0){
       let has_timeH=this.timeH>0?Number(this.timeH)*3600:0
       let has_timeM=this.timeM>0?Number(this.timeM)*60:0
@@ -408,9 +409,7 @@ export default {
       }
      }
     }
-   }else{
-      this.notimePlan=this.showTime(this.deviceUseInfo.surplus_used_time)
-    }
+   }
   },  
    //应用分组-获取分组应用名
     setGroupapp(_,__, list){
