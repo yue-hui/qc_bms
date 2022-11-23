@@ -126,6 +126,15 @@ const PERMISSION_DATA = [
             c_layout: 'vertical',
             code: 20005,
             children: []
+          },
+          {
+            name: '管控规则',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20119,
+            children: []
           }
         ]
       },
@@ -1224,6 +1233,15 @@ const AGENT_PERMISSION_DATA = [
             layout: 'vertical',
             c_layout: 'vertical',
             code: 20005,
+            children: []
+          },
+          {
+            name: '管控规则',
+            checked: false,
+            width: BUTTON_OPERATION_WIDTH,
+            layout: 'vertical',
+            c_layout: 'vertical',
+            code: 20119,
             children: []
           }
         ]

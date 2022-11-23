@@ -183,7 +183,7 @@
                 @click="view_details(scope.row)">查看
               </gl-button>
                <gl-button
-                pid="20099"
+                pid="20119"
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
