@@ -158,19 +158,27 @@ export default {
     }
     if (this.limited_soft_list.single_soft_list.length>0) {
        let list=this.limited_soft_list.single_soft_list.map(item=>{
-         return item.timeLimits
+         if (item.timeLimits) {
+             return item.timeLimits
+         }
+       }).filter(Boolean)
+      if (list.length>0) {
+          list.forEach(item=>{
+         this.limitedTime+= this.timerFormatHMS_s(item)
        })
-       list.forEach(item=>{
-       this.limitedTime+= this.timerFormatHMS_s(item)
-       })
+      } 
     }
      if (this.limited_soft_list.group_soft_list.length>0) {
        let list=this.limited_soft_list.group_soft_list.map(item=>{
-         return item.timeLimits
-       })
+          if (item.timeLimits) {
+             return item.timeLimits
+         }  
+       }).filter(Boolean)
+       if (list.length>0) {
        list.forEach(item=>{
        this.limitedTime+=this.timerFormatHMS_s(item)
        })
+       }
     }
   },
   methods: {
@@ -246,6 +254,7 @@ export default {
     },
      // 可用时间和已用时间比较
     gethasTime(time){
+      if (time) {
        let index = new Date().getDay()
        if(index==0){
          index=7
@@ -258,6 +267,9 @@ export default {
        }else{
          return false
        }
+      }else{
+        return false
+      }
     },
     // 时间换算
     showTime(val,ms=false){
