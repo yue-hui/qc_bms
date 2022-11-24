@@ -49,7 +49,8 @@
       </el-table-column>
       <el-table-column label="使用时间段"  prop="soft_fragments" align="center">
           <template slot-scope="scoped">
-             <div v-if="scoped.row.soft_fragments&&changeTimeTab(scoped.row.soft_fragments).length>0"><div v-for="(item,index) in changeTimeTab(scoped.row.soft_fragments)">{{item}}</div></div>
+             <div v-if="scoped.row.timeLimits&&scoped.row.soft_fragments&&changeTimeTab(scoped.row.soft_fragments).length>0"><div v-for="(item,index) in changeTimeTab(scoped.row.soft_fragments)">{{item}}</div></div>
+             <div v-else-if="!scoped.row.timeLimits">00:00-24:00</div>
              <div v-else>-</div>
         </template>
       </el-table-column>
@@ -58,6 +59,7 @@
          <template slot-scope="scoped">
              <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
              <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
+             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex"> 已用0分钟 </div>
              <div v-else> - </div>
         </template>
       </el-table-column>
@@ -81,7 +83,9 @@
       <el-table-column label="应用" prop="soft_list" align="center" show-overflow-tooltip  width='220px' :formatter="setGroupapp"></el-table-column>
       <el-table-column label="使用时间段"  prop="group_fragment" align="center">
         <template slot-scope="scoped">
-           <div><div v-for="(item,index) in changeTimeTab(scoped.row.group_fragment)"> {{item}}</div></div>
+            <div v-if="scoped.row.timeLimits&&scoped.row.group_fragment&&changeTimeTab(scoped.row.group_fragment).length>0"><div v-for="(item,index) in changeTimeTab(scoped.row.group_fragment)">{{item}}</div></div>
+            <div v-else-if="!scoped.row.timeLimits">00:00-24:00</div>
+            <div v-else>-</div>
         </template>
       </el-table-column>
       <el-table-column label="可用时间" prop="timeLimits" align="center" :formatter="timerFormat"></el-table-column>
@@ -89,6 +93,7 @@
         <template slot-scope="scoped">
              <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
              <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
+             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex"> 已用0分钟 </div>
              <div v-else> - </div>
         </template>
       </el-table-column>
@@ -217,7 +222,10 @@ export default {
        return time_list
     },
     // 根据星期-秒数换算-小时
-    timerFormat(_,__, time){
+    timerFormat(row,__, time){
+      if (!row.timeLimits) {
+        return 0+'分钟'
+      }
       if (!time) {
         return '-'
       }
@@ -268,7 +276,7 @@ export default {
          return false
        }
       }else{
-        return false
+        return true
       }
     },
     // 时间换算
