@@ -283,7 +283,7 @@ export default {
           let end=(this.rule_info.rule_usable_temp.usable_end_time)/1000
           this.nowTime=(new Date().getTime())/1000
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time  
-          let difTime=end-this.nowTime+1.9
+          let difTime=end-this.nowTime+1.4
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
              window.clearInterval(this.timer)
@@ -302,6 +302,8 @@ export default {
     },
     //设备切换
     getDeviceId(e){
+      window.clearInterval(this.timer)
+      this.timer=null
       this.tab_index=-1
       this.device_id=e
       sessionStorage.setItem('device_id',this.device_id)
