@@ -57,10 +57,10 @@
       <el-table-column label="可用时间" prop="timeLimits" align="center" :formatter="timerFormat"> </el-table-column>
       <el-table-column label="已用时间" prop="used_time" align="center">
          <template slot-scope="scoped">
-             <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
-             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
-             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex"> 已用0分钟 </div>
-             <div v-else> - </div>
+             <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex&&device_type!='IOS'">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
+             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex&&device_type!='IOS'">已用0分钟</div>
+             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex&&device_type!='IOS'"> 已用0分钟 </div>
+             <div v-else> --</div>
         </template>
       </el-table-column>
     </el-table>
@@ -91,10 +91,10 @@
       <el-table-column label="可用时间" prop="timeLimits" align="center" :formatter="timerFormat"></el-table-column>
       <el-table-column label="已用时间" prop="used_time" align="center">
         <template slot-scope="scoped">
-             <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
-             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex">已用0分钟</div>
-             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex"> 已用0分钟 </div>
-             <div v-else> - </div>
+             <div v-if="scoped.row.timeLimits&&nowIndex==activeIndex&&device_type!='IOS'">{{'已用'+timerFormatHMS(scoped.row.timeLimits)}}</div>
+             <div v-else-if="scoped.row.timeLimits&&nowIndex!=activeIndex&&device_type!='IOS'">已用0分钟</div>
+             <div v-else-if="!scoped.row.timeLimits&&nowIndex==activeIndex&&device_type!='IOS'"> 已用0分钟 </div>
+             <div v-else> -- </div>
         </template>
       </el-table-column>
     </el-table>
@@ -149,6 +149,7 @@ export default {
       type: String,
       default: "",
     },
+    device_type:'',
     rule_usable_temp:{},
     time:{},
     deviceUseInfo:{},

@@ -146,7 +146,7 @@
                    </div>
                    <div>
                      <controlTime :device_type='device_type' :time='rule_info.rule_time_list' :ruleTimePlanB='rule_info.ruleTimePlanB' :deviceUseInfo='rule_info.deviceUseInfo' v-if="tab_index==0" :type='mode_type'></controlTime>
-                     <controlAppTimelimit :limited_soft_list="rule_info.limited_soft_list" :rule_usable_temp="rule_info.rule_usable_temp" :deviceUseInfo='rule_info.deviceUseInfo' :time="rule_info.rule_time_list" v-if="tab_index==1" :type='mode_type'></controlAppTimelimit>
+                     <controlAppTimelimit :device_type='device_type' :limited_soft_list="rule_info.limited_soft_list" :rule_usable_temp="rule_info.rule_usable_temp" :deviceUseInfo='rule_info.deviceUseInfo' :time="rule_info.rule_time_list" v-if="tab_index==1" :type='mode_type'></controlAppTimelimit>
                      <controlAppList :list="rule_info.forbidden_soft_list" v-if="tab_index==2"></controlAppList>
                      <controlAppList :list="rule_info.free_soft_list" v-if="tab_index==3"></controlAppList>
                      <controlAppList :list="rule_info.default_soft_list" v-if="tab_index==4"></controlAppList>
