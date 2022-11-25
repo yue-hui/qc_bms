@@ -262,6 +262,7 @@ export default {
     },
      // 可用时间和已用时间比较
     gethasTime(time){
+      // 限时分组删除后-无timeLimits字段 
       if (time) {
        let index = new Date().getDay()
        if(index==0){

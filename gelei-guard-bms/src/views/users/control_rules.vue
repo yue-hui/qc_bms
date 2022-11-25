@@ -282,7 +282,7 @@ export default {
           let end=this.rule_info.rule_usable_temp.usable_end_time
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time
           let nowTime=new Date().getTime()
-          let difTime=Math.floor((end-nowTime+2500)/1000)
+          let difTime=Math.floor((end-nowTime)/1000)
           // let difTime=Math.floor((end-begin)/1000)
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
