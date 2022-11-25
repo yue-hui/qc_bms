@@ -200,6 +200,7 @@ export default {
       modeList:modeList,
       timeDifference:'',
       timer:null,
+      nowTime:''
     }
   },
   watch:{
@@ -277,12 +278,13 @@ export default {
         this.rule_info=item.data
         this.mode_type=String(item.data.mode)
         if (this.rule_info.rule_usable_temp&&JSON.stringify(this.rule_info.rule_usable_temp)!=null) {
+          this.nowTime=new Date().getTime()
           this.app_list= this.rule_info.rule_usable_temp.softs
           this.timer=setInterval(()=>{
           let end=this.rule_info.rule_usable_temp.usable_end_time
-          // let begin=this.rule_info.rule_usable_temp.usable_begin_time
-          let nowTime=new Date().getTime()
-          let difTime=Math.floor((end-nowTime)/1000)
+          // let begin=this.rule_info.rule_usable_temp.usable_begin_time  
+          let difTime=(end-this.nowTime+7000)/1000
+          this.nowTime=new Date().getTime()
           // let difTime=Math.floor((end-begin)/1000)
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
