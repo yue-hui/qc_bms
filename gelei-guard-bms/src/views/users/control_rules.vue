@@ -281,9 +281,9 @@ export default {
           this.app_list= this.rule_info.rule_usable_temp.softs
           this.timer=setInterval(()=>{
           let end=(this.rule_info.rule_usable_temp.usable_end_time)/1000
-          this.nowTime=(new Date().getTime())/1000
+          this.nowTime=Math.floor((new Date().getTime())/1000)
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time  
-          let difTime=end-this.nowTime+1.4
+          let difTime=end-this.nowTime
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
              window.clearInterval(this.timer)
