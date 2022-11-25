@@ -278,14 +278,12 @@ export default {
         this.rule_info=item.data
         this.mode_type=String(item.data.mode)
         if (this.rule_info.rule_usable_temp&&JSON.stringify(this.rule_info.rule_usable_temp)!=null) {
-          this.nowTime=new Date().getTime()
           this.app_list= this.rule_info.rule_usable_temp.softs
           this.timer=setInterval(()=>{
-          let end=this.rule_info.rule_usable_temp.usable_end_time
+          let end=(this.rule_info.rule_usable_temp.usable_end_time)/1000
+          this.nowTime=(new Date().getTime())/1000
           // let begin=this.rule_info.rule_usable_temp.usable_begin_time  
-          let difTime=(end-this.nowTime+7000)/1000
-          this.nowTime=new Date().getTime()
-          // let difTime=Math.floor((end-begin)/1000)
+          let difTime=end-this.nowTime
           this.timeDifference=this.setTimeDifference(difTime)
           if(this.timeDifference==0){
              window.clearInterval(this.timer)
