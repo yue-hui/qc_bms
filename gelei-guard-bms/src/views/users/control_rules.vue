@@ -24,6 +24,14 @@
                   </el-form-item>
                 </div>
               </el-col>
+               <el-col :span="8">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="会员过期时间">
+                    <span v-if="member_list.length>0">{{ num }}</span>
+                    <span v-else>已过期</span>
+                  </el-form-item>
+                </div>
+              </el-col>
             </el-row>
             <el-row :gutter="24">
               <el-col :span="8">
@@ -164,6 +172,8 @@
 <script>
 
 import { get_parent_details, deviceRules } from '../../api/interactive'
+import { date_formatter, get_value_from_map_list } from '@/utils/common'
+import { DATE_FORMAT_WITH_POINT, DATE_TIME_FORMAT, ORDERED_MEMBER_STATUS_LABEL } from '../../utils/constant'
 import { mapGetters } from 'vuex'
 import controlTime from './components/control_time'
 import controlAppTimelimit from './components/control_app_timelimit'
@@ -179,7 +189,6 @@ export default {
     controlTime,controlAppTimelimit,controlAppList
   },
   filters: {
-
   },
   data() {
     return {
@@ -200,7 +209,10 @@ export default {
       modeList:modeList,
       timeDifference:'',
       timer:null,
-      nowTime:''
+      member_list:[],
+      nowTime:'',
+      date:"",
+      num:'',
     }
   },
   watch:{
@@ -230,6 +242,19 @@ export default {
       get_parent_details(config).then(res => {
         if (res.status === 0) {
           this.information = res.data
+          this.member_list=res.data.member_list
+          if (this.member_list.length>0) {
+           this.member_list=this.member_list.map(item=>{
+              return item.end_time
+            })
+            this.num=this.member_list.sort().reverse()[0];
+          }
+           this.date=new Date().getTime()
+           if (this.num&&this.num>this.date) {
+             this.num=date_formatter(this.num, DATE_FORMAT_WITH_POINT)
+           }else{
+             this.num='已过期'
+           }
           this.chlid_info=this.information.chlid_list.find(item=>{
             return item.user_id==this.user_id
           })
