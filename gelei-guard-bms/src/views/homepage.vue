@@ -1048,7 +1048,7 @@ export default {
    async fetchOverallData() {
     const date=new Date().getHours()
      const form={
-        date:this.picker_time+' '+date+':00:00'
+        endTime:this.picker_time+' '+date+':00:00'
      }
      await get_homepage_overall_data(form).then(r => {
         if (r.status === 0) {
