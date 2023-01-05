@@ -1050,7 +1050,7 @@ export default {
     const date=new Date().getTime()
      const form={
         end_time:this.picker_time,
-        begin_time:parseDateTime('y-m-d', date)
+        begin_time:'2000-01-01'
      }
      await get_homepage_overall_data(form).then(r => {
         if (r.status === 0) {
