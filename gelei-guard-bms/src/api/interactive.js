@@ -49,10 +49,11 @@ export function get_advertising_point_list() {
 * */
 
 // 获取整体数据
-export function get_homepage_overall_data() {
+export function get_homepage_overall_data(data) {
   return request({
     url: '/greenguard/manager/index/summary',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 

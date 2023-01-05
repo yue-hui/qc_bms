@@ -20,8 +20,21 @@
               </div>
               <span slot="reference" class="title-tips">？</span>
             </el-popover>
+            <div class="time">
+               截止 ： 
+                <el-date-picker
+                   v-model="picker_time"
+                   type="date"
+                   value-format="yyyy-MM-dd"
+                   @change="pickertimeChange"
+                   placeholder="选择日期">
+                </el-date-picker>
+            </div>
+            <div class="title-area-img" :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
           </div>
-          <div class="summary-items-area">
+         <!-- 整体数据 -->
+          <div v-if="picker_time_show" class="active_cardShow">
+           <div class="summary-items-area">
             <div :style="'background-color: ' + theme_color[0]" :class="{ 'summary-items-active': overallDataDetailIndex === 0 }" class="summary-item" @click="parseOverallDataDetail(0)">
               <div class="item-info">
                 <div class="item-value">{{ overallData.payUser.count }}</div>
@@ -60,6 +73,8 @@
               :colors="overallDataChartColor"
               :data="overallDataChartData"/>
           </div>
+          </div>
+         <!-- 整体数据 -->
         </div>
       </div>
       <div class="card-box">
@@ -973,7 +988,10 @@ export default {
         aliPay: '-', // 支付宝
         ctcc: '-', // 电信
         comparison: 0 // 较上一周
-      }
+      },
+      // 整体数据 截止日期
+      picker_time:parseDateTime('y-m-d',new Date().getTime()),
+      picker_time_show:false
     }
   },
   computed: {
@@ -1011,15 +1029,28 @@ export default {
   },
   methods: {
     fetchPageData() {
-      this.fetchOverallData()
+      // this.fetchOverallData()
       this.fetchGrowthData()
+    },
+    pickertimeChange(){
+      this.fetchOverallData()
+    },
+   async setPickerTimeShow(){
+      this.picker_time_show=!this.picker_time_show
+      if (this.picker_time_show) {
+         await this.fetchOverallData()
+      }
     },
     /**
      * @description 获取首页整体数据
      * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=106
      * */
-    fetchOverallData() {
-      get_homepage_overall_data().then(r => {
+   async fetchOverallData() {
+    const date=new Date().getHours()
+     const form={
+        date:this.picker_time+' '+date+':00:00'
+     }
+     await get_homepage_overall_data(form).then(r => {
         if (r.status === 0) {
           /* r.data = [
             {
@@ -2058,6 +2089,24 @@ export default {
       color: #454545;
       font-weight: bold;
     }
+    .title-area-img{
+      margin-left: auto;
+      font-weight: bold;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .active{
+      transform: rotate(90deg);
+    }
+    .time{
+      font-size: 16px;
+      color: #454545;
+      margin-left: 40px;
+      font-weight: bold;
+    }
+  }
+  .active_cardShow{
+    transition: opacity 5s;
   }
 }
 </style>
@@ -2366,9 +2415,9 @@ $radio_fair_color: rgba(0, 0, 0, 0.71);
               }
             }
           }
-          .ratio-with-chart-area{
-            .data-item{}
-          }
+          // .ratio-with-chart-area{
+          //   .data-item{}
+          // }
         }
       }
 
