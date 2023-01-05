@@ -1046,9 +1046,11 @@ export default {
      * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=106
      * */
    async fetchOverallData() {
-    const date=new Date().getHours()
+    const date_Hour=new Date().getHours()
+    const date=new Date().getTime()
      const form={
-        end_time:this.picker_time+' '+date+':00:00'
+        end_time:this.picker_time,
+        begin_time:parseDateTime('y-m-d', date)
      }
      await get_homepage_overall_data(form).then(r => {
         if (r.status === 0) {
