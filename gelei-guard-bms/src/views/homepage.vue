@@ -20,7 +20,7 @@
               </div>
               <span slot="reference" class="title-tips">？</span>
             </el-popover>
-            <div class="time">
+            <div class="time" v-if="picker_time_show">
                截止 ： 
                 <el-date-picker
                    v-model="picker_time"
@@ -30,7 +30,7 @@
                    placeholder="选择日期">
                 </el-date-picker>
             </div>
-            <div class="title-area-img" :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
+            <div class="title-area-img" v-if="!picker_time_show" :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
           </div>
          <!-- 整体数据 -->
           <div v-if="picker_time_show" class="active_cardShow">
@@ -1036,7 +1036,7 @@ export default {
       this.fetchOverallData()
     },
    async setPickerTimeShow(){
-      this.picker_time_show=!this.picker_time_show
+      this.picker_time_show=true
       if (this.picker_time_show) {
          await this.fetchOverallData()
       }
