@@ -33,7 +33,8 @@
             <div class="title-area-img" v-if="!picker_time_show" :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
           </div>
          <!-- 整体数据 -->
-          <div v-if="picker_time_show" class="active_cardShow">
+         <transition name='pickTime'>
+          <div  v-if="picker_time_show">
            <div class="summary-items-area">
             <div :style="'background-color: ' + theme_color[0]" :class="{ 'summary-items-active': overallDataDetailIndex === 0 }" class="summary-item" @click="parseOverallDataDetail(0)">
               <div class="item-info">
@@ -74,6 +75,7 @@
               :data="overallDataChartData"/>
           </div>
           </div>
+          </transition>
          <!-- 整体数据 -->
         </div>
       </div>
@@ -2107,8 +2109,17 @@ export default {
       font-weight: bold;
     }
   }
-  .active_cardShow{
-    transition: opacity 5s;
+  .pickTime-enter-active{
+    transition: opacity 3s;
+  }
+  .pickTime-enter{
+     opacity: 0;
+  }
+  .pickTime-leave-active{
+    transition: opacity 3s;
+  }
+  .pickTime-leave-to{
+    opacity: 0;
   }
 }
 </style>
