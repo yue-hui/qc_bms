@@ -1038,7 +1038,7 @@ export default {
       this.fetchOverallData()
     },
    async setPickerTimeShow(){
-      this.picker_time_show=true
+      this.picker_time_show=!this.picker_time_show
       if (this.picker_time_show) {
          await this.fetchOverallData()
       }
