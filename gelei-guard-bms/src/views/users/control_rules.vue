@@ -133,7 +133,7 @@
         <div slot="header" class="clearfix-header" style="display: flex;justify-content: space-between">
           <span  v-if="mode_type==2&&bind_type==1">守护时间设置</span>
           <span  v-if="mode_type==3&&bind_type==1">应用守护设置</span>
-          <span  v-if="mode_type==4&&bind_type==1">时间应用守护设置</span>
+          <span  v-if="mode_type==4&&bind_type==1||mode_type==7">时间应用守护设置</span>
         </div>
       <div class="card-block-body">
           <el-form ref="form" label-suffix=":" label-width="140px" style="padding:20px 0">
@@ -142,10 +142,10 @@
                  <controlTime :time='rule_info.rule_time_list' :ruleTimePlanB='rule_info.ruleTimePlanB'></controlTime>
               </el-col>
             </el-row>
-            <el-row :gutter="24" v-if="mode_type>2&&mode_type<5&&bind_type==1">
+            <el-row :gutter="24" v-if="mode_type>2&&mode_type<5&&bind_type==1||mode_type==7">
                <el-col :span="24">
                    <div class="head_tab">
-                      <div class="tab" v-if="mode_type==4" :class="tab_index==0?'active':''" @click="changeTab(0)">可用时间</div>
+                      <div class="tab" v-if="mode_type==4||mode_type==7" :class="tab_index==0?'active':''" @click="changeTab(0)">可用时间</div>
                       <div class="tab" v-if="device_type!='PC'" :class="tab_index==1?'active':''" @click="changeTab(1)">限时应用</div>
                       <div class="tab" :class="tab_index==2?'active':''" @click="changeTab(2)">禁止使用</div>
                       <div class="tab" :class="tab_index==3?'active':''" @click="changeTab(3)">始终可用</div>
