@@ -183,6 +183,7 @@ const modeList={
   4:'超强守护',
   3:'重度守护',
   2:'中度守护',
+  7:'极速版守护'
 }
 export default {
   components: {
