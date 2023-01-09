@@ -30,7 +30,7 @@
                    placeholder="选择日期">
                 </el-date-picker>
             </div>
-            <div class="title-area-img" v-if="!picker_time_show" :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
+            <div class="title-area-img"  :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
           </div>
          <!-- 整体数据 -->
          <transition name='pickTime'>
