@@ -621,6 +621,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import { Loading } from 'element-ui';
 import MultiProcess from '@/components/MultiProcess'
 import { get_homepage_growth_data, get_homepage_overall_data } from '../api/interactive'
 import { parseDateTime, getWeekRangeTime, getMonthRangeTime, cloneDeep } from '../utils'
@@ -993,7 +994,8 @@ export default {
       },
       // 整体数据 截止日期
       picker_time:parseDateTime('y-m-d',new Date().getTime()),
-      picker_time_show:false
+      picker_time_show:false,
+      Loading:''
     }
   },
   computed: {
@@ -1040,6 +1042,7 @@ export default {
    async setPickerTimeShow(){
       this.picker_time_show=!this.picker_time_show
       if (this.picker_time_show) {
+        this.Loading= Loading.service();
          await this.fetchOverallData()
       }
     },
@@ -1228,8 +1231,10 @@ export default {
           // 充值金额
           this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
           this.parseOverallDataDetail(this.overallDataDetailIndex)
+           this.Loading.close()
         } else {
           this.$message.error(r.message)
+          this.Loading.close()
         }
       })
     },
