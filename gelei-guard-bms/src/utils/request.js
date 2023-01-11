@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import { Message, MessageBox  } from 'element-ui'
 import store from '../store'
 import sign from './sign'
 import { SILENCE_API_WHITE_LIST } from './api_features'
@@ -14,7 +14,7 @@ const cancelTokenMap = {}
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
-  timeout: 30 * 1000 // 请求超时时间
+  timeout: 45 * 1000 // 请求超时时间
 })
 
 service.interceptors.response.use(

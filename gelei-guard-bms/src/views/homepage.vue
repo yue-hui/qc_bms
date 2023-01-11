@@ -1,7 +1,7 @@
 <template>
   <div class="gelei-content" style="overflow-x: auto">
     <div class="content-body">
-      <div class="card-box" style="margin-bottom: 30px">
+      <div class="card-box" style="margin-bottom: 30px" id="allArea">
         <div class="total-data-area">
           <div class="title-area">
             <span class="title">整体数据</span>
@@ -33,7 +33,7 @@
             <div class="title-area-img"  :class="picker_time_show?'active':''" @click="setPickerTimeShow"><i class="el-icon-arrow-right"></i></div>
           </div>
          <!-- 整体数据 -->
-         <transition name='pickTime'>
+         <transition name='pickTime' >
           <div  v-if="picker_time_show">
            <div class="summary-items-area">
             <div :style="'background-color: ' + theme_color[0]" :class="{ 'summary-items-active': overallDataDetailIndex === 0 }" class="summary-item" @click="parseOverallDataDetail(0)">
@@ -1033,17 +1033,30 @@ export default {
   },
   methods: {
     fetchPageData() {
-      // this.fetchOverallData()
+      this.fetchOverallData()
       this.fetchGrowthData()
     },
     pickertimeChange(){
+        this.Loading= Loading.service({
+        lock: true,//lock的修改符--默认是false
+        text: '数据加载中，请稍后',//显示在加载图标下方的加载文案
+        spinner: 'el-icon-loading',//自定义加载图标类名
+        background: 'rgba(255, 255, 255, 0.7)',//遮罩层颜色
+        target: document.querySelector('#allArea')//loadin覆盖的dom元素节点
+     });
       this.fetchOverallData()
     },
    async setPickerTimeShow(){
       this.picker_time_show=!this.picker_time_show
       if (this.picker_time_show) {
-        this.Loading= Loading.service();
-         await this.fetchOverallData()
+        this.Loading= Loading.service({
+        lock: true,//lock的修改符--默认是false
+        text: '数据加载中，请稍后',//显示在加载图标下方的加载文案
+        spinner: 'el-icon-loading',//自定义加载图标类名
+        background: 'rgba(255, 255, 255, 0.7)',//遮罩层颜色
+        target: document.querySelector('#allArea')//loadin覆盖的dom元素节点
+     });
+         await this.fetchOverallData() 
       }
     },
     /**
@@ -1057,6 +1070,8 @@ export default {
         end_time:this.picker_time,
         begin_time:'2000-01-01'
      }
+      // setTimeout(() => {
+      // }, 300) 
      await get_homepage_overall_data(form).then(r => {
         if (r.status === 0) {
           /* r.data = [
@@ -1231,10 +1246,14 @@ export default {
           // 充值金额
           this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
           this.parseOverallDataDetail(this.overallDataDetailIndex)
-           this.Loading.close()
+           if (this.Loading!='') {
+             this.Loading.close()
+           }
         } else {
+           if (this.Loading!='') {
+             this.Loading.close()
+           }
           this.$message.error(r.message)
-          this.Loading.close()
         }
       })
     },
@@ -2115,13 +2134,13 @@ export default {
     }
   }
   .pickTime-enter-active{
-    transition: opacity 3s;
+    transition: opacity 1.5s;
   }
   .pickTime-enter{
      opacity: 0;
   }
   .pickTime-leave-active{
-    transition: opacity 3s;
+    transition: opacity 1.5s;
   }
   .pickTime-leave-to{
     opacity: 0;
