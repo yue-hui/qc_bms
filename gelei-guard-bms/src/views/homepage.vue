@@ -27,6 +27,7 @@
                    type="date"
                    value-format="yyyy-MM-dd"
                    @change="pickertimeChange"
+                    :picker-options="pickerOptionsTime"
                    placeholder="选择日期">
                 </el-date-picker>
             </div>
@@ -995,7 +996,12 @@ export default {
       // 整体数据 截止日期
       picker_time:parseDateTime('y-m-d',new Date().getTime()),
       picker_time_show:false,
-      Loading:''
+      Loading:'',
+      pickerOptionsTime: {
+         disabledDate(time) {
+              return time.getTime() > Date.now(); 
+          }
+        }
     }
   },
   computed: {
@@ -1039,11 +1045,16 @@ export default {
     pickertimeChange(){
         this.Loading= Loading.service({
         lock: true,//lock的修改符--默认是false
-        text: '数据加载中，请稍后',//显示在加载图标下方的加载文案
+        text: '数据加载中，请稍后查看',//显示在加载图标下方的加载文案
         spinner: 'el-icon-loading',//自定义加载图标类名
         background: 'rgba(255, 255, 255, 0.7)',//遮罩层颜色
         target: document.querySelector('#allArea')//loadin覆盖的dom元素节点
      });
+       setTimeout(()=>{
+         if (this.Loading!='') {
+             this.Loading.close()
+           } 
+       },5000)
       this.fetchOverallData()
     },
    async setPickerTimeShow(){
@@ -1051,12 +1062,17 @@ export default {
       if (this.picker_time_show) {
         this.Loading= Loading.service({
         lock: true,//lock的修改符--默认是false
-        text: '数据加载中，请稍后',//显示在加载图标下方的加载文案
+        text: '数据加载中，请稍后查看',//显示在加载图标下方的加载文案
         spinner: 'el-icon-loading',//自定义加载图标类名
         background: 'rgba(255, 255, 255, 0.7)',//遮罩层颜色
         target: document.querySelector('#allArea')//loadin覆盖的dom元素节点
      });
-         await this.fetchOverallData() 
+       setTimeout(()=>{
+         if (this.Loading!='') {
+             this.Loading.close()
+           } 
+       },5000)
+          this.fetchOverallData() 
       }
     },
     /**
@@ -1246,13 +1262,7 @@ export default {
           // 充值金额
           this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
           this.parseOverallDataDetail(this.overallDataDetailIndex)
-           if (this.Loading!='') {
-             this.Loading.close()
-           }
-        } else {
-           if (this.Loading!='') {
-             this.Loading.close()
-           }
+        } else {    
           this.$message.error(r.message)
         }
       })
