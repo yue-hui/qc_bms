@@ -1265,6 +1265,7 @@ export default {
            this.Loading.close()
           this.$message.success('数据加载成功，请查看...')
         } else {
+           this.Loading.close()
           if (r.status === 999&&r.message.indexOf('系统繁忙')!=-1) {
             this.$message.error('数据加载超时啦，请刷新下，重新加载....')
           }else{
