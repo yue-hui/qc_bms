@@ -1262,8 +1262,14 @@ export default {
           // 充值金额
           this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
           this.parseOverallDataDetail(this.overallDataDetailIndex)
-        } else {    
-          this.$message.error(r.message)
+           this.Loading.close()
+          this.$message.success('数据加载成功，请查看...')
+        } else {
+          if (r.status === 999&&r.message.indexOf('系统繁忙')!=-1) {
+            this.$message.error('数据加载超时啦，请刷新下，重新加载....')
+          }else{
+            this.$message.error(r.message)
+          }    
         }
       })
     },
