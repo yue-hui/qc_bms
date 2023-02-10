@@ -25,6 +25,7 @@
                 <el-date-picker
                    v-model="picker_time"
                    type="date"
+                   :clearable='false'
                    value-format="yyyy-MM-dd"
                    @change="pickertimeChange"
                     :picker-options="pickerOptionsTime"
