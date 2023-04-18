@@ -1134,6 +1134,15 @@ export function get_device_ali_log(data) {
   })
 }
 
+// 查询用户操作记录
+export function get_device_rule_loglist(data) {
+  return request({
+    url: '/greenguard/manager/rulelog/list',
+    method: 'post',
+    data
+  })
+}
+
 // 7天签到接口
 export function get_seven_clock(data) {
   return request({

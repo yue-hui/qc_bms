@@ -94,7 +94,7 @@ export const asyncRoutes = [
     name: 'UserManagement',
     redirect: '/users/information',
     alwaysShow: true,
-    meta: { title: '用户管理', icon: 'information', pid: '20002' },
+    meta: { title: '用户信息管理', icon: 'information', pid: '20002' },
     children: [
       {
         path: 'information',
@@ -140,12 +140,34 @@ export const asyncRoutes = [
         component: () => import('@/views/users/devices_record'),
         meta: { title: '设备使用记录', icon: 'devices_record', pid: '20094' }
       },
-      {
+      // {
+      //   path: 'logs',
+      //   name: 'Logs',
+      //   component: () => import('@/views/users/logs'),
+      //   meta: { title: '用户日志查询', icon: 'logs', pid: '20112' }
+      // }
+    ]
+  },
+  {
+    path: '/operation',
+    component: Layout,
+    name: 'UserDataOperation',
+    redirect: '/operation/logs',
+    alwaysShow: true,
+    meta: { title: '用户操作查询', icon: 'form', pid: '20095' },
+    children: [
+       {
         path: 'logs',
         name: 'Logs',
         component: () => import('@/views/users/logs'),
-        meta: { title: '用户日志查询', icon: 'logs', pid: '20112' }
-      }
+        meta: { title: '设备状态', icon: 'logs', pid: '20112' }
+      },
+      {
+        path: 'records',
+        name: 'records',
+        component: () => import('@/views/users/records'),
+        meta: { title: '操作记录', icon: 'analysis_kids', pid: '20014' }
+      },
     ]
   },
   {

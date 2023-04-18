@@ -833,23 +833,23 @@ export default {
         list: [
           {
             label: '付费用户数',
-            content: '累计在青葱守护7付费买过会员的用户，包括iOS高级会员、安卓高级会员、iOS普通会员、安卓普通会员和电信会员'
+            content: '累计付费买过会员的用户，包括iOS高级会员、安卓高级会员、iOS普通会员、安卓普通会员、电信会员、pc家长端高级会员、小程序家长端高级会员'
           },
           {
             label: '订单成交量',
-            content: '累计在青葱守护7付费成功的订单总量，包括iOS高级会员、iOS普通会员、安卓高级会员、安卓普通会员和电信会员'
+            content: '累计付费成功的订单总量，包括iOS高级会员、iOS普通会员、安卓高级会员、安卓普通会员、电信会员、pc家长端高级会员、小程序家长端高级会员'
           },
           {
             label: '注册用户总数',
-            content: '累计在青葱守护7注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
+            content: '累计注册成功的用户总量，第三方平台家长注册用户指通过分销、邀请好友注册成功但没登录APP，无法获取平台信息的用户'
           },
           {
             label: '累计绑定设备',
-            content: '累计在青葱守护7成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、iOS设备和PC设备'
+            content: '累计成功绑定的孩子设备总量，包括公版、华为企业模式、小米企业模式、定制机、iOS设备、PC设备、手机、平板、监督模式'
           },
           {
             label: '充值金额',
-            content: '在青葱守护7所有付费成功订单的总金额，包括iOS高级会员收入、iOS普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入'
+            content: '所有付费成功订单的总金额，包括iOS高级会员收入、iOS普通会员收入、安卓高级会员收入、安卓普通会员收入、电信会员收入、pc家长端高级会员收入、小程序家长端高级会员收入'
           }
         ],
         list2: [
@@ -1071,6 +1071,7 @@ export default {
        setTimeout(()=>{
          if (this.Loading!='') {
              this.Loading.close()
+             this.Loading=''
            } 
        },5000)
           this.fetchOverallData() 
@@ -1081,8 +1082,6 @@ export default {
      * @doc http://showdoc.dev.zhixike.net/web/#/1?page_id=106
      * */
    async fetchOverallData() {
-    const date_Hour=new Date().getHours()
-    const date=new Date().getTime()
      const form={
         end_time:this.picker_time,
         begin_time:'2000-01-01'
@@ -1263,10 +1262,16 @@ export default {
           // 充值金额
           this.overallData.amount.count = this.transformRMB(data.find(item => item.category === '05').list.find(item => item.type === '00').number)
           this.parseOverallDataDetail(this.overallDataDetailIndex)
-           this.Loading.close()
+           if (this.Loading!='') {
+             this.Loading.close()
+             this.Loading=''
+           } 
           this.$message.success('数据加载成功，请查看...')
         } else {
-           this.Loading.close()
+           if (this.Loading!='') {
+             this.Loading.close()
+             this.Loading=''
+           } 
           if (r.status === 999&&r.message.indexOf('系统繁忙')!=-1) {
             this.$message.error('数据加载超时啦，请刷新下，重新加载....')
           }else{
@@ -2018,7 +2023,9 @@ export default {
             { name: 'iOS普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '02').number },
             { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
             { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
-            { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
+            { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number },
+            { name: 'pc高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number },
+            { name: '小程序高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
           ]
         }
         this.overallDataChartColor = ['#3ec0c6']
@@ -2031,7 +2038,9 @@ export default {
             { name: 'iOS普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '02').number },
             { name: '安卓高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '03').number },
             { name: '安卓普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '04').number },
-            { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number }
+            { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
+            { name: 'pc高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
+            { name: '小程序高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
           ]
         }
         this.overallDataChartColor = ['#fbb444']
@@ -2057,6 +2066,8 @@ export default {
             { name: 'iOS家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
             { name: '安卓家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
             { name: '电信家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            { name: 'PC家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            { name: '小程序家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
             { name: '第三方平台家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
             { name: 'iOS孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
             { name: '安卓孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number },
@@ -2073,6 +2084,8 @@ export default {
             { name: 'iOS普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
             { name: '安卓高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
             { name: '安卓普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: 'pc高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: '小程序高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
             { name: '电信会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
         }
