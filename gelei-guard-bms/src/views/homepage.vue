@@ -634,7 +634,7 @@ const theme_color = ['#3EC0C6', '#FBB444', '#8596F1', '#D87FE2',
   '#c9ab00', '#7eb00a', '#6f5553', '#c14089']
 
 const echart_colors = [
-  '#338DE8', '#ED6060', '#EFAE3E', '#3CE5D5', '#92CC52'
+  '#338DE8', '#ED6060', '#EFAE3E', '#3CE5D5', '#92CC52','#c14089'
 ]
 const JsBigDecimal = require('js-big-decimal')
 
@@ -1510,7 +1510,8 @@ export default {
         '02': 'iOS',
         '04': '企业模式',
         '05': '定制机',
-        '01': 'PC'
+        '01': 'PC',
+        'mode4Cnt':'监督模式'
       }
       this.newBindDevice.chartData.rows = Object.keys(newBindDeviceType).map(key => {
         const value = data.bind_device_type.find(item => item.name === key)
