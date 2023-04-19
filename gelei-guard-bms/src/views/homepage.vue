@@ -2084,8 +2084,8 @@ export default {
             { name: 'iOS普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
             { name: '安卓高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
             { name: '安卓普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
-            { name: 'pc高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
-            { name: '小程序高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
+            { name: 'pc高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '07').number) },
+            { name: '小程序高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '06').number) },
             { name: '电信会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
         }
