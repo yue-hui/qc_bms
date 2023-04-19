@@ -2024,8 +2024,8 @@ export default {
             { name: '安卓高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '03').number },
             { name: '安卓普通付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '04').number },
             { name: '电信付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number },
-            { name: 'pc高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number },
-            { name: '小程序高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
+            // { name: 'pc高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number },
+            // { name: '小程序高级付费会员数', 总数: this.overallOriginData.find(item => item.category === '01').list.find(item => item.type === '05').number }
           ]
         }
         this.overallDataChartColor = ['#3ec0c6']
@@ -2039,8 +2039,8 @@ export default {
             { name: '安卓高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '03').number },
             { name: '安卓普通会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '04').number },
             { name: '电信会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
-            { name: 'pc高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
-            { name: '小程序高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
+            // { name: 'pc高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
+            // { name: '小程序高级会员', 总数: this.overallOriginData.find(item => item.category === '02').list.find(item => item.type === '05').number },
           ]
         }
         this.overallDataChartColor = ['#fbb444']
@@ -2054,7 +2054,9 @@ export default {
             { name: '小米企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '03').number },
             { name: '定制机', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '04').number },
             { name: 'iOS设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '05').number },
-            { name: 'PC设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number }
+            { name: 'PC设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number },
+            { name: '荣耀企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '07').number },
+            { name: '监督模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '08').number }
           ]
         }
         this.overallDataChartColor = ['#8596f1']
@@ -2066,8 +2068,8 @@ export default {
             { name: 'iOS家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '01').number },
             { name: '安卓家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '02').number },
             { name: '电信家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
-            { name: 'PC家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
-            { name: '小程序家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            // { name: 'PC家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
+            // { name: '小程序家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '03').number },
             { name: '第三方平台家长注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '04').number },
             { name: 'iOS孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '05').number },
             { name: '安卓孩子注册用户', 总数: this.overallOriginData.find(item => item.category === '04').list.find(item => item.type === '06').number },
