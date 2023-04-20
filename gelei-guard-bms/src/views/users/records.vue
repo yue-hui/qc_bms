@@ -13,7 +13,9 @@
                     size="mini"
                     placeholder="请输入设备ID"
                     clearable
-                    @change="query_condition_change" />
+                    @blur="query_condition_change"
+                    @keyup.enter.native="query_condition_change"
+                   />
                 </el-col>
               </el-row>
             </div>
