@@ -9,12 +9,12 @@
                 <el-col :span="7" class="order-number-list">设备ID:</el-col>
                 <el-col :span="16">
                   <el-input
-                    v-model="query_sets.child_device_id"
+                    v-model.trim="query_sets.child_device_id"
                     size="mini"
                     placeholder="请输入设备ID"
                     clearable
-                    @blur="query_condition_change"
-                    @keyup.enter.native="query_condition_change"
+                    @blur="query_id_change"
+                    @keyup.enter.native="query_id_change"
                    />
                 </el-col>
               </el-row>
@@ -91,12 +91,13 @@ export default {
   components: {},
   data() {
     const endTime = new Date()
-    const startTime = new Date().setTime( new Date().getTime() - 7 *24* 60 * 60 * 1000)
-    // let time=new Date()
-    // time.setTime(1681281698633)
+    // const startTime = new Date().setTime( )
+    let startTime=new Date()
+    startTime.setTime(new Date().getTime() - 7 *24* 60 * 60 * 1000)
     // console.log(time)
     return {
       loading: false,
+      datetimeChange:false,
       query_sets: {
         child_device_id: '',
         datetime_range: [startTime, endTime],
@@ -112,8 +113,7 @@ export default {
             onClick(picker) {
             const end = new Date()
             let start = new Date()
-            start.setTime(start.getTime() - 60 * 60 * 1000).getTime()
-            start=start.getTime()
+            start.setTime(start.getTime() - 60 * 60 * 1000)
             picker.$emit('pick', [start, end])
             }
           }, {
@@ -121,8 +121,7 @@ export default {
             onClick(picker) {
               const end = new Date();
               let start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24).getTime();
-              start=start.getTime()
+              start.setTime(start.getTime() - 3600 * 1000 * 24);
               picker.$emit('pick', [start, end]);
             }
           }, {
@@ -131,7 +130,6 @@ export default {
               const end = new Date();
               let start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
-              start=start.getTime()
               picker.$emit('pick', [start, end]);
             }
          }],
@@ -147,6 +145,7 @@ export default {
   },
   methods: {
     query_condition_change: function() {
+        this.datetimeChange=true
         if (this.query_sets.datetime_range[1].getTime()-this.query_sets.datetime_range[0]>7*24*3600*1000) {
         this.$message.error('请选择七天内的时间查询');
         return 
@@ -155,7 +154,14 @@ export default {
       this.page = 1
       this.get_list()
     },
-
+    //id变化
+    query_id_change:function(){
+      if (!this.datetimeChange) {
+        this.query_sets.datetime_range[1]= new Date()
+      }
+      this.page = 1
+      this.get_list()
+    },
     table_size_change: function(size) {
       this.page_size = size
       this.page = 1
@@ -175,7 +181,7 @@ export default {
       data.begin_time = (() => {
         if (Array.isArray(this.query_sets.datetime_range) &&
           this.query_sets.datetime_range.length === 2) {
-          return String(this.query_sets.datetime_range[0])
+          return String(this.query_sets.datetime_range[0].getTime())
         }
         return ''
       })()
