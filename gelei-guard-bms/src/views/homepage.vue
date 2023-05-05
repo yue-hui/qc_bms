@@ -2060,6 +2060,7 @@ export default {
             { name: '监督模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '08').number }
           ]
         }
+        
         this.overallDataChartColor = ['#8596f1']
       }
       if (overallDataDetailIndex === 3) {
