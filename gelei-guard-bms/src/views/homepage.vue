@@ -2056,11 +2056,10 @@ export default {
             { name: '定制机', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '04').number },
             { name: 'iOS设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '05').number },
             { name: 'PC设备', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '06').number },
-            { name: '荣耀企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '07').number },
-            { name: '监督模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '08').number }
+            { name: '荣耀企业模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '07').number?this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '07').number:0 },
+            { name: '监督模式', 总数: this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '08').number?this.overallOriginData.find(item => item.category === '03').list.find(item => item.type === '08').number:0 }
           ]
         }
-        
         this.overallDataChartColor = ['#8596f1']
       }
       if (overallDataDetailIndex === 3) {
@@ -2088,8 +2087,8 @@ export default {
             { name: 'iOS普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '02').number) },
             { name: '安卓高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '03').number) },
             { name: '安卓普通会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '04').number) },
-            { name: 'pc高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '07').number) },
-            { name: '小程序高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '06').number) },
+            { name: 'pc高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '07').number)?this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '07'):0 },
+            { name: '小程序高级会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '06').number)?this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '06'):0 },
             { name: '电信会员充值到账金额', 总数: this.transformRMB(this.overallOriginData.find(item => item.category === '05').list.find(item => item.type === '05').number) }
           ]
         }
