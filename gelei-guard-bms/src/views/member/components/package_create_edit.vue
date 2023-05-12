@@ -44,6 +44,12 @@
                 <el-radio v-for="(item, index) in member_package_objects" :key="index" :label="item.value">{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="华为SN套餐" prop="is_sn">
+              <el-radio-group v-model="public_form.is_sn" size="mini">
+                <el-radio label="0">否</el-radio>
+                <el-radio label="1">是</el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="会员订阅方式" prop="renew_type">
               <el-radio-group v-model="public_form.renew_type" size="mini">
                 <el-radio v-for="(item, index) in renew_type_list" :disabled="action === 2" :key="index" :label="item.value">{{ item.label }}</el-radio>
@@ -265,6 +271,7 @@ export default {
       patriarch_member_types,
       public_form: {
         is_member: '1',
+        is_sn:'0',
         valid_days: '',
         original_price: '',
         discount_price: 0,
@@ -304,6 +311,9 @@ export default {
       public_rules: {
         is_member: [
           { required: true, message: '套餐对象为必选项', trigger: 'blur' }
+        ],
+         is_sn: [
+          { required: true, message: '是否为SN套餐为必选项', trigger: 'blur' }
         ],
         renew_type: [
           { required: true, message: '会员订阅方式为必选项', trigger: 'blur' }
@@ -426,6 +436,7 @@ export default {
       }
       this.public_form = {
         is_member: '1',
+        is_sn:'0',
         valid_days: '',
         original_price: '',
         discount_price: 0,
@@ -461,6 +472,7 @@ export default {
       }
       this.public_form = {
         is_member: current.is_member,
+        is_sn: current.is_sn,
         valid_days: current.valid_days,
         original_price: current.original_price,
         discount_price: current.discount_price,
@@ -568,6 +580,7 @@ export default {
       //  按月购买
       if (this.public_form.renew_type === 1) {
         options['is_member'] = this.public_form.is_member
+        options['is_sn'] = this.public_form.is_sn
         options['valid_days'] = this.public_form.valid_days
         options['original_price'] = this.public_form.original_price
         options['discount_price'] = this.public_form.discount_price

@@ -119,7 +119,27 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="20" class="col-bg layout-right">
+           <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">华为SN套餐:</el-col>
+                <el-col :span="16">
+                  <el-select v-model="query_sets.is_sn" size="mini" clearable placeholder="全部" @change="query_condition_change">
+                    <el-option
+                      label="全部"
+                      value=" " />
+                       <el-option
+                      label="是"
+                      value="1" />
+                      <el-option
+                      label="否"
+                      value="0" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="8" :md="12" :lg="14" :xl="16" class="col-bg layout-right">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -274,7 +294,8 @@ export default {
         is_member: '',
         device_type: '',
         is_listing: '1',
-        renew_type: ''
+        renew_type: '',
+        is_sn:''
       },
       device_type_items: MEMBER_DEVICE_LIST_RANGE,
       packages: PACKAGE_TYPE,

@@ -1609,3 +1609,39 @@ export function clearAppLock(data) {
     data
   })
 }
+
+/**
+ * @description SN订单列表
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000841
+ * */
+ export function getSnorderList(data) {
+  return request({
+    url: '/greenguard/common/order/sn/list',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 新增SN订单
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000841
+ * */
+ export function addSnorderApi(data) {
+  return request({
+    url: '/greenguard/common/order/sn/add',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 编辑SN订单
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000841
+ * */
+ export function editSnorderApi(data) {
+  return request({
+    url: '/greenguard/common/order/sn/edit',
+    method: 'post',
+    data
+  })
+}
