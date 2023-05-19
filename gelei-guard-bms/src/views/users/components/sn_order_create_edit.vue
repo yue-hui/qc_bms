@@ -23,7 +23,7 @@
                 <el-radio label="0">赠送</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="订单号" prop="orderNo">
+            <el-form-item label="订单号" prop='orderNo' :rules="form.payType=='0'?rules.target:[{required:false}]">
               <el-input v-model="form.orderNo" :disabled="action==2||form.userId!=''" class="input-disable-with-selected" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="购买时间" prop="payTime">
@@ -93,6 +93,9 @@ export default {
         parentName: [
           { required: true, message: '家长姓名为必选项', trigger: 'blur' }
         ],
+        orderNo:[
+          { required: true, message: '赠送类型订单号为必选项', trigger: 'blur' }
+        ],
         phone: [
           { required: true, message: '家长手机号为必选项', trigger: 'blur' },
           {
@@ -161,12 +164,6 @@ export default {
           this.form.sn = e.replace(/[\u4E00-\u9FA5]/g,"");
        }))
     },
-    change_device_type(e) {
-      this.public_form.device_type = e
-    },
-    change_un_pub_device_type(e) {
-      this.un_public_form.device_type = e
-    },
     clear_data() {
       this.form = {
         sn:'',
@@ -218,6 +215,7 @@ export default {
       // 创建
       this.is_busy = true
       const options = this.get_options()
+      options.remark="bms"
       addSnorderApi(options).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
@@ -233,10 +231,6 @@ export default {
       // 保存
       this.is_busy = true
       const options = this.get_options()
-      options['plan_id'] = this.form.plan_id
-      if (this.form.plan_type === '02') {
-        delete options.device_type
-      }
       editSnorderApi(options).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
