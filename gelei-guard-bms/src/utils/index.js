@@ -266,3 +266,18 @@ export function isJsonString(str) {
     return false
   }
 }
+
+/**
+ * @description 判断是否是空对象
+ * @param obj {Object}
+ * */
+ export function isEmptyObject(obj) {
+  if (getValueType(obj) !== 'object') {
+    return false
+  }
+  try {
+    return JSON.stringify(obj) === '{}' && Object.keys(obj).length === 0
+  } catch (e) {
+    return false
+  }
+}

@@ -127,7 +127,7 @@
                   <el-select v-model="query_sets.is_sn" size="mini" clearable placeholder="全部" @change="query_condition_change">
                     <el-option
                       label="全部"
-                      value=" " />
+                      value="" />
                        <el-option
                       label="是"
                       value="1" />

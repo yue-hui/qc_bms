@@ -1645,3 +1645,27 @@ export function clearAppLock(data) {
     data
   })
 }
+
+/**
+ * @description 查询SN订单是否存在未填
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000841
+ * */
+ export function checkSnVipApi(data) {
+  return request({
+    url: '/greenguard/common/order/sn/checkSnVip',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 审核SN订单
+ * @doc https://www.tapd.cn/43727804/markdown_wikis/show/#1143727804001000841
+ * */
+ export function approvedSnOrder(data) {
+  return request({
+    url: '/greenguard/common/order/sn/approved',
+    method: 'post',
+    data
+  })
+}

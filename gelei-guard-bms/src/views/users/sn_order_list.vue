@@ -18,6 +18,21 @@
               </el-row>
             </div>
           </el-col>
+            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
+            <div class="grid-content bg-purple-light">
+              <el-row>
+                <el-col :span="8" class="order-number-list">家长姓名:</el-col>
+                <el-col :span="16">
+                  <el-input
+                    v-model="query_sets.parentName"
+                    size="mini"
+                    placeholder="家长姓名"
+                    clearable
+                    @change="query_condition_change" />
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
           <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="4" class="col-bg">
             <div class="grid-content bg-purple-light">
               <el-row>
@@ -138,7 +153,7 @@
               </el-row>
             </div>
           </el-col>
-          <el-col :xs="1" :sm="12" :md="3" :lg="14" :xl="16" class="col-bg layout-right col-right-button">
+          <el-col :xs="1" :sm="12" :md="3" :lg="14" :xl="12" class="col-bg layout-right col-right-button">
             <div class="grid-content bg-purple-light">
               <el-row>
                 <gl-button
@@ -187,6 +202,14 @@
               <span :style="{'color': get_order_status_style(scope.row.payType)}">{{ scope.row.payType==1?'购买':'赠送' }}</span>
             </template>
           </el-table-column>
+            <el-table-column
+            align="center"
+            label="支付状态"
+            prop="status">
+            <template slot-scope="scope">
+              <span :style="{'color': get_snorder_status_style(scope.row.status)}">{{ scope.row.status==99?'成功':'未支付' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="购买时间"
@@ -215,6 +238,10 @@
               <span :style="{'color': get_order_status_style(scope.row.activeState)}">{{ scope.row.activeState==1?'已激活':'未激活' }}</span>
             </template>
           </el-table-column>
+           <el-table-column
+            align="center"
+            label="激活时间"
+            prop="activeTime" />
           <el-table-column
             align="center"
             label="绑定时间"
@@ -227,7 +254,7 @@
               <span :style="{'color': get_order_status_style(scope.row.bindState)}">{{ scope.row.bindState==1?'已绑定':'未绑定' }}</span>
             </template>
           </el-table-column>
-            <el-table-column
+          <el-table-column
             align="center"
             label="SN状态"
             prop="snState">
@@ -235,7 +262,7 @@
               <span :style="{'color': get_order_status_style(scope.row.snState)}">{{ scope.row.snState==1?'有效':'无效' }}</span>
             </template>
           </el-table-column>
-               <el-table-column
+          <el-table-column
             align="center"
             label="操作"
             width="174"
@@ -244,9 +271,10 @@
                <gl-button
                 pid="20010"
                 size="small"
-                :disabled="scope.row.auditState==1"
+                :disabled="scope.row.auditState==1||scope.row.status!=99"
                 style="text-decoration: underline;"
                 type="text"
+                @click="audit_sn_order(scope.row)"
                >通过
               </gl-button>
               <gl-button
@@ -254,6 +282,7 @@
                 size="small"
                 style="text-decoration: underline;"
                 type="text"
+                :disabled="scope.row.auditState==1"
                 @click="edit_sn_order(scope.row)"
                 >编辑
               </gl-button>
@@ -282,7 +311,7 @@ import {
   TABLE_PAGE_SIEZS_LIST
 } from '@/utils/constant'
 // import dayjs from 'dayjs'
-import { getSnorderList } from '@/api/interactive'
+import { getSnorderList,approvedSnOrder } from '@/api/interactive'
 import { date_formatter, formatter_transaction_amount, get_value_from_map_list } from '@/utils/common'
 import { fetch_all_order_filter_list } from '@/api/merge'
 import { getPagenationSize, setPagenationSize } from '@/utils/auth'
@@ -338,6 +367,13 @@ export default {
       if (status_name === '1') {
         return '#55ff5b'
       } else if (status_name === '0') {
+        return '#ff0000'
+      }
+    },
+     get_snorder_status_style(status_name) {
+      if (status_name === '99') {
+        return '#55ff5b'
+      } else if (status_name === '01') {
         return '#ff0000'
       }
     },
@@ -405,11 +441,6 @@ export default {
     fetch_order_list() {
       /* 获取订单列表 */
       const data = this.get_condition_with_pagination()
-      const member_type = data.member_type
-      if (member_type === '04') {
-        data['member_type'] = '03'
-        data['pay_type'] = '06'
-      }
       this.loading = true
       getSnorderList(data).then(res => {
         if (res.status === 0) {
@@ -424,6 +455,27 @@ export default {
         this.loading = false
       })
     },
+   /* 审核SN订单 */
+   audit_sn_order(row){
+       this.$confirm('确认审核通过该SN吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        approvedSnOrder({
+          orderId: row.orderId
+        })
+          .then(res => {
+            if (res.status !== 0) throw res
+              this.$message.success('操作成功')
+              this.init()
+          })
+          .catch(e => {
+            this.$message.error(e.message)
+          })
+      }).catch(() => {
+      })
+   },
    edit_sn_order(row){
       this.action = 2
       this.current = row

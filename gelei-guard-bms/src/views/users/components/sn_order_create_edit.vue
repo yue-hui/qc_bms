@@ -12,19 +12,19 @@
               <el-input v-model="form.sn" @input="getSn" class="input-disable-with-selected" maxlength='20' style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="家长姓名" prop="parentName">
-              <el-input v-model="form.parentName" class="input-disable-with-selected" :disabled="action==2" style="width:400px" size="mini" />
+              <el-input v-model="form.parentName" class="input-disable-with-selected"  :disabled="action==2||form.userId!=''" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="家长手机号" prop="phone">
-              <el-input v-model="form.phone" class="input-disable-with-selected" :disabled="action==2" style="width:400px" size="mini" />
+              <el-input v-model="form.phone" class="input-disable-with-selected"  :disabled="action==2" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="付费类型" prop="payType">
-              <el-radio-group v-model="form.payType"  size="mini" :disabled="action==2">
+              <el-radio-group v-model="form.payType"  size="mini" :disabled="action==2||form.userId!=''">
                 <el-radio label="1">购买</el-radio>
                 <el-radio label="0">赠送</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="订单号" prop="orderNo">
-              <el-input v-model="form.orderNo" :disabled="action==2" class="input-disable-with-selected" style="width:400px" size="mini" />
+              <el-input v-model="form.orderNo" :disabled="action==2||form.userId!=''" class="input-disable-with-selected" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="购买时间" prop="payTime">
                <el-date-picker v-model="form.payTime" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import { addSnorderApi,editSnorderApi } from '@/api/interactive'
+import { addSnorderApi,editSnorderApi,checkSnVipApi } from '@/api/interactive'
 import { MEMBER_DEVICE_LIST_RANGE } from '@/views/toolbox/data/promotion'
 import { MEMBER_PACKAGE_OBJECTS, PATRIARCH_MEMBER_TYPES } from '../../../utils/constant'
-import { cloneDeep } from '../../../utils'
+import { cloneDeep,isEmptyObject } from '../../../utils'
 
 export default {
   name: 'PackageCreateEdit',
@@ -79,6 +79,8 @@ export default {
         parentName:'',
         phone:'',
         payType:'1',
+        orderNo:'',
+        userId:''
       },
       renew_type_list: [
         { label: '非自动续费订阅', value: 1 },
@@ -87,15 +89,6 @@ export default {
       rules: {
         sn: [
           { required: true, message: 'sn/序列号为必选项', trigger: 'blur' },
-          {
-            validator: (rule, value, callback) => {
-              if (!/^1[0-9]{10}$/.test(value)) {
-                // 账号不正确
-                return callback(new Error('请输入正确的联系方式'))
-              }
-              callback()
-            }, trigger: 'blur'
-          },
         ],
         parentName: [
           { required: true, message: '家长姓名为必选项', trigger: 'blur' }
@@ -109,6 +102,10 @@ export default {
                 return callback(new Error('请输入正确的联系方式'))
               }
               callback()
+                
+             if (value&&value.length==11) {
+                this.checkSnVip(value)
+             }
             }, trigger: 'blur'
           },
         ],
@@ -166,7 +163,8 @@ export default {
         parentName:'',
         phone:'',
         payType:'1',
-        
+        orderNo:'',
+        userId:''
       }
     },
     init_props_data() {
@@ -245,6 +243,26 @@ export default {
         }
       }).finally(() => {
         this.is_busy = false
+      })
+    },
+
+    checkSnVip(phone){
+      checkSnVipApi({phone}).then(res => {
+        if (res.status === 0) {
+          if (res.data) {
+            this.form.parentName=res.data.parentName
+            this.form.orderNo=res.data.orderNo
+            this.form.userId=res.data.userId
+            this.form.payType="0"
+          }else{
+            this.form.orderNo=''
+            this.form.parentName=''
+            this.form.userId=''
+          }
+        } else {
+          this.$message.error(res.message)
+        }
+      }).finally(() => {
       })
     }
   }
