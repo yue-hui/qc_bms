@@ -27,10 +27,10 @@
               <el-input v-model="form.orderNo" :disabled="action==2||form.userId!=''" class="input-disable-with-selected" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="购买时间" prop="payTime">
-               <el-date-picker v-model="form.payTime" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
+               <el-date-picker v-model="form.payTime"  value-format="yyyy-MM-dd HH:mm" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
             </el-form-item>
             <el-form-item label="有效期截止" prop="payEndTime">
-               <el-date-picker v-model="form.payEndTime" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
+               <el-date-picker v-model="form.payEndTime"  value-format="yyyy-MM-dd HH:mm" disabled  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
             </el-form-item>
           </el-form>
            <el-form label-width="60px" label-suffix=":">
@@ -141,6 +141,16 @@ export default {
       },
       immediate: true
     },
+    "form.payTime":{
+      handler: function(val) {
+         if (val) {
+            const yy=new Date(val).getFullYear()+3
+            const endYear=val.replace(val.substring(0,4),yy)
+            this.form.payEndTime=endYear
+         }
+      },
+      deep:true
+    },
   },
   mounted: function() {
     this.visiable_height = document.documentElement.clientHeight + 'px'
@@ -208,13 +218,6 @@ export default {
       // 创建
       this.is_busy = true
       const options = this.get_options()
-      if (isNaN(options.discount_start_time)) {
-        options.discount_start_time = 0
-      }
-      if (isNaN(options.discount_end_time)) {
-        options.discount_end_time = 0
-      }
-      // return console.log(options)
       addSnorderApi(options).then(res => {
         if (res.status === 0) {
           this.$message.success(res.message)
