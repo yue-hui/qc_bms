@@ -254,11 +254,12 @@ export default {
             this.form.orderNo=res.data.orderNo
             this.form.userId=res.data.userId
             this.form.payType="0"
-          }else{
-            this.form.orderNo=''
-            this.form.parentName=''
-            this.form.userId=''
           }
+          // else{
+          //   this.form.orderNo=''
+          //   this.form.parentName=''
+          //   this.form.userId=''
+          // }
         } else {
           this.$message.error(res.message)
         }
