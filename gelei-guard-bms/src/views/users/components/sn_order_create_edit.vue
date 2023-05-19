@@ -15,7 +15,7 @@
               <el-input v-model="form.parentName" class="input-disable-with-selected"  :disabled="action==2||form.userId!=''" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="家长手机号" prop="phone">
-              <el-input v-model="form.phone" class="input-disable-with-selected"  :disabled="action==2" style="width:400px" size="mini" />
+              <el-input v-model="form.phone" maxlength='11' class="input-disable-with-selected"  :disabled="action==2" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="付费类型" prop="payType">
               <el-radio-group v-model="form.payType"  size="mini" :disabled="action==2||form.userId!=''">
@@ -27,10 +27,10 @@
               <el-input v-model="form.orderNo" :disabled="action==2||form.userId!=''" class="input-disable-with-selected" style="width:400px" size="mini" />
             </el-form-item>
             <el-form-item label="购买时间" prop="payTime">
-               <el-date-picker v-model="form.payTime"  value-format="yyyy-MM-dd HH:mm" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
+               <el-date-picker v-model="form.payTime"  value-format="yyyy-MM-dd HH:mm:ss" :disabled="action==2"  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
             </el-form-item>
             <el-form-item label="有效期截止" prop="payEndTime">
-               <el-date-picker v-model="form.payEndTime"  value-format="yyyy-MM-dd HH:mm" disabled  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
+               <el-date-picker v-model="form.payEndTime"  value-format="yyyy-MM-dd HH:mm:ss" disabled  type="date"  class="input-disable-with-selected" style="width:400px;height:28px" placeholder="选择日期"> </el-date-picker>
             </el-form-item>
           </el-form>
            <el-form label-width="60px" label-suffix=":">
