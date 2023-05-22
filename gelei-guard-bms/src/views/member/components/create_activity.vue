@@ -40,8 +40,8 @@
             <el-form-item label="套餐原价">
               <span class="label-text">0元</span>
             </el-form-item>
-            <el-form-item label="活动可参与次数">
-              <span class="label-text">1次</span>
+            <el-form-item label="活动可参与次数" prop='number'>
+              <el-input v-model.number="form.number" size="mini" type="number" placeholder="请输入活动可参与次数"  />
             </el-form-item>
             <el-form-item label="用户名单" prop="phones">
               <el-input v-model="form.phones" size="mini" type="textarea" />
@@ -113,13 +113,17 @@ export default {
         member_type_label: '',
         phones: '',
         notify_msg: '',
-        is_notify: ''
+        is_notify: '',
+        number:1
       },
       rules: {
         activity_name: [
           { required: true, message: '请填写活动名称', trigger: 'blur' },
           { max: 20, message: '活动名称长度不超过20字', trigger: 'blur' }
         ],
+          number: [,
+          { required: true, message: '请填写活动可购买次数', trigger: 'blur' }
+          ],
         activity_type: [
           { required: true, message: '活动类型不能为空', trigger: 'blur' }
         ],
@@ -193,6 +197,7 @@ export default {
         activity_name: this.form.activity_name,
         activity_type: this.form.activity_type,
         phones: this.form.phones,
+        number:this.form.number,
         plan_id: this.form.plan_id,
         notify_msg: this.form.notify_msg || '',
         is_notify: this.form.is_notify
