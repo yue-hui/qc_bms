@@ -7,7 +7,7 @@
           <div class="close-icon" @click="cancel"><i class="el-message-box__close el-icon-close" /></div>
         </div>
         <div class="body-area">
-          <el-form ref="form" :rules="rules" :model="form" label-width="120px" label-suffix=":">
+          <el-form ref="form" :rules="rules" :model="form" label-width="130px" label-suffix=":">
             <el-form-item label="活动名称" prop="activity_name">
               <el-input v-model="form.activity_name" size="mini" />
             </el-form-item>

@@ -65,6 +65,15 @@
               </el-col>
             </el-row>
           </el-col>
+             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="8" class="col-bg">
+            <el-row>
+              <el-col :xl="24" class="activity-item">
+                <div class="item-name">活动可参与次数:</div>
+                <div class="between-item-name-and-item-value" />
+                <div class="item-value">{{ activity_details.number }}次</div>
+              </el-col>
+            </el-row>
+          </el-col>
         </el-row>
         <!--活动详细信息结束-->
 
