@@ -128,12 +128,12 @@ export const asyncRoutes = [
         component: () => import('@/views/users/order_list'),
         meta: { title: '订单管理', icon: 'form', pid: '20006' }
       },
-      {
-        path: 'sn_order-list',
-        name: 'SnOrderManagement',
-        component: () => import('@/views/users/sn_order_list'),
-        meta: { title: '华为SN注册列表', icon: 'form', pid: '20006' }
-      },
+      // {
+      //   path: 'sn_order-list',
+      //   name: 'SnOrderManagement',
+      //   component: () => import('@/views/users/sn_order_list'),
+      //   meta: { title: '华为SN注册列表', icon: 'form', pid: '20006' }
+      // },
       {
         path: 'devices-manage',
         name: 'DeviceManagement',

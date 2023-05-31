@@ -262,6 +262,11 @@
               <span :style="{'color': get_order_status_style(scope.row.snState)}">{{ scope.row.snState==1?'有效':'无效' }}</span>
             </template>
           </el-table-column>
+            <el-table-column
+            align="center"
+            label="设备ID"
+            prop="deviceId">
+          </el-table-column>
           <el-table-column
             align="center"
             label="操作"
